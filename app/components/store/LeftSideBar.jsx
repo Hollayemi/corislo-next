@@ -1,0 +1,205 @@
+import * as React from 'react';
+import { styled, useTheme, alpha } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import MuiDrawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import StoreDashboardAppBar from './AppBar';
+import { SidebarContent } from '@/app/data/store/sidebarContents';
+import Image from 'next/image';
+import themeConfig from '@/app/configs/themeConfig'
+import Link from 'next/link';
+import { Avatar, AvatarGroup, Button, Typography } from '@mui/material';
+
+const drawerWidth = 260;
+
+const openedMixin = (theme) => ({
+  width: drawerWidth,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: 'hidden',
+});
+
+const closedMixin = (theme) => ({
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: 'hidden',
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up('sm')]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
+export const getStaticPaths = async (context) => {
+  console.log(context)
+  return {
+    prpos : {
+      fallback: false,
+      paths: []
+    }
+  }
+}
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  padding: theme.spacing(0, 2),
+  backgroundColor: "white",
+  position: 'sticky',
+  zIndex: theme.zIndex.appBar + 1,
+  top: 0,
+  left: 0,
+  right: 0,
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+}));
+
+const StyleList = styled(List)(({ theme }) => ({
+  overflowY: 'auto',
+  '&::-webkit-scrollbar': {
+    width: '5px', // Width of the scrollbar
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: 'custom.bodyLight', // Color of the scrollbar thumb
+    borderRadius: '6px', // Rounded corners of the thumb
+  },
+  '&::-webkit-scrollbar-thumb:hover': {
+    backgroundColor: '#eee', // Color of the scrollbar thumb on hover
+  },
+  // Firefox
+  scrollbarWidth: 'thin', // Width of the scrollbar
+  scrollbarColor: '#888 #f1f1f1',
+}))
+
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
+    width: drawerWidth,
+    flexShrink: 0,
+    zIndex: theme.zIndex.drawer,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ...(open && {
+      ...openedMixin(theme),
+      '& .MuiDrawer-paper': openedMixin(theme),
+    }),
+    ...(!open && {
+      ...closedMixin(theme),
+      '& .MuiDrawer-paper': closedMixin(theme),
+    }),
+  }),
+);
+
+
+export default function StoreLeftSideBar({ children, showing, ...rest }) {
+  // const router = useRouter()
+  console.log(rest, 'rest')
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(true);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <Box sx={{ display: 'flex' }} >
+      <CssBaseline />
+      <StoreDashboardAppBar
+        open={open}
+        handleDrawerOpen={handleDrawerOpen}
+        handleDrawerClose={handleDrawerClose}
+        drawerWidth={drawerWidth}
+      />
+      <Drawer variant="permanent" open={open} sx={{ bgcolor: alpha(theme.palette.common.white, 1) }} PaperProps={{ sx: { backgroundColor: "custom.bodyLight" }, elevation: 8, overflow: "hidden" }}>
+        <DrawerHeader className="" elevation={6} color='inherit'>
+          <Box className="flex justify-between items-center relative w-full">
+            <Image src={themeConfig.vertical1} width={120} height={80} />
+          </Box>
+        </DrawerHeader>
+        <StyleList className="overflow-scroll">
+          <List className='overflow-hidden shrink-0' sx={{ bgcolor: "white" }}>
+            {SidebarContent.map((each, index) => (
+              <Link href={each.path}>
+                <ListItem key={index} disablePadding sx={{ display: 'block', color: "gray" }} className="text-xs">
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? 'initial' : 'center',
+                      fontSize: "13px",
+                      px: 2.5,
+                      mx: 1,
+                      transition: "none",
+                      '&:hover': {
+                        color: "white !important",
+                        bgcolor: "#2C337C",
+                        borderRadius: 2
+                      }
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : 'auto',
+                        justifyContent: 'center',
+                        color: "inherit",
+                        fontSize: "2px",
+                      }}
+                    >
+                      {each.icon}
+                    </ListItemIcon>
+                    {/* <ListItemText primary={each.name} sx={{ opacity: open ? 1 : 0, fontSize: "10px", }} /> */}
+                    <ListItemText>
+                      <Typography variant="h5" style={{ fontSize: '13px', opacity: open ? 1 : 0 }}>
+                        {each.name}
+                      </Typography>
+                    </ListItemText>
+                  </ListItemButton>
+                </ListItem>
+              </Link>
+            ))}
+          </List>
+
+          <Box className="flex flex-col justify-center items-start ml-6" style={{ display: open ? "flex" : "none" }}>
+              <Typography variant="h5" style={{ fontSize: '13px' }} className="text-black font-bold py-2">
+                Stores
+              </Typography>
+              <AvatarGroup total={10}>
+                <Avatar alt="Remy Sharp" src="/images/avatar/1.png" sx={{ width: 34, height: 34 }}/>
+                <Avatar alt="Travis Howard" src="/images/avatar/2.png" sx={{ width: 34, height: 34 }}/>
+                <Avatar alt="Agnes Walker" src="/images/avatar/4.png" sx={{ width: 34, height: 34 }}/>
+                <Avatar alt="Trevor Henderson" src="/images/avatar/5.png" sx={{ width: 34, height: 34 }}/>
+                <Avatar alt="Travis Howard" src="/images/avatar/2.png" sx={{ width: 34, height: 34 }}/>
+              </AvatarGroup>
+
+              <Box className="flex items-center pb-2 flex-col justify-center w-52 my-5 rounded-md" sx={{ bgcolor: 'custom.body' }}>
+                <Image src="/images/more/upgradenow.png" width={150} height={70} />
+                <Typography variant="h5" style={{ color: "#254980" }} className="text-black text-center font-bold text-xs">
+                  Unlock more features by <br /> upgrading your plan.
+                </Typography>
+
+                <Button className="my-3 h-8 w-32 text-white bg-blue-900 hover:bg-blue-800 rounded-md text-xs" variant='h5'>
+                  Upgrade Now
+                </Button>
+              </Box>
+
+          </Box>
+        </StyleList>        
+      </Drawer>
+      <Box component="main" sx={{ flexGrow: 1, p: 1 }} color="primary">
+        <div className="h-12"></div>
+        {children}
+      </Box>
+    </Box>
+  );
+}
