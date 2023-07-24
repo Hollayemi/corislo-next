@@ -204,13 +204,13 @@ export default function StoreLeftSideBar({ children, path }) {
         </StyleList>        
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, px: 1.5 }} color="primary" >
-        <Box className="flex h-screen items-start pt-20">
+        <Box className="flex flex-col md:flex-row h-screen items-start  pt-20">
           {
-            subListBar && <Box className="w-48 mr-3 h-full bg-white rounded-md">
+            subListBar && <Box className="w-full md:w-48 m-1 md:mr-3 h-full bg-white rounded-md">
               <InnerBar content={SidebarContent} path={path} />
             </Box>
           }
-          <Box className=" grow h-full p-3 bg-white rounded-md">
+          <Box className="w-full md:w-auto grow  h-full p-3 m-1 bg-white rounded-md">
             {children}
           </Box>
         </Box>
