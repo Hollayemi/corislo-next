@@ -1,8 +1,14 @@
+"use client"
 import { Typography } from "@mui/material"
+import StoreLeftSideBar from "@/app/components/store/LeftSideBar";
 
-const SideBars = () => {
+const SideBars = ({ params }) => {
   return (
-    <Typography color="secondary" className="pt-4">j j jn jk kj kj bjhbjhkbjhbjhbvvjhv kv b vkb kb k</Typography>
+    <StoreLeftSideBar path={params} subListBar={false}>
+      <Typography color="primary" className="pt-4">
+        m;km;k
+      </Typography>
+    </StoreLeftSideBar>
   )
 }
 

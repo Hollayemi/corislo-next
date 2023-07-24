@@ -1,10 +1,10 @@
+'use client';
 import * as React from 'react';
 import { styled, useTheme, alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -15,6 +15,7 @@ import Image from 'next/image';
 import themeConfig from '@/app/configs/themeConfig'
 import Link from 'next/link';
 import { Avatar, AvatarGroup, Button, Typography } from '@mui/material';
+import InnerBar from './InnerBar'
 
 const drawerWidth = 260;
 
@@ -39,7 +40,6 @@ const closedMixin = (theme) => ({
   },
 });
 export const getStaticPaths = async (context) => {
-  console.log(context)
   return {
     prpos : {
       fallback: false,
@@ -68,12 +68,14 @@ const StyleList = styled(List)(({ theme }) => ({
     width: '5px', // Width of the scrollbar
   },
   '&::-webkit-scrollbar-thumb': {
-    backgroundColor: 'custom.bodyLight', // Color of the scrollbar thumb
+    backgroundColor: '#BDBDBD', // Color of the scrollbar thumb
     borderRadius: '6px', // Rounded corners of the thumb
   },
   '&::-webkit-scrollbar-thumb:hover': {
-    backgroundColor: '#eee', // Color of the scrollbar thumb on hover
+    backgroundColor: '#42496b', // Color of the scrollbar thumb on hover
   },
+  cursor: "pointer",
+  transition: "all 1.5s",
   // Firefox
   scrollbarWidth: 'thin', // Width of the scrollbar
   scrollbarColor: '#888 #f1f1f1',
@@ -98,12 +100,12 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 
-export default function StoreLeftSideBar({ children, showing, ...rest }) {
-  // const router = useRouter()
-  console.log(rest, 'rest')
+export default function StoreLeftSideBar({ children, path }) {
+  const subListBar = true
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
-
+  
+  const onSideBar = !path.sidebar ? "" : `/${path.sidebar}`
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -124,20 +126,25 @@ export default function StoreLeftSideBar({ children, showing, ...rest }) {
       <Drawer variant="permanent" open={open} sx={{ bgcolor: alpha(theme.palette.common.white, 1) }} PaperProps={{ sx: { backgroundColor: "custom.bodyLight" }, elevation: 8, overflow: "hidden" }}>
         <DrawerHeader className="" elevation={6} color='inherit'>
           <Box className="flex justify-between items-center relative w-full">
-            <Image src={themeConfig.vertical1} width={120} height={80} />
+            <Image src={themeConfig.vertical1} alt="logo" width={120} height={80} />
           </Box>
         </DrawerHeader>
         <StyleList className="overflow-scroll">
           <List className='overflow-hidden shrink-0' sx={{ bgcolor: "white" }}>
             {SidebarContent.map((each, index) => (
-              <Link href={each.path}>
+              
+              <Link href={`/store/dashboard${each.path}`} key={index}>
                 <ListItem key={index} disablePadding sx={{ display: 'block', color: "gray" }} className="text-xs">
                   <ListItemButton
                     sx={{
                       minHeight: 48,
                       justifyContent: open ? 'initial' : 'center',
                       fontSize: "13px",
+                      my: 0.5,
                       px: 2.5,
+                      color: onSideBar !== each.path ? "#666" : "#fff",
+                      bgcolor: onSideBar !== each.path ? "#fff" : "#2C337C",
+                      borderRadius: 2,
                       mx: 1,
                       transition: "none",
                       '&:hover': {
@@ -183,7 +190,7 @@ export default function StoreLeftSideBar({ children, showing, ...rest }) {
               </AvatarGroup>
 
               <Box className="flex items-center pb-2 flex-col justify-center w-52 my-5 rounded-md" sx={{ bgcolor: 'custom.body' }}>
-                <Image src="/images/more/upgradenow.png" width={150} height={70} />
+                <Image src="/images/more/upgradenow.png" alt="upgrade now" width={150} height={70} />
                 <Typography variant="h5" style={{ color: "#254980" }} className="text-black text-center font-bold text-xs">
                   Unlock more features by <br /> upgrading your plan.
                 </Typography>
@@ -196,9 +203,17 @@ export default function StoreLeftSideBar({ children, showing, ...rest }) {
           </Box>
         </StyleList>        
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 1 }} color="primary">
-        <div className="h-12"></div>
-        {children}
+      <Box component="main" sx={{ flexGrow: 1, px: 1.5 }} color="primary" >
+        <Box className="flex h-screen items-start pt-20">
+          {
+            subListBar && <Box className="w-48 mr-3 h-full bg-white rounded-md">
+              <InnerBar content={SidebarContent} path={path} />
+            </Box>
+          }
+          <Box className=" grow h-full p-3 bg-white rounded-md">
+            {children}
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

@@ -1,0 +1,111 @@
+import { Box, Link, List, ListItem, ListItemButton, ListItemText, Typography } from "@mui/material"
+import { styled } from '@mui/material/styles';
+
+const StyledBox = styled(Box)(({ theme }) => ({
+  overflowY: 'auto',
+  '&::-webkit-scrollbar': {
+    width: '5px', // Width of the scrollbar
+  },
+  borderRadius: 5,
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#BDBDBD', // Color of the scrollbar thumb
+    borderRadius: '6px', // Rounded corners of the thumb
+  },
+  '&::-webkit-scrollbar-thumb:hover': {
+    backgroundColor: '#42496b', // Color of the scrollbar thumb on hover
+  },
+  cursor: "pointer",
+  transition: "all 1.5s",
+  // Firefox
+  scrollbarWidth: 'thin', // Width of the scrollbar
+  scrollbarColor: '#888 #f1f1f1',
+}))
+
+const ele_2 = [
+    {
+      title: "Store Lists",
+      contents: [
+        {
+          name: "Store 1",
+          path: "/store-1"
+        },
+        {
+          name: "Store 2",
+          path: "/store-2"
+        },
+        {
+          name: "Store 2",
+          path: "/store-2"
+        },
+        {
+          name: "Store 3",
+          path: "/store-3"
+        },
+        {
+          name: "Store 4",
+          path: "/store-4"
+        }
+      ]
+    }
+  ]
+
+
+const OnlyContents = ({ each, path }) => {
+    const onSubList =  "/" + path.sublist
+    const listPath = `/store/dashboard/${path.sidebar}${each.path}`;
+    return (
+        <Link href={listPath} className="text-red-500 decoration-none">
+            <ListItem disablePadding sx={{ display: 'block', color: "gray" }} className="text-xs">
+            <ListItemButton
+            sx={{
+                minHeight: 48,
+                fontSize: "13px",
+                my: 0.5,
+                px: 2.5,
+                textDecoration: "none",
+                color: onSubList !== each.path ? "#666" : "#fff",
+                bgcolor: onSubList !== each.path ? "#fff" : "#2C337C",
+                borderRadius: 2,
+                mx: 1,
+                transition: "none",
+                '&:hover': {
+                color: "white !important",
+                bgcolor: "#2C337C",
+                borderRadius: 2
+                }
+            }}
+            >
+            {/* <ListItemText primary={each.name} sx={{ opacity: open ? 1 : 0, fontSize: "10px", }} /> */}
+            <ListItemText>
+                <Typography variant="h5" style={{ fontSize: '13px' }}>
+                {each.name}
+                </Typography>
+            </ListItemText>
+            </ListItemButton>
+        </ListItem>
+        </Link>
+    )
+}
+
+const InnerBar = ({ content, path }) => {
+
+    return(
+        <StyledBox className="overflow-scroll">
+          <List className='overflow-hidden shrink-0' sx={{ bgcolor: "white" }}>
+            {ele_2.map((item, idx) => {
+                return (
+                    <Box key={idx} className="p-3">
+                        <Typography variant="h5" className="text-[12px] text-gray-500">{item.title}</Typography>
+                        {item.contents?.map((each, index) => {
+                            return <OnlyContents each={each} key={index} path={path} />
+                        })}
+                    </Box>
+                )
+            })}
+          </List>
+        </StyledBox>
+    )
+
+}
+
+export default InnerBar

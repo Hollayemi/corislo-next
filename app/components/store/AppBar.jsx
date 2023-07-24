@@ -223,7 +223,7 @@ export default function StoreDashboardAppBar({ open, handleDrawerOpen, drawerWid
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            <Image src={themeConfig.vertical1} width={120} height={80} />
+            <Image src={themeConfig.vertical1} width={120} alt="logo" height={80} />
           </Typography>}
           {open && 
             <Box className="flex justify-between items-center relative w-full">
