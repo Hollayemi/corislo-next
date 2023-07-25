@@ -1,4 +1,4 @@
-const DefaultPalette = (mode="light", skin) => {
+const DefaultPalette = (mode='light', skin) => {
   // ** Vars
   const whiteColor = '#FFF'
   const lightColor = '51, 48, 60'
@@ -23,16 +23,15 @@ const DefaultPalette = (mode="light", skin) => {
       light: lightColor,
       lightPaperBg: whiteColor,
       darkPaperBg: darkPaperBgColor,
-      body: mode === "light" ? "#F3F5FF" : "#25293C",
-      bodyLight: mode === "light" ? "#fffff" : "#383f5c",
-      bodyLighter: mode === "light" ? "#fffff" : "#42496b",
+      bodyLight: mode === "light" ? "#ffffff" : "#383f5c",
+      bodyGray: mode === "light" ? "##e6e7e8" : "#42496b",
       trackBg: mode === "light" ? "#F1F0F2" : "#3B405B",
       avatarBg: mode === "light" ? "#F6F6F7" : "#4A5072",
       tableHeaderBg: mode === "light" ? "#F6F6F7" : "#4A5072",
     },
     mode: mode,
     primary: {
-      light: "#ffffff",
+      light: "#fffff",
       main: "#2C337C",
       dark: "#655BD3",
     },
@@ -81,11 +80,11 @@ const DefaultPalette = (mode="light", skin) => {
       A400: "#BDBDBD",
       A700: "#616161",
     },
-    // text: {
-    //   primary: `rgba(${mainColor}, 0.87)`,
-    //   secondary: `rgba(${mainColor}, 0.6)`,
-    //   disabled: `rgba(${mainColor}, 0.38)`,
-    // },
+    text: {
+      primary: `rgba(${mainColor}, 0.87)`,
+      secondary: `rgba(${mainColor}, 0.6)`,
+      disabled: `rgba(${mainColor}, 0.38)`,
+    },
     divider: `rgba(${mainColor}, 0.12)`,
     background: {
       paper: mode === "light" ? whiteColor : darkPaperBgColor,

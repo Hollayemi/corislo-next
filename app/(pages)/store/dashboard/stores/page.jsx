@@ -1,9 +1,9 @@
 "use client"
 import { Typography } from "@mui/material"
-import StoreLeftSideBar from "@/app/components/store/LeftSideBar";
+import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 
 const StorePage = ({ params }) => {
-  const path={...params, sidebar: "store"}
+  const path={...params, sidebar: "stores"}
   return (
     <StoreLeftSideBar path={path} subListBar={false}>
       <Typography color="primary" className="pt-4">

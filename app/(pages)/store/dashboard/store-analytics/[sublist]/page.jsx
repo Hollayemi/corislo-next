@@ -1,8 +1,8 @@
 import { Typography } from "@mui/material"
-import StoreLeftSideBar from "@/app/components/store/LeftSideBar";
+import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 
 const StoreAnlysis = ({ params }) => {
-  const path={...params, sidebar: "store-analysis"}
+  const path={...params, sidebar: "store-analytics"}
   return (
       <StoreLeftSideBar path={path} subListBar={true}>
         <Typography color="primary" className="">

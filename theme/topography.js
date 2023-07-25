@@ -2,41 +2,41 @@ const Typography = theme => {
   return {
     h1: {
       fontWeight: 500,
-      color: theme.palette.secondary.main
+      color: "red"
     },
     h2: {
       fontWeight: 500,
-      color: theme.palette.secondary.main
+      color: "red"
     },
     h3: {
       fontWeight: 500,
-      color: theme.palette.secondary.main
+      color: "red"
     },
     h4: {
       fontWeight: 500,
-      color: theme.palette.secondary.main
+      color: "red"
     },
     h5: {
       fontWeight: 500,
-      color: theme.palette.secondary.main
+      color: "red"
     },
     h6: {
-      color: theme.palette.secondary.main
+      color: "red"
     },
     subtitle1: {
-      color: theme.palette.secondary.main
+      color: "red"
     },
     subtitle2: {
       color: theme.palette.secondary
     },
     body1: {
-      color: theme.palette.secondary.main
+      color: "red"
     },
     body2: {
       color: theme.palette.secondary
     },
     button: {
-      color: theme.palette.secondary.main
+      color: "red"
     },
     caption: {
       color: theme.palette.secondary

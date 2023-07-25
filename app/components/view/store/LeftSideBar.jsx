@@ -14,7 +14,7 @@ import { SidebarContent } from '@/app/data/store/sidebarContents';
 import Image from 'next/image';
 import themeConfig from '@/app/configs/themeConfig'
 import Link from 'next/link';
-import { Avatar, AvatarGroup, Button, Typography } from '@mui/material';
+import { Avatar, AvatarGroup, Button, Typography, Breadcrumbs } from '@mui/material';
 import InnerBar from './InnerBar'
 
 const drawerWidth = 260;
@@ -100,8 +100,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 
-export default function StoreLeftSideBar({ children, path }) {
-  const subListBar = true
+export default function StoreLeftSideBar({ children, path, InnerList, breadCrumbChild }) {
+  console.log(path);
+  // const subListBar = true
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   
@@ -113,6 +114,19 @@ export default function StoreLeftSideBar({ children, path }) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  
+  // const Breadcrumbs = () => {
+
+  //   return (
+  //     <Breadcrumbs separator="›" aria-label="breadcrumb">
+  //       {crumb.map((item, index) => (
+  //         <Link underline="hover" key={index} color="inherit" href="/">
+  //           {item}
+  //         </Link>
+  //       ))}
+  //     </Breadcrumbs>
+  //   )
+  // }
 
   return (
     <Box sx={{ display: 'flex' }} >
@@ -123,14 +137,14 @@ export default function StoreLeftSideBar({ children, path }) {
         handleDrawerClose={handleDrawerClose}
         drawerWidth={drawerWidth}
       />
-      <Drawer variant="permanent" open={open} sx={{ bgcolor: alpha(theme.palette.common.white, 1) }} PaperProps={{ sx: { backgroundColor: "custom.bodyLight" }, elevation: 8, overflow: "hidden" }}>
+      <Drawer variant="permanent" open={open} PaperProps={{ sx: { backgroundColor: "custom.bodyLight" }, elevation: 8, overflow: "hidden" }}>
         <DrawerHeader className="" elevation={6} color='inherit'>
           <Box className="flex justify-between items-center relative w-full">
             <Image src={themeConfig.vertical1} alt="logo" width={120} height={80} />
           </Box>
         </DrawerHeader>
         <StyleList className="overflow-scroll">
-          <List className='overflow-hidden shrink-0' sx={{ bgcolor: "white" }}>
+          <List className='overflow-hidden shrink-0' sx={{ bgcolor: "custom.bodyLight" }}>
             {SidebarContent.map((each, index) => (
               
               <Link href={`/store/dashboard${each.path}`} key={index}>
@@ -189,7 +203,7 @@ export default function StoreLeftSideBar({ children, path }) {
                 <Avatar alt="Travis Howard" src="/images/avatar/2.png" sx={{ width: 34, height: 34 }}/>
               </AvatarGroup>
 
-              <Box className="flex items-center pb-2 flex-col justify-center w-52 my-5 rounded-md" sx={{ bgcolor: 'custom.body' }}>
+              <Box className="flex items-center pb-2 flex-col justify-center w-52 my-5 rounded-md" sx={{ bgcolor: 'custom.bodyGray' }}>
                 <Image src="/images/more/upgradenow.png" alt="upgrade now" width={150} height={70} />
                 <Typography variant="h5" style={{ color: "#254980" }} className="text-black text-center font-bold text-xs">
                   Unlock more features by <br /> upgrading your plan.
@@ -203,14 +217,20 @@ export default function StoreLeftSideBar({ children, path }) {
           </Box>
         </StyleList>        
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, px: 1.5 }} color="primary" >
-        <Box className="flex flex-col md:flex-row h-screen items-start  pt-20">
+      <Box component="main" sx={{ flexGrow: 1 }}>
+        <Box className="flex sticky top-0 items-center justify-between pt-20 mb-3 px-7">
+            <Typography color="primary" className='font-bold'>Breadcrumb</Typography>
+            
+            {/* <Breadcrumbs /> */}
+            {breadCrumbChild}
+        </Box>
+        <Box className="flex flex-col md:flex-row h-screen items-start relative px-1.5 shadow-md">
           {
-            subListBar && <Box className="w-full md:w-48 m-1 md:mr-3 h-full bg-white rounded-md">
-              <InnerBar content={SidebarContent} path={path} />
+            InnerList && <Box className="w-full sticky top-0 md:w-48 m-1 h-full bg-white rounded-md">
+              <InnerBar content={SidebarContent} path={path} InnerList={InnerList} />
             </Box>
           }
-          <Box className="w-full md:w-auto grow  h-full p-3 m-1 bg-white rounded-md">
+          <Box className="w-full md:w-auto  h-full px-3 m-1 rounded-md">
             {children}
           </Box>
         </Box>

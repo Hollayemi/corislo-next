@@ -19,11 +19,11 @@ const ThemeComponent = props => {
 
   // ** Continue theme creation and pass merged component overrides to CreateTheme function  
 
-  // theme = createTheme(theme,
-  //   {
-  //       topography: Topography(theme)
-  //   }, 
-  // )
+  theme = createTheme(theme,
+    {
+        topography: Topography(theme)
+    }, 
+  )
 
   // ** Set responsive font sizes to true
   if (themeConfig.responsiveFontSizes) {

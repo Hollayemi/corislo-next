@@ -1,6 +1,6 @@
 "use client"
 import { Typography } from "@mui/material"
-import StoreLeftSideBar from "@/app/components/store/LeftSideBar";
+import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 
 const MarketingPage = ({ params }) => {
   const path={...params, sidebar: "marketing"}

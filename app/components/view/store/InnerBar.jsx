@@ -1,8 +1,10 @@
-import { Box, Link, List, ListItem, ListItemButton, ListItemText, Typography } from "@mui/material"
+import { Box, List, ListItem, ListItemButton, ListItemText, Typography } from "@mui/material"
 import { styled } from '@mui/material/styles';
+import Link from 'next/link'
 
 const StyledBox = styled(Box)(({ theme }) => ({
   overflowY: 'auto',
+  width: 200,
   '&::-webkit-scrollbar': {
     width: '5px', // Width of the scrollbar
   },
@@ -51,10 +53,10 @@ const ele_2 = [
 
 
 const OnlyContents = ({ each, path }) => {
-    const onSubList =  "/" + path.sublist
-    const listPath = `/store/dashboard/${path.sidebar}${each.path}`;
+  const onSubList =  !path.sublist ? "" : `/${path.sublist}`
+  const listPath = `/store/dashboard/${path.sidebar}${each.path}`;
     return (
-        <Link href={listPath} className="text-red-500 decoration-none">
+        <Link href={listPath} className="decoration-none">
             <ListItem disablePadding sx={{ display: 'block', color: "gray" }} className="text-xs">
             <ListItemButton
             sx={{
@@ -87,12 +89,12 @@ const OnlyContents = ({ each, path }) => {
     )
 }
 
-const InnerBar = ({ content, path }) => {
+const InnerBar = ({ content, path, InnerList }) => {
 
     return(
         <StyledBox className="overflow-scroll">
           <List className='overflow-hidden shrink-0' sx={{ bgcolor: "white" }}>
-            {ele_2.map((item, idx) => {
+            {InnerList?.map((item, idx) => {
                 return (
                     <Box key={idx} className="p-3">
                         <Typography variant="h5" className="text-[12px] text-gray-500">{item.title}</Typography>

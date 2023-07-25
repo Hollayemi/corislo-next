@@ -9,7 +9,7 @@ import CardHeader from '@mui/material/CardHeader'
 import { DataGrid } from '@mui/x-data-grid'
 
 // ** Custom Components
-import CustomChip from 'src/@core/components/mui/chip'
+import CustomChip from '@/app/components/chip'
 import CustomAvatar from '@/app/components/avatar'
 import QuickSearchToolbar from '@/app/components/quickTool/QuickSearchToolbar'
 
@@ -51,9 +51,9 @@ const escapeRegExp = value => {
 const columns = [
   {
     flex: 0.275,
-    minWidth: 290,
+    minWidth: 190,
     field: 'full_name',
-    headerName: 'Name',
+    headerName: 'Product Name',
     renderCell: params => {
       const { row } = params
 
@@ -75,6 +75,39 @@ const columns = [
   {
     flex: 0.2,
     minWidth: 120,
+    headerName: 'Uploaded By',
+    field: 'age',
+    renderCell: params => (
+      <Typography variant='body2' sx={{ color: 'text.primary' }}>
+        {params.row.age}
+      </Typography>
+    )
+  },
+  {
+    flex: 0.2,
+    minWidth: 120,
+    headerName: 'Category',
+    field: 'city',
+    renderCell: params => (
+      <Typography variant='body2' sx={{ color: 'text.primary' }}>
+        {params.row.city}
+      </Typography>
+    )
+  },
+  {
+    flex: 0.2,
+    minWidth: 120,
+    headerName: 'Price',
+    field: 'salary',
+    renderCell: params => (
+      <Typography variant='body2' sx={{ color: 'text.primary' }}>
+        {params.row.salary}
+      </Typography>
+    )
+  },
+  {
+    flex: 0.2,
+    minWidth: 120,
     headerName: 'Date',
     field: 'start_date',
     renderCell: params => (
@@ -85,31 +118,9 @@ const columns = [
   },
   {
     flex: 0.2,
-    minWidth: 110,
-    field: 'salary',
-    headerName: 'Salary',
-    renderCell: params => (
-      <Typography variant='body2' sx={{ color: 'text.primary' }}>
-        {params.row.salary}
-      </Typography>
-    )
-  },
-  {
-    flex: 0.125,
-    field: 'age',
-    minWidth: 80,
-    headerName: 'Age',
-    renderCell: params => (
-      <Typography variant='body2' sx={{ color: 'text.primary' }}>
-        {params.row.age}
-      </Typography>
-    )
-  },
-  {
-    flex: 0.2,
     minWidth: 140,
     field: 'status',
-    headerName: 'Status',
+    headerName: 'Actions',
     renderCell: params => {
       const status = statusObj[params.row.status]
 
@@ -127,10 +138,10 @@ const columns = [
   }
 ]
 
-const TableColumns = () => {
+const ProductList = () => {
   // ** States
   const [data] = useState(rows)
-  const [pageSize, setPageSize] = useState(7)
+  const [pageSize, setPageSize] = useState(10)
   const [searchText, setSearchText] = useState('')
   const [filteredData, setFilteredData] = useState([])
 
@@ -152,8 +163,6 @@ const TableColumns = () => {
   }
 
   return (
-    <Card>
-      <CardHeader title='Quick Filter' />
       <DataGrid
         autoHeight
         columns={columns}
@@ -172,9 +181,9 @@ const TableColumns = () => {
             onChange: event => handleSearch(event.target.value)
           }
         }}
+        sx={{ border: "none" }}
       />
-    </Card>
   )
 }
 
-export default TableColumns
+export default ProductList

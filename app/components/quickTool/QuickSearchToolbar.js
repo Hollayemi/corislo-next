@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import { GridToolbarFilterButton } from '@mui/x-data-grid'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '@/app/components/icon'
 
 const QuickSearchToolbar = props => {
   return (
@@ -16,7 +16,7 @@ const QuickSearchToolbar = props => {
         flexWrap: 'wrap',
         alignItems: 'center',
         justifyContent: 'space-between',
-        p: theme => theme.spacing(2, 5, 4, 5)
+        p: theme => theme.spacing(1)
       }}
     >
       <GridToolbarFilterButton />

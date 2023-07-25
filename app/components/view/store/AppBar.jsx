@@ -55,7 +55,7 @@ const Icons = styled('div')(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   cursor: "pointer",
   height: '100%',
-  backgroundColor: "custom.bodyLighter",
+  backgroundColor: "custom.bodyGray",
   '&:hover': {
     backgroundColor: alpha(theme.palette.primary.main, 0.1),
   },
