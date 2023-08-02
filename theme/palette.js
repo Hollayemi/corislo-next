@@ -24,7 +24,7 @@ const DefaultPalette = (mode='light', skin) => {
       lightPaperBg: whiteColor,
       darkPaperBg: darkPaperBgColor,
       bodyLight: mode === "light" ? "#ffffff" : "#383f5c",
-      bodyGray: mode === "light" ? "##e6e7e8" : "#42496b",
+      bodyGray: mode === "light" ? "#DFE1ED" : "#42496b",
       trackBg: mode === "light" ? "#F1F0F2" : "#3B405B",
       avatarBg: mode === "light" ? "#F6F6F7" : "#4A5072",
       tableHeaderBg: mode === "light" ? "#F6F6F7" : "#4A5072",

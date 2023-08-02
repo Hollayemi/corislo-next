@@ -650,3 +650,206 @@ export const rows = [
     status: 1
   }
 ]
+
+
+export const categoriesBriefData = [
+  {
+    products: 4,
+    category: "Men",
+    sub_categories: 2,
+  },
+  {
+    products: 4,
+    category: "Women",
+    sub_categories: 2,
+  },
+  {
+    products: 4,
+    category: "Men",
+    sub_categories: 2,
+  },
+  {
+    products: 4,
+    category: "Women",
+    sub_categories: 2,
+  },
+  {
+    products: 4,
+    category: "Men",
+    sub_categories: 2,
+  },
+  {
+    products: 4,
+    category: "Women",
+    sub_categories: 2,
+  },
+];
+
+
+export const categoryDataExpand = {
+      collectionName: "Men wears",
+      category: "Men",
+      brands: [
+        {
+          name: "Men Cloth",
+          subcategory: "Clothing",
+          groups: [
+            {
+              _id: {
+                group: "T-Shirts",
+              },
+              products: [
+                {
+                  prodName: "3 in 1 Round short sleeve white round neck",
+                  images: {
+                    image:
+                      "http://res.cloudinary.com/xmart/image/upload/v1687658026/644edda6a02b98cebe21ebd2/3%20in%201%20Round%20short%20sleeve%20white%20round%20neck/tdkjfpb8xxfuduevapy1.jpg",
+                    name: "3 in 1 Round short sleeve white round neck0",
+                    public_id:
+                      "644edda6a02b98cebe21ebd2/3 in 1 Round short sleeve white round neck/tdkjfpb8xxfuduevapy1",
+                  },
+                  price: 3000,
+                },
+                {
+                  prodName: "Men Vintage Wear",
+                  images: {
+                    image:
+                      "http://res.cloudinary.com/xmart/image/upload/v1687658112/644edda6a02b98cebe21ebd2/Men%20Vintage%20Wear/vt5fvmkzfiybndvwkb6u.jpg",
+                    name: "Men Vintage Wear0",
+                    public_id:
+                      "644edda6a02b98cebe21ebd2/Men Vintage Wear/vt5fvmkzfiybndvwkb6u",
+                  },
+                  price: 15000,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "Men Shoes",
+          subcategory: "Shoes",
+          groups: [
+            {
+              _id: {
+                group: "Sneakers & Canvas",
+              },
+              products: [
+                {
+                  prodName: "Men Lace_up breathable Sneakers",
+                  images: {
+                    image:
+                      "http://res.cloudinary.com/xmart/image/upload/v1687652120/644edda6a02b98cebe21ebd2/Men%20Lace_up%20breathable%20Sneakers/xf1r3pi67vpgbxfnoxhy.jpg",
+                    name: "Men Lace_up breathable Sneakers0",
+                    public_id:
+                      "644edda6a02b98cebe21ebd2/Men Lace_up breathable Sneakers/xf1r3pi67vpgbxfnoxhy",
+                  },
+                  price: 3500,
+                },
+                {
+                  prodName: "Men blue round toe breathable flat adidas shoe",
+                  images: {
+                    image:
+                      "http://res.cloudinary.com/xmart/image/upload/v1687652318/644edda6a02b98cebe21ebd2/Men%20blue%20round%20toe%20breathable%20flat%20adidas%20shoe/yg6qr8wvb8cl6tmvo3a3.jpg",
+                    name: "Men blue round toe breathable flat adidas shoe0",
+                    public_id:
+                      "644edda6a02b98cebe21ebd2/Men blue round toe breathable flat adidas shoe/yg6qr8wvb8cl6tmvo3a3",
+                  },
+                  price: 5000,
+                },
+              ],
+            },
+            {
+              _id: {
+                group: "Heels",
+              },
+              products: [
+                {
+                  prodName: "Women Leather Heel Shoe",
+                  images: {
+                    image:
+                      "http://res.cloudinary.com/xmart/image/upload/v1687657718/644edda6a02b98cebe21ebd2/Women%20Leather%20Heel%20Shoe/gcqxt3rcgglraaaejojn.jpg",
+                    name: "Women Leather Heel Shoe0",
+                    public_id:
+                      "644edda6a02b98cebe21ebd2/Women Leather Heel Shoe/gcqxt3rcgglraaaejojn",
+                  },
+                  price: 6000,
+                },
+              ],
+            },
+            {
+              _id: {
+                group: "Flat Shoes",
+              },
+              products: [
+                {
+                  prodName: "Women flat round toe shoe",
+                  images: {
+                    image:
+                      "http://res.cloudinary.com/xmart/image/upload/v1687660465/644edda6a02b98cebe21ebd2/Women%20flat%20round%20toe%20shoe/tm9v6q7spls3c2sc0z4o.jpg",
+                    name: "Women flat round toe shoe0",
+                    public_id:
+                      "644edda6a02b98cebe21ebd2/Women flat round toe shoe/tm9v6q7spls3c2sc0z4o",
+                  },
+                  price: 7500,
+                },
+              ],
+            },
+          ],
+        }
+      ]
+    }
+
+  
+export const productSizes = [
+  { size: "EU-35", colors: [] },
+  { size: "US-5", colors: [] },
+  { size: "UK-2.5", colors: [] },
+  { size: "EU-36", colors: [] },
+  { size: "US-6", colors: [] },
+  { size: "UK-3.5", colors: [] },
+  { size: "EU-37", colors: [] },
+  { size: "US-6.5", colors: [] },
+  { size: "UK-4", colors: [] },
+  { size: "EU-38", colors: [] },
+  { size: "US-7.5", colors: [] },
+  { size: "UK-5", colors: [] },
+  { size: "EU-39", colors: [] },
+  { size: "US-8.5", colors: [] },
+  { size: "UK-6", colors: [] },
+  { size: "EU-40", colors: [] },
+  { size: "US-9", colors: [] },
+  { size: "UK-6.5", colors: [] },
+  { size: "EU-41", colors: [] },
+  { size: "US-9.5", colors: [] },
+  { size: "UK-7.5", colors: [] },
+  { size: "EU-42", colors: [] },
+  { size: "US-10", colors: [] },
+  { size: "UK-8", colors: [] },
+  { size: "EU-43", colors: [] },
+  { size: "US-10.5", colors: [] },
+  { size: "UK-9", colors: [] },
+  { size: "EU-44", colors: [] },
+  { size: "US-11.5", colors: [] },
+  { size: "UK-9.5", colors: [] },
+  { size: "EU-45", colors: [] },
+  { size: "US-12", colors: [] },
+  { size: "UK-10.5", colors: [] },
+  { size: "EU-46", colors: [] },
+  { size: "US-12.5", colors: [] },
+  { size: "UK-11", colors: [] },
+  { size: "EU-47", colors: [] },
+  { size: "US-13", colors: [] },
+  { size: "UK-11.5", colors: [] },
+  { size: "EU-48", colors: [] },
+  { size: "US-14", colors: [] },
+  { size: "UK-12.5", colors: [] },
+  { size: "EU-49", colors: [] },
+  { size: "US-14.5", colors: [] },
+  { size: "UK-13.5", colors: [] },
+  { size: "EU-50", colors: [] },
+  { size: "US-15", colors: [] },
+  { size: "UK-14", colors: [] },
+  { size: "EU-51", colors: [] },
+  { size: "US-16", colors: [] },
+  { size: "UK-15", colors: [] },
+];

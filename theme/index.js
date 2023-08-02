@@ -30,6 +30,11 @@ const ThemeComponent = props => {
     theme = responsiveFontSizes(theme)
   }
 
+  const xs = theme.breakpoints.down("xs");
+  const sm = theme.breakpoints.up("sm");
+  const md = theme.breakpoints.up("md");
+  const lg = theme.breakpoints.up("lg");
+
   return (
     <ThemeProvider theme={theme}>
         <CssBaseline />

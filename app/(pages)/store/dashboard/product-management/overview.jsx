@@ -44,15 +44,15 @@ const data = [
 
 const renderStats = () => {
   return data.map((sale, index) => (
-    <Grid item xs={6} md={3} key={index}>
+    <Grid item xs={12} md={3} key={index}>
       <Box key={index} sx={{ display: 'flex', alignItems: 'start' }}>
         <CustomAvatar skin='light' color={sale.color} sx={{ mr: 2, mt: 2, width: 42, height: 42 }}>
           <Icon icon={sale.icon} />
         </CustomAvatar>
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Typography color="text.primary" variant='h6' className="font-extrabold">{sale.stats}</Typography>
-          <Typography color="text.primary" variant='body2' className="font-bold">{sale.title}</Typography>
-          <Typography color="text.primary" variant='caption' className="text-[10px] mt-1 text-gray-500">{sale.more}</Typography>
+          <Typography color="text.primary" variant='h6' sx={{ fontWeight: 600 }}>{sale.stats}</Typography>
+          <Typography color="text.primary" variant='body2' className="!font-bold">{sale.title}</Typography>
+          <Typography color="text.primary" variant='caption' className="!text-[10px] !mt-1 !text-gray-500">{sale.more}</Typography>
         </Box>
       </Box>
     </Grid>

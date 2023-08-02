@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
         <meta property="og:image" content="/images/logo/horizontal/1.png" />
         <meta property="og:url" content="https:corislo-demo.vercel.app" />
         <meta property="og:type" content="product" />
-      <body className="">
+      <body className="!overflow-x-hidden">
         <ThemeComponent>
           {children}
         </ThemeComponent>

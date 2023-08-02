@@ -141,7 +141,7 @@ const columns = [
 const ProductList = () => {
   // ** States
   const [data] = useState(rows)
-  const [pageSize, setPageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(7)
   const [searchText, setSearchText] = useState('')
   const [filteredData, setFilteredData] = useState([])
 
@@ -161,8 +161,8 @@ const ProductList = () => {
       setFilteredData([])
     }
   }
-
   return (
+    <Card>
       <DataGrid
         autoHeight
         columns={columns}
@@ -170,20 +170,21 @@ const ProductList = () => {
         rowsPerPageOptions={[7, 10, 25, 50]}
         components={{ Toolbar: QuickSearchToolbar }}
         rows={filteredData.length ? filteredData : data}
-        onPageSizeChange={newPageSize => setPageSize(newPageSize)}
+        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         componentsProps={{
           baseButton: {
-            variant: 'outlined'
+            variant: "outlined",
           },
           toolbar: {
             value: searchText,
-            clearSearch: () => handleSearch(''),
-            onChange: event => handleSearch(event.target.value)
-          }
+            clearSearch: () => handleSearch(""),
+            onChange: (event) => handleSearch(event.target.value),
+          },
         }}
         sx={{ border: "none" }}
       />
-  )
+    </Card>
+  );
 }
 
 export default ProductList

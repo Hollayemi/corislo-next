@@ -16,6 +16,7 @@ import themeConfig from '@/app/configs/themeConfig'
 import Link from 'next/link';
 import { Avatar, AvatarGroup, Button, Typography, Breadcrumbs } from '@mui/material';
 import InnerBar from './InnerBar'
+import BottomBar from './BottomBar';
 
 const drawerWidth = 260;
 
@@ -34,7 +35,7 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: 'hidden',
-  width: `calc(${theme.spacing(7)} + 1px)`,
+  width: `calc(${theme.spacing(0)} + 0px)`,
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
@@ -101,10 +102,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 
 export default function StoreLeftSideBar({ children, path, InnerList, breadCrumbChild }) {
-  console.log(path);
-  // const subListBar = true
+
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   
   const onSideBar = !path.sidebar ? "" : `/${path.sidebar}`
   const handleDrawerOpen = () => {
@@ -129,7 +129,7 @@ export default function StoreLeftSideBar({ children, path, InnerList, breadCrumb
   // }
 
   return (
-    <Box sx={{ display: 'flex' }} >
+    <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <StoreDashboardAppBar
         open={open}
@@ -137,22 +137,42 @@ export default function StoreLeftSideBar({ children, path, InnerList, breadCrumb
         handleDrawerClose={handleDrawerClose}
         drawerWidth={drawerWidth}
       />
-      <Drawer variant="permanent" open={open} PaperProps={{ sx: { backgroundColor: "custom.bodyLight" }, elevation: 8, overflow: "hidden" }}>
-        <DrawerHeader className="" elevation={6} color='inherit'>
+      <Drawer
+        variant="permanent"
+        open={open}
+        PaperProps={{
+          sx: { backgroundColor: "custom.bodyLight" },
+          elevation: 8,
+          overflow: "hidden",
+        }}
+      >
+        <DrawerHeader className="" elevation={6} color="inherit">
           <Box className="flex justify-between items-center relative w-full">
-            <Image src={themeConfig.vertical1} alt="logo" width={120} height={80} />
+            <Image
+              src={themeConfig.vertical1}
+              alt="logo"
+              width={120}
+              height={80}
+            />
           </Box>
         </DrawerHeader>
         <StyleList className="overflow-scroll">
-          <List className='overflow-hidden shrink-0' sx={{ bgcolor: "custom.bodyLight" }}>
+          <List
+            className="overflow-hidden shrink-0"
+            sx={{ bgcolor: "custom.bodyLight" }}
+          >
             {SidebarContent.map((each, index) => (
-              
               <Link href={`/store/dashboard${each.path}`} key={index}>
-                <ListItem key={index} disablePadding sx={{ display: 'block', color: "gray" }} className="text-xs">
+                <ListItem
+                  key={index}
+                  disablePadding
+                  sx={{ display: "block", color: "gray" }}
+                  className="text-xs"
+                >
                   <ListItemButton
                     sx={{
                       minHeight: 48,
-                      justifyContent: open ? 'initial' : 'center',
+                      justifyContent: open ? "initial" : "center",
                       fontSize: "13px",
                       my: 0.5,
                       px: 2.5,
@@ -161,18 +181,18 @@ export default function StoreLeftSideBar({ children, path, InnerList, breadCrumb
                       borderRadius: 2,
                       mx: 1,
                       transition: "none",
-                      '&:hover': {
+                      "&:hover": {
                         color: "white !important",
                         bgcolor: "#2C337C",
-                        borderRadius: 2
-                      }
+                        borderRadius: 2,
+                      },
                     }}
                   >
                     <ListItemIcon
                       sx={{
                         minWidth: 0,
-                        mr: open ? 3 : 'auto',
-                        justifyContent: 'center',
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
                         color: "inherit",
                         fontSize: "2px",
                       }}
@@ -181,7 +201,10 @@ export default function StoreLeftSideBar({ children, path, InnerList, breadCrumb
                     </ListItemIcon>
                     {/* <ListItemText primary={each.name} sx={{ opacity: open ? 1 : 0, fontSize: "10px", }} /> */}
                     <ListItemText>
-                      <Typography variant="h5" style={{ fontSize: '13px', opacity: open ? 1 : 0 }}>
+                      <Typography
+                        variant="h5"
+                        style={{ fontSize: "13px", opacity: open ? 1 : 0 }}
+                      >
                         {each.name}
                       </Typography>
                     </ListItemText>
@@ -191,47 +214,111 @@ export default function StoreLeftSideBar({ children, path, InnerList, breadCrumb
             ))}
           </List>
 
-          <Box className="flex flex-col justify-center items-start ml-6" style={{ display: open ? "flex" : "none" }}>
-              <Typography variant="h5" style={{ fontSize: '13px' }} className="text-black font-bold py-2">
-                Stores
+          <Box
+            className="flex flex-col justify-center items-start ml-6"
+            style={{ display: open ? "flex" : "none" }}
+          >
+            <Typography
+              variant="h5"
+              style={{ fontSize: "13px" }}
+              className="text-black font-bold py-2"
+            >
+              Stores
+            </Typography>
+            <AvatarGroup total={10}>
+              <Avatar
+                alt="Remy Sharp"
+                src="/images/avatar/1.png"
+                sx={{ width: 34, height: 34 }}
+              />
+              <Avatar
+                alt="Travis Howard"
+                src="/images/avatar/2.png"
+                sx={{ width: 34, height: 34 }}
+              />
+              <Avatar
+                alt="Agnes Walker"
+                src="/images/avatar/4.png"
+                sx={{ width: 34, height: 34 }}
+              />
+              <Avatar
+                alt="Trevor Henderson"
+                src="/images/avatar/5.png"
+                sx={{ width: 34, height: 34 }}
+              />
+              <Avatar
+                alt="Travis Howard"
+                src="/images/avatar/2.png"
+                sx={{ width: 34, height: 34 }}
+              />
+            </AvatarGroup>
+
+            <Box
+              className="flex items-center pb-2 flex-col justify-center w-52 my-5 rounded-md"
+              sx={{ bgcolor: "custom.bodyGray" }}
+            >
+              <Image
+                src="/images/more/upgradenow.png"
+                alt="upgrade now"
+                width={150}
+                height={70}
+              />
+              <Typography
+                variant="h5"
+                style={{ color: "#254980" }}
+                className="!text-black !text-center !font-bold !text-xs"
+              >
+                Unlock more features by <br /> upgrading your plan.
               </Typography>
-              <AvatarGroup total={10}>
-                <Avatar alt="Remy Sharp" src="/images/avatar/1.png" sx={{ width: 34, height: 34 }}/>
-                <Avatar alt="Travis Howard" src="/images/avatar/2.png" sx={{ width: 34, height: 34 }}/>
-                <Avatar alt="Agnes Walker" src="/images/avatar/4.png" sx={{ width: 34, height: 34 }}/>
-                <Avatar alt="Trevor Henderson" src="/images/avatar/5.png" sx={{ width: 34, height: 34 }}/>
-                <Avatar alt="Travis Howard" src="/images/avatar/2.png" sx={{ width: 34, height: 34 }}/>
-              </AvatarGroup>
 
-              <Box className="flex items-center pb-2 flex-col justify-center w-52 my-5 rounded-md" sx={{ bgcolor: 'custom.bodyGray' }}>
-                <Image src="/images/more/upgradenow.png" alt="upgrade now" width={150} height={70} />
-                <Typography variant="h5" style={{ color: "#254980" }} className="text-black text-center font-bold text-xs">
-                  Unlock more features by <br /> upgrading your plan.
-                </Typography>
-
-                <Button className="my-3 h-8 w-32 text-white bg-blue-900 hover:bg-blue-800 rounded-md text-xs" variant='h5'>
-                  Upgrade Now
-                </Button>
-              </Box>
-
-          </Box>
-        </StyleList>        
-      </Drawer>
-      <Box component="main" sx={{ flexGrow: 1 }}>
-        <Box className="flex sticky top-0 items-center justify-between pt-20 mb-3 px-7">
-            <Typography color="primary" className='font-bold'>Breadcrumb</Typography>
-            
-            {/* <Breadcrumbs /> */}
-            {breadCrumbChild}
-        </Box>
-        <Box className="flex flex-col md:flex-row h-screen items-start relative px-1.5 shadow-md">
-          {
-            InnerList && <Box className="w-full sticky top-0 md:w-48 m-1 h-full bg-white rounded-md">
-              <InnerBar content={SidebarContent} path={path} InnerList={InnerList} />
+              <Button
+                className="!my-3 !h-8 !w-32 !text-white !bg-blue-900 !hover:bg-blue-800 !rounded-md !text-xs"
+                variant="h5"
+              >
+                Upgrade Now
+              </Button>
             </Box>
-          }
-          <Box className="w-full md:w-auto  h-full px-3 m-1 rounded-md">
+          </Box>
+        </StyleList>
+      </Drawer>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1 }}
+        className="relative w-full h-full"
+        bgcolor="custom.bodyGray"
+      >
+        <Box className="flex sticky top-0 items-center justify-between pt-20 mb-3 md:px-7 px-3">
+          <Typography color="primary" className="font-bold">
+            Breadcrumb
+          </Typography>
+          {/* <Breadcrumbs /> */}
+          {/* {breadCrumbChild} */}
+        </Box>
+        <Box
+          className="flex flex-col w-full relative md:flex-row items-start md:px-1.5 shadow-md"
+          bgcolor="custom.bodyGray"
+        >
+          {InnerList && (
+            <Box className="w-full hidden md:block sticky top-[68px] h-[85vh] md:w-48 m-1 bg-white rounded-md">
+              <InnerBar
+                content={SidebarContent}
+                path={path}
+                InnerList={InnerList}
+              />
+            </Box>
+          )}
+          <Box className="grow relative h-full md:px-3 m-1 rounded-md pb-14">
             {children}
+            <Box
+              className="fixed md:hidden bottom-0 left-0 w-full"
+              sx={{ zIndex: 1190 }}
+            >
+              <BottomBar
+                content={SidebarContent}
+                path={path}
+                InnerList={InnerList}
+              />
+            </Box>
           </Box>
         </Box>
       </Box>

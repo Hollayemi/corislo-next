@@ -77,7 +77,6 @@ const OnlyContents = ({ each, path }) => {
                 }
             }}
             >
-            {/* <ListItemText primary={each.name} sx={{ opacity: open ? 1 : 0, fontSize: "10px", }} /> */}
             <ListItemText>
                 <Typography variant="h5" style={{ fontSize: '13px' }}>
                 {each.name}
@@ -90,24 +89,27 @@ const OnlyContents = ({ each, path }) => {
 }
 
 const InnerBar = ({ content, path, InnerList }) => {
-
-    return(
-        <StyledBox className="overflow-scroll">
-          <List className='overflow-hidden shrink-0' sx={{ bgcolor: "white" }}>
-            {InnerList?.map((item, idx) => {
-                return (
-                    <Box key={idx} className="p-3">
-                        <Typography variant="h5" className="text-[12px] text-gray-500">{item.title}</Typography>
-                        {item.contents?.map((each, index) => {
-                            return <OnlyContents each={each} key={index} path={path} />
-                        })}
-                    </Box>
-                )
-            })}
-          </List>
-        </StyledBox>
-    )
-
-}
+  return (
+    <StyledBox className="overflow-scroll">
+      <List className="overflow-hidden shrink-0" sx={{ bgcolor: "white" }}>
+        {InnerList?.map((item, idx) => {
+          return (
+            <Box key={idx} className="p-3">
+              <Typography
+                variant="h5"
+                className="text-[12px] text-gray-500 mb-3"
+              >
+                {item.title}
+              </Typography>
+              {item.contents?.map((each, index) => {
+                return <OnlyContents each={each} key={index} path={path} />;
+              })}
+            </Box>
+          );
+        })}
+      </List>
+    </StyledBox>
+  );
+};
 
 export default InnerBar
