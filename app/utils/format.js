@@ -5,6 +5,9 @@
  * @param {String} value date to format
  * @param {Object} formatting Intl object to format with
  */
+
+import { Typography, Box } from "@mui/material";
+
 // ** Checks if the passed date is today
 const isToday = date => {
   const today = new Date()
@@ -15,6 +18,37 @@ const isToday = date => {
     new Date(date).getFullYear() === today.getFullYear()
   )
 }
+
+export const changeTime = (prevDate) => {
+  prevDate = new Date(prevDate);
+  const newDate = new Date();
+  const timeDiff = newDate.getTime() - prevDate.getTime();
+  let period = Math.floor(timeDiff / (1000 * 60));
+
+  let realTime;
+  if (period > 60) {
+    period = Math.floor(timeDiff / (1000 * 3600));
+    if (period > 23) {
+      if (period > 720) {
+        realTime = `${Math.floor(period / 30)} months ago`;
+      } else if (Math.floor(Math.floor(period) / 24) > 1) {
+        realTime = `${Math.floor(Math.floor(period) / 24)} days ago`;
+      } else {
+        realTime = `${Math.floor(Math.floor(period) / 24)} day ago`;
+      }
+    } else {
+      realTime = `${Math.floor(period)} hours ago`;
+    }
+  } else if (Math.floor(period) > 59) {
+    realTime = `${Math.floor(period / 60)} hours ago`;
+  } else if (Math.floor(period) > 0) {
+    realTime = `${Math.floor(period)} minutes ago`;
+  } else {
+    realTime = " Just now";
+  }
+
+  return realTime;
+};
 
 export const formatDate = (value, formatting = { month: 'short', day: 'numeric', year: 'numeric' }) => {
   if (!value) return value
@@ -88,3 +122,54 @@ export const formatCVC = (value, cardNumber, Payment) => {
 
   return clearValue.slice(0, maxLength)
 }
+
+
+export const formatShippingAddress = (address) => {
+  return (
+    <Typography variant="h5" className="!text-xs">
+      {`(${address.title}) ${address.address}, ${address.city}, ${address.state}, ${address.postal_code}`}
+    </Typography>
+  );
+};
+
+
+export const formatSegmentation = (orders, totalAmount, lastSeen) => {
+  let categ = "Recent Buyer";
+  let color = "orange"
+  const timeDifference = Math.abs(new Date(lastSeen) - new Date());
+  console.log(timeDifference);
+  const millisecondsPerWeek = 7 * 24 * 60 * 60 * 1000;
+  const weeksDifference = Math.floor(timeDifference / millisecondsPerWeek);
+
+  if (orders >= 10 && totalAmount.parseInt() > 100000 ) {
+    categ = "High Spender";
+    color = "red"
+  }
+  if (
+    orders > 15 && totalAmount.parseInt() < 100000
+  ) {
+    categ = "Frequent Buyer";
+    color = "green";
+  }
+  if (weeksDifference > 4) {
+    categ = "Inactive Buyer";
+    color = "gray";
+  }
+  if (orders === 1) {
+    categ = "First time buyer Buyer";
+    color = "error";
+  }
+  return (
+    <Typography>
+      <Box
+        className={`!text-xs !whitespace-break-spaces flex items-center `}
+        color={color}
+      >
+        <Box bgcolor={color} className="w-4 h-4 shrink-0 rounded-full mr-2"></Box>
+
+        {categ}
+      </Box>
+    </Typography>
+  );
+};
+

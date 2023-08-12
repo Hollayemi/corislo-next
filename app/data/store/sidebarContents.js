@@ -9,59 +9,72 @@ import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 
+
+export const navigation = {
+  dashboard: "",
+  store: "/stores",
+  product_management: "/product-management",
+  order_management: "/order-management",
+  customer_management: "/customer-management",
+  store_analytics: "/store_analytics",
+  marketing: "/marketing",
+  settings: "/settings",
+  pricing: "/pricing",
+};
 export const SidebarContent = [
   {
     name: "Dashboard",
-    path: "",
+    path: navigation.dashboard,
     icon: <ViewQuiltIcon />,
     key: "ele_1",
   },
   {
     name: "Store",
-    path: "/stores",
+    path: navigation.store,
     icon: <StorefrontIcon />,
     key: "ele_2",
   },
   {
     name: "Product Management",
-    path: "/product-management",
+    path: navigation.product_management,
     icon: <ShoppingBagIcon />,
     key: "ele_3",
   },
   {
     name: "Order Management",
-    path: "/order-management",
+    path: navigation.order_management,
     icon: <ViewStreamIcon />,
     key: "ele_4",
   },
   {
     name: "Customer Management",
-    path: "/customer-management",
+    path: navigation.customer_management,
     icon: <Diversity1Icon />,
     key: "ele_5",
   },
   {
     name: "Store Analytics",
-    path: "/store-analytics",
+    path: navigation.store_analytics,
     icon: <AccountTreeIcon />,
     key: "ele_6",
   },
   {
     name: "Marketing",
-    path: "/marketing",
+    path: navigation.marketing,
     icon: <AutoGraphIcon />,
     key: "ele_7",
   },
   {
     name: "Settings",
-    path: "/settings",
+    path: navigation.settings,
     icon: <SettingsApplicationsIcon />,
     key: "ele_8",
   },
   {
     name: "Pricing",
-    path: "/pricing",
+    path: navigation.pricing,
     icon: <CreditCardIcon />,
     key: "ele_8",
   },
 ];
+

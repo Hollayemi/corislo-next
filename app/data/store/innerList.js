@@ -3,6 +3,8 @@ import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
+import SettingsIcon from "@mui/icons-material/Settings";
+import StoreIcon from "@mui/icons-material/Store";
 
 export const prodInnerList = [
   {
@@ -37,6 +39,61 @@ export const prodInnerList = [
         path: "/out-of-stock",
         icon: <ShowChartIcon />,
         short: "stock",
+      },
+    ],
+  },
+];
+
+
+
+export const storeInnerList = [
+  {
+    title: "Store List",
+    contents: [
+      {
+        name: "Your Branch",
+        path: "",
+        icon: <ListAltIcon />,
+        short: "Products",
+      },
+      {
+        name: "Gourment Delight",
+        path: "/gourment-delight",
+        icon: <CategoryIcon />,
+        short: "Categories",
+      },
+      {
+        name: "Home Essentials",
+        path: "/home-essentials",
+        icon: <CreateNewFolderIcon />,
+        short: "escape",
+      },
+      {
+        name: "Tech Solutions",
+        path: "/tech-solutions",
+        icon: <AddToPhotosIcon />,
+        short: "Add Product",
+      },
+    ],
+  },
+];
+
+
+export const storeBottomBar = [
+  {
+    title: "Store List",
+    contents: [
+      {
+        name: "Profile",
+        path: "/stores",
+        icon: <StoreIcon />,
+        short: "Profile",
+      },
+      {
+        name: "Store Settings",
+        path: "/settings",
+        icon: <SettingsIcon />,
+        short: "Settings",
       },
     ],
   },

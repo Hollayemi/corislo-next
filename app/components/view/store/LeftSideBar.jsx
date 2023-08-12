@@ -101,7 +101,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 
-export default function StoreLeftSideBar({ children, path, InnerList, breadCrumbChild }) {
+export default function StoreLeftSideBar({ children, path, InnerList, BottomList, breadCrumbChild }) {
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -283,19 +283,26 @@ export default function StoreLeftSideBar({ children, path, InnerList, breadCrumb
       </Drawer>
       <Box
         component="main"
-        sx={{ flexGrow: 1 }}
-        className="relative w-full h-full"
+        className="relative !grow h-full"
         bgcolor="custom.bodyGray"
       >
-        <Box className="flex sticky top-0 items-center justify-between pt-20 mb-3 md:px-7 px-3">
-          <Typography color="primary" className="font-bold">
-            Breadcrumb
-          </Typography>
-          {/* <Breadcrumbs /> */}
-          {/* {breadCrumbChild} */}
+        {/* <Box className=""> */}
+        <Box className="flex flex-col w-full sticky top-0 pt-20 md:px-7 px-3">
+          {onSideBar === "" && (
+            <Typography color="primary" className="mb-5 font-bold text-xl">
+              Welcome back, Creative Box{" "}
+            </Typography>
+          )}
+          <Box className="flex items-center justify-between mb-3">
+            <Typography color="primary" className="font-bold">
+              Breadcrumb
+            </Typography>
+            {/* <Breadcrumbs /> */}
+            {/* {breadCrumbChild} */}
+          </Box>
         </Box>
         <Box
-          className="flex flex-col w-full relative md:flex-row items-start md:px-1.5 shadow-md"
+          className="flex flex-col  relative md:flex-row items-start md:px-1.5 shadow-md"
           bgcolor="custom.bodyGray"
         >
           {InnerList && (
@@ -307,7 +314,7 @@ export default function StoreLeftSideBar({ children, path, InnerList, breadCrumb
               />
             </Box>
           )}
-          <Box className="grow relative h-full md:px-3 m-1 rounded-md pb-14">
+          <Box className="!w-full h-full md:px-3 m-1 rounded-md pb-14">
             {children}
             <Box
               className="fixed md:hidden bottom-0 left-0 w-full"
@@ -316,12 +323,13 @@ export default function StoreLeftSideBar({ children, path, InnerList, breadCrumb
               <BottomBar
                 content={SidebarContent}
                 path={path}
-                InnerList={InnerList}
+                InnerList={BottomList || InnerList}
               />
             </Box>
           </Box>
         </Box>
       </Box>
     </Box>
+    // </Box>
   );
 }

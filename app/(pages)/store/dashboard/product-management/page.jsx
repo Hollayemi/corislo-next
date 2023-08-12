@@ -5,7 +5,7 @@ import ProductList from "@/app/components/view/store/tables/productList";
 import OverViewCard from "./overview";
 import { prodInnerList } from "@/app/data/store/innerList";
 import BreadcrumbEle from "./breadcrumbChild";
-
+import { productListingRows } from "./rows"
 const ProductManagement = ({ params }) => {
   const path={...params, sidebar: "product-management"}
   return (
@@ -24,28 +24,9 @@ const ProductManagement = ({ params }) => {
             <Typography className="text-xs md:text-md font-bold">
               All Products (3,627)
             </Typography>
-            <Box className="flex items-center">
-              <Typography
-                className="mr-3 text-xs md:text-md"
-              >
-                Result per page
-              </Typography>
-              <Select
-                label="Age"
-                defaultValue="30"
-                id="demo-simple-select-outlined"
-                labelId="demo-simple-select-outlined-label"
-                size="small"
-              >
-                <MenuItem value="10">10</MenuItem>
-                <MenuItem value={18}>18</MenuItem>
-                <MenuItem value={30}>30</MenuItem>
-                <MenuItem value={40}>45</MenuItem>
-              </Select>
-            </Box>
           </Box>
-          <Box className={`!overflow-auto w-[355px]  relative`}>
-            <ProductList />
+          <Box className={`relative`}>
+            <ProductList rows={productListingRows.data} />
           </Box>
         </Box>
       </Box>

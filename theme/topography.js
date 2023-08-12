@@ -39,7 +39,7 @@ const Typography = theme => {
       color: "red"
     },
     caption: {
-      color: theme.palette.secondary
+      color: "#eee"
     },
     overline: {
       color: theme.palette.secondary
