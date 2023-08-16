@@ -26,7 +26,7 @@ const escapeRegExp = value => {
 
 
 
-const OrderTable = ({ columns, rows }) => {
+const OrderTable = ({ columns, rows, onRowClick = () => {} }) => {
   const myRows = rows.map((e, i) => {return { ...e, id: i }})
   // ** States
   const [data] = useState(myRows);
@@ -69,10 +69,11 @@ const OrderTable = ({ columns, rows }) => {
               },
             },
           }}
-          slots={{ Toolbar: QuickSearchToolbar }}
+          onRowClick={(e) => onRowClick(e.row, e.id)}
+          components={{ Toolbar: QuickSearchToolbar }}
           rows={filteredData.length ? filteredData : data}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          slotProps={{
+          componentsProps={{
             baseButton: {
               variant: "outlined",
             },

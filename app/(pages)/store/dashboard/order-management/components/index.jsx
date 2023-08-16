@@ -11,10 +11,10 @@ import { TabList, TabPanel, TabContext } from "@mui/lab";
 import OrderTable from "@/app/components/view/store/tables/OrderTable";
 import { allOrderColumns, ordersColumns } from "./columns";
 import Icon from "@/app/components/icon";
-import { rows } from "../row";
+// import { rows } from "../row";
 
 
-export const OrderListComponents = ({ value, setValue, selectRow }) => {
+export const OrderListComponents = ({ value, setValue, rows }) => {
   // ** Hook
   const router = useRouter();
   // ** State
@@ -27,17 +27,22 @@ export const OrderListComponents = ({ value, setValue, selectRow }) => {
 
   const sortBy = (by) => {
     if (!by || by === "all") {
-      return rows.data;
+      return rows || [];
     } else {
-      return rows.data.filter((e) => e.status === by);
+      return rows ? rows.filter((e) => e.status === by) : [];
     }
   };
 
-  const actionFunctions = (row, action) =>{
-      if(action === "modify"){
-        // selectRow(row);
-        router.push(`/store/dashboard/order-management?order=${row._id}`);
-      }
+  const actionFunctions = (row, action) => {
+    if (action === "modify") {
+      // selectRow(row);
+      router.push(`/store/dashboard/order-management?order=${row._id}`);
+    }
+  };
+  const onRowClick = (row, id) => {
+    router.push(
+      `/store/dashboard/order-management?order=${row._id}&tableId=${id}`
+    );
   }
 
   return (
@@ -63,6 +68,7 @@ export const OrderListComponents = ({ value, setValue, selectRow }) => {
           <OrderTable
             columns={allOrderColumns(actionFunctions)}
             rows={sortBy()}
+            onRowClick={onRowClick}
           />
         </Box>
       </TabPanel>
@@ -102,14 +108,15 @@ export const statusObj = [
   { title: "pending", color: "info" },
 ];
 
-export const DetailsDesign = ({ icon, title, info, btnFunc, btnText }) => {
+export const DetailsDesign = ({ icon, title, info, btnFunc, btnText, color }) => {
   return (
     <Box className="flex w-full md:w-64 md:max-w-300px mt-6">
       <Box
         className="w-10 h-10 mr-2 shrink-0 rounded-full flex items-center justify-center"
         bgcolor="custom.bodyGray"
+        color={color}
       >
-        <Icon icon={icon} fontSize={0.8} />
+        <Icon icon={icon} />
       </Box>
       <Box>
         <Typography className="!font-bold !text-sm !mb-3">{title}</Typography>
@@ -120,8 +127,12 @@ export const DetailsDesign = ({ icon, title, info, btnFunc, btnText }) => {
                 className="flex items-cente !text-xs text-gray-500 mb-2"
                 key={i}
               >
-                <Typography className="!mr-2 shrink-0 !text-xs">{each.key}: </Typography>
-                <Typography className="!text-xs !whitespace-break-spaces">{each.value}</Typography>
+                <Typography className="!mr-2 shrink-0 !text-xs">
+                  {each.key}:{" "}
+                </Typography>
+                <Typography className="!text-xs !whitespace-break-spaces">
+                  {each.value}
+                </Typography>
               </Box>
             );
           })}

@@ -1,20 +1,21 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import martApi from '../api/baseApi';
-import { jsonHeader } from '../api/setAuthHeaders';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import martApi from "../api/baseApi";
+import { jsonHeader } from "../api/setAuthHeaders";
+import tokens from "@/app/configs/tokens";
 
 export const deleteHandler = createAsyncThunk(
-    'post/deleteHandler',
-    async (payload) => {
-        const storeToken = localStorage.getItem('store_token');
-        const { data } = await martApi
-            .post(`/store/file/delete`, payload, jsonHeader(storeToken))
-            .then((res) => res)
-            .catch((e) => {
-                console.log(e.response);
-                return e;
-            });
-        return data;
-    }
+  "post/deleteHandler",
+  async (payload) => {
+    const storeToken = tokens.store;
+    const { data } = await martApi
+      .post(`/store/file/delete`, payload, jsonHeader(storeToken))
+      .then((res) => res)
+      .catch((e) => {
+        console.log(e.response);
+        return e;
+      });
+    return data;
+  }
 );
 
 // //

@@ -1,6 +1,6 @@
 import { createAsyncThunk, unwrapResult } from '@reduxjs/toolkit';
 
-import { Message, toaster } from 'rsuite';
+import toaster from "@/app/configs/toaster";
 import martApi from '../api/baseApi';
 
 const resetPasswordApi = createAsyncThunk('post/RP', async (payload) => {
@@ -23,13 +23,6 @@ export const ResetPasswordHandler = (formData, navigate, dispatch) => {
             }
         })
         .catch((err) => {
-            toaster.push(
-                <Message showIcon type="error">
-                    No Connection
-                </Message>,
-                {
-                    placement: 'topEnd',
-                }
-            );
+            toaster({ message: "No Connection", type: "error" });
         });
 };

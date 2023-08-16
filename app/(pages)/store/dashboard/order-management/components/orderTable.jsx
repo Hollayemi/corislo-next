@@ -24,7 +24,7 @@ const OrderTable = ({ selectRow }) => {
             <Box className="mt-6">
               <OrderListComponents
                 value={value}
-                selectRow={selectRow}
+                rows={selectRow.data}
                 setValue={setValue}
               />
             </Box>

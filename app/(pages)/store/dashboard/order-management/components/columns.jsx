@@ -1,5 +1,5 @@
 import * as React from "react";
-import { changeTime } from "@/app/utils/format";
+import { changeTime, formatDate } from "@/app/utils/format";
 import { statusObj } from ".";
 import { Typography, Button, Box, Menu, MenuItem } from "@mui/material";
 import CustomChip from "@/app/components/chip";
@@ -10,60 +10,60 @@ export const ordersColumns = (handleActionClick) => {
     {
       flex: 0.6,
       headerName: "Order ID",
-      field: "discount",
+      field: "_id",
       renderCell: (params) => (
         <Typography variant="body2" sx={{ color: "text.primary" }}>
-          {params.row.discount}
+          {params.row._id}
         </Typography>
       ),
     },
     {
       flex: 1.5,
       headerName: "Customer",
-      field: "picker.name",
+      field: "customer",
       renderCell: (params) => (
         <Typography variant="body2" sx={{ color: "text.primary" }}>
-          {params.row.picker.name}
+          {params.row.customerName}
         </Typography>
       ),
     },
     {
       flex: 1,
       headerName: "Order Date",
-      field: "createdAt",
+      field: "dateAdded",
       renderCell: (params) => (
         <Typography variant="body2" sx={{ color: "text.primary" }}>
-          {changeTime(params.row.createdAt)}
+          {formatDate(params.row.dateAdded)}
         </Typography>
       ),
     },
     {
       flex: 1,
       headerName: "Delivery Date",
-      field: "updatedAt",
+      field: "deliveryDate",
       renderCell: (params) => (
         <Typography variant="body2" sx={{ color: "text.primary" }}>
-          {changeTime(params.row.updatedAt)}
+          {formatDate(params.row.deliveryDate)}
         </Typography>
       ),
     },
     {
       flex: 0.8,
       headerName: "Total Order Price",
-      field: "totalAmount",
+      field: "toatalPrice",
       renderCell: (params) => (
         <Typography variant="body2" sx={{ color: "text.primary" }}>
-          {params.row.totalAmount}
+          {params.row.totalPrice}
         </Typography>
       ),
     },
     {
       flex: 0.8,
       headerName: "Delivery Medium",
-      field: "medium",
+      field: "deliveryMedium",
       renderCell: (params) => (
         <Typography variant="body2" sx={{ color: "text.primary" }}>
-          {params.row.medium}
+          {params.row.deliveryMedium}
         </Typography>
       ),
     },

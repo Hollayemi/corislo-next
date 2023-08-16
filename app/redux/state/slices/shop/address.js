@@ -1,5 +1,5 @@
 import { createAsyncThunk, unwrapResult } from '@reduxjs/toolkit';
-import { Message, toaster } from 'rsuite';
+import toaster from "@/app/configs/toaster";
 import martApi from '../api/addressApi';
 
 const getAddressApi = createAsyncThunk(
@@ -27,14 +27,7 @@ export const getAddress = (payload, dispatch, setData) => {
                     formatted: res.results[0].formatted,
                 });
             } else {
-                toaster.push(
-                    <Message showIcon type="error">
-                        Could'nt get address
-                    </Message>,
-                    {
-                        placement: 'topCenter',
-                    }
-                );
+                toaster({message: "Couldn't get address", type: "error"})
             }
         })
         .catch((e) => {});

@@ -1,13 +1,26 @@
-"use client"
-import { Typography, Box, Select, MenuItem } from "@mui/material"
+"use client";
+import useSWR from "swr";
+import { Typography, Box, Select, MenuItem } from "@mui/material";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 import ProductList from "@/app/components/view/store/tables/productList";
 import OverViewCard from "./overview";
 import { prodInnerList } from "@/app/data/store/innerList";
 import BreadcrumbEle from "./breadcrumbChild";
-import { productListingRows } from "./rows"
+import { productListingRows } from "./rows";
+import tokens from "@/app/configs/tokens";
+import { StoreSalesApi } from "@/app/redux/state/slices/shop/overview/sales";
+
 const ProductManagement = ({ params }) => {
-  const path={...params, sidebar: "product-management"}
+  const { data, error, isLoading } = useSWR({
+    endPoint: "/store/get-products",
+    token: tokens.store,
+  });
+  console.log(data, error, isLoading);
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(StoreSalesApi({ time: "1_month" }));
+  // }, []);
+  const path = { ...params, sidebar: "product-management" };
   return (
     <StoreLeftSideBar
       path={path}
@@ -22,16 +35,16 @@ const ProductManagement = ({ params }) => {
         <Box className="bg-white rounded-md mt-4 px-3 pt-6 w-full">
           <Box className="flex justify-between items-center px-">
             <Typography className="text-xs md:text-md font-bold">
-              All Products (3,627)
+              All Products ({data?.data.length})
             </Typography>
           </Box>
           <Box className={`relative`}>
-            <ProductList rows={productListingRows.data} />
+            {data && <ProductList rows={data?.data} />}
           </Box>
         </Box>
       </Box>
     </StoreLeftSideBar>
   );
-}
+};
 
-export default ProductManagement
+export default ProductManagement;

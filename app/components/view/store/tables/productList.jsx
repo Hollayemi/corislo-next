@@ -19,9 +19,10 @@ import { formatDate } from "@/app/utils/format"
 import { rows } from '@/app/data/store/productData'
 
 // ** renders client column
+
+
 const renderClient = params => {
   const { row } = params
-  console.log(row);
   const stateNum = Math.floor(Math.random() * 6)
   const states = ['success', 'error', 'warning', 'info', 'primary', 'secondary']
   const color = states[stateNum]

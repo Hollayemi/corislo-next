@@ -38,7 +38,8 @@ const Avatar = forwardRef((props, ref) => {
     success: getAvatarStyles(skin, 'success'),
     error: getAvatarStyles(skin, 'error'),
     warning: getAvatarStyles(skin, 'warning'),
-    info: getAvatarStyles(skin, 'info')
+    info: getAvatarStyles(skin, 'info'),
+    pink: getAvatarStyles(skin, 'pink')
   }
 
   return <MuiAvatar ref={ref} {...props} sx={!src && skin && color ? Object.assign(colors[color], sx) : sx} />

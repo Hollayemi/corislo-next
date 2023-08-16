@@ -1,9 +1,10 @@
 // ** MUI Imports
+import useSWR from "swr";
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
-import CardContent from '@mui/material/CardContent'
+import tokens from "@/app/configs/tokens";
 
 // ** Icon Imports
 import Icon from '@/app/components/icon'
@@ -42,7 +43,8 @@ const data = [
   }
 ]
 
-const renderStats = () => {
+const renderStats = (data) => {
+  console.log(data);
   return data.map((sale, index) => (
     <Grid item xs={12} md={3} key={index}>
       <Box key={index} sx={{ display: 'flex', alignItems: 'start' }}>
@@ -60,14 +62,21 @@ const renderStats = () => {
 }
 
 const OverViewCard = () => {
+  const { data, error, isLoading } = useSWR({
+    endPoint: "/store/files-count",
+    token: tokens.store,
+  });
+  console.log(data, error, isLoading);
   return (
-    
-      <Box sx={{ pt: theme => `${theme.spacing(0.5)} !important` }}>
+    !error &&
+    !isLoading && (
+      <Box sx={{ pt: (theme) => `${theme.spacing(0.5)} !important` }}>
         <Grid container spacing={1}>
-          {renderStats()}
+          {renderStats(data.data.topBar)}
         </Grid>
       </Box>
-  )
+    )
+  );
 }
 
 export default OverViewCard

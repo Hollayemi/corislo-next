@@ -1,5 +1,5 @@
 import { createAsyncThunk, unwrapResult } from '@reduxjs/toolkit';
-import { Message, toaster } from 'rsuite';
+import toaster from "@/app/configs/toaster";
 import martApi from '../../../api/baseApi';
 
 export const myPaymentRef = createAsyncThunk(
@@ -18,14 +18,7 @@ export const handlePaymentSuccess = (dispatch, payload) => {
         .then(unwrapResult)
         .then((res) => {
             if (res.type === 'Transaction was successful') {
-                toaster.push(
-                    <Message showIcon type={res.type}>
-                        {res.message}
-                    </Message>,
-                    {
-                        placement: 'topEnd',
-                    }
-                );
+                toaster({ ...res });
             }
         })
         .catch((e) => {

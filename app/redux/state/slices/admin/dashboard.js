@@ -2,9 +2,10 @@ import { createAsyncThunk, createSlice, unwrapResult } from '@reduxjs/toolkit';
 import martApi from '../api/baseApi';
 import { jsonHeader } from '../api/setAuthHeaders';
 import { REQUEST_STATUS } from '../constants';
+import tokens from '@/app/configs/tokens';
 
 const Overview = createAsyncThunk('post/xmartOverview', async (payload) => {
-    const xmartToken = localStorage.getItem('xmart_token');
+    const xmartToken = tokens.corislo
     const { data } = await martApi
         .post('/xmartOverview/', payload, jsonHeader(xmartToken))
         .then((res) => res)
@@ -30,7 +31,7 @@ export const xmartOverview = (dispatch, setTargetInfo, query) => {
 const awaitingProducts = createAsyncThunk(
     'post/xmartOverview',
     async (payload) => {
-        const xmartToken = localStorage.getItem('xmart_token');
+        const xmartToken = tokens.corislo;
         const { data } = await martApi
             .post('/awaitingProducts', payload, jsonHeader(xmartToken))
             .then((res) => res)

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, unwrapResult } from '@reduxjs/toolkit';
-import { Message, toaster } from 'rsuite';
+import toaster from "@/app/configs/toaster";
 import martApi from '../../api/baseApi';
 import { REQUEST_STATUS } from '../../constants';
 
@@ -21,13 +21,6 @@ export const feedbackLoader = (payload, dispatch, setInfo) => {
             if (res.type === 'success') {
                 setInfo(res.data[0]);
             }
-            toaster.push(
-                <Message showIcon type={res.type}>
-                    {res.text}
-                </Message>,
-                {
-                    placement: 'bottomCenter',
-                }
-            );
+            toaster({ ...res })
         });
 };

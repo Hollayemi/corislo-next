@@ -56,11 +56,12 @@ const OnlyContents = ({ each, path }) => {
   const onSubList =  !path.sublist ? "" : `/${path.sublist}`
   const listPath = `/store/dashboard/${path.sidebar}${each.path}`;
     return (
-        <Link href={listPath} className="decoration-none">
+        <Link href={listPath}>
             <ListItem disablePadding sx={{ display: 'block', color: "gray" }} className="text-xs">
             <ListItemButton
+            size="small"
             sx={{
-                minHeight: 48,
+                minHeight: 40,
                 fontSize: "13px",
                 my: 0.5,
                 px: 2.5,
@@ -68,7 +69,7 @@ const OnlyContents = ({ each, path }) => {
                 color: onSubList !== each.path ? "#666" : "#fff",
                 bgcolor: onSubList !== each.path ? "#fff" : "#2C337C",
                 borderRadius: 2,
-                mx: 1,
+                // mx: 1,
                 transition: "none",
                 '&:hover': {
                 color: "white !important",
@@ -97,7 +98,7 @@ const InnerBar = ({ content, path, InnerList }) => {
             <Box key={idx} className="p-3">
               <Typography
                 variant="h5"
-                className="text-[12px] text-gray-500 mb-3"
+                className="!text-[12px] text-gray-500 !mb-3"
               >
                 {item.title}
               </Typography>

@@ -1,9 +1,24 @@
+'use client';
+import useSWR from "swr";
+import { useRouter } from "next/navigation";
 import { Typography, Box, Select, MenuItem } from "@mui/material";
 import Table from "@/app/components/view/store/tables/OrderTable";
 import { listingColumns } from "./columns";
 import { allCustomers } from "./rows";
+import tokens from "@/app/configs/tokens";
 
 export const AllCustomers = () => {
+  const router = useRouter();
+  const { data, error, isLoading } = useSWR({
+    endPoint: `/branch/customers`,
+    token: tokens.store,
+  });
+  const onRowClick = (row) => {
+    console.log(row)
+    router.push(
+      `/store/dashboard/customer-management?customer=${row._id.userId}`
+    );
+  }
   return (
     <Box>
       <Typography variant="caption" className="!text-[12px] !mt-3">
@@ -21,12 +36,18 @@ export const AllCustomers = () => {
       </Typography>
 
       {/* <br /> */}
-      <Typography variant="h5" className="!font-bold !text-sm pt-6">
-        All Customers (1,394)
-      </Typography>
-      {/* <Box> */}
-      <Table columns={listingColumns} rows={allCustomers.data} />
-      {/* </Box> */}
+      {!error && !isLoading && (
+        <>
+          <Typography variant="h5" className="!font-bold !text-sm py-6">
+            All Customers ({data.data.length})
+          </Typography>
+          <Table
+            columns={listingColumns}
+            onRowClick={onRowClick}
+            rows={data.data}
+          />
+        </>
+      )}
     </Box>
   );
 };

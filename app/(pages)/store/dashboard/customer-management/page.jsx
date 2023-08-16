@@ -34,7 +34,11 @@ const CustomerManagement = ({ params, searchParams }) => {
           </Box>
 
           <Box>
-            {searchParams.customer ? <CustomerDetails /> : <AllCustomers />}
+            {searchParams.customer ? (
+              <CustomerDetails customer={searchParams.customer} />
+            ) : (
+              <AllCustomers />
+            )}
           </Box>
         </Box>
       </Box>

@@ -1,27 +1,25 @@
+'use client'
 import "@/styles/globals.css";
 import ThemeComponent from "@/theme";
 import Head from "next/head";
-// import NProgress from "nprogress";
+import persistStore from "redux-persist/es/persistStore";
+import NextProgress from "nextjs-progressbar";
+import {store} from "@/app/redux/state/store"
+import { Provider } from 'react-redux';
+import { PersistGate } from "redux-persist/integration/react";
+import { SWRConfig } from "swr";
+import martApi from "@/app/redux/state/slices/api/baseApi";
+import { jsonHeader } from "../redux/state/slices/api/setAuthHeaders";
 
 export const metadata = {
   title: "Corislo-NG | Your One-Stop Ecommerce Hub for Next-Generation Solutions",
   description: "Your ultimate destination for top-quality products and unparalleled shopping experiences. Explore a captivating assortment of fashion, electronics, home essentials, and more. Immerse yourself in a seamless and secure shopping journey with our user-friendly platform. Indulge your senses, find inspiration, and redefine convenience with every visit. Embrace the joy of discovering something extraordinary as you navigate through our meticulously curated selection. Elevate your online shopping experience with Corislo – where dreams become reality.",
 
 };
+
+const persistor = persistStore(store);
+
 // ** Pace Loader
-// if (true) {
-//   Router.events.on('routeChangeStart', () => {
-//     NProgress.start()
-//   })
-
-//   Router.events.on('routeChangeError', () => {
-//     NProgress.done()
-//   })
-
-//   Router.events.on('routeChangeComplete', () => {
-//     NProgress.done()
-//   })
-// }
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
@@ -56,7 +54,24 @@ export default function RootLayout({ children }) {
         <meta property="og:type" content="product" />
       </Head>
       <body className="">
-        <ThemeComponent>{children}</ThemeComponent>
+        <SWRConfig
+          value={{
+            refreshInterval: false,
+            revalidateOnFocus: false,
+            fetcher: async (resource, init) => {
+              const getToken = resource.token ? jsonHeader(resource.token) : {};
+              const res = await martApi.get(resource.endPoint, getToken);
+              return res.data;
+            }
+          }}
+        >
+          <NextProgress />
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <ThemeComponent>{children}</ThemeComponent>
+            </PersistGate>
+          </Provider>
+        </SWRConfig>
       </body>
     </html>
   );

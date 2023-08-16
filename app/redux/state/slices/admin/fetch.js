@@ -1,10 +1,11 @@
 import { createAsyncThunk, unwrapResult } from '@reduxjs/toolkit';
 import martApi from '../api/baseApi';
 import { jsonHeader } from '../api/setAuthHeaders';
+import tokens from "@/app/configs/tokens";
 
 // Api to get all Business for admin
 export const getAllBusinesses = createAsyncThunk('post/allstores', async () => {
-    const xmartToken = localStorage.getItem('xmart_token');
+    const xmartToken = tokens.corislo
     const { data } = await martApi
         .get('/all-stores', jsonHeader(xmartToken))
         .then((res) => res)
@@ -28,7 +29,7 @@ export const fetchAllStore = (dispatch, setData) => {
 export const getStoreInfoApi = createAsyncThunk(
     'post/allBuzz',
     async (store) => {
-        const xmartToken = localStorage.getItem('xmart_token');
+        const xmartToken = tokens.corislo;
         const { data } = await martApi
             .get(`/getStoreByStoreName/${store}`, jsonHeader(xmartToken))
             .then((res) => res)

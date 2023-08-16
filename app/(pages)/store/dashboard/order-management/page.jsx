@@ -1,18 +1,25 @@
 "use client";
 import { useState } from "react";
+import useSWR from "swr";
 import { Typography, Box, Grid } from "@mui/material";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 import OrderTable from "./components/orderTable";
 import OrderDetails from "./components/orderDetails";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useRouter } from "next/navigation"
+import tokens from "@/app/configs/tokens";
 
 const OrderManagement = ({ params, searchParams }) => {
+
+  const { data, error, isLoading } = useSWR({
+    endPoint: "/branch/order-request",
+    token: tokens.store,
+  });
+  console.log(data, error, isLoading);
   console.log(params);
   const router = useRouter()
 
   const path = { ...params, sidebar: "order-management" };
-  const [selectedRow, selectRow] = useState(null);
 
   return (
     <StoreLeftSideBar path={path} subListBar={false}>
@@ -32,9 +39,9 @@ const OrderManagement = ({ params, searchParams }) => {
           </Typography>
         </Box>
         {!searchParams.order ? (
-          <OrderTable selectRow={selectRow} />
+          !error && !isLoading && <OrderTable selectRow={data} />
         ) : (
-          <OrderDetails row={selectedRow} />
+          <OrderDetails order={searchParams.order} />
         )}
       </Box>
     </StoreLeftSideBar>

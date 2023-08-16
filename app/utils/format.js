@@ -9,15 +9,15 @@
 import { Typography, Box } from "@mui/material";
 
 // ** Checks if the passed date is today
-const isToday = date => {
-  const today = new Date()
+const isToday = (date) => {
+  const today = new Date();
 
   return (
     new Date(date).getDate() === today.getDate() &&
     new Date(date).getMonth() === today.getMonth() &&
     new Date(date).getFullYear() === today.getFullYear()
-  )
-}
+  );
+};
 
 export const changeTime = (prevDate) => {
   prevDate = new Date(prevDate);
@@ -50,79 +50,147 @@ export const changeTime = (prevDate) => {
   return realTime;
 };
 
-export const formatDate = (value, formatting = { month: 'short', day: 'numeric', year: 'numeric' }) => {
-  if (!value) return value
+export const formatDate = (
+  value,
+  formatting = { month: "short", day: "numeric", year: "numeric" }
+) => {
+  if (!value) return value;
 
-  return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
-}
+  return new Intl.DateTimeFormat("en-US", formatting).format(new Date(value));
+};
 
 // ** Returns short month of passed date
 export const formatDateToMonthShort = (value, toTimeForCurrentDay = true) => {
-  const date = new Date(value)
-  let formatting = { month: 'short', day: 'numeric' }
+  const date = new Date(value);
+  let formatting = { month: "short", day: "numeric" };
   if (toTimeForCurrentDay && isToday(date)) {
-    formatting = { hour: 'numeric', minute: 'numeric' }
+    formatting = { hour: "numeric", minute: "numeric" };
   }
 
-  return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
-}
+  return new Intl.DateTimeFormat("en-US", formatting).format(new Date(value));
+};
 
 // ? The following functions are taken from https://codesandbox.io/s/ovvwzkzry9?file=/utils.js for formatting credit card details
 // Get only numbers from the input value
-const clearNumber = (value = '') => {
-  return value.replace(/\D+/g, '')
-}
+const clearNumber = (value = "") => {
+  return value.replace(/\D+/g, "");
+};
 
 // Format credit cards according to their types
 export const formatCreditCardNumber = (value, Payment) => {
   if (!value) {
-    return value
+    return value;
   }
-  const issuer = Payment.fns.cardType(value)
-  const clearValue = clearNumber(value)
-  let nextValue
+  const issuer = Payment.fns.cardType(value);
+  const clearValue = clearNumber(value);
+  let nextValue;
   switch (issuer) {
-    case 'amex':
-      nextValue = `${clearValue.slice(0, 4)} ${clearValue.slice(4, 10)} ${clearValue.slice(10, 15)}`
-      break
-    case 'dinersclub':
-      nextValue = `${clearValue.slice(0, 4)} ${clearValue.slice(4, 10)} ${clearValue.slice(10, 14)}`
-      break
+    case "amex":
+      nextValue = `${clearValue.slice(0, 4)} ${clearValue.slice(
+        4,
+        10
+      )} ${clearValue.slice(10, 15)}`;
+      break;
+    case "dinersclub":
+      nextValue = `${clearValue.slice(0, 4)} ${clearValue.slice(
+        4,
+        10
+      )} ${clearValue.slice(10, 14)}`;
+      break;
     default:
-      nextValue = `${clearValue.slice(0, 4)} ${clearValue.slice(4, 8)} ${clearValue.slice(8, 12)} ${clearValue.slice(
-        12,
-        19
-      )}`
-      break
+      nextValue = `${clearValue.slice(0, 4)} ${clearValue.slice(
+        4,
+        8
+      )} ${clearValue.slice(8, 12)} ${clearValue.slice(12, 19)}`;
+      break;
   }
 
-  return nextValue.trim()
-}
+  return nextValue.trim();
+};
 
 // Format expiration date in any credit card
-export const formatExpirationDate = value => {
+export const formatExpirationDate = (value) => {
   const finalValue = value
-    .replace(/^([1-9]\/|[2-9])$/g, '0$1/') // 3 > 03/
-    .replace(/^(0[1-9]|1[0-2])$/g, '$1/') // 11 > 11/
-    .replace(/^([0-1])([3-9])$/g, '0$1/$2') // 13 > 01/3
-    .replace(/^(0?[1-9]|1[0-2])([0-9]{2})$/g, '$1/$2') // 141 > 01/41
-    .replace(/^([0]+)\/|[0]+$/g, '0') // 0/ > 0 and 00 > 0
+    .replace(/^([1-9]\/|[2-9])$/g, "0$1/") // 3 > 03/
+    .replace(/^(0[1-9]|1[0-2])$/g, "$1/") // 11 > 11/
+    .replace(/^([0-1])([3-9])$/g, "0$1/$2") // 13 > 01/3
+    .replace(/^(0?[1-9]|1[0-2])([0-9]{2})$/g, "$1/$2") // 141 > 01/41
+    .replace(/^([0]+)\/|[0]+$/g, "0") // 0/ > 0 and 00 > 0
     // To allow only digits and `/`
-    .replace(/[^\d\/]|^[\/]*$/g, '')
-    .replace(/\/\//g, '/') // Prevent entering more than 1 `/`
+    .replace(/[^\d\/]|^[\/]*$/g, "")
+    .replace(/\/\//g, "/"); // Prevent entering more than 1 `/`
 
-  return finalValue
-}
+  return finalValue;
+};
 
 // Format CVC in any credit card
 export const formatCVC = (value, cardNumber, Payment) => {
-  const clearValue = clearNumber(value)
-  const issuer = Payment.fns.cardType(cardNumber)
-  const maxLength = issuer === 'amex' ? 4 : 3
+  const clearValue = clearNumber(value);
+  const issuer = Payment.fns.cardType(cardNumber);
+  const maxLength = issuer === "amex" ? 4 : 3;
 
-  return clearValue.slice(0, maxLength)
-}
+  return clearValue.slice(0, maxLength);
+};
 
+export const calculateDateDiff = (timeSpan, initialDate, operator = "-") => {
+
+  const today = new Date(initialDate);
+  console.log(today);
+  const dateSplit = timeSpan.split("_");
+  const howMany = dateSplit[0];
+  const prediod = dateSplit[1];
+
+  if (prediod === "day" || prediod === "days") {
+    const daysAgo = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      operator === "-"
+        ? today.getDate() - 1 * howMany
+        : today.getDate() + 1 * howMany
+    );
+    daysAgo.setHours(0, 0, 0, 0); // Set time to midnight for accurate comparison
+
+    return formatDate(daysAgo);
+  }
+
+  if (prediod === "week" || prediod === "weeks") {
+    const theDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      operator === "-"
+        ? today.getDate() - 7 * howMany
+        : today.getDate() + 7 * howMany
+    );
+
+    return formatDate(theDate);
+  }
+
+  if (prediod === "month" || prediod === "months") {
+    const theDate = new Date(
+      today.getFullYear(),
+      operator === "-"
+        ? today.getMonth() - 1 * howMany
+        : today.getMonth() + 1 * howMany,
+      1
+    );
+
+    return formatDate(theDate);
+  }
+
+  if (prediod === "year" || prediod === "years") {
+    const oneYearAgo = new Date(
+      operator === "-"
+        ? today.getFullYear() - 1 * howMany
+        : today.getFullYear() + 1 * howMany,
+      today.getMonth(),
+      today.getDate()
+    );
+    oneYearAgo.setHours(0, 0, 0, 0); // Set time to midnight for accurate comparison
+
+    return formatDate(oneYearAgo);
+  }
+  return formatDate(today); //
+};
 
 export const formatShippingAddress = (address) => {
   return (
@@ -132,22 +200,19 @@ export const formatShippingAddress = (address) => {
   );
 };
 
-
 export const formatSegmentation = (orders, totalAmount, lastSeen) => {
   let categ = "Recent Buyer";
-  let color = "orange"
+  let color = "orange";
   const timeDifference = Math.abs(new Date(lastSeen) - new Date());
   console.log(timeDifference);
   const millisecondsPerWeek = 7 * 24 * 60 * 60 * 1000;
   const weeksDifference = Math.floor(timeDifference / millisecondsPerWeek);
 
-  if (orders >= 10 && totalAmount.parseInt() > 100000 ) {
+  if (orders >= 10 && totalAmount.parseInt() > 100000) {
     categ = "High Spender";
-    color = "red"
+    color = "red";
   }
-  if (
-    orders > 15 && totalAmount.parseInt() < 100000
-  ) {
+  if (orders > 15 && totalAmount.parseInt() < 100000) {
     categ = "Frequent Buyer";
     color = "green";
   }
@@ -165,7 +230,10 @@ export const formatSegmentation = (orders, totalAmount, lastSeen) => {
         className={`!text-xs !whitespace-break-spaces flex items-center `}
         color={color}
       >
-        <Box bgcolor={color} className="w-4 h-4 shrink-0 rounded-full mr-2"></Box>
+        <Box
+          bgcolor={color}
+          className="w-4 h-4 shrink-0 rounded-full mr-2"
+        ></Box>
 
         {categ}
       </Box>
@@ -173,3 +241,10 @@ export const formatSegmentation = (orders, totalAmount, lastSeen) => {
   );
 };
 
+export const formatCurrency = (amount, currency = "NGN", sign = "NG") => {
+  const formattedCurrencyUS = new Intl.NumberFormat(`en-${sign}`, {
+    style: "currency",
+    currency,
+  }).format(amount);
+  return formattedCurrencyUS;
+};
