@@ -72,43 +72,66 @@ const LoginV1 = () => {
   }
 
   return (
-    <Box className='content-center '>
+    <Box className="content-center ">
       <AuthWrapper>
         <Card>
-          <CardContent >
-            <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <CardContent>
+            <Box
+              sx={{
+                mb: 3,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <Image src={themeConfig.vertical1} width={180} height={100} />
               {/* <Typography sx={{ ml: 2.5, fontWeight: 600, fontSize: '1.625rem', lineHeight: 1.385 }}>
                 {themeConfig.templateName}
               </Typography> */}
             </Box>
             <Box sx={{ mb: 2 }}>
-              <Typography variant='h6' sx={{ mb: 1.5 }}>
+              <Typography variant="h6" sx={{ mb: 1.5 }}>
                 {`Welcome to ${themeConfig.templateName}! 👋🏻`}
               </Typography>
-              <Typography sx={{ color: 'text.secondary' }}>
+              <Typography sx={{ color: "text.secondary" }}>
                 Please sign-in to your account and start the adventure
               </Typography>
             </Box>
-            <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-              <TextField autoFocus fullWidth id='email' label='Email' sx={{ mb: 4 }} />
+            <form
+              noValidate
+              autoComplete="off"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <TextField
+                autoFocus
+                fullWidth
+                id="email"
+                label="Email"
+                sx={{ mb: 4 }}
+              />
               <FormControl fullWidth sx={{ mb: 1.5 }}>
-                <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
+                <InputLabel htmlFor="auth-login-password">Password</InputLabel>
                 <OutlinedInput
-                  label='Password'
+                  label="Password"
                   value={values.password}
-                  id='auth-login-password'
-                  onChange={handleChange('password')}
-                  type={values.showPassword ? 'text' : 'password'}
+                  id="auth-login-password"
+                  onChange={handleChange("password")}
+                  type={values.showPassword ? "text" : "password"}
                   endAdornment={
-                    <InputAdornment position='end'>
+                    <InputAdornment position="end">
                       <IconButton
-                        edge='end'
+                        edge="end"
                         onClick={handleClickShowPassword}
-                        onMouseDown={e => e.preventDefault()}
-                        aria-label='toggle password visibility'
+                        onMouseDown={(e) => e.preventDefault()}
+                        aria-label="toggle password visibility"
                       >
-                        <Icon icon={values.showPassword ? 'tabler:eye' : 'tabler:eye-off'} />
+                        <Icon
+                          icon={
+                            values.showPassword
+                              ? "tabler:eye"
+                              : "tabler:eye-off"
+                          }
+                        />
                       </IconButton>
                     </InputAdornment>
                   }
@@ -117,22 +140,43 @@ const LoginV1 = () => {
               <Box
                 sx={{
                   mb: 1.75,
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  alignItems: 'center',
-                  justifyContent: 'space-between'
+                  display: "flex",
+                  flexWrap: "wrap",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                <FormControlLabel control={<Checkbox />} label='Remember Me' />
-                <LinkStyled href='/pages/auth/forgot-password-v1'>Forgot Password?</LinkStyled>
+                <FormControlLabel control={<Checkbox />} label="Remember Me" />
+                <LinkStyled href="/pages/auth/forgot-password-v1">
+                  Forgot Password?
+                </LinkStyled>
               </Box>
-              <Button fullWidth size='large' color='primary' type='submit' variant='contained' sx={{ mb: 4 }}>
+              <Button
+                fullWidth
+                size="large"
+                color="primary"
+                type="submit"
+                variant="contained"
+                sx={{ mb: 4 }}
+              >
                 Login
               </Button>
-              <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-                <Typography sx={{ color: 'text.secondary', mr: 2 }}>New on our platform?</Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                }}
+              >
+                <Typography sx={{ color: "text.secondary", mr: 2 }}>
+                  New on our platform?
+                </Typography>
                 <Typography>
-                  <LinkStyled href='/auth/create-account' sx={{ fontSize: '1rem' }}>
+                  <LinkStyled
+                    href="/auth/create-account"
+                    sx={{ fontSize: "1rem" }}
+                  >
                     Create an account
                   </LinkStyled>
                 </Typography>
@@ -147,23 +191,47 @@ const LoginV1 = () => {
               >
                 or
               </Divider> */}
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <IconButton href='/' component={Link} sx={{ color: '#497ce2' }} onClick={e => e.preventDefault()}>
-                  <Icon icon='tabler:facebook' />
-                </IconButton>
-                <IconButton href='/' component={Link} sx={{ color: '#1da1f2' }} onClick={e => e.preventDefault()}>
-                  <Icon icon='mdi:twitter' />
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <IconButton
+                  href="/"
+                  component={Link}
+                  sx={{ color: "#497ce2" }}
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <Icon icon="tabler:facebook" />
                 </IconButton>
                 <IconButton
-                  href='/'
+                  href="/"
                   component={Link}
-                  onClick={e => e.preventDefault()}
-                  sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : 'grey.300') }}
+                  sx={{ color: "#1da1f2" }}
+                  onClick={(e) => e.preventDefault()}
                 >
-                  <Icon icon='mdi:github' />
+                  <Icon icon="mdi:twitter" />
                 </IconButton>
-                <IconButton href='/' component={Link} sx={{ color: '#db4437' }} onClick={e => e.preventDefault()}>
-                  <Icon icon='mdi:google' />
+                <IconButton
+                  href="/"
+                  component={Link}
+                  onClick={(e) => e.preventDefault()}
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === "light" ? "#272727" : "grey.300",
+                  }}
+                >
+                  <Icon icon="mdi:github" />
+                </IconButton>
+                <IconButton
+                  href="https:5001/api/v1/auth/google"
+                  component={Link}
+                  sx={{ color: "#db4437" }}
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <Icon icon="mdi:google" />
                 </IconButton>
               </Box>
             </form>
@@ -171,7 +239,7 @@ const LoginV1 = () => {
         </Card>
       </AuthWrapper>
     </Box>
-  )
+  );
 }
 LoginV1.getLayout = page => <BlankLayout>{page}</BlankLayout>
 

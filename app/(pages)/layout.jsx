@@ -11,7 +11,7 @@ import { SWRConfig } from "swr";
 import martApi from "@/app/redux/state/slices/api/baseApi";
 import { jsonHeader } from "../redux/state/slices/api/setAuthHeaders";
 
-export const metadata = {
+const metadata = {
   title: "Corislo-NG | Your One-Stop Ecommerce Hub for Next-Generation Solutions",
   description: "Your ultimate destination for top-quality products and unparalleled shopping experiences. Explore a captivating assortment of fashion, electronics, home essentials, and more. Immerse yourself in a seamless and secure shopping journey with our user-friendly platform. Indulge your senses, find inspiration, and redefine convenience with every visit. Embrace the joy of discovering something extraordinary as you navigate through our meticulously curated selection. Elevate your online shopping experience with Corislo – where dreams become reality.",
 

@@ -13,7 +13,8 @@ if (authToken) {
 }
 let server = "http://localhost:5001/api/v1/";
 if (process.env.NODE_ENV === "production") {
-  server = "https://corisio.onrender.com/api/v1/";
+  console.log("in production")
+  server = "https://corislo-backend.onrender.com/api/v1/";
 }
 const Axios = axios.create({
   baseURL: server,

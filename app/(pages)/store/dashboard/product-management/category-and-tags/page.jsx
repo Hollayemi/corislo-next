@@ -10,6 +10,8 @@ import Icon from '@/app/components/icon'
 import TreeItem from '@mui/lab/TreeItem'
 import { alpha, styled } from '@mui/material/styles'
 import MuiTreeView from '@mui/lab/TreeView'
+import tokens from "@/app/configs/tokens";
+import useSWR from 'swr';
 
 const CategoryAndTags = ({ params }) => {
   const path={...params, sidebar: "product-management", sublist: "category-and-tags"}
@@ -35,7 +37,11 @@ const CategoryAndTags = ({ params }) => {
 }
 
 const BriefCategories = ({ selectedCate, setSelectedCate }) => {
-    const allCategories = categoriesBriefData.map((item, i) => {
+    const { data, error, isLoading } = useSWR({
+    endPoint: "/store/brief-categories",
+    token: tokens.store,
+  });
+    const allCategories = !error && !isLoading ? data.data.map((item, i) => {
         return (
             <Grid item xs={12} sm={6} md={4} key={i}>
                 <CardStatsHorizontal
@@ -49,7 +55,7 @@ const BriefCategories = ({ selectedCate, setSelectedCate }) => {
                 />
             </Grid>
         )
-    })
+    }): null
     return (
         <>
             <Typography className="!font-bold">Categories</Typography>

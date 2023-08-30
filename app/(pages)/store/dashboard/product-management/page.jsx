@@ -15,7 +15,6 @@ const ProductManagement = ({ params }) => {
     endPoint: "/store/get-products",
     token: tokens.store,
   });
-  console.log(data, error, isLoading);
   // const dispatch = useDispatch();
   // useEffect(() => {
   //   dispatch(StoreSalesApi({ time: "1_month" }));
