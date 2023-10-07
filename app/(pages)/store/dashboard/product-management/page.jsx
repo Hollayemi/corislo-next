@@ -30,8 +30,8 @@ const ProductManagement = ({ params }) => {
       <Box className="w-full">
         <Box className="bg-white rounded-md px-3 py-6">
           <OverViewCard />
-        </Box>
         <Box className="bg-white rounded-md mt-4 px-3 pt-6 w-full">
+        </Box>
           <Box className="flex justify-between items-center px-">
             <Typography className="text-xs md:text-md font-bold">
               All Products ({data?.data.length})

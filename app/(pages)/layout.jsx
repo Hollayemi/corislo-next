@@ -59,7 +59,7 @@ export default function RootLayout({ children }) {
             refreshInterval: false,
             revalidateOnFocus: false,
             fetcher: async (resource, init) => {
-              const getToken = resource.token ? jsonHeader(resource.token) : {};
+              const getToken = resource.token ? jsonHeader() : {};
               const res = await martApi.get(resource.endPoint, getToken);
               return res.data;
             }
