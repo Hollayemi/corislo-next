@@ -5,4 +5,75 @@
 *{
     padding: 0px;
     margin: 0px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
+
+.slick-slide{
+    margin: 0 5px;
+}
+
+.slick-list{
+    margin: 0 -10px;
+}
+button {
+    text-transform: none !important;
+}
+
+input::placeholder, textarea::placeholder{
+    font-size: 12px !important;
+    font-family: cursive;
+}
+
+
+.custom-slider {
+    position: relative !important;
+    z-index: 10;
+        
+}
+
+.slick-prev:before, .slick-next:before{
+    color: #2C337C !important;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid #2C337C;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slick-prev:after{
+    background-color:red;
+}
+
+.custom-slider .slick-next {
+    position: absolute;
+    top: -30px !important;
+    left: 97% !important;
+    z-index: 10000 !important;
+}
+.custom-slider .slick-prev {
+    position: absolute !important;
+    top: -30px !important;
+    left: calc(94% - 25px) !important;
+    z-index: 10000 !important;
+}
+
+@media screen and (max-width: 700px) {
+    .custom-slider .slick-next {
+        position: absolute;
+        top: -30px !important;
+        left: 93% !important;
+        z-index: 10000 !important;
+    }
+    .custom-slider .slick-prev {
+        position: absolute !important;
+        top: -30px !important;
+        left: calc(88% - 25px) !important;
+        z-index: 10000 !important;
+    }
+}
+/* 
+.customInputt:focus-within{
+    border: 1px solid blue;
+} */

@@ -1,72 +1,45 @@
-'use client';
+"use client";
+// ** React Imports
+import { useState } from "react";
+
 // ** Next Import
-import Link from 'next/link'
+import Link from "next/link";
 
 // ** MUI Components
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
-import CardContent from '@mui/material/CardContent'
-import { styled, useTheme } from '@mui/material/styles'
-import MuiCard from '@mui/material/Card'
+import Box from "@mui/material/Box";
+import { styled, useTheme } from "@mui/material/styles";
+import MuiCard from "@mui/material/Card";
+import MuiFormControlLabel from "@mui/material/FormControlLabel";
 
-// ** Configs
-import themeConfig from '@/app/configs/themeConfig'
+import { CustomInput } from "@/app/components/cards/auth/components";
+import { Button, Typography } from "@mui/material";
+import Image from "next/image";
 
-// ** Layout Import
-import BlankLayout from '@/app/components/layouts/BlankLayout';
-
-// ** Demo Imports
-import AuthWrapper from '@/app/components/wrapper/AuthWrapper'
-import Image from 'next/image';
-
-// ** Styled Components
-const Card = styled(MuiCard)(({ theme }) => ({
-  [theme.breakpoints.up('sm')]: { width: '25rem' }
-}))
-
-const LinkStyled = styled(Link)(({ theme }) => ({
-  textDecoration: 'none',
-  marginLeft: theme.spacing(2),
-  color: theme.palette.primary.main
-}))
-
-const VerifyEmailV1 = () => {
-  // ** Hook
-  const theme = useTheme()
-
+const SendMail = () => {
   return (
-    <Box className='content-center'>
-      <AuthWrapper>
-        <Card>
-          <CardContent sx={{ p: theme => `${theme.spacing(10.5, 8, 8)} !important` }}>
-            <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Image src={themeConfig.vertical1} width={150} height={100} />
-            </Box>
-            <Box sx={{ mb: 6 }}>
-              <Typography variant='h6' sx={{ mb: 1.5 }}>
-                Verify your email ✉️
-              </Typography>
-              <Typography sx={{ color: 'text.secondary' }}>
-                Account activation link sent to your email address: hello@example.com Please follow the link inside to
-                continue.
-              </Typography>
-            </Box>
-            <Button fullWidth variant='contained'>
-              Skip for now
-            </Button>
-            <Box sx={{ mt: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Typography sx={{ color: 'text.secondary' }}>Didn't get the mail?</Typography>
-              <LinkStyled href='/' onClick={e => e.preventDefault()}>
-                Resend
-              </LinkStyled>
-            </Box>
-          </CardContent>
-        </Card>
-      </AuthWrapper>
-    </Box>
-  )
-}
-VerifyEmailV1.getLayout = page => <BlankLayout>{page}</BlankLayout>
+    <Box className=" w-[380px] !mt-4 flex flex-col items-center">
+      <Image
+        src="/images/misc/verify-email.png"
+        alt="verify"
+        width={600}
+        height={600}
+        className="w-60 h-[220px]"
+      />
 
-export default VerifyEmailV1
+      <Typography variant="caption" className="!text-[13px] !text-center">
+        Welcome to Corisio! To complete your registration and secure your
+        account, please enter the following OTP that was sent to your mail
+        sam*****@gmail.com in the input provided in the next page
+      </Typography>
+
+      <Button
+        variant="contained"
+        className="w-80 !h-10 !rounded-full !text-gray-100 !text-[14px] !mt-6"
+      >
+        Verify Email Address
+      </Button>
+    </Box>
+  );
+};
+
+export default SendMail;

@@ -19,6 +19,34 @@ const isToday = (date) => {
   );
 };
 
+export const timeSince = (date) => {
+  const currentDate = new Date();
+  const timeElapsedInSeconds = Math.floor((currentDate - date) / 1000);
+
+  if (timeElapsedInSeconds < 60) {
+    return "Just now";
+  } else if (timeElapsedInSeconds < 3600) {
+    const minutes = Math.floor(timeElapsedInSeconds / 60);
+    return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
+  } else if (timeElapsedInSeconds < 86400) {
+    const hours = Math.floor(timeElapsedInSeconds / 3600);
+    return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
+  } else if (timeElapsedInSeconds < 604800) {
+    const days = Math.floor(timeElapsedInSeconds / 86400);
+    return `${days} day${days !== 1 ? "s" : ""} ago`;
+  } else if (timeElapsedInSeconds < 2419200) {
+    const weeks = Math.floor(timeElapsedInSeconds / 604800);
+    return `${weeks} week${weeks !== 1 ? "s" : ""} ago`;
+  } else if (timeElapsedInSeconds < 29030400) {
+    // Approximately one year
+    const months = Math.floor(timeElapsedInSeconds / 2419200);
+    return `${months} month${months !== 1 ? "s" : ""} ago`;
+  } else {
+    const years = Math.floor(timeElapsedInSeconds / 29030400); // Approximately one year
+    return `${years} year${years !== 1 ? "s" : ""} ago`;
+  }
+};
+
 export const changeTime = (prevDate) => {
   prevDate = new Date(prevDate);
   const newDate = new Date();
@@ -133,7 +161,6 @@ export const formatCVC = (value, cardNumber, Payment) => {
 };
 
 export const calculateDateDiff = (timeSpan, initialDate, operator = "-") => {
-
   const today = new Date(initialDate);
   console.log(today);
   const dateSplit = timeSpan.split("_");
@@ -248,3 +275,4 @@ export const formatCurrency = (amount, currency = "NGN", sign = "NG") => {
   }).format(amount);
   return formattedCurrencyUS;
 };
+

@@ -1,3 +1,4 @@
+"use client";
 // ** Icon Imports
 import { Icon } from '@iconify/react'
 

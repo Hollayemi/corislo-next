@@ -1,85 +1,62 @@
-'use client';
+"use client";
+// ** React Imports
+import { useState } from "react";
+
 // ** Next Import
-import Link from 'next/link'
+import Link from "next/link";
 
 // ** MUI Components
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Typography from '@mui/material/Typography'
-import CardContent from '@mui/material/CardContent'
-import { styled, useTheme } from '@mui/material/styles'
-import MuiCard from '@mui/material/Card'
+import Box from "@mui/material/Box";
+import { styled, useTheme } from "@mui/material/styles";
+import MuiCard from "@mui/material/Card";
+import MuiFormControlLabel from "@mui/material/FormControlLabel";
 
-// ** Icon Imports
-import Icon from '@/app/components/icon'
+import { CustomInput } from "@/app/components/cards/auth/components";
+import { Button, Typography } from "@mui/material";
+import Image from "next/image";
 
-// ** Configs
-import themeConfig from '@/app/configs/themeConfig'
+const ForgotPassword = () => {
+  const [openInput, setOpenInput] = useState(false);
+  const [email, setEmail] = useState('');
 
-// ** Layout Import
-import BlankLayout from '@/app/components/layouts/BlankLayout';
-
-// ** Demo Imports
-import AuthWrapper from '@/app/components/wrapper/AuthWrapper'
-import Image from 'next/image';
-
-
-// ** Styled Components
-const Card = styled(MuiCard)(({ theme }) => ({
-  [theme.breakpoints.up('sm')]: { width: '25rem' }
-}))
-
-const LinkStyled = styled(Link)(({ theme }) => ({
-  display: 'flex',
-  fontSize: '1rem',
-  alignItems: 'center',
-  textDecoration: 'none',
-  justifyContent: 'center',
-  color: theme.palette.primary.main
-}))
-
-const ForgotPasswordV1 = () => {
-  // ** Hook
-  const theme = useTheme()
+  const buttonFunc = () => {
+    if(!openInput){
+      setOpenInput(true)
+    }
+  }
 
   return (
-    <Box className='content-center'>
-      <AuthWrapper>
-        <Card>
-          <CardContent sx={{ p: theme => `${theme.spacing(10.5, 8, 8)} !important` }}>
-            <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Image src={themeConfig.vertical1} width={150} height={100} />
-              {/* <Typography sx={{ ml: 2.5, fontWeight: 600, fontSize: '1.625rem', lineHeight: 1.385 }}>
-                {themeConfig.templateName}
-              </Typography> */}
-            </Box>
-            <Box sx={{ mb: 6 }}>
-              <Typography variant='h6' sx={{ mb: 1.5 }}>
-                Forgot Password? 🔒
-              </Typography>
-              <Typography sx={{ color: 'text.secondary' }}>
-                Enter your email and we&prime;ll send you instructions to reset your password
-              </Typography>
-            </Box>
-            <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-              <TextField autoFocus type='email' label='Email' sx={{ display: 'flex', mb: 4 }} />
-              <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 4 }}>
-                Send reset link
-              </Button>
-              <Typography sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', '& svg': { mr: 1 } }}>
-                <LinkStyled href='/pages/auth/login-v1'>
-                  <Icon fontSize='1.25rem' icon='tabler:chevron-left' />
-                  <span>Back to login</span>
-                </LinkStyled>
-              </Typography>
-            </form>
-          </CardContent>
-        </Card>
-      </AuthWrapper>
-    </Box>
-  )
-}
-ForgotPasswordV1.getLayout = page => <BlankLayout>{page}</BlankLayout>
+    <Box className="w-[380px] md:w-[480px] !mt-16 flex flex-col items-center">
+      {!openInput && (
+        <Typography variant="caption" className="!text-[13px] !text-center">
+          If you've forgotten your Corisio password, don't worry; we've got you
+          covered. To reset your password and regain access to your account,
+          Click the button below
+        </Typography>
+      )}
 
-export default ForgotPasswordV1
+      {openInput && (
+        <CustomInput
+          title="Email Address"
+          id="phone"
+          onChange={(e) => setEmail(e.target.value)}
+          inputProps={{
+            type: "email",
+            value: email,
+            placeholder: "Enter the email address assoiciated to your account",
+          }}
+        />
+      )}
+
+      <Button
+        variant="contained"
+        onClick={buttonFunc}
+        className="w-80 !h-10 !rounded-full !text-gray-100 !text-[14px] !mt-6"
+      >
+        Reser your password
+      </Button>
+    </Box>
+  );
+};
+
+export default ForgotPassword;

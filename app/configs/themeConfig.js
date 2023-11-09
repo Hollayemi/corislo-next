@@ -8,6 +8,7 @@ const themeConfig = {
   // ** Layout Configs
   templateName: "CORISIO" /* App Name */,
   vertical1: "/images/logo/horizontal/1.png",
+  logo_hor_bw: "/images/logo/horizontal/hor-logo-4.png",
   profile: "/images/avatar/2.png",
   layout: "vertical" /* vertical | horizontal */,
   mode: "light" /* light | dark | semi-dark /*! Note: semi-dark value will only work for Vertical Layout */,
