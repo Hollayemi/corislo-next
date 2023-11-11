@@ -56,8 +56,11 @@ export default function AuthLayout({ children, reverse, image, ...others }) {
         </Box>
       </Box>
 
-      <Box className="w-full h-full px-3 overflow-y-scroll" bgcolor="custom.bodyGray">
-        <Box className="flex flex-col md:justify-center items-center h-full">
+      <Box
+        className="w-full h-full px-3 overflow-y-scroll"
+        bgcolor="custom.bodyGray"
+      >
+        <Box className="flex flex-col md:ustify-center my-16 px-4 items-center h-full">
           <Box className="flex flex-col items-center mt-14 md:mt-0 ">
             <Image
               src={themeConfig.vertical1}
@@ -74,6 +77,7 @@ export default function AuthLayout({ children, reverse, image, ...others }) {
               {others.title || "{ Page Title }"}
             </Typography>
           </Box>
+          
           {children}
         </Box>
       </Box>
