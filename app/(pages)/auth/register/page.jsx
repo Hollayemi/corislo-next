@@ -33,7 +33,7 @@ const RegisterAccount = () => {
   };
 
   return (
-    <Box className="w-[380px] md:w-[550px] !mt-8">
+    <Box className="w-[360px] md:w-[550px] !mt-8 ">
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <CustomInput
@@ -127,13 +127,13 @@ const RegisterAccount = () => {
 
       <Button
         variant="contained"
-        className="w-full !h-10 !rounded-full !text-gray-100 !text-[17px] !mt-3"
+        className="w-full !h-10 !rounded-full !text-gray-100 !text-[17px] !mt-5"
       >
         Sign In
       </Button>
       <Button
         variant="outlined"
-        className="w-full !h-10 !rounded-full !text-gray-600 !text-[17px] !mt-3"
+        className="w-full !h-10 !rounded-full !text-gray-600 !text-[17px] !mt-5"
       >
         <Image
           src="/images/logos/logos/google.png"
@@ -146,7 +146,7 @@ const RegisterAccount = () => {
       </Button>
 
       <Box className="flex justify-center">
-        <Typography className="!text-[13px] !mt-2">
+        <Typography className="!text-[13px] !mt-2 !mb-10">
           Already have an account?{" "}
           <Link
             href="/auth/login"

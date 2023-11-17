@@ -276,3 +276,14 @@ export const formatCurrency = (amount, currency = "NGN", sign = "NG") => {
   return formattedCurrencyUS;
 };
 
+export const summarizeFollowers = (followers) => {
+  if (followers < 1500) {
+    return followers.toString(); // Return as is if below 1500
+  } else if (followers < 1000000) {
+    const abbreviatedValue = (followers / 1000).toFixed(1);
+    return `${abbreviatedValue}k`;
+  } else {
+    const abbreviatedValue = (followers / 1000000).toFixed(1);
+    return `${abbreviatedValue}M`;
+  }
+};

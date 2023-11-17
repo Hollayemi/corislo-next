@@ -2,11 +2,8 @@
 "use client";
 import { Box, Button, Rating, Typography } from "@mui/material";
 import IconifyIcon from "../icon";
-// import { cartHandler } from "@/app/redux/state/slices/home/cart";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-// import { SpecBox } from "@/app/(main)/shop/[category]/[product]/spec";
-// import { useData } from "@/app/hooks/useData";
 import useSWR from "swr";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -16,7 +13,7 @@ export const PopularProduct = ({ image, prodName, price }) => {
   const router = useRouter();
   return (
     <Box className="!w-44 !h-56 m-2 ">
-      <Box onClick={() => router.push(`/shop/`)}>
+      <Box onClick={() => router.push(`/biz/Corisio-Store/${prodName}`)}>
         <img
           src={image}
           alt="product_image"
@@ -24,7 +21,7 @@ export const PopularProduct = ({ image, prodName, price }) => {
         />
       </Box>
       <Box className="py-1">
-        <Link href={`/shop/`}>
+        <Link href={`/biz/Corisio-Store/${prodName}`}>
           <Box>
             <Typography
               variant="body2"
@@ -51,7 +48,7 @@ export const HotDeal = ({ image, prodName, price, unit, of }) => {
   const router = useRouter();
   return (
     <Box className="!w-44 !h-60 m-2 ">
-      <Box onClick={() => router.push(`/shop/`)}>
+      <Box onClick={() => router.push(`/biz/Corisio-Store/${prodName}`)}>
         <img
           src={image}
           alt="product_image"
@@ -59,7 +56,7 @@ export const HotDeal = ({ image, prodName, price, unit, of }) => {
         />
       </Box>
       <Box className="pt-1">
-        <Link href={`/shop/`}>
+        <Link href={`/biz/Corisio-Store/${prodName}`}>
           <Box>
             <Typography
               variant="body2"
@@ -101,7 +98,7 @@ export const ProductOnCategory = ({
   const { offline } = {};
 
   return (
-    <Box className="m-1 p-3 py-4 rounded-xl md:!w-76 relative bg-white ProductOnCategory">
+    <Box className="m-1  p-3 py-4 rounded-xl md:!w-76 relative bg-white ProductOnCategory">
       <Box className="!flex items-center relative">
         <Link
           href={`/shop/${product?.category?.replaceAll(" ", "-")}/${
@@ -171,8 +168,8 @@ export const ProductOnShowcase = ({
 }) => {
   const router = useRouter();
   return (
-    <Box className="w-5/12 min-w-[155px] max-w-[180px] md:w-44 !h-64 m-2 ">
-      <Box onClick={() => router.push(`/shop/`)}>
+    <Box className="w-5/12 min-w-[150px] max-w-[170px] md:w-44 !h-64 mx-1.5 md:mx-2 my-2.5 ">
+      <Box onClick={() => router.push(`/biz/Corisio-Store/${prodName}`)}>
         <img
           src={image}
           alt="product_image"
@@ -180,7 +177,7 @@ export const ProductOnShowcase = ({
         />
       </Box>
       <Box className="pt-1 px-px">
-        <Link href={`/shop/`}>
+        <Link href={`/biz/Corisio-Store/${prodName}`}>
           <Box>
             <Typography
               variant="body2"
@@ -219,39 +216,7 @@ export const ProductOnShowcase = ({
   );
 };
 
-export const ProductOnCartView = ({
-  products: { product, quantity },
-  cartProducts,
-  handleLocalCartChange,
-}) => {
-  const { offline } = {};
-  const dispatch = useDispatch();
-  return (
-    <Box className="!flex !w-full p-2 m-1 items-center relative">
-      <img
-        src={product?.images[0].image}
-        className="w-16 h-16 rounded-xl"
-        alt={product?.prodName}
-      />
-      <Box className="pl-2">
-        <Typography variant="h5" className="!text-[12px] !leading-1">
-          {product?.prodName}
-        </Typography>
 
-        <Box className="flex items-center justify-between mt-2">
-          <Typography variant="caption" className="!text-[12px] text-pink-500">
-            {quantity} units
-          </Typography>
-
-          <Typography variant="body1" className="!font-extrabold !text-[12px]">
-            <span className="!font-extrabold !text-[10px]">$</span>
-            {product?.prodPrice}
-          </Typography>
-        </Box>
-      </Box>
-    </Box>
-  );
-};
 
 export const OfflineProductOnCartView = ({
   product,

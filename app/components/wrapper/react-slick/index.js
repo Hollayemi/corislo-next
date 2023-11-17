@@ -19,12 +19,12 @@ const configs = {
 }
 
 
-const ReactSlickSlider = ({ config = 1, children }) => {
-    return (
-      <Box className="custom-slider">
-        <Slider {...configs[config]}>{children}</Slider>
-      </Box>
-    );
-}
+const ReactSlickSlider = ({ config = 1, children, noArrowStyle }) => {
+  return (
+    <Box className={`${!noArrowStyle && "custom-slider"}`}>
+      <Slider {...configs[config]}>{children}</Slider>
+    </Box>
+  );
+};
 
 export default ReactSlickSlider

@@ -5,7 +5,7 @@ import { styled, alpha } from "@mui/material/styles";
 import { Testimonials, TestimonialsComponent, WhoIsWaiting } from "./Components/Footer";
 import { SectionTitle } from "../../cards/homeCards";
 
-const HomeFooter = ({ customersReview }) => {
+const HomeFooter = () => {
   const pages = {
     company: ["About Us", "Careers", "Blog"],
     helpfulLinks: [
@@ -39,17 +39,7 @@ const HomeFooter = ({ customersReview }) => {
   return (
     <Box>
       <Box className="px-2 md:px-16">
-        {customersReview !== false && (
-          <>
-            <SectionTitle black="What our" blue="Customers has to say" />
-            <TestimonialsComponent />
-          </>
-        )}
-
-        <Box className="flex justify-center">
-          <WhoIsWaiting />
-        </Box>
-        <Box className="flex items-center justify-between !my-16">
+        <Box className="flex items-center justify-between !my-12">
           <Typography variant="body2" className="!font-bold w-40 md:w-auto">
             Download our Mobile app
           </Typography>

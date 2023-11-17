@@ -126,70 +126,65 @@ export const moreProducts = [
     prodName:
       "VEJARO T09 Men's 2 In 1 Short Sleeve T-Shirt & Shorts Set-Black.",
     prodPrice: 46000,
-    star: 4,
+    star: 2,
     store: "Tianxhu Store",
   },
   {
-    prodName:
-      "VEJARO T09 Men's 2 In 1 Short Sleeve T-Shirt & Shorts Set-Black.",
+    prodName: "Flangesio Ultra-Cool Design Men's Sneakers PU Le...",
     prodPrice: 46000,
-    star: 4,
+    star: 5,
     store: "Corisio Store",
   },
   {
-    prodName:
-      "VEJARO T09 Men's 2 In 1 Short Sleeve T-Shirt & Shorts Set-Black.",
+    prodName: "Smart Watch Full Touch Screen Watch - For Android & IOS",
     prodPrice: 46000,
-    star: 4,
+    star: 3,
     store: "Mama-feeds Store",
   },
   {
     prodName:
       "VEJARO T09 Men's 2 In 1 Short Sleeve T-Shirt & Shorts Set-Black.",
     prodPrice: 46000,
-    star: 4,
+    star: 2,
     store: "Bella Store",
   },
   {
-    prodName:
-      "VEJARO T09 Men's 2 In 1 Short Sleeve T-Shirt & Shorts Set-Black.",
+    prodName: "2022 Men's Casual Running Sneakers - Khaki",
     prodPrice: 46000,
-    star: 4,
+    star: 1,
     store: "Cyber dad Store",
   },
   {
-    prodName:
-      "VEJARO T09 Men's 2 In 1 Short Sleeve T-Shirt & Shorts Set-Black.",
+    prodName: "Flangesio Ultra-Cool Design Men's Sneakers PU Le...",
     prodPrice: 46000,
     star: 4,
     store: "Ajibefun Store",
   },
   {
-    prodName:
-      "VEJARO T09 Men's 2 In 1 Short Sleeve T-Shirt & Shorts Set-Black.",
+    prodName: "Smart Watch Full Touch Screen Watch - For Android & IOS",
     prodPrice: 46000,
-    star: 4,
+    star: 5,
     store: "Tobbs Store",
   },
   {
     prodName:
       "VEJARO T09 Men's 2 In 1 Short Sleeve T-Shirt & Shorts Set-Black.",
     prodPrice: 46000,
-    star: 4,
+    star: 3,
     store: "Bj Store",
   },
   {
     prodName:
       "VEJARO T09 Men's 2 In 1 Short Sleeve T-Shirt & Shorts Set-Black.",
     prodPrice: 46000,
-    star: 4,
+    star: 1,
     store: "Olu's Store",
   },
   {
     prodName:
       "VEJARO T09 Men's 2 In 1 Short Sleeve T-Shirt & Shorts Set-Black.",
     prodPrice: 46000,
-    star: 4,
+    star: 1,
     store: "Corisio Store",
   },
   {
@@ -203,11 +198,10 @@ export const moreProducts = [
     prodName:
       "VEJARO T09 Men's 2 In 1 Short Sleeve T-Shirt & Shorts Set-Black.",
     prodPrice: 46000,
-    star: 4,
+    star: 5,
     store: "Tianxhu Store",
   },
 ];
-
 
 export const topStoresData = [
   {
@@ -233,5 +227,113 @@ export const topStoresData = [
     image: "/images/misc/shop/4.png",
     followers: 63435,
     rating: 4,
-  }
+  },
+];
+
+export const userGroupCartData = [
+  {
+    store: {
+      branch: "OAemlC",
+      store: "Corisio Store",
+    },
+    branchCheckout: 8200.98,
+    products: [
+      {
+        prodName:
+          "VEJARO T09 Men's 2 In 1 Short Sleeve T-Shirt & Shorts Set-Black.",
+        prodPrice: 22000,
+        quantity: 2,
+        store: "Tianxhu Store",
+      },
+      {
+        prodName: "Flangesio Ultra-Cool Design Men's Sneakers PU Le...",
+        prodPrice: 16000,
+        quantity: 5,
+        store: "Corisio Store",
+      },
+      {
+        prodName: "Smart Watch Full Touch Screen Watch - For Android & IOS",
+        prodPrice: 46000,
+        quantity: 3,
+        store: "Mama-feeds Store",
+      },
+    ],
+  },
+  {
+    store: {
+      branch: "AioaisJ",
+      store: "Tianxhu Store",
+    },
+    branchCheckout: 4299.98,
+    products: [
+      {
+        prodName: "2022 Men's Casual Running Sneakers - Khaki",
+        prodPrice: 16000,
+        quantity: 1,
+        store: "Cyber dad Store",
+      },
+      {
+        prodName: "Flangesio Ultra-Cool Design Men's Sneakers PU Le...",
+        prodPrice: 6000,
+        quantity: 4,
+        store: "Ajibefun Store",
+      },
+    ],
+  },
+];
+
+export const groupCart = [
+  {
+    _id: {
+      branch: "OAemlC",
+      store: "corisio",
+    },
+    fromBranch: [
+      {
+        _id: "651c943da246471d20195620",
+        productId: "650cd15568cf0de68b03196c",
+        userId: "650b73afdbd4242dbb61db7f",
+        quantity: 2,
+        store: "corisio",
+        color: ["#FF4081"],
+        size: ["M", "XL"],
+        branch: "OAemlC",
+        createdAt: "2023-10-03T22:22:53.457Z",
+        updatedAt: "2023-10-04T09:09:22.495Z",
+        __v: 0,
+        result: {
+          _id: "650cd15568cf0de68b03196c",
+          prodName: "Gucci Women's Floral Print Silk Dress",
+          prodPrice: 1199.99,
+          prodKey: "GUCCIDRESS67890",
+          prodInfo:
+            "Elevate your style with this exquisite Gucci silk dress featuring a beautiful floral print. Perfect for special occasions or a night out on the town, this dress exudes elegance and sophistication.",
+          specifications: {
+            size: ["S", "M", "L"],
+            color: ["#FF4081"],
+          },
+          images: [],
+          totInStock: 15,
+          store: "corisio",
+          storeId: "650c6723b6f4e04f516f0828",
+          branches: ["OAemlC"],
+          status: "waiting",
+          collectionName: "Women classic wears",
+          subCollectionName: "Classic Gucci Tops",
+          category: "650c53e9a5671072c99a4065",
+          subcategory: "650c53e9a5671072c99a4067",
+          productGroup: "650c53e9a5671072c99a4073",
+          createdAt: "2023-09-21T23:27:17.882Z",
+          updatedAt: "2023-09-21T23:27:17.882Z",
+          __v: 0,
+        },
+        price: 1199.99,
+        string: 0,
+        newPrice: 2399.98,
+      },
+    ],
+    prodIds: ["650cd15568cf0de68b03196c"],
+    total: 1,
+    branchCheckout: 2399.98,
+  },
 ];

@@ -6,12 +6,13 @@ import IconifyIcon from "../../icon";
 import Image from "next/image";
 import themeConfig from "@/app/configs/themeConfig";
 
-function Header() {
+function Header({ search, setSearch }) {
   const theme = useTheme();
   const LinkStyled = styled(Link)(({ theme }) => ({
-    fontSize: "0.749rem",
+    fontSize: "0.869rem",
+    fontWeight: 500,
     textDecoration: "none",
-    color: theme.palette.primary.main,
+    color: "black",
   }));
   const pages = [
     { name: "Home", link: "/" },
@@ -35,18 +36,20 @@ function Header() {
             key={i}
             href={page.link}
             color={theme.palette.primary.main}
-            className="px-1 mx-4 font-bold leading-10 hover:text-yellow-400"
+            className="px-1 mx-4  leading-10 hover:text-yellow-400"
           >
             {page.name}
           </LinkStyled>
         ))}
       </Box>
       <Box className="flex items-center">
-        <Box className="relative mr-4 hidden md:block">
+        <Box className="relative mr-2 md:mr-4 md:block">
           <input
             type="text"
             placeholder="Search by keyword"
-            className="w-40 pl-10 text-[13px] pr-4 h-8 border rounded-xl transition-all focus:w-64"
+            value={search}
+            className="w-32 md:w-40 pl-10 text-[13px] pr-4 h-8 border rounded-xl transition-all md:focus:w-64"
+            onChange={(e) => setSearch(e.target.value)}
           />
           <IconifyIcon
             icon="tabler:search"
@@ -55,19 +58,19 @@ function Header() {
         </Box>
         <IconifyIcon
           icon="tabler:shopping-cart"
-          className="!text-[19px] mx-2 "
+          className="!text-[19px] mx-1 md:mx-2 "
         />
 
         <Button
           variant="outlined"
-          className="!rounded-2xl !text-xs h-8 w-20 !ml-5"
+          className="!rounded-2xl !text-xs h-8 w-20 ml-2 md:!ml-5"
           size="small"
         >
           Login
         </Button>
         <Button
           variant="contained"
-          className="!rounded-2xl h-8 w-20 !text-xs !ml-5"
+          className="!rounded-2xl !hidden md:!block h-8 w-20 !text-xs !ml-2 md:!ml-5"
           size="small"
         >
           Register

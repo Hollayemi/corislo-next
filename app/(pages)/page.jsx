@@ -1,17 +1,16 @@
 "use client";
-
-import { useSelector } from "react-redux";
 import HomeWrapper from "../components/view/home";
+import React from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import Image from "next/image";
-import IconifyIcon from "../components/icon";
+import IconifyIcon from "@/app/components/icon";
 import {
   FlashSale,
   PopularAds,
   SectionMiddleTitle,
   SectionTitle,
   TopStores,
-} from "../components/cards/homeCards";
+} from "@/app/components/cards/homeCards";
 import {
   categoryData,
   hotDealData,
@@ -19,19 +18,21 @@ import {
   popularAdsData,
   popularProducts,
   topStoresData,
-} from "../data/home/homepage";
-import ReactSlickSlider from "../components/wrapper/react-slick";
+} from "@/app/data/home/homepage";
+import ReactSlickSlider from "@/app/components/wrapper/react-slick";
 import {
   HotDeal,
   PopularProduct,
   ProductOnShowcase,
-} from "../components/templates/productTemplates";
-import CountdownTimer from "../components/cards/countDown";
+} from "@/app/components/templates/productTemplates";
+import CountdownTimer from "@/app/components/cards/countDown";
+import {
+  TestimonialsComponent,
+  WhoIsWaiting,
+} from "@/app/components/view/home/Components/Footer";
 
-const HomePage = () => {
-  const info = useSelector((state) => state);
-  console.log(info);
-
+const HomePage = ({ searchParams }) => {
+ 
   return (
     <HomeWrapper>
       <Box className="!mb-20 mt-6 md:mt-16">
@@ -375,6 +376,13 @@ const HomePage = () => {
                 How it works
               </Button>
             </Box>
+          </Box>
+        </Box>
+        <Box className="px-2 md:px-16 mt-4">
+          <SectionTitle black="What our" blue="Customers has to say" />
+          <TestimonialsComponent />
+          <Box className="flex justify-center">
+            <WhoIsWaiting />
           </Box>
         </Box>
       </Box>

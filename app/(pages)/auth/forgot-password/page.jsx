@@ -26,7 +26,7 @@ const ForgotPassword = () => {
   }
 
   return (
-    <Box className="w-[380px] md:w-[480px] !mt-16 flex flex-col items-center">
+    <Box className="w-full max-w-[380px] md:w-[480px] !mt-16 flex flex-col items-center">
       {!openInput && (
         <Typography variant="caption" className="!text-[13px] !text-center">
           If you've forgotten your Corisio password, don't worry; we've got you

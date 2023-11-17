@@ -52,7 +52,7 @@ const OtpVerification = () => {
   };
 
   return (
-    <Box className="w-[380px] md:w-[480px] !mt-10 flex flex-col items-center">
+    <Box className="w-full max-w-[380px] md:w-[480px] !mt-10 flex flex-col items-center">
       <OtpInput />
       <br />
       <br />

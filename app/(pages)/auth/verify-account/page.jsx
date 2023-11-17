@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 const VerifyAccount = () => {
   const router = useRouter()
   return (
-    <Box className="w-[380px] md:w-[480px] !mt-4 flex flex-col items-center">
+    <Box className="w-full max-w-[380px] md:w-[480px] !mt-4 flex flex-col items-center">
       <Image
         src="/images/misc/verify-cup.png"
         alt="verify"

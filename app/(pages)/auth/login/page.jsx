@@ -34,7 +34,7 @@ const LoginV1 = () => {
   }
 
   return (
-    <Box className=" w-[380px] !mt-16">
+    <Box className="!mt-16 w-full max-w-[380px]">
       <CustomInput
         title="First Name"
         id="firstname"
@@ -55,7 +55,7 @@ const LoginV1 = () => {
       </Button>
       <Button
         variant="outlined"
-        className="w-full !h-10 !rounded-full !text-gray-600 !text-[17px] !mt-3"
+        className="w-full !h-10 !rounded-full !text-gray-600 !text-[17px] !mt-6"
       >
         <Image
           src="/images/logos/logos/google.png"
@@ -68,8 +68,15 @@ const LoginV1 = () => {
       </Button>
 
       <Box className="flex justify-center">
-        <Typography className='!text-[13px] !mt-2'>
-          Don’t have an account? <Link href="/auth/register" color='custom.pri' className='!font-semibold'>Register</Link>
+        <Typography className="!text-[13px] !mt-5">
+          Don’t have an account?{" "}
+          <Link
+            href="/auth/register"
+            color="custom.pri"
+            className="!font-semibold"
+          >
+            Register
+          </Link>
         </Typography>
       </Box>
     </Box>

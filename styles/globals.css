@@ -21,7 +21,7 @@ button {
 
 input::placeholder, textarea::placeholder{
     font-size: 12px !important;
-    font-family: cursive;
+    /* font-family: cursive; */
 }
 
 
@@ -31,7 +31,11 @@ input::placeholder, textarea::placeholder{
         
 }
 
-.slick-prev:before, .slick-next:before{
+.slick-prev:before,  .slick-next:before{
+    color: #2C337C !important;
+}
+
+.custom-slider .slick-prev:before, .custom-slider .slick-next:before{
     color: #2C337C !important;
     width: 30px;
     height: 30px;
@@ -77,3 +81,11 @@ input::placeholder, textarea::placeholder{
 .customInputt:focus-within{
     border: 1px solid blue;
 } */
+
+.dfdgfd{
+    list-style-type: disc !important;
+}
+
+.dfdgfd li{
+    font-weight: 200 !important;
+}

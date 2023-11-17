@@ -9,7 +9,7 @@ import useBgColor from '@/app/hooks/useBgColor'
 
 const Chip = props => {
   // ** Props
-  const { sx, skin, color, rounded } = props
+  const { sx, skin, color, rounded, className } = props;
 
   // ** Hook
   const bgColors = useBgColor()
@@ -28,14 +28,17 @@ const Chip = props => {
   return (
     <MuiChip
       {...propsToPass}
-      variant='filled'
-      className={clsx({
-        'MuiChip-rounded': rounded,
-        'MuiChip-light': skin === 'light'
-      })}
-      sx={skin === 'light' && color ? Object.assign(colors[color], sx) : sx}
+      variant="filled"
+      className={
+        (clsx({
+          "MuiChip-rounded": rounded,
+          "MuiChip-light": skin === "light",
+        }),
+        className)
+      }
+      sx={skin === "light" && color ? Object.assign(colors[color], sx) : sx}
     />
-  )
+  );
 }
 
 export default Chip
