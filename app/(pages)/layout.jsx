@@ -1,20 +1,25 @@
-'use client'
+"use client";
 import "@/styles/globals.css";
 import ThemeComponent from "@/theme";
 import Head from "next/head";
 import persistStore from "redux-persist/es/persistStore";
 import NextProgress from "nextjs-progressbar";
-import {store} from "@/app/redux/state/store"
-import { Provider } from 'react-redux';
+import { store } from "@/app/redux/state/store";
+import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { SWRConfig } from "swr";
 import martApi from "@/app/redux/state/slices/api/baseApi";
 import { jsonHeader } from "../redux/state/slices/api/setAuthHeaders";
+// ** Third Party Import
+import { Toaster } from "react-hot-toast";
+import ReactHotToast from "@/app/styles/react-hot-toast";
+import { UserDataProvider } from "../context/userContext";
 
 const metadata = {
-  title: "Corislo-NG | Your One-Stop Ecommerce Hub for Next-Generation Solutions",
-  description: "Your ultimate destination for top-quality products and unparalleled shopping experiences. Explore a captivating assortment of fashion, electronics, home essentials, and more. Immerse yourself in a seamless and secure shopping journey with our user-friendly platform. Indulge your senses, find inspiration, and redefine convenience with every visit. Embrace the joy of discovering something extraordinary as you navigate through our meticulously curated selection. Elevate your online shopping experience with Corislo – where dreams become reality.",
-
+  title:
+    "Corislo-NG | Your One-Stop Ecommerce Hub for Next-Generation Solutions",
+  description:
+    "Your ultimate destination for top-quality products and unparalleled shopping experiences. Explore a captivating assortment of fashion, electronics, home essentials, and more. Immerse yourself in a seamless and secure shopping journey with our user-friendly platform. Indulge your senses, find inspiration, and redefine convenience with every visit. Embrace the joy of discovering something extraordinary as you navigate through our meticulously curated selection. Elevate your online shopping experience with Corislo – where dreams become reality.",
 };
 
 const persistor = persistStore(store);
@@ -50,28 +55,37 @@ export default function RootLayout({ children }) {
           content="Your ultimate destination for top-quality products and unparalleled shopping experiences. Explore a captivating assortment of fashion, electronics, home essentials, and more. Immerse yourself in a seamless and secure shopping journey with our user-friendly platform. Indulge your senses, find inspiration, and redefine convenience with every visit. Embrace the joy of discovering something extraordinary as you navigate through our meticulously curated selection. Elevate your online shopping experience with Corislo – where dreams become reality."
         />
         <meta property="og:image" content="/images/logo/horizontal/1.png" />
-        <meta property="og:url" content="https:corislo-demo.vercel.app" />
+        <meta property="og:url" content="https:corislo.vercel.app" />
         <meta property="og:type" content="product" />
       </Head>
       <body className="">
         <SWRConfig
           value={{
             refreshInterval: false,
-            revalidateOnFocus: false,
+            revalidateOnFocus: true,
+
             fetcher: async (resource, init) => {
-              const getToken = resource.token ? jsonHeader() : {};
-              const res = await martApi.get(resource.endPoint, getToken);
+              const getToken = jsonHeader();
+              const res = await martApi.get(resource, getToken);
               return res.data;
-            }
+            },
           }}
         >
           <NextProgress />
           <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-              <ThemeComponent>{children}</ThemeComponent>
-            </PersistGate>
+            <UserDataProvider>
+              <PersistGate loading={null} persistor={persistor}>
+                <ThemeComponent>{children}</ThemeComponent>
+              </PersistGate>
+            </UserDataProvider>
           </Provider>
         </SWRConfig>
+        <ReactHotToast>
+          <Toaster
+            position="top-right"
+            toastOptions={{ className: "react-hot-toast" }}
+          />
+        </ReactHotToast>
       </body>
     </html>
   );

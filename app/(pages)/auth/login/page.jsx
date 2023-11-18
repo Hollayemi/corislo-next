@@ -14,12 +14,16 @@ import MuiFormControlLabel from '@mui/material/FormControlLabel'
 import { CustomInput } from '@/app/components/cards/auth/components';
 import { Button, Typography } from '@mui/material';
 import Image from 'next/image';
+import { loginHandler } from '@/app/redux/state/slices/auth/Login';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
 
 const LoginV1 = () => {
-
+  const router = useRouter()
+  const dispatch = useDispatch()
   const [values, setValues] = useState({
     password: '',
-    showPassword: false
+    email: false
   })
 
   // ** Hook
@@ -29,20 +33,22 @@ const LoginV1 = () => {
     setValues({ ...values, [prop]: event.target.value })
   }
 
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword })
-  }
+  // const handleClickShowPassword = () => {
+  //   setValues({ ...values, showPassword: !values.showPassword })
+  // }
 
   return (
     <Box className="!mt-16 w-full max-w-[380px]">
       <CustomInput
-        title="First Name"
-        id="firstname"
+        title="Email Adderess"
+        onChange={handleChange("email")}
+        id="email"
         inputProps={{ type: "text", placeholder: "Enter your email address" }}
       />
       <br />
       <CustomInput
-        title="First Name"
+        title="Password"
+        onChange={handleChange("password")}
         id="password"
         inputProps={{ type: "password", placeholder: "Password" }}
       />
@@ -50,6 +56,7 @@ const LoginV1 = () => {
       <Button
         variant="contained"
         className="w-full !h-10 !rounded-full !text-gray-100 !text-[17px] !mt-6"
+        onClick={() => loginHandler(values, router, dispatch)}
       >
         Sign In
       </Button>

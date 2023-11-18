@@ -30,23 +30,29 @@ export const CustomInput = ({
   error,
   onChange,
 }) => (
-  <Box className="px-4 relative py-1.5 flex flex-col w-full bg-white rounded-md border-2 border-white focus-within:border-blue-800 overflow-hidden">
-    <label htmlFor={id} className="!text-[11px]">
-      {title}
-    </label>
-    <TextInput
-      multiline={multiline}
-      id={id}
-      inputProps={inputProps}
-      onChange={onChange}
-    />
-    {!hideCheck && (
-      <Box
-        className="w-4 h-4 rounded-full flex flex-shrink-0 items-center justify-center absolute right-0 mr-4 bottom-0 mb-2"
-        bgcolor={!error ? "custom.pri" : "red"}
-      >
-        <IconifyIcon icon="tabler:check" className="!text-[12px] !text-white" />
-      </Box>
-    )}
+  <Box>
+    <Box className="px-4 relative py-1.5 flex flex-col w-full bg-white rounded-md border-2 border-white focus-within:border-blue-800 overflow-hidden">
+      <label htmlFor={id} className="!text-[11px]">
+        {title}
+      </label>
+      <TextInput
+        multiline={multiline}
+        id={id}
+        inputProps={inputProps}
+        onChange={onChange}
+      />
+      {!hideCheck && (
+        <Box
+          className="w-4 h-4 rounded-full flex flex-shrink-0 items-center justify-center absolute right-0 mr-4 bottom-0 mb-2"
+          bgcolor={!error ? "custom.pri" : "red"}
+        >
+          <IconifyIcon
+            icon={!error ? "tabler:check" : "tabler:x"}
+            className="!text-[12px] !text-white"
+          />
+        </Box>
+      )}
+    </Box>
+    {error && <Typography className="!text-red-500 !text-[11px] !float-right !px-2 !pt-0.5">{error}</Typography>}
   </Box>
 );

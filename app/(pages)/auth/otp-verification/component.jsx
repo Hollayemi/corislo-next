@@ -1,19 +1,29 @@
-import React from 'react';
+"use client";
+import React, { useState, useRef } from "react";
 
-const OtpInput = () => {
+const OtpInput = ({ inputValues, setInputValues }) => {
   const inputRefs = [
-    React.createRef(),
-    React.createRef(),
-    React.createRef(),
-    React.createRef(),
-    React.createRef(),
-    React.createRef(),
+    useRef(),
+    useRef(),
+    useRef(),
+    useRef(),
+    useRef(),
+    useRef(),
   ];
 
   const handleInput = (e, index) => {
-    if (e.target.value.length === 1 && index < 5) {
+    const newValue = e.target.value;
+
+    // Update the corresponding input value in the state
+    setInputValues((prevValues) => {
+      const newValues = [...prevValues];
+      newValues[index] = newValue;
+      return newValues;
+    });
+
+    if (newValue.length === 1 && index < 5) {
       inputRefs[index + 1].current.focus();
-    } else if (e.target.value.length === 0 && index > 0) {
+    } else if (newValue.length === 0 && index < 0) {
       inputRefs[index - 1].current.focus();
     }
   };
@@ -21,17 +31,17 @@ const OtpInput = () => {
   return (
     <div className="flex justify-center items-center">
       {Array.from({ length: 6 }).map((_, index) => (
-        <>
+        <div key={index}>
           <input
-            key={index}
             ref={inputRefs[index]}
             type="text"
             className="w-10 h-10 text-center border rounded-md m-1.5"
             maxLength={1}
+            value={inputValues[index]}
             onChange={(e) => handleInput(e, index)}
           />
           {index === 2 && <h6 className="w-6"></h6>}
-        </>
+        </div>
       ))}
     </div>
   );

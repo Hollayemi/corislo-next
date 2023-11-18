@@ -1,27 +1,28 @@
 "use client";
 // ** React Imports
-import { useEffect, useState } from "react";
-
-// ** Next Import
-import Link from "next/link";
+import React, { useEffect, useState } from "react";
 
 // ** MUI Components
 import Box from "@mui/material/Box";
-import { styled, useTheme } from "@mui/material/styles";
-import MuiCard from "@mui/material/Card";
-import MuiFormControlLabel from "@mui/material/FormControlLabel";
-
-import { CustomInput } from "@/app/components/cards/auth/components";
 import { Button, Typography } from "@mui/material";
-import Image from "next/image";
 import OtpInput from "./component";
+import { useUserData } from "@/app/hooks/useData";
+import { verifyOtp } from "@/app/redux/state/slices/auth/otp";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 const OtpVerification = () => {
-  const [openInput, setOpenInput] = useState(false);
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const { userInfo } = useUserData();
 
+  // usestate hooks
+  const [openInput, setOpenInput] = useState(false);
   const [countdown, setCountdown] = useState(60); // Initial countdown value in seconds
   const [resendDisabled, setResendDisabled] = useState(false);
+  const [inputValues, setInputValues] = useState(["", "", "", "", "", ""]);
 
+  const otpValues = inputValues.join("");
   useEffect(() => {
     let intervalId;
 
@@ -38,10 +39,12 @@ const OtpVerification = () => {
   }, [countdown]);
 
   const buttonFunc = () => {
+    verifyOtp({ userId: userInfo._id, otp: otpValues }, router, dispatch);
     if (!openInput) {
       setOpenInput(true);
     }
   };
+
 
   const handleResend = () => {
     // Handle OTP resend logic here
@@ -53,7 +56,7 @@ const OtpVerification = () => {
 
   return (
     <Box className="w-full max-w-[380px] md:w-[480px] !mt-10 flex flex-col items-center">
-      <OtpInput />
+      <OtpInput inputValues={inputValues} setInputValues={setInputValues} />
       <br />
       <br />
       <Typography variant="caption" className="!text-[13px] !text-center">

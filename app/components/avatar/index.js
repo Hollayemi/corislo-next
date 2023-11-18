@@ -8,7 +8,7 @@ import { lighten, useTheme } from '@mui/material/styles'
 // ** Hooks Imports
 import useBgColor from '@/app/hooks/useBgColor'
 
-const Avatar = forwardRef((props, ref) => {
+const CustomAvatar = forwardRef((props, ref) => {
   // ** Props
   const { sx, src, skin, color } = props
 
@@ -44,9 +44,9 @@ const Avatar = forwardRef((props, ref) => {
 
   return <MuiAvatar ref={ref} {...props} sx={!src && skin && color ? Object.assign(colors[color], sx) : sx} />
 })
-Avatar.defaultProps = {
-  skin: 'filled',
-  color: 'primary'
-}
+CustomAvatar.defaultProps = {
+  skin: "filled",
+  color: "primary",
+};
 
-export default Avatar
+export default CustomAvatar;

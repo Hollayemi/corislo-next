@@ -4,18 +4,15 @@ import martApi from "../api/baseApi";
 import { getAccount } from "./Login";
 import toaster from "@/app/configs/toaster";
 import { mutate } from "swr";
+import { jsonHeader } from "../api/setAuthHeaders";
 
-export const RegNewUser = createAsyncThunk(
+export const otpVerificationApi = createAsyncThunk(
   "post/RegNewUser",
   async (payload) => {
     console.log(payload);
     const { data } = await martApi
-      .post("/auth/create-account", payload, {})
+      .post("/auth/verify", payload, jsonHeader())
       .then((e) => {
-        console.log(e);
-        const { token } = e.data;
-        typeof window !== "undefined" &&
-          localStorage.setItem("user_token", token);
         return e;
       })
       .catch((err) => {
@@ -26,15 +23,15 @@ export const RegNewUser = createAsyncThunk(
   }
 );
 
-export const registerHandler = (payload, router, dispatch) => {
-  dispatch(RegNewUser(payload))
+export const verifyOtp = (payload, router, dispatch) => {
+  dispatch(otpVerificationApi(payload))
     .then(unwrapResult)
     .then((res) => {
       console.log(res);
       toaster({ ...res });
       console.log("here");
       if (res.type === "success") {
-        if (mutate("/user/get-account")) router.push("/auth/otp-verification");
+        router.push(res.to || "");
       }
     })
     .catch((err) => {

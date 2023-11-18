@@ -8,9 +8,9 @@ import { otpHandler } from "../shop/setOtp";
 import { jsonHeader } from "../api/setAuthHeaders";
 import tokens from "@/app/configs/tokens";
 
-const kem_signin = createAsyncThunk("post/kem_signin", async (payload) => {
+const UserLoginApi = createAsyncThunk("post/UserLogin", async (payload) => {
   const { data } = await martApi
-    .post("/user/login", {
+    .post("/auth/login", {
       ...payload,
     })
     .then((res) => {
@@ -23,11 +23,9 @@ const kem_signin = createAsyncThunk("post/kem_signin", async (payload) => {
   return data;
 });
 
-export const getAccount = createAsyncThunk("post/loginSlice", async (from) => {
-  from && localStorage.setItem("redirected_from", from);
-  const userToken = tokens.auth;
+export const getAccount = createAsyncThunk("post/loginSlice", async () => {
   const { data } = await martApi
-    .get(`/user/get-account`, jsonHeader(userToken))
+    .get(`/user/get-account`, jsonHeader())
     .then((res) => {
       console.log(res);
       const { accessToken } = res.data.user;
@@ -84,14 +82,13 @@ export const { setUsers, userLogout } = UserSlice.actions;
 
 // export states
 export default UserSlice.reducer;
-export { kem_signin };
 
 /*
 
 */
 
-export const myLogin = (formData, navigate, dispatch, wasGoing) => {
-  dispatch(kem_signin(formData))
+export const loginHandler = (payload, router, dispatch) => {
+  dispatch(UserLoginApi(payload))
     .then(unwrapResult)
     .then((res) => {
       console.log(res);
@@ -104,23 +101,23 @@ export const myLogin = (formData, navigate, dispatch, wasGoing) => {
               const goTo = localStorage.getItem("redirected_from");
               localStorage.removeItem("redirected_from");
               if (
-                goTo === "/seller/dashboard" &&
-                res.user.store_entryMode === "otp"
+                goTo === "/store/dashboard" &&
+                res?.user?.store_entryMode === "otp"
               ) {
                 dispatch(otpHandler())
                   .then(unwrapResult)
                   .then((res) => {
                     console.log(res);
-                    navigate("/seller/dashboard/auth");
+                    router.push("/store/dashboard/auth");
                   });
               }
               console.log(goTo);
-              navigate(goTo);
+              router.push(goTo);
             } else {
               if (!res.user.username) {
-                navigate("/site/user/account");
+                router.push("/");
               }
-              navigate("/site/user/account");
+              router.push("/");
             }
           });
       }

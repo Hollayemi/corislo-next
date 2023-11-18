@@ -1,65 +1,101 @@
 "use client";
 // ** React Imports
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // ** Next Import
 import Link from "next/link";
 
 // ** MUI Components
 import Box from "@mui/material/Box";
-import { styled, useTheme } from "@mui/material/styles";
-import MuiCard from "@mui/material/Card";
-import MuiFormControlLabel from "@mui/material/FormControlLabel";
 
 import { CustomInput } from "@/app/components/cards/auth/components";
 import { Button, Grid, Typography } from "@mui/material";
 import Image from "next/image";
+import validationRegisterSchema from "./validation";
+import { registerHandler } from "@/app/redux/state/slices/auth/Signup";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 const RegisterAccount = () => {
+  // hooks
+  const router = useRouter()
+  const dispatch = useDispatch();
   const [values, setValues] = useState({
+    fullname: "",
+    email: "",
+    username: "",
     password: "",
-    showPassword: false,
+    state: "",
+    phoneNumber: "",
   });
 
-  // ** Hook
-  const theme = useTheme();
+  const [confPass, setConfPass] = useState("")
+
+  const [errors, setErrors] = useState({
+    fullname: "",
+    email: "",
+    username: "",
+    password: "",
+    state: "",
+    phoneNumber: "",
+  });
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword });
-  };
+  useEffect(() => {
+    validationRegisterSchema
+      .validate(values, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+      })
+      .catch((validationErrors) => {
+        const newErrors = validationErrors.inner.reduce((acc, error) => {
+          acc[error.path] = error.message;
+          return acc;
+        }, {});
+        setErrors(newErrors);
+      });
+  }, [values]);
+
 
   return (
     <Box className="w-[360px] md:w-[550px] !mt-8 ">
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <CustomInput
-            title="First Name"
-            id="firstname"
+            title="Full Name"
+            id="fullname"
+            error={values.fullname && errors.fullname}
+            name="fullname"
+            onChange={handleChange("fullname")}
             inputProps={{
               type: "text",
-              placeholder: "Enter your first name",
+              placeholder: "Enter your full name",
             }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <CustomInput
-            title="Last Name"
-            error
-            id="lastname"
+            title="Username"
+            error={values.username && errors.username}
+            onChange={handleChange("username")}
+            id="username"
+            name="username"
             inputProps={{
               type: "text",
-              placeholder: "Enter your last name",
+              placeholder: "Enter your username",
             }}
           />
         </Grid>
         <Grid item xs={12}>
           <CustomInput
             title="Email Address"
-            id="emailAddress"
+            error={values.email && errors.email}
+            onChange={handleChange("email")}
+            id="email"
+            name="email"
             inputProps={{
               type: "email",
               placeholder: "Enter your email address",
@@ -69,8 +105,10 @@ const RegisterAccount = () => {
         <Grid item xs={12} md={6}>
           <CustomInput
             title="Phone Number"
-            id="phone"
-            error
+            onChange={handleChange("phoneNumber")}
+            id="phoneNumber"
+            name="phoneNumber"
+            error={values.phoneNumber && errors.phoneNumber}
             inputProps={{
               type: "number",
               placeholder: "Enter your phone number",
@@ -81,6 +119,8 @@ const RegisterAccount = () => {
           <CustomInput
             title="State"
             id="state"
+            name="state"
+            onChange={handleChange("state")}
             inputProps={{
               type: "text",
               placeholder: "Enter your state",
@@ -90,23 +130,28 @@ const RegisterAccount = () => {
         <Grid item xs={12} md={6}>
           <CustomInput
             title="Password"
+            onChange={handleChange("password")}
+            error={values.password && errors.password}
             id="password"
+            name="password"
             inputProps={{
               type: "password",
               placeholder: ".......",
             }}
           />
-          <ul className="list-disc !text-[13px] mb-5 ml-8 mt-2">
+          {/* <ul className="list-disc !text-[13px] mb-5 ml-8 mt-2">
             <li className="mb-2">Min of 8 characters</li>
             <li className="mb-2">Must have an Upper Letter</li>
             <li className="mb-2">Must have a unique symbol</li>
-          </ul>
+          </ul> */}
         </Grid>
         <Grid item xs={12} md={6}>
           <CustomInput
             title="Confirm Password"
             id="confPass"
-            error
+            error={values.password !== confPass}
+            name="confPass"
+            onChange={(e) => setConfPass(e.target.value)}
             inputProps={{
               type: "password",
               placeholder: ".......",
@@ -115,8 +160,8 @@ const RegisterAccount = () => {
         </Grid>
       </Grid>
 
-      <Box className="flex items-center !mt-6 md:!mt-1">
-        <input type="radio" id="tandc" />
+      <Box className="flex items-center !mt-6">
+        <input type="radio" id="tandc" name="tandc" />
         <label htmlFor="tandc" className="ml-4">
           I agree with the{" "}
           <Link href="/terms" color="custom.pri" className="!font-semibold">
@@ -127,9 +172,10 @@ const RegisterAccount = () => {
 
       <Button
         variant="contained"
-        className="w-full !h-10 !rounded-full !text-gray-100 !text-[17px] !mt-5"
+        className="w-full !h-10 !rounded-full !text-gray-100 !text-[17px] !mt-3"
+        onClick={() => registerHandler(values, router, dispatch)}
       >
-        Sign In
+        Sign Up
       </Button>
       <Button
         variant="outlined"

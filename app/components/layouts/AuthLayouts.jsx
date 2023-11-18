@@ -57,10 +57,10 @@ export default function AuthLayout({ children, reverse, image, ...others }) {
       </Box>
 
       <Box
-        className="w-full h-full px-3 overflow-y-scroll"
+        className="w-full h-full px-3 overflow-y-auto"
         bgcolor="custom.bodyGray"
       >
-        <Box className="flex flex-col md:ustify-center my- px-2 items-center h-full">
+        <Box className="flex flex-col md:justify-center my-4 md:my-0 px-2 items-center h-full">
           <Box className="flex flex-col items-center mt-14 md:mt-0 ">
             <Image
               src={themeConfig.vertical1}
