@@ -14,21 +14,23 @@ const DashboardOverview = ({ params }) => {
   const dispatch = useDispatch();
   return (
     <StoreLeftSideBar path={params}>
-      <Box>
-        <TopCards />
-      </Box>
-      <Box className="mt-4">
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={3}>
-            <BranchesSales />
+      <Box className="px-2">
+        <Box>
+          <TopCards />
+        </Box>
+        <Box className="mt-4 flwx justify-center">
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={3}>
+              <BranchesSales />
+            </Grid>
+            <Grid item xs={12} md={5}>
+              <DashboardLineChart />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <DashboardBubbleChart />
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={5}>
-            <DashboardLineChart />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <DashboardBubbleChart />
-          </Grid>
-        </Grid>
+        </Box>
       </Box>
       {/* <OrderTable
           columns={allOrderColumns(actionFunctions)}

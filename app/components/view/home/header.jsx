@@ -16,10 +16,9 @@ import { userLogout } from "@/app/redux/state/slices/auth/Login";
 
 function Header({ search, setSearch }) {
   const router = useRouter();
-  const { isOffline, userInfo, cartNum } = useUserData();
+  const { isOffline, userInfo, cartedProds } = useUserData();
 
   // let holla = "dsdsdfa".
-  console.log(isOffline, userInfo);
   const theme = useTheme();
   const LinkStyled = styled(Link)(({ theme }) => ({
     fontSize: "0.869rem",
@@ -36,14 +35,14 @@ function Header({ search, setSearch }) {
   ];
 
   const MyCartBtn = ({ num }) => (
-    <Box className="flex items-center">
+    <Box className="flex items-center my-2">
       <Box
         color={theme.palette.primary.main}
-        className="!mr-1 w-5 h-5 flex-shrink-0 bg-white !rounded-full flex items-center !text-sm justify-center font-bold"
+        className="!mr-1.5 w-5 h-5 flex-shrink-0 bg-white !rounded-full flex items-center !text-sm justify-center font-bold"
       >
         {num}
       </Box>
-      <ShoppingCartIcon className="text-white !text-[17px]" />
+      <ShoppingCartIcon className="text-white !text-[18px] !flex-shrink-0" />
     </Box>
   );
 
@@ -73,7 +72,7 @@ function Header({ search, setSearch }) {
           alt="logo"
           width={400}
           height={400}
-          className="!w-10 md:!w-28 !flex-shrink-0"
+          className="!w-10 md:!w-28 ml-1 !flex-shrink-0"
         />
       </Box>
       <Box className="items-center hidden md:block">
@@ -89,7 +88,7 @@ function Header({ search, setSearch }) {
         ))}
       </Box>
       <Box className="flex items-center w-full md:w-auto">
-        <Box className="relative mr-2 md:mr-4 md:block w-full md:w-auto px-3 md:px-0">
+        <Box className="relative mr-2 md:mr-4 md:block w-full md:w-auto px-2 md:px-0">
           <input
             type="text"
             placeholder="Search by keyword"
@@ -107,8 +106,10 @@ function Header({ search, setSearch }) {
             <Chip
               onClick={() => router.push("/cart")}
               sx={{ backgroundColor: theme.palette.primary.main }}
-              className="h-8 !rounded-full w-14 hover:!bg-blue-900"
-              label={<MyCartBtn variant="contained" num={cartNum || 0} />}
+              className="h-9 min-h-9 py-2 !rounded-full w-16 hover:!bg-blue-900"
+              label={
+                <MyCartBtn variant="contained" num={cartedProds?.length || 0} />
+              }
               size="small"
             />
             <Typography
@@ -122,14 +123,14 @@ function Header({ search, setSearch }) {
               <CustomAvatar
                 src={userInfo.image}
                 alt="Pic"
-                className="!w-10 !h-10 !ml-2"
+                className="!w-10 !h-10 !ml-2 flex-shrink-0"
               />
             ) : (
               <CustomAvatar
                 skin="light"
                 color="primary"
-                className="!w-10 !h-10 !font-black !text-[15px] !ml-2"
-                onClick={() =>  userLogout()}
+                className="!w-10 !h-10 !font-black !text-[15px] !ml-2 flex-shrink-0"
+                onClick={() => userLogout()}
                 // sx={{ ml: 3, width: 30, height: 30, fontSize: "0.85rem" }}
               >
                 {getInitials(userInfo?.fullname || "New User").substring(0, 2)}

@@ -167,9 +167,10 @@ export const ProductOnShowcase = ({
   star,
 }) => {
   const router = useRouter();
+  const reshapedProdName = prodName.split(" ").join("-").toLowerCase()
   return (
     <Box className="w-5/12 min-w-[150px] max-w-[170px] md:w-44 !h-64 mx-1.5 md:mx-2 my-2.5 ">
-      <Box onClick={() => router.push(`/biz/Corisio-Store/${prodName}`)}>
+      <Box onClick={() => router.push(`/biz/Corisio-Store/${reshapedProdName}`)}>
         <img
           src={image}
           alt="product_image"
@@ -177,7 +178,7 @@ export const ProductOnShowcase = ({
         />
       </Box>
       <Box className="pt-1 px-px">
-        <Link href={`/biz/Corisio-Store/${prodName}`}>
+        <Link href={`/biz/Corisio-Store/${reshapedProdName}`}>
           <Box>
             <Typography
               variant="body2"

@@ -8,7 +8,7 @@ import {
 import { CartProductView } from "@/app/components/templates/productView";
 import HomeWrapper from "@/app/components/view/home";
 import ReactSlickSlider from "@/app/components/wrapper/react-slick";
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
 import {
   hotDealData,
   moreProducts,
@@ -24,11 +24,16 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import React, { useState } from "react";
+import { useUserData } from "@/app/hooks/useData";
+import { deleteBulkCart } from "@/app/redux/state/slices/home/cart";
+import { useDispatch } from "react-redux";
 
 const UserCart = () => {
-  const [checkAll, setCheckAll] = useState(false);
-  console.log(checkAll);
-  const router = useRouter()
+  const dispatch = useDispatch()
+  const { cartData, cartedProds } = useUserData();
+  const [selected, selectCart] = useState([])
+  const router = useRouter();
+
   return (
     <HomeWrapper>
       <Box className="!px-2 my-5 sm:!px-16 md:!px-24 lg:!px-32 md:!py-7 relative">
@@ -37,14 +42,11 @@ const UserCart = () => {
             <Box className="">
               <Box className="bg-white rounded-md py-5 px-4">
                 <Typography variant="body2" className="!font-bold !text-[20px]">
-                  Shopping Cart (5)
+                  Shopping Cart ({cartedProds.length})
                 </Typography>
                 <Box className="w-full flex justify-between items-center !mt-2">
                   <FormControlLabel
                     className="!mt-2"
-                    onChange={() => {
-                      setCheckAll(!checkAll);
-                    }}
                     label={
                       <Box>
                         <Typography variant="caption" className="">
@@ -54,8 +56,10 @@ const UserCart = () => {
                     }
                     control={
                       <Checkbox
-                        onChange={() => {
-                          setCheckAll(!checkAll);
+                        checked={selected.length === cartedProds.length}
+                        onChange={(e) => {
+                          const checked = e.target.checked;
+                          selectCart(() => (checked ? cartedProds : []));
                         }}
                         disabled={false}
                         name="basic-checked"
@@ -64,7 +68,11 @@ const UserCart = () => {
                   />
                   <Button
                     variant="text"
-                    className="!text-[12px] !text-blue-700 !mt-1"
+                    className={`!text-[12px] !text-blue-700 !mt-1 ${
+                      !selected.length > 0 && "cursor-cancel"
+                    }`}
+                    disabled={!selected.length > 0}
+                    onClick={() => deleteBulkCart(selected, dispatch)}
                   >
                     Delete selected items
                   </Button>
@@ -80,24 +88,30 @@ const UserCart = () => {
                 </Box>
               </Box>
               <Box className="bg-white w-full rounded-md py-5 px-2 md:px-4 mt-5">
-                {moreProducts.map(
-                  (each, i) =>
-                    i < 4 && (
-                      <Box key={i}>
-                        <CartProductView
-                          store={each.store}
-                          prodName={each.prodName}
-                          image={`/images/more/${i + 1}.png`}
-                          prodPrice={each.prodPrice}
-                          quantity={each.star}
-                          checkAll={checkAll}
-                        />
-                        {moreProducts.length > i + 1 && (
-                          <Box className="w-full border-[1px] border-gray-100 my-5"></Box>
-                        )}
-                      </Box>
-                    )
-                )}
+                {cartData?.products &&
+                  cartData?.products.map(
+                    (each, i) =>
+                      i < 4 && (
+                        <Box key={i}>
+                          <CartProductView
+                            store={each.store}
+                            selected={selected}
+                            selectCart={selectCart}
+                            branch={each.branch}
+                            cartId={each._id}
+                            productId={each.product._id}
+                            colors={each.product?.specifications?.colors}
+                            prodName={each.product.prodName}
+                            image={`/images/more/${i + 1}.png`}
+                            prodPrice={each.product.prodPrice}
+                            quantity={each.quantity}
+                          />
+                          {moreProducts.length > i + 1 && (
+                            <Box className="w-full border-[1px] border-gray-100 my-5"></Box>
+                          )}
+                        </Box>
+                      )
+                  )}
               </Box>
             </Box>
           </Grid>
@@ -112,7 +126,7 @@ const UserCart = () => {
                     Sub total
                   </Typography>
                   <Typography variant="body2" className="!text-[12px]">
-                    NGN54,200
+                    NGN {cartData?.sum_price?.toLocaleString()}
                   </Typography>
                 </Box>
                 <Box className="w-full flex justify-between items-center !mt-2">
@@ -123,7 +137,7 @@ const UserCart = () => {
                     variant="body2"
                     className="!text-[12px] !text-red-500"
                   >
-                    -NGN16,260
+                    -NGN 1,260
                   </Typography>
                 </Box>
 
@@ -139,7 +153,7 @@ const UserCart = () => {
                     variant="body2"
                     className="!text-[13px] !font-bold"
                   >
-                    NGN37,940
+                    NGN {cartData?.sum_price?.toLocaleString()}
                   </Typography>
                 </Box>
               </Box>
@@ -195,7 +209,7 @@ const UserCart = () => {
               </Box>
               <Button
                 variant="contained"
-                onClick={() => router.push('/checkout')}
+                onClick={() => router.push("/checkout")}
                 className="w-full !mt-6 h-12 !rounded-full !border-none !text-[14px] !text-white"
               >
                 Checkout (5)

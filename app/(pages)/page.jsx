@@ -1,6 +1,6 @@
 "use client";
 import HomeWrapper from "../components/view/home";
-import React from "react";
+import React, { useState } from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import Image from "next/image";
 import IconifyIcon from "@/app/components/icon";
@@ -30,9 +30,12 @@ import {
   TestimonialsComponent,
   WhoIsWaiting,
 } from "@/app/components/view/home/Components/Footer";
+import useSWR from "swr";
 
 const HomePage = ({ searchParams }) => {
- 
+  const {data: prods, isLoading, error} = useSWR("/products")
+  const products = prods ? prods.data : []
+
   return (
     <HomeWrapper>
       <Box className="!mb-20 mt-6 md:mt-16">
@@ -260,7 +263,7 @@ const HomePage = ({ searchParams }) => {
           <Box className="px-3 md:px-10">
             <SectionTitle black="More" blue="Products" />
             <Box className="!mt-6 flex flex-wrap justify-center">
-              {moreProducts.map((prod, i) => (
+              {products.map((prod, i) => (
                 <ProductOnShowcase
                   key={i}
                   prodName={prod.prodName}

@@ -6,8 +6,14 @@ import { userGroupCartData } from "@/app/data/home/homepage";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import Image from "next/image";
 import React from "react";
+import useSWR from "swr";
 
 const Checkout = () => {
+  const { data: carts, error } = useSWR("/user/cart-group");
+  const groupedCart = carts ? carts.data : [];
+
+  console.log(groupedCart);
+
   return (
     <HomeWrapper>
       <Box>
@@ -41,16 +47,16 @@ const Checkout = () => {
                   />
                 </Box>
               </Box>
-
               <Box className="bg-white rounded-md py-5 px-4 mt-5">
-                {userGroupCartData.map((each, i) => (
+                {groupedCart.map((each, i) => (
                   <Box key={i}>
                     <GroupCartProducts
-                      store={each.store.store}
-                      products={each.products}
+                      store={each._id.store}
+                      branchPrice={each.branchCheckout}
+                      branch={each.fromBranch}
                     />
-                    
-                    {userGroupCartData.length > i + 1 && (
+
+                    {groupedCart.length > i + 1 && (
                       <Box className="w-full border-[1px] my-5"></Box>
                     )}
                   </Box>

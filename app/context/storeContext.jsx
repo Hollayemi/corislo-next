@@ -7,24 +7,21 @@ import useSWR from "swr";
 const { createContext, useEffect } = require("react");
 
 const defaultProvider = {
-  cartedProds: [],
-  cartData: {},
-  userInfo: {},
-  selectedAddress: {},
-  isOffline: true,
+  staffInfo: {},
+  storeInfo: {},
+  connection: false,
 };
-const DataContext = createContext(defaultProvider);
+const StoreDataContext = createContext(defaultProvider);
 
-const UserDataProvider = ({ children }) => {
+const StoreDataProvider = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
   const { userData } = useSelector((state) => state.reducer.loginReducer);
 
-
   const getPath = pathname.split("/");
   useEffect(() => {
     const getLocalToken =
-      typeof window !== "undefined" && localStorage.getItem("user_token");
+      typeof window !== "undefined" && localStorage.getItem("store_token");
 
     if (
       getLocalToken &&
@@ -36,17 +33,16 @@ const UserDataProvider = ({ children }) => {
     }
   }, [userData, getPath, router]);
 
-  const isOffline = () => {
+  const connection = () => {
     const getLocalToken =
-      typeof window !== "undefined" && localStorage.getItem("user_token");
+      typeof window !== "undefined" && localStorage.getItem("store_token");
     if (userData?.accessToken && getLocalToken) {
       // const decodedToken = jwt_decode(userData?.accessToken); // Decode the JWT token
       // const currentTime = Date.now() / 1000; // Get the current time in seconds
-
       // // Check if the token is still valid based on its expiration time
       // return decodedToken.exp < currentTime;
     }
-    return !Boolean(getLocalToken);
+    return Boolean(getLocalToken);
   };
 
   //
@@ -57,35 +53,35 @@ const UserDataProvider = ({ children }) => {
   //data fetching functions
 
   //
-  // fetch userInfo
+  // fetch staffInfo
   //
   const {
-    data: userInfo,
-    error: userErr,
-    isLoading: userIsLoading,
-  } = useSWR(!isOffline() && "/user/get-account");
+    data: staffInfo,
+    error: staffErr,
+    isLoading: staffIsLoading,
+  } = useSWR(connection() && "/branch/logged-in-staff");
   //
-  // fetch CARTiNFO
+  //
+  // fetch storeInfo
   //
   const {
-    data: cartData,
-    error: cartErr,
-    isLoading: cartIsLoading,
-  } = useSWR(!isOffline() && "/user/cart");
+    data: storeInfo,
+    error: storeErr,
+    isLoading: storeIsLoading,
+  } = useSWR(connection() && "/store");
+  //
+  
   return (
-    <DataContext.Provider
+    <StoreDataContext.Provider
       value={{
-        cartedProds:
-          (!cartErr && !cartIsLoading && cartData?.data?.cartedProds) || [],
-        cartData:
-          (!cartErr && !cartIsLoading && cartData?.data) || {},
-        userInfo: (!userErr && !userIsLoading && userInfo?.user) || {},
+        staffInfo: (!staffErr && !staffIsLoading && staffInfo?.data) || {},
+        storeInfo: (!storeErr && !storeIsLoading && storeInfo) || {},
         selectedAddress: {},
-        isOffline: isOffline(),
+        connection: connection(),
       }}
     >
       {children}
-    </DataContext.Provider>
+    </StoreDataContext.Provider>
   );
 };
-export { UserDataProvider, DataContext };
+export { StoreDataProvider, StoreDataContext };

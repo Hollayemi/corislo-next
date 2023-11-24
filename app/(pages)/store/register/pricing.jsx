@@ -13,8 +13,6 @@ const Pricing = () => {
       </Typography>
       <AllPlans />
       <br />
-      <br />
-      <br />
     </Box>
   );
 };

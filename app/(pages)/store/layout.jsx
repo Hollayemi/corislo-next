@@ -1,5 +1,9 @@
 'use client';
+import { StoreDataProvider } from "@/app/context/storeContext";
+import { jsonHeader } from "@/app/redux/state/slices/api/setAuthHeaders";
 import { Box } from "@mui/material"
+import { SWRConfig } from "swr";
+import martApi from "@/app/redux/state/slices/api/baseApi";
 
 // export const metadata = {
 //   title: "Store - corislo",
@@ -9,8 +13,23 @@ import { Box } from "@mui/material"
 export default function MyStoreDashboardLayout({ children }) {
     
     return (
-        <Box className="h-screen" color="custom.body">
+      <SWRConfig
+        value={{
+          refreshInterval: false,
+          revalidateOnFocus: false,
+
+          fetcher: async (resource, init) => {
+            const getToken = jsonHeader("store");
+            const res = await martApi.get(resource, getToken);
+            return res.data;
+          },
+        }}
+      >
+        <StoreDataProvider>
+          <Box className="h-screen" bgcolor="custom.bodyGray">
             {children}
-        </Box>
-    )
+          </Box>
+        </StoreDataProvider>
+      </SWRConfig>
+    );
 }

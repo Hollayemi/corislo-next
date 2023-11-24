@@ -65,7 +65,7 @@ export default function RootLayout({ children }) {
             revalidateOnFocus: true,
 
             fetcher: async (resource, init) => {
-              const getToken = jsonHeader();
+              const getToken = jsonHeader("user");
               const res = await martApi.get(resource, getToken);
               return res.data;
             },
@@ -75,17 +75,19 @@ export default function RootLayout({ children }) {
           <Provider store={store}>
             <UserDataProvider>
               <PersistGate loading={null} persistor={persistor}>
-                <ThemeComponent>{children}</ThemeComponent>
+                <ThemeComponent>
+                  {children}
+                  <ReactHotToast>
+                    <Toaster
+                      position="top-right"
+                      toastOptions={{ className: "react-hot-toast" }}
+                    />
+                  </ReactHotToast>
+                </ThemeComponent>
               </PersistGate>
             </UserDataProvider>
           </Provider>
         </SWRConfig>
-        <ReactHotToast>
-          <Toaster
-            position="top-right"
-            toastOptions={{ className: "react-hot-toast" }}
-          />
-        </ReactHotToast>
       </body>
     </html>
   );

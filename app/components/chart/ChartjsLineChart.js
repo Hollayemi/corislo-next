@@ -118,14 +118,15 @@ const DashboardLineChart = (props) => {
   };
 
   return (
-    <Card>
-      <Box className="!px-3 !py-3">
+    <Card className="w-full">
+      <Box className="!px-3 !py-3 w-full">
         <Typography className="text-[13px] font-bold">
           Income Statement Chart
         </Typography>
       </Box>
+      
       <CardContent>
-        <Line data={data} height={300} options={options} />
+        <Line data={data} width={"100%"} height={300} options={options} />
       </CardContent>
     </Card>
   );

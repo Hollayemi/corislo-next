@@ -7,17 +7,39 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import IconifyIcon from "../icon";
+import { useDispatch } from "react-redux";
+import { addCartHandler, changeQuantity } from "@/app/redux/state/slices/home/cart";
+import { removeOrAddToArray } from "@/app/utils/arrayFunctions";
 
 export const CartProductView = ({
   image,
   quantity,
   prodName,
   prodPrice,
+  branch,
   store,
-  checkAll,
+  cartId,
+  productId,
   hideCheckbox,
   hideQtyFunc,
+  selected,
+  selectCart,
 }) => {
+  const colorArray = [
+    "#eefabb",
+    "#aecabb",
+    "#eabdbb",
+    "#beea45",
+    "#afedda",
+    "#34ee",
+    "#000",
+  ];
+  const dispatch = useDispatch();
+  const payload = {
+    productId: productId,
+    store,
+    branch,
+  };
   return (
     <Box className="flex items-start py-3 w-full relative">
       <Box
@@ -26,10 +48,12 @@ export const CartProductView = ({
         {!hideCheckbox && (
           <FormControlLabel
             className="!mt-2 md:w-8"
-            onChange={(e) => {}}
+            onChange={(e) =>
+              removeOrAddToArray(productId, selected, selectCart)
+            }
             control={
               <Checkbox
-                checked={checkAll}
+                checked={selected.includes(productId)}
                 disabled={false}
                 name="basic-checked"
               />
@@ -54,20 +78,27 @@ export const CartProductView = ({
               {prodName}
             </Typography>
             <Box className="flex items-center">
-              <Typography variant="caption" className="!text-[10px]">
+              <Typography
+                variant="body2"
+                className="!text-[10px] !text-gray-300"
+              >
                 colors
               </Typography>
-              <Box className="flex items-center">
-                <Box className="w-2 h-2 bg-red-500 rounded-full border border-white"></Box>
-                <Box className="w-2 h-2 bg-blue-500 rounded-full border border-white"></Box>
-                <Box className="w-2 h-2 bg-black-500 rounded-full border border-white"></Box>
+              <Box className="flex items-center ml-2 relative">
+                {colorArray.map((col, i) => (
+                  <Box
+                    bgcolor={col}
+                    key={i}
+                    className={`w-3 h-3 rounded-full border border-white`}
+                  ></Box>
+                ))}
               </Box>
             </Box>
             <Typography
               variant="body2"
               className="!font-extrabold !text-black !text-[16px] !my-px !p-0"
             >
-              NGN{prodPrice}
+              NGN {(prodPrice * (quantity || 1)).toFixed(2).toLocaleString()}
             </Typography>
             <Typography variant="body2" className="!text-[11px] !text-blue-800">
               {store}
@@ -77,7 +108,10 @@ export const CartProductView = ({
       </Box>
       {!hideQtyFunc && (
         <Box className="w-20 absolute top-2 right-0 mr-2">
-          <Box className="float-right mb-6">
+          <Box
+            className="float-right mb-6"
+            onClick={() => addCartHandler(payload, dispatch)}
+          >
             <IconifyIcon
               icon="tabler:trash"
               className="!text-[18px] !text-red-600"
@@ -85,7 +119,9 @@ export const CartProductView = ({
           </Box>
           <Box className="flex justify-between w-full my-2.5 md:my-0.5">
             <Box
-              onClick={() => {}}
+              onClick={() =>
+                changeQuantity({ id: cartId, operator: "+" }, dispatch)
+              }
               className="h-6 w-6 rounded-full cursor-pointer !text-[14px] border border-blue-800 !font-black flex items-center justify-center"
             >
               +
@@ -97,7 +133,9 @@ export const CartProductView = ({
               {quantity}
             </Typography>
             <Box
-              onClick={() => {}}
+              onClick={() =>
+                changeQuantity({ id: cartId, operator: "-" }, dispatch)
+              }
               className="h-6 w-6 rounded-full cursor-pointer !text-[14px] border border-blue-800 !font-black flex items-center justify-center"
             >
               -
@@ -109,28 +147,28 @@ export const CartProductView = ({
   );
 };
 
-export const GroupCartProducts = ({ store, products }) => {
+export const GroupCartProducts = ({ store, branch, branchPrice }) => {
   return (
     <Box>
       <Box className="w-full flex justify-between items-center !mt-5">
         <Typography
           variant="body2"
-          className="!text-[20px] !font-bold !text-blue-800"
+          className="!text-[15px] !font-bold !text-blue-800"
         >
           {store}
         </Typography>
         <Typography variant="body2" className="!text-[13px] !font-bold">
-          Waybill Fee: NGN4,500
+          Waybill Fee: NGN {branchPrice?.toFixed(2)}
         </Typography>
       </Box>
 
       <Box className="px-2 !mt-4">
-        {products.map((each, i) => (
+        {branch.map((each, i) => (
           <CartProductView
             key={i}
-            prodName={each.prodName}
+            prodName={each.product.prodName}
             image={`/images/more/${i + 1}.png`}
-            prodPrice={each.prodPrice}
+            prodPrice={each.product.prodPrice}
             quantity={each.quantity}
             hideCheckbox
             hideQtyFunc

@@ -12,12 +12,30 @@ import React, { useState } from "react";
 import { ProdDescription } from "./tabs";
 import { SectionTitle } from "@/app/components/cards/homeCards";
 import { hotDealData, popularProducts } from "@/app/data/home/homepage";
-import { HotDeal, PopularProduct } from "@/app/components/templates/productTemplates";
+import {
+  HotDeal,
+  PopularProduct,
+} from "@/app/components/templates/productTemplates";
 import { ReviewTab } from "./reviewTab";
+import useSWR from "swr";
+import { removeOrAddToArray } from "@/app/utils/arrayFunctions";
+import { useDispatch } from "react-redux";
+import { addCartHandler } from "@/app/redux/state/slices/home/cart";
+import { useUserData } from "@/app/hooks/useData";
 
-const ProductDisplay = () => {
+const ProductDisplay = ({ params }) => {
+  const dispatch = useDispatch();
+  const { product: prodNameParam } = params;
+  const { cartedProds } = useUserData();
+  const { data: prod, error } = useSWR(
+    `/products?prodName=${prodNameParam.split("-").join(" ")}`
+  );
+  const product = prod ? prod?.data[0] : {};
+  console.log(prodNameParam, product);
   const ImagesArray = [1, 2, 3, 4, 5, 6, 7];
   // ** State
+  const [colors, setColors] = useState([]);
+  const [size, setSize] = useState("");
   const [value, setTabValue] = useState("1");
 
   const handleChangeTab = (event, newValue) => {
@@ -27,6 +45,13 @@ const ProductDisplay = () => {
   const filteredSizes = productSizes.filter(
     (obj) => obj.size.split("-")[0] === "EU"
   );
+  const payload = {
+    productId: product?._id,
+    color: colors,
+    size: size,
+    store: product?.store,
+    branch: product?.branches,
+  };
   const colorArray = [
     "#eefabb",
     "#aecabb",
@@ -73,29 +98,49 @@ const ProductDisplay = () => {
           </Grid>
           <Grid item xs={12} md={7}>
             <Typography variant="body2" className="!font-semibold !text-xl">
-              Flangesio Ultra-Cool Design Men's Sneakers PU Leather Trend Casual
-              Shoes
+              {product.prodName}
             </Typography>
 
             <Box className="w-full mt-5 flex flex-wrap">
-              <TitleValue title="Brand" value="Flangesio" />
-              <TitleValue title="Category" value="Clothing and Fashion" />
-              <TitleValue title="Sub-Category" value="Shoes" />
-              <TitleValue title="Classes" value="Men’s Shoes" />
+              <TitleValue
+                title="Collection"
+                value={product.collectionName || "Flangesio"}
+              />
+              <TitleValue
+                title="Category"
+                value={product.category || "Clothing and Fashion"}
+              />
+              <TitleValue
+                title="Sub-Category"
+                value={product.subCollectionName || "Shoes"}
+              />
+              <TitleValue
+                title="Classes"
+                value={product.group || "Men’s Shoes"}
+              />
               <Box className="w-1/2 mt-1 flex items-center">
                 <Box className="w-20">
                   <Typography variant="caption" className="!text-gray-400">
-                    Rating (23)
+                    Rating ({product?.totalReviews?.toLocaleString() || 0})
                   </Typography>
                 </Box>
                 <Box>
                   <Typography variant="caption" className="!text-black">
-                    <Rating
-                      defaultValue={4}
-                      className=" mt-2"
-                      name="size-small"
-                      size="small"
-                    />
+                    {product?.star ? (
+                      <Rating
+                        defaultValue={product.star || 0}
+                        className=" mt-2"
+                        name="size-small"
+                        size="small"
+                      />
+                    ) : (
+                      <Rating
+                        defaultValue={0}
+                        className=" mt-2"
+                        name="size-small"
+                        size="small"
+                      />
+                    )}
                   </Typography>
                 </Box>
               </Box>
@@ -124,29 +169,42 @@ const ProductDisplay = () => {
                 {colorArray.map((col, i) => (
                   <Box
                     key={i}
-                    className={`!bg-slate-600 w-4 h-4 rounded-full m-1.5`}
-                  ></Box>
+                    bgcolor={col}
+                    onClick={() => removeOrAddToArray(col, colors, setColors)}
+                    className={`w-4 h-4 rounded-full m-1.5 flex items-center justify-center`}
+                  >
+                    {colors.includes(col) && (
+                      <img
+                        src="/images/misc/check.png"
+                        alt="."
+                        className="w-2.5 h-2.5"
+                      />
+                    )}
+                  </Box>
                 ))}
               </Box>
               <Typography variant="caption" className="!font-bold">
                 Sizes Available
               </Typography>
               <Box className="flex items-center flex-wrap mb-5">
-                {filteredSizes.map(
+                {product?.specifications?.size?.map(
                   (each, i) =>
                     i < 7 && (
                       <Chip
-                        onClick={() => {}}
+                        onClick={() => setSize(each)}
+                        bgcolor="#000"
                         sx={{ margin: 0.5, borderRadius: "5px" }}
-                        className="hover:!text-white"
+                        className={`hover:!text-white ${
+                          size === each && "!bg-blue-900 !text-white"
+                        }`}
                         label={
                           <Box className="flex items-center ">
-                            {each.size}
-                            <IconifyIcon
+                            {each}
+                            {/* <IconifyIcon
                               icon="tabler:x"
                               fontSize={20}
                               className="ml-2"
-                            />
+                            /> */}
                           </Box>
                         }
                         key={i}
@@ -160,25 +218,34 @@ const ProductDisplay = () => {
               <Box className="flex items-center flex-wrap justify-center">
                 <Typography
                   variant="body2"
-                  className="!font-black !text-black !text-3xl !mr-3 !my-3"
+                  className="!font-black !text-black !text-2xl !mr-3 !my-3"
                 >
-                  NGN6,799
+                  NGN{product?.prodPrice?.toLocaleString()}
                 </Typography>
                 <Button
                   variant="contained"
-                  className="!rounded-full h-8 w-36 !shadow-none !text[12px] !my-3"
+                  className="!rounded-full h-10 w-36 !shadow-none !text[11px] !my-3"
+                  onClick={() => addCartHandler(payload, dispatch)}
                   startIcon={
                     <IconifyIcon
                       icon="tabler:shopping-cart"
-                      className="!text-blue-800 !text-white !ml-3"
+                      className="!text-blue-800 !text-white"
                     />
                   }
                 >
-                  Add to cart
+                  {cartedProds.includes(product?._id)
+                    ? "Remove from cart"
+                    : "Add to cart"}
                 </Button>
                 <Button
-                  variant="text"
-                  className="!rounded-full h-8 w-32 !shadow-none !text[12px] !bg-white border-none !my-3"
+                  startIcon={
+                    <IconifyIcon
+                      icon="tabler:wallet"
+                      className="!text-blue-800  !ml-3"
+                    />
+                  }
+                  variant="outlined"
+                  className="!rounded-full h-10 w-32 !border !border-blue-800 !text-blue-800 !shadow-none !text[11px] !bg-white !my-3"
                 >
                   Buy Now
                 </Button>
@@ -247,7 +314,11 @@ const ProductDisplay = () => {
                 </Box>
 
                 <Box className="mt-2 md:mt-0 md:w-2/5 block">
-                  <TickCheck title="Order Fufilment Rate:" icon result="Average" />
+                  <TickCheck
+                    title="Order Fufilment Rate:"
+                    icon
+                    result="Average"
+                  />
                   <TickCheck title="Customer Rating:" icon result="Good" />
                 </Box>
               </Box>
@@ -389,7 +460,7 @@ const TickCheck = ({ title, result, icon }) => (
     <Box className="flex items-center">
       {icon && (
         <IconifyIcon
-          icon="tabler:chevron-down"
+          icon="tabler:check"
           className="w-3.5 h-3.5 !text-white p-px !rounded-full bg-green-600 mr-1"
         />
       )}
@@ -398,10 +469,7 @@ const TickCheck = ({ title, result, icon }) => (
       </Typography>
     </Box>
     <Box>
-      <Typography
-        variant="body2"
-        className="!text-black !text-[13px] !ml-4"
-      >
+      <Typography variant="body2" className="!text-black !text-[13px] !ml-4">
         {result}
       </Typography>
     </Box>

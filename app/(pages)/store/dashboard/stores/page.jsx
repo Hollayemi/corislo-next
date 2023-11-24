@@ -14,14 +14,32 @@ import {
 } from "./component";
 import Icon from "@/app/components/icon";
 import { storeBottomBar, storeInnerList } from "@/app/data/store/innerList";
+import { useStoreData } from "@/app/hooks/useData";
 
 const StorePage = ({ params }) => {
-  console.log(params);
+  const { storeInfo } = useStoreData();
   const [openHours, setOpenHours] = useState({})
   const [socialMedia, setSocialMedia] = useState({});
   const [files, setFiles] = useState([]);
   const path={...params, sidebar: "stores"}
+
+  const [inputValues, setValues] = useState({
+    store: storeInfo?.profile?.store || "",
+    address: storeInfo?.profile?.address || "",
+    city: storeInfo?.profile?.city || "",
+    bus_stop: storeInfo?.profile?.bus_stop || "",
+    about_store: storeInfo?.profile?.about_store || "",
+    social_media: "",
+    opening_hours: openHours,
+  });
   
+  console.log(inputValues);
+  console.log(storeInfo);
+  
+  const handleChange = (prop) => (event) => {
+    setValues({ ...inputValues, [prop]: event.target.value });
+  };
+
   return (
     <StoreLeftSideBar
       path={path}
@@ -34,7 +52,7 @@ const StorePage = ({ params }) => {
           Store Profile
         </Typography>
         <Link href="/store/dashboard/stores/settings">
-          <Typography className="pb-1 border-b-2 cursor-pointer text-sm font-bold w-28 ml-3 text-center border-transparent">
+          <Typography className="pb-1 border-b-2 cursor-pointer text-sm font-bold w-28 !ml-6 text-center border-transparent">
             Store Settings
           </Typography>
         </Link>
@@ -92,7 +110,11 @@ const StorePage = ({ params }) => {
               </Box>
             </Box>
             <Box className="!mt-8 !border-b !pb-3">
-              <InputBoxWithSideLabel label="Your Store Name" />
+              <InputBoxWithSideLabel
+                value={inputValues.store}
+                onChange={handleChange("store")}
+                label="Your Store Name"
+              />
             </Box>
 
             <Box className="!mt-8 !border-b !pb-6">
@@ -104,9 +126,21 @@ const StorePage = ({ params }) => {
               </Typography>
               <br />
               <br />
-              <InputBoxWithSideLabel label="City" />
-              <InputBoxWithSideLabel label="Address" />
-              <InputBoxWithSideLabel label="Closest Bus Stop or Landmark" />
+              <InputBoxWithSideLabel
+                value={inputValues.city}
+                onChange={handleChange("city")}
+                label="City"
+              />
+              <InputBoxWithSideLabel
+                value={inputValues.address}
+                onChange={handleChange("address")}
+                label="Address"
+              />
+              <InputBoxWithSideLabel
+                value={inputValues.bus_stop}
+                onChange={handleChange("bus_stop")}
+                label="Closest Bus Stop or Landmark"
+              />
             </Box>
 
             <Box className="!mt-8 !pb-6">
@@ -122,7 +156,9 @@ const StorePage = ({ params }) => {
                 sx={{ mb: 0.5 }}
                 fullWidth
                 multiline
-                defaultValue="About Store: Welcome to Sport Zone, your ultimate destination for all things sports and fitness. We are dedicated to providing athletes and fitness enthusiasts with top-notch sports equipment, apparel, and accessories to help you excel in your game and achieve your fitness goals. At Sport Zone, we understand the importance of having the right gear to enhance your performance. Our extensive collection features top brands and high-quality products that cater to a wide range of sports, including basketball, soccer, tennis, running, and more. Whether you're a professional athlete, a weekend warrior, or a fitness enthusiast, we have everything you need to unleash your full potential."
+                value={inputValues.about_store}
+                onChange={handleChange("about_store")}
+                // defaultValue="About Store: Welcome to Sport Zone, your ultimate destination for all things sports and fitness. We are dedicated to providing athletes and fitness enthusiasts with top-notch sports equipment, apparel, and accessories to help you excel in your game and achieve your fitness goals. At Sport Zone, we understand the importance of having the right gear to enhance your performance. Our extensive collection features top brands and high-quality products that cater to a wide range of sports, including basketball, soccer, tennis, running, and more. Whether you're a professional athlete, a weekend warrior, or a fitness enthusiast, we have everything you need to unleash your full potential."
                 id="textarea-outlined"
                 maxRows={12}
                 minRows={10}

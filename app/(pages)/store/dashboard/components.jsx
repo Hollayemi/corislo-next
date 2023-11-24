@@ -62,10 +62,10 @@ export const TopCards = () => {
   
     const theme = useTheme();
     return (
-      <Box>
-        <Grid container spacing={2}>
+      <Box className="">
+        <Grid container spacing={0.5}>
           {data.map((item, index) => (
-            <Grid item xs={6} sm={3} key={index}>
+            <Grid item xs={6} sm={6} md={3} key={index}>
               <Box bgcolor="custom.bodyLight" className="px-2 py-3 md:!p-3 !rounded-md">
                 <Box className="border-l-4 border-slate-600 pl-3">
                   <Box
@@ -108,7 +108,6 @@ export const TopCards = () => {
                               ? "tabler:arrow-narrow-up"
                               : "tabler:arrow-narrow-down"
                           }
-                          arrow-narrow-up
                         />
                         {item.increase}%
                       </div>

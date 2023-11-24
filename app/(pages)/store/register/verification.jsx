@@ -7,8 +7,8 @@ import React, { useState } from "react";
 import DocumentUploader from "./dropZone";
 
 const Verification = () => {
-  const [files, setFiles] = useState([7]);
-  const [status, setStatus] = useState("uploading");
+  const [files, setFiles] = useState([]);
+  const [status, setStatus] = useState("");
   const text =
     "Business profile needs to upload their business documents.----The Business documents will be reviewed within 1 - 2 Minutes.----The Business profile will be notified of the verification status.";
   return (

@@ -21,6 +21,21 @@ const TextInput = ({ inputProps, id, onChange, multiline }) =>
     ></textarea>
   );
 
+const SelectInput = ({ onChange, id, values }) => {
+  return (
+    <Box>
+      <select
+        onChange={onChange}
+        id={id}
+        className="outline-none border-none selectDefault w-full h-6 !text-gray-400 !text-[14px] pr-5 !bg-white autofill:!px-4"
+      >
+        {values?.map((res, i) => (
+          <option value={res.value} key={i} className="h-10">{res.display}</option>
+        ))}
+      </select>
+    </Box>
+  );
+};
 export const CustomInput = ({
   title,
   inputProps,
@@ -35,12 +50,16 @@ export const CustomInput = ({
       <label htmlFor={id} className="!text-[11px]">
         {title}
       </label>
-      <TextInput
-        multiline={multiline}
-        id={id}
-        inputProps={inputProps}
-        onChange={onChange}
-      />
+      {inputProps.type !== "select" ? (
+        <TextInput
+          multiline={multiline}
+          id={id}
+          inputProps={inputProps}
+          onChange={onChange}
+        />
+      ) : (
+        <SelectInput onChange={onChange} id={id} values={inputProps.values} />
+      )}
       {!hideCheck && (
         <Box
           className="w-4 h-4 rounded-full flex flex-shrink-0 items-center justify-center absolute right-0 mr-4 bottom-0 mb-2"
@@ -53,6 +72,10 @@ export const CustomInput = ({
         </Box>
       )}
     </Box>
-    {error && <Typography className="!text-red-500 !text-[11px] !float-right !px-2 !pt-0.5">{error}</Typography>}
+    {error && (
+      <Typography className="!text-red-500 !text-[11px] !float-right !px-2 !pt-0.5">
+        {error}
+      </Typography>
+    )}
   </Box>
 );

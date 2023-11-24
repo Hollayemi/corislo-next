@@ -7,47 +7,48 @@ import Link from "next/link";
 
 // ** MUI Components
 import Box from "@mui/material/Box";
-import { styled, useTheme } from "@mui/material/styles";
-import MuiCard from "@mui/material/Card";
-import MuiFormControlLabel from "@mui/material/FormControlLabel";
 
 import { CustomInput } from "@/app/components/cards/auth/components";
 import { Button, Typography } from "@mui/material";
 import Image from "next/image";
-import StoreAuthLayout from "@/app/components/layouts/StoreAuthLayout";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import AuthLayout from "@/app/components/layouts/AuthLayouts";
+import { storeLoginHandler } from "@/app/redux/state/slices/shop/auth/storeLogin";
 
 const StoreLogin = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [values, setValues] = useState({
+    store: "",
     password: "",
-    showPassword: false,
+    username: "",
   });
-
-  // ** Hook
-  const theme = useTheme();
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword });
-  };
-
   return (
-    <AuthLayout title="Sign In to your Store Account">
-      <Box className=" w-[380px] !mt-16">
+    <AuthLayout title="Sign in to your store">
+      <Box className="!mt-16 w-full max-w-[380px]">
         <CustomInput
           title="Business / Personnel Email Address"
-          id="firstname"
-          inputProps={{
-            type: "text",
-            placeholder: "Enter your Business / Personnel Email Address",
-          }}
+          onChange={handleChange("store")}
+          id="email"
+          inputProps={{ type: "text", placeholder: "Enter your email address" }}
         />
         <br />
         <CustomInput
-          title="First Name"
+          title="Username"
+          onChange={handleChange("username")}
+          id="username"
+          inputProps={{ type: "text", placeholder: "Enter your username" }}
+        />
+        <br />
+        <CustomInput
+          title="Password"
+          onChange={handleChange("password")}
           id="password"
           inputProps={{ type: "password", placeholder: "Password" }}
         />
@@ -55,12 +56,13 @@ const StoreLogin = () => {
         <Button
           variant="contained"
           className="w-full !h-10 !rounded-full !text-gray-100 !text-[17px] !mt-6"
+          onClick={() => storeLoginHandler(values, router, dispatch)}
         >
           Sign In
         </Button>
         <Button
           variant="outlined"
-          className="w-full !h-10 !rounded-full !text-gray-600 !text-[17px] !mt-3"
+          className="w-full !h-10 !rounded-full !text-gray-600 !text-[17px] !mt-6"
         >
           <Image
             src="/images/logos/logos/google.png"
@@ -73,7 +75,7 @@ const StoreLogin = () => {
         </Button>
 
         <Box className="flex justify-center">
-          <Typography className="!text-[13px] !mt-2">
+          <Typography className="!text-[13px] !mt-5">
             Don’t have an account?{" "}
             <Link
               href="/auth/register"

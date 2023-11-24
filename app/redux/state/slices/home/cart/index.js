@@ -2,61 +2,71 @@ import { createAsyncThunk, createSlice, unwrapResult } from "@reduxjs/toolkit";
 import toaster from "@/app/configs/toaster";
 import martApi from "../../api/baseApi";
 import { jsonHeader } from "../../api/setAuthHeaders";
-import { REQUEST_STATUS } from "../../constants";
-import { FetchCartHandler } from "./fetchCart";
-import tokens from "@/app/configs/tokens";
+import { mutate } from "swr";
 
-export const addCart = createAsyncThunk("post/myCart", async (payload) => {
-  const userToken = tokens.auth;
+
+const addCartApi = createAsyncThunk("post/myCart", async (payload) => {
   const { data } = await martApi
-    .post("/user/cart", payload.body, jsonHeader(userToken))
+    .post("/user/cart", payload, jsonHeader())
     .then((e) => e)
     .catch((e) => e.response);
   return data;
 });
 
-const initialState = {
-  cartData: { message: [] },
-  status: "idle",
-  error: "",
-};
 
-const addNewCart = createSlice({
-  name: "newShop",
-  initialState,
-  reducers: {},
-  extraReducers: {
-    [addCart.pending]: (state) => ({
-      ...initialState,
-      status: REQUEST_STATUS.PENDING,
-    }),
-    [addCart.fulfilled]: (state, { payload }) => ({
-      ...initialState,
-      cartData: payload,
-      status: REQUEST_STATUS.FULFILLED,
-    }),
-    [addCart.rejected]: (state) => ({
-      ...initialState,
-      status: REQUEST_STATUS.REJECTED,
-    }),
-  },
-});
-
-export default addNewCart.reducer;
-
-/*
-
-*/
-
-export const cartHandler = (payload, dispatch, setHideCart) => {
-  dispatch(addCart(payload))
+export const addCartHandler = (payload, dispatch) => {
+  dispatch(addCartApi(payload))
     .then(unwrapResult)
     .then((res) => {
       toaster({ ...res });
       if (res.type === "success") {
-        FetchCartHandler(dispatch);
-        setHideCart("block");
+        mutate("/user/cart");
       }
+    })
+    .catch((e) => {});
+};
+
+
+
+const cartQuantityApi = createAsyncThunk(
+  "post/cart-quantity",
+  async (payload) => {
+    const { data } = await martApi
+      .get(`/user/cart-qty?id=${payload.id}&operator=${payload.operator}`, jsonHeader())
+      .then((e) => e)
+      .catch((e) => e.response);
+    return data;
+  }
+);
+
+export const changeQuantity = (payload, dispatch) => {
+  dispatch(cartQuantityApi(payload))
+    .then(unwrapResult)
+    .then((res) => {
+      toaster({ ...res });
+      mutate("/user/cart");
+    })
+    .catch((e) => {});
+};
+
+
+const deleteBulkCartApi = createAsyncThunk(
+  "post/cart-quantity",
+  async (payload) => {
+    const { data } = await martApi
+      .post(`/user/cart/delete-bulk`, payload, jsonHeader())
+      .then((e) => e)
+      .catch((e) => e.response);
+    return data;
+  }
+);
+
+export const deleteBulkCart = (payload, dispatch) => {
+  dispatch(deleteBulkCartApi(payload))
+    .then(unwrapResult)
+    .then((res) => {
+      toaster({ ...res });
+      mutate("/user/cart");
     })
     .catch((e) => {});
 };

@@ -31,4 +31,5 @@ const ReactHotToast = styled(Box)(({ theme }) => {
   }
 })
 
+
 export default ReactHotToast
