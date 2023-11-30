@@ -26,7 +26,7 @@ const renderClient = params => {
   const stateNum = Math.floor(Math.random() * 6)
   const states = ['success', 'error', 'warning', 'info', 'primary', 'secondary']
   const color = states[stateNum]
-  if (row.image.image) {
+  if (row?.image?.image) {
     return (
       <CustomAvatar
         src={row.image.image}
@@ -235,12 +235,12 @@ const ProductList = ({ rows }) => {
     }
   }
   return (
-    <Grid container>
-      <Grid
-        item
-        xs={12}
-        className="!w-[385px] !max-w-[385px] md:!w-full md:!max-w-full overflow-scroll md:overflow-auto border md:border-none shadow md:shadow-none"
-      >
+    // <Grid container>
+    //   <Grid
+    //     item
+    //     xs={12}
+    //     // className="!w-[385px] !max-w-[385px] md:!w-full md:!max-w-full overflow-scroll md:overflow-auto border md:border-none shadow md:shadow-none"
+      // >
         <DataGrid
           autoHeight
           columns={columns}
@@ -260,10 +260,10 @@ const ProductList = ({ rows }) => {
             },
           }}
           sx={{ border: "none" }}
-          className="w-[1220px] md:w-full"
+          // className="w-[1220px] md:w-full"
         />
-      </Grid>
-    </Grid>
+    //   </Grid>
+    // </Grid>
   );
 }
 

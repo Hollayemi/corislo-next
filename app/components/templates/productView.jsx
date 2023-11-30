@@ -109,7 +109,7 @@ export const CartProductView = ({
       {!hideQtyFunc && (
         <Box className="w-20 absolute top-2 right-0 mr-2">
           <Box
-            className="float-right mb-6"
+            className="float-right mb-10 md:mb-6"
             onClick={() => addCartHandler(payload, dispatch)}
           >
             <IconifyIcon

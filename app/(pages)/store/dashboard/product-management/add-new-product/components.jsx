@@ -17,7 +17,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 // ** Icon Imports
 import Icon from '@/app/components/icon'
 
-export const SimpleDropDown = ({ label, items, onChange, sx }) => {
+export const SimpleDropDown = ({ label, items, onChange, sx, render }) => {
   return (
     <FormControl fullWidth sx={...sx}>
       <InputLabel id="demo-simple-select-outlined-label">{label}</InputLabel>
@@ -32,10 +32,7 @@ export const SimpleDropDown = ({ label, items, onChange, sx }) => {
         <MenuItem value="">
           <em>None</em>
         </MenuItem>
-        <MenuItem value={10}>Ten</MenuItem>
-        <MenuItem value={20}>Twenty</MenuItem>
-        <MenuItem value={30}>Thirty</MenuItem>
-        {items}
+        {render}
       </Select>
     </FormControl>
   );

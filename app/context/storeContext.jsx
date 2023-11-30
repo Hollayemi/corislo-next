@@ -18,7 +18,20 @@ const StoreDataProvider = ({ children }) => {
   const pathname = usePathname();
   const { userData } = useSelector((state) => state.reducer.loginReducer);
 
-  const getPath = pathname.split("/");
+    const getPath = pathname.split("/");
+
+  // useEffect(() => {
+  //   if (
+  //     !connection &&
+  //     getPath[1] !== "store" &&
+  //     getPath[2] !== "login"
+  //   ) {
+  //     router.replace(`/store/login`);
+  //   }else{
+  //     router.replace(`/store/dashboard`);
+  //   }
+  // }, [userData, getPath, router]);
+
   useEffect(() => {
     const getLocalToken =
       typeof window !== "undefined" && localStorage.getItem("store_token");

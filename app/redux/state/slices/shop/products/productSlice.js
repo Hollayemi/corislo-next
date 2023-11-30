@@ -5,97 +5,33 @@ import martApi from "../../api/baseApi";
 import { jsonHeader } from "../../api/setAuthHeaders";
 import { REQUEST_STATUS } from "../../constants";
 import { updateInstance } from "../settings/genApi";
-import tokens from '@/app/configs/tokens';
+import tokens from "@/app/configs/tokens";
+import { mutate } from "swr";
 // add product
 export const createNewProduct = createAsyncThunk(
-  "post/newProductkk",
+  "post/store/product",
   async (payload) => {
-    const storeToken = tokens.store;
     const { data } = await martApi
-      .post("/addProduct", payload, jsonHeader(storeToken))
+      .post("/store/product/new", payload, jsonHeader("store"))
       .then((res) => res)
       .catch((e) => e.response);
     return data;
   }
 );
 
-// export const updateInstance = createAsyncThunk(
-//     'post/collectionInstance',
-//     async (payload) => {
-//         const { data } = await martApi
-//             .post(`/use`, payload, {})
-//             .then((res) => {
-//                 return res;
-//             })
-//             .catch((e) => {
-//                 console.log(e.response);
-//                 return e.response;
-//             });
-//         return data;
-//     }
-// );
-//
-const initialState = {
-  creatname: "",
-};
-
-//
-//
-//
-const myNewProduct = createSlice({
-  name: "newCollection",
-  initialState,
-  reducers: {},
-  extraReducers: {
-    [createNewProduct.pending]: () => ({
-      ...initialState,
-      status: REQUEST_STATUS.PENDING,
-    }),
-    [createNewProduct.fulfilled]: (state, { payload }) => ({
-      ...initialState,
-      status: REQUEST_STATUS.FULFILLED,
-      colData: payload,
-    }),
-    [createNewProduct.rejected]: () => ({
-      ...initialState,
-      status: REQUEST_STATUS.REJECTED,
-    }),
-  },
-});
-
-export const { addNewCollection } = myNewProduct.actions;
-export default myNewProduct.reducer;
-
-//
-//
-//
-
-export const createProductHandler = (formData, dispatch, neededInfo) => {
-  if (neededInfo.authStatus === REQUEST_STATUS.VERIFIED) {
-    const payload = {
-      ...formData,
-      shopID: neededInfo.shopData._id,
-    };
-    const subPayload = {
-      id: neededInfo.shopData._id,
-      number: 1,
-      operator: "-",
-      useCase: "products",
-    };
-    dispatch(createNewProduct(payload))
-      .then(unwrapResult)
-      .then((res) => {
-        console.log(res);
-        toaster({ ...res });
-        if (res.type === "success") {
-          dispatch(updateInstance(subPayload));
-        }
-        neededInfo.reFetchData();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
+export const createProductHandler = (formData, dispatch) => {
+  dispatch(createNewProduct(formData))
+    .then(unwrapResult)
+    .then((res) => {
+      console.log(res);
+      toaster({ ...res });
+      if (res.type === "success") {
+        mutate("store/products");
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 /*
 

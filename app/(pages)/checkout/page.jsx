@@ -3,16 +3,24 @@ import IconifyIcon from "@/app/components/icon";
 import { GroupCartProducts } from "@/app/components/templates/productView";
 import HomeWrapper from "@/app/components/view/home";
 import { userGroupCartData } from "@/app/data/home/homepage";
+import { useUserData } from "@/app/hooks/useData";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import useSWR from "swr";
 
 const Checkout = () => {
+  const { cartedProds } = useUserData()
   const { data: carts, error } = useSWR("/user/cart-group");
   const groupedCart = carts ? carts.data : [];
-
   console.log(groupedCart);
+
+  const [payload, updatePayload] = useState({
+    products: cartedProds,
+    delivery: {},
+    picker: {},
+    address: {},
+  });
 
   return (
     <HomeWrapper>
@@ -54,8 +62,8 @@ const Checkout = () => {
                       store={each._id.store}
                       branchPrice={each.branchCheckout}
                       branch={each.fromBranch}
+                      updatePayload={updatePayload}
                     />
-
                     {groupedCart.length > i + 1 && (
                       <Box className="w-full border-[1px] my-5"></Box>
                     )}

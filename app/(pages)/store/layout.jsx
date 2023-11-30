@@ -26,7 +26,7 @@ export default function MyStoreDashboardLayout({ children }) {
         }}
       >
         <StoreDataProvider>
-          <Box className="h-screen" bgcolor="custom.bodyGray">
+          <Box className="h-full min-h-screen" bgcolor="custom.bodyGray">
             {children}
           </Box>
         </StoreDataProvider>

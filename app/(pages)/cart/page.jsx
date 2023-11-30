@@ -29,11 +29,16 @@ import { deleteBulkCart } from "@/app/redux/state/slices/home/cart";
 import { useDispatch } from "react-redux";
 
 const UserCart = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { cartData, cartedProds } = useUserData();
-  const [selected, selectCart] = useState([])
+  const [selected, selectCart] = useState([]);
   const router = useRouter();
-
+  // mutate(
+  //   "selectCarts",
+  //   selected.map((x) => {
+  //     return { cartId: x, dilivery: "pickup" };
+  //   })
+  // );
   return (
     <HomeWrapper>
       <Box className="!px-2 my-5 sm:!px-16 md:!px-24 lg:!px-32 md:!py-7 relative">
@@ -106,7 +111,7 @@ const UserCart = () => {
                             prodPrice={each.product.prodPrice}
                             quantity={each.quantity}
                           />
-                          {moreProducts.length > i + 1 && (
+                          {cartData.products.length > i + 1 && (
                             <Box className="w-full border-[1px] border-gray-100 my-5"></Box>
                           )}
                         </Box>

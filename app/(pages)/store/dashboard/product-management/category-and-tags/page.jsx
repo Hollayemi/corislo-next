@@ -37,10 +37,7 @@ const CategoryAndTags = ({ params }) => {
 }
 
 const BriefCategories = ({ selectedCate, setSelectedCate }) => {
-    const { data, error, isLoading } = useSWR({
-    endPoint: "/store/brief-categories",
-    token: tokens.store,
-  });
+    const { data, error, isLoading } = useSWR("/store/brief-categories");
     const allCategories = !error && !isLoading ? data.data.map((item, i) => {
         return (
             <Grid item xs={12} sm={6} md={4} key={i}>

@@ -11,10 +11,7 @@ import tokens from "@/app/configs/tokens";
 
 const OrderManagement = ({ params, searchParams }) => {
 
-  const { data, error, isLoading } = useSWR({
-    endPoint: "/branch/order-request",
-    token: tokens.store,
-  });
+  const { data, error, isLoading } = useSWR("/branch/order-request");
   console.log(data, error, isLoading);
   console.log(params);
   const router = useRouter()

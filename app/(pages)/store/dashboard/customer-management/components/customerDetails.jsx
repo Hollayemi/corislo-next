@@ -18,10 +18,7 @@ export const CustomerDetails = ({ customer }) => {
     data: customerInfo,
     error: customerErr,
     isLoading: customerLoading,
-  } = useSWR({
-    endPoint: `/branch/customers?customer=${customer}`,
-    token: tokens.store,
-  });
+  } = useSWR(`/branch/customers?customer=${customer}`);
 
   const {
     data: historyInfo,

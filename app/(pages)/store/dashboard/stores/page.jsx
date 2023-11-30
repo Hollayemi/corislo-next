@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import { useState } from "react";
 import { Typography, Box, Grid, Paper, TextField, Button } from "@mui/material";
-import Link from "next/link"
+import Link from "next/link";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 import Image from "next/image";
 import themeConfig from "@/app/configs/themeConfig";
@@ -15,27 +15,24 @@ import {
 import Icon from "@/app/components/icon";
 import { storeBottomBar, storeInnerList } from "@/app/data/store/innerList";
 import { useStoreData } from "@/app/hooks/useData";
+import { useDispatch } from "react-redux";
+import { updateStoreProfile } from "@/app/redux/state/slices/shop/settings/editShop";
 
 const StorePage = ({ params }) => {
   const { storeInfo } = useStoreData();
-  const [openHours, setOpenHours] = useState({})
-  const [socialMedia, setSocialMedia] = useState({});
+  const dispatch = useDispatch();
+  const [openHours, setOpenHours] = useState(storeInfo?.profile?.opening_hours || {});
+  const [socialMedia, setSocialMedia] = useState(storeInfo?.profile?.social_media || {});
   const [files, setFiles] = useState([]);
-  const path={...params, sidebar: "stores"}
+  const path = { ...params, sidebar: "stores" };
 
   const [inputValues, setValues] = useState({
-    store: storeInfo?.profile?.store || "",
     address: storeInfo?.profile?.address || "",
     city: storeInfo?.profile?.city || "",
     bus_stop: storeInfo?.profile?.bus_stop || "",
     about_store: storeInfo?.profile?.about_store || "",
-    social_media: "",
-    opening_hours: openHours,
   });
-  
-  console.log(inputValues);
-  console.log(storeInfo);
-  
+
   const handleChange = (prop) => (event) => {
     setValues({ ...inputValues, [prop]: event.target.value });
   };
@@ -48,11 +45,11 @@ const StorePage = ({ params }) => {
       BottomList={storeBottomBar}
     >
       <Box className="px-10 !hidden sm:!flex z-50 -mt-7">
-        <Typography className="pb-1 border-b-2 cursor-pointer text-sm font-bold w-24 text-center border-blue-900">
+        <Typography className="pb-1 border-b-2 cursor-pointer !text-[13px] !w-24 text-center border-blue-900">
           Store Profile
         </Typography>
         <Link href="/store/dashboard/stores/settings">
-          <Typography className="pb-1 border-b-2 cursor-pointer text-sm font-bold w-28 !ml-6 text-center border-transparent">
+          <Typography className="pb-1 border-b-2 cursor-pointer !text-[13px] !w-28 !ml-6 text-center border-transparent">
             Store Settings
           </Typography>
         </Link>
@@ -67,7 +64,7 @@ const StorePage = ({ params }) => {
                 </Typography>
                 <Button
                   variant="contained"
-                  className=" bg-blue-900 md:hidden"
+                  className=" bg-blue-900 md:!hidden"
                   startIcon={<Icon icon="tabler:plus" />}
                 >
                   Add Store
@@ -111,8 +108,11 @@ const StorePage = ({ params }) => {
             </Box>
             <Box className="!mt-8 !border-b !pb-3">
               <InputBoxWithSideLabel
-                value={inputValues.store}
-                onChange={handleChange("store")}
+                value={storeInfo?.profile?.store || ""}
+                inputProps={{
+                  disabled: true,
+                }}
+                onChange={() => {}}
                 label="Your Store Name"
               />
             </Box>
@@ -258,6 +258,13 @@ const StorePage = ({ params }) => {
               fullWidth
               className="!py-2 !bg-blue-900"
               startIcon={<Icon icon="tabler:device-floppy" />}
+              onClick={() =>
+                updateStoreProfile(dispatch, {
+                  ...inputValues,
+                  social_media: socialMedia,
+                  opening_hours: openHours,
+                })
+              }
             >
               Save
             </Button>
@@ -280,6 +287,6 @@ const StorePage = ({ params }) => {
       </Box>
     </StoreLeftSideBar>
   );
-}
+};
 
-export default StorePage
+export default StorePage;

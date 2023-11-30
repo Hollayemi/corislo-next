@@ -110,7 +110,7 @@ const Drawer = styled(MuiDrawer, {
 const StoreLeftSideBar = React.memo(
   ({ children, path, InnerList, BottomList, breadCrumbChild }) => {
     const { staffInfo } = useStoreData();
-    console.log(staffInfo);
+  
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -290,16 +290,16 @@ const StoreLeftSideBar = React.memo(
             </Box>
           </StyleList>
         </Drawer>
-        <Box className="relative w-full flex-shrink-0 h-full !pr-3 md:!pr-16">
+        <Box className="top-0 left-0 w-full flex-shrink-0 h-full !pr-3 md:!pr-16">
           {/* <Box className=""> */}
 
           <Box className="flex flex-col w-full sticky top-0 pt-20 md:px-7 px-3">
             {onSideBar === "" && (
-              <Typography color="primary" className="mb-5 font-bold text-xl">
+              <Typography color="primary" className="mb-5 !font-bold !text-2xl">
                 Welcome back, {staffInfo.fullname || "Staff Name"}{" "}
               </Typography>
             )}
-            <Box className="flex items-center justify-between mb-3">
+            <Box className="flex items-center justify-between mb-6">
               <Typography color="primary" className="font-bold">
                 Breadcrumb
               </Typography>
@@ -307,9 +307,9 @@ const StoreLeftSideBar = React.memo(
               {/* {breadCrumbChild} */}
             </Box>
           </Box>
-          <Box className="flex flex-col  relative md:flex-row items-start md:px-1.5 shadow-md">
+          <Box className="flex flex-col  relative md:flex-row items-start md:px-1.5">
             {InnerList && (
-              <Box className="w-full hidden md:block sticky top-[68px] h-[85vh] md:w-48 m-1 bg-white rounded-md">
+              <Box className="w-full hidden md:block sticky top-[68px] h-[85vh] md:w-52 mr-1 bg-white rounded-md">
                 <InnerBar
                   content={SidebarContent}
                   path={path}

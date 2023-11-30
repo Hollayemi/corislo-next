@@ -46,31 +46,44 @@ const data = [
 const renderStats = (data) => {
   console.log(data);
   return data.map((sale, index) => (
-    <Grid item xs={12} md={3} key={index}>
-      <Box key={index} sx={{ display: 'flex', alignItems: 'start' }}>
-        <CustomAvatar skin='light' color={sale.color} sx={{ mr: 2, mt: 2, width: 42, height: 42 }}>
+    <Grid item xs={6} md={3} key={index}>
+      <Box className="flex items-start mb-5 md:mb-2">
+        <CustomAvatar
+          skin="light"
+          color={sale.color}
+          className="!w-19 md:!w-12 !h-19 md:!h-12 mr-1 md:!mr-3"
+        >
           <Icon icon={sale.icon} />
         </CustomAvatar>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Typography color="text.primary" variant='h6' sx={{ fontWeight: 600 }}>{sale.stats}</Typography>
-          <Typography color="text.primary" variant='body2' className="!font-bold">{sale.title}</Typography>
-          <Typography color="text.primary" variant='caption' className="!text-[10px] !mt-1 !text-gray-500">{sale.more}</Typography>
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <Typography variant="body2" className="!font-black !text-[23px]">
+            {sale.stats}
+          </Typography>
+          <Typography
+            variant="body2"
+            className="!font-bold !text-[15px]"
+          >
+            {sale.title}
+          </Typography>
+          <Typography
+            variant="caption"
+            className="!text-[9px] md:!text-[10px] !mt-1 !text-gray-500"
+          >
+            {sale.more}
+          </Typography>
         </Box>
       </Box>
     </Grid>
-  ))
+  ));
 }
 
 const OverViewCard = () => {
-  const { data, error, isLoading } = useSWR({
-    endPoint: "/store/files-count",
-    token: tokens.store,
-  });
+  const { data, error, isLoading } = useSWR("/store/files-count");
   console.log(data, error, isLoading);
   return (
     !error &&
     !isLoading && (
-      <Box sx={{ pt: (theme) => `${theme.spacing(0.5)} !important` }}>
+      <Box className="py-3 px-10.5md:px-5">
         <Grid container spacing={1}>
           {renderStats(data.data.topBar)}
         </Grid>

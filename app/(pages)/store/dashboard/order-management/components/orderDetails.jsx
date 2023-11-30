@@ -36,19 +36,13 @@ const OrderDetails = ({ order }) => {
     data: orderInfo,
     error: orderErr,
     isLoading: orderLoading,
-  } = useSWR({
-    endPoint: `/branch/order-request?order=${order}`,
-    token: tokens.store,
-  });
+  } = useSWR(`/branch/order-request?order=${order}`);
 
   const {
     data: prodInfo,
     error: prodErr,
     isLoading: prodLoading,
-  } = useSWR({
-    endPoint: `/user/order-product/${order}`,
-    token: tokens.store,
-  });
+  } = useSWR(`/user/order-product/${order}`);
 
   const handleButtonClick = (event) => {
     setAnchorEl(event.currentTarget);

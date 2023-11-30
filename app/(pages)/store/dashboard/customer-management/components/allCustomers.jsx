@@ -9,10 +9,7 @@ import tokens from "@/app/configs/tokens";
 
 export const AllCustomers = () => {
   const router = useRouter();
-  const { data, error, isLoading } = useSWR({
-    endPoint: `/branch/customers`,
-    token: tokens.store,
-  });
+  const { data, error, isLoading } = useSWR("/branch/customers");
   const onRowClick = (row) => {
     console.log(row)
     router.push(

@@ -97,14 +97,20 @@ export const FileUploader = ({ files, setFiles }) => {
   );
 };
 
-export const InputBoxWithSideLabel = ({ label, value, className, onChange }) => {
+export const InputBoxWithSideLabel = ({ label, value, className, inputProps, onChange }) => {
   return (
     <Grid container spacing={2} className={`mb-6 ${className}`}>
       <Grid item xs={12} sm={4} className="!flex items-center">
         <Typography>{label}</Typography>
       </Grid>
       <Grid item xs={12} sm={8}>
-        <TextField fullWidth onChange={onChange} value={value} size="small" />
+        <TextField
+          {...inputProps}
+          fullWidth
+          onChange={onChange}
+          value={value}
+          size="small"
+        />
       </Grid>
     </Grid>
   );
@@ -129,6 +135,7 @@ export const SocialMediaConponent = ({ label, className, socialMedia, setSocialM
         <TextField
           onChange={(e) => handleChange(smallLabel, e.target.value)}
           fullWidth
+          value={label && socialMedia[label?.split(" ").join("")?.toLowerCase()]}
           size="small"
         />
       </Grid>

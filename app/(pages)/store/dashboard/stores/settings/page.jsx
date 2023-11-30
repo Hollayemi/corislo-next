@@ -27,44 +27,56 @@ import {
 } from "../component";
 import Icon from "@/app/components/icon";
 import { storeBottomBar, storeInnerList } from "@/app/data/store/innerList";
+import { useStoreData } from "@/app/hooks/useData";
+import { useDispatch } from "react-redux";
+import { updateStoreProfile } from "@/app/redux/state/slices/shop/settings/editShop";
 
 const StorePage = ({ params }) => {
+  const { storeInfo: { profile } } = useStoreData();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    pickup: true,
+    pickup: profile?.pickup || false,
     waybill: {
-      isset: false,
-      waybill_fee_paid_seperately: false,
-      minimum_amount: "500",
-      delivery_hour_diff_opening_hours: false,
+      isset: profile?.waybill?.isset || false,
+      waybill_fee_paid_seperately:
+        profile?.waybill?.waybill_fee_paid_seperately || false,
+      minimum_amount: profile?.waybill?.minimum_amount || "0",
+      delivery_hour_diff_opening_hours:
+        profile?.waybill?.delivery_hour_diff_opening_hours || false,
     },
     payment_settings: {
-      account_name: "",
-      account_number: "",
-      bank: "",
+      account_name: profile?.payment_settings?.account_name || "",
+      account_number: profile?.payment_settings?.account_number || "",
+      bank: profile?.payment_settings?.bank || "",
     },
     refund_policies: {
-      isset: true,
-      refund_policy: "",
-      refund_option: ["Drop at the store"],
-      repayment_method: [],
+      isset: profile?.refund_policies?.isset || false,
+      refund_policy: profile?.refund_policies?.refund_policy || "",
+      refund_option: profile?.refund_policies?.refund_option || [],
+      repayment_method: profile?.refund_policies?.repayment_method || [],
     },
-    allow_preorder: true,
+    allow_preorder: profile?.allow_preorder || false,
     notifications: {
-      isset: true,
-      low_stock: 5,
-      isset_low_stock: true,
-      out_of_stock: true,
-      restock_reminder: true,
+      isset: profile?.notifications?.isset || false,
+      low_stock: profile?.notifications?.low_stock || 0,
+      isset_low_stock: profile?.notifications?.isset_low_stock || false,
+      out_of_stock: profile?.notifications?.out_of_stock || false,
+      restock_reminder: profile?.notifications?.restock_reminder || false,
     },
     email_notification: {
-      isset: true,
-      order_confirmation: true,
-      shipping_updates: true,
-      account_activity: true,
-      customer_inquires: true,
+      isset: profile?.email_notification?.isset || false,
+      order_confirmation: profile?.email_notification?.order_confirmation || false,
+      shipping_updates: profile?.email_notification?.shipping_updates || false,
+      account_activity: profile?.email_notification?.account_activity || false,
+      customer_inquires: profile?.email_notification?.customer_inquires || false,
     },
   });
 
+  console.log(profile, formData);
+
+  const handleChange = (prop) => (event) => {
+    setFormData({ ...formData, [prop]: event.target.value });
+  };
   let newValue = {};
   const updateFormData = (newVal, variable, object) => {
     variable === "pickup" && (newValue = { pickup: newVal });
@@ -73,17 +85,28 @@ const StorePage = ({ params }) => {
       (newValue = { waybill: { ...formData.waybill, [variable]: newVal } });
 
     object === "payment_settings" &&
-      (newValue = { payment_settings: { ...formData.payment_settings, [variable]: newVal } });
-    
+      (newValue = {
+        payment_settings: { ...formData.payment_settings, [variable]: newVal },
+      });
+
     object === "refund_policies" &&
-      (newValue = { refund_policies: { ...formData.refund_policies, [variable]: newVal } });
-    
+      (newValue = {
+        refund_policies: { ...formData.refund_policies, [variable]: newVal },
+      });
+
     object === "notifications" &&
-      (newValue = { notifications: { ...formData.notifications, [variable]: newVal } });
-    
+      (newValue = {
+        notifications: { ...formData.notifications, [variable]: newVal },
+      });
+
     object === "email_notification" &&
-      (newValue = { email_notification: { ...formData.email_notification, [variable]: newVal } });
-    
+      (newValue = {
+        email_notification: {
+          ...formData.email_notification,
+          [variable]: newVal,
+        },
+      });
+
     setFormData({
       ...formData,
       ...newValue,
@@ -91,7 +114,8 @@ const StorePage = ({ params }) => {
   };
   const path = { ...params, sidebar: "stores" };
 
-  const disableEmail = !formData.email_notification.isset || !formData.notifications.isset
+  const disableEmail =
+    !formData.email_notification.isset || !formData.notifications.isset;
   const disableNotif = !formData.notifications.isset;
   const disableWaybill = !formData.waybill.isset;
   const disableRefund = !formData.refund_policies.isset;
@@ -109,21 +133,21 @@ const StorePage = ({ params }) => {
             Store Profile
           </Typography>
         </Link>
-        <Typography className="pb-1 border-b-2 cursor-pointer text-sm font-semibold w-28 ml-3 text-center border-blue-900">
+        <Typography className="pb-1 border-b-2 cursor-pointer text-sm font-semibold w-28 !ml-6 text-center border-blue-900">
           Store Settings
         </Typography>
       </Box>
       <Box className="w-full bg-white !rounded-md !px-4 !mt-4 !md:px-5 !pb-8">
         <Grid container spacing={2}>
           <Grid item xs={12} sm={7}>
-            <Box c>
+            <Box>
               <Box className="flex items-center justify-between">
                 <Typography className="font-bold text-sm">
                   Delivery Option
                 </Typography>
                 <Button
                   variant="contained"
-                  className=" bg-blue-900 md:hidden"
+                  className=" bg-blue-900 md:!hidden"
                   startIcon={<Icon icon="tabler:plus" />}
                 >
                   Add Store
@@ -282,12 +306,14 @@ const StorePage = ({ params }) => {
               <br />
 
               <InputBoxWithSideLabel
+                value={formData.payment_settings.bank}
                 label="Bank Name"
                 onChange={(e) =>
                   updateFormData(e.target.value, "bank", "payment_settings")
                 }
               />
               <InputBoxWithSideLabel
+                value={formData.payment_settings.account_name}
                 label="Account Name"
                 onChange={(e) =>
                   updateFormData(
@@ -298,6 +324,7 @@ const StorePage = ({ params }) => {
                 }
               />
               <InputBoxWithSideLabel
+                value={formData.payment_settings.account_number}
                 label="Account Number"
                 onChange={(e) =>
                   updateFormData(
@@ -349,8 +376,8 @@ const StorePage = ({ params }) => {
                   labelId="demo-simple-select-outlined-label"
                   onChange={(e) =>
                     updateFormData(
-                      !formData.refund_policies.refund_option,
-                      "refund_option",
+                      e.target.value,
+                      "refund_policy",
                       "refund_policies"
                     )
                   }
@@ -391,6 +418,9 @@ const StorePage = ({ params }) => {
                   value={formData.refund_policies.refund_option}
                   className="w-28"
                 >
+                  <MenuItem value="Drop at the store">
+                    Drop at the store
+                  </MenuItem>
                   <MenuItem value="Drop at the store">
                     Drop at the store
                   </MenuItem>
@@ -539,7 +569,6 @@ const StorePage = ({ params }) => {
                 }
                 control={
                   <Checkbox
-                    defaultChecked
                     disabled={disableNotif}
                     checked={formData.notifications.out_of_stock}
                     name="basic-disabled-checked"
@@ -565,7 +594,6 @@ const StorePage = ({ params }) => {
                 }
                 control={
                   <Checkbox
-                    defaultChecked
                     disabled={disableNotif}
                     checked={formData.notifications.restock_reminder}
                     name="basic-disabled-checked"
@@ -591,7 +619,6 @@ const StorePage = ({ params }) => {
                 }
                 control={
                   <Checkbox
-                    defaultChecked
                     disabled={disableNotif}
                     checked={formData.email_notification.isset}
                     name="basic-disabled-checked"
@@ -720,6 +747,7 @@ const StorePage = ({ params }) => {
               fullWidth
               className="!py-2 !bg-blue-900"
               startIcon={<Icon icon="tabler:device-floppy" />}
+              onClick={() => updateStoreProfile(dispatch, formData)}
             >
               Save
             </Button>
