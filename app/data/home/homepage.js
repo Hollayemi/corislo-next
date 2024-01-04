@@ -42,27 +42,32 @@ export const popularProducts = [
     prodName: "2022 Men's Casual Running Sneakers - Khaki",
     image: "/images/more/1.png",
     price: 54000,
+    store:"Tianxhu Store"
   },
   {
     prodName:
       "VEJARO T09 Men's 2 In 1 Short Sleeve T-Shirt & Shorts Set-Black.",
     image: "/images/more/2.png",
     price: 14300,
+    store:"Tianxhu Store"
   },
   {
     prodName: "Smart Watch Full Touch Screen Watch - For Android & IOS",
     image: "/images/more/3.png",
     price: 14500,
+    store:"Tianxhu Store"
   },
   {
     prodName: "Hip Hop Loose Mens Streetwear T-....",
     image: "/images/more/4.png",
     price: 54000,
+    store:"Tianxhu Store"
   },
   {
     prodName: "Fast usb c cable type c cable Fast ....",
     image: "/images/more/5.png",
     price: 54000,
+    store:"Tianxhu Store"
   },
 ];
 
@@ -73,6 +78,7 @@ export const hotDealData = [
     price: 54000,
     unit: 30,
     of: 300,
+    store:"Tianxhu Store"
   },
   {
     prodName:
@@ -81,6 +87,7 @@ export const hotDealData = [
     price: 14300,
     unit: 80,
     of: 200,
+    store:"Tianxhu Store"
   },
   {
     prodName: "Smart Watch Full Touch Screen Watch - For Android & IOS",
@@ -88,6 +95,7 @@ export const hotDealData = [
     price: 14500,
     unit: 230,
     of: 300,
+    store:"Tianxhu Store"
   },
   {
     prodName: "Hip Hop Loose Mens Streetwear T-....",
@@ -95,6 +103,7 @@ export const hotDealData = [
     price: 54000,
     unit: 16,
     of: 100,
+    store:"Tianxhu Store"
   },
   {
     prodName: "Fast usb c cable type c cable Fast ....",
@@ -102,6 +111,7 @@ export const hotDealData = [
     price: 54000,
     unit: 70,
     of: 100,
+    store:"Tianxhu Store"
   },
 ];
 export const popularAdsData = [

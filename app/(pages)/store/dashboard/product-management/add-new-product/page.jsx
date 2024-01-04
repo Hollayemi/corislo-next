@@ -197,7 +197,7 @@ const AddNewProduct = ({ params }) => {
               />
               <br />
               <FormControlLabel
-                value="Waybilling"
+                value="waybilling"
                 control={
                   <Checkbox
                     checked={delivery.includes("waybilling")}

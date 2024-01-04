@@ -22,6 +22,7 @@ const DefaultPalette = (mode='light', skin) => {
       main: mainColor,
       light: lightColor,
       lightPaperBg: whiteColor,
+      lightSec: "#FFFBF1",
       darkPaperBg: darkPaperBgColor,
       bodyLight: mode === "light" ? "#ffffff" : "#383f5c",
       sec: mode === "light" ? "#fcb415" : "#fcb415",

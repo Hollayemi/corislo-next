@@ -110,7 +110,7 @@ function Header({ search, setSearch }) {
               label={
                 <MyCartBtn variant="contained" num={cartedProds?.length || 0} />
               }
-              size="small"
+              size="large"
             />
             <Typography
               noWrap
@@ -141,7 +141,7 @@ function Header({ search, setSearch }) {
           <>
             <IconifyIcon
               icon="tabler:shopping-cart"
-              className="!text-[19px] mx-1 md:mx-2 "
+              className="!text-[19px] mx-1 flex-shrink-0 md:mx-2 "
             />
 
             <Button

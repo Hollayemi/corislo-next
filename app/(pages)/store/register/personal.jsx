@@ -17,10 +17,13 @@ const PersonalProfile = ({
           <CustomInput
             title="Full Name"
             id="fullname"
-            error={readyToNext ? errors.fullname: values.fullname && errors.fullname}
+            error={
+              readyToNext ? errors.fullname : values.fullname && errors.fullname
+            }
             name="fullname"
             onChange={handleUserChange("fullname")}
             inputProps={{
+              value: values.fullname || "",
               type: "text",
               placeholder: "Enter your full name",
             }}
@@ -29,11 +32,14 @@ const PersonalProfile = ({
         <Grid item xs={12} md={6}>
           <CustomInput
             title="Username"
-            error={readyToNext ? errors.username: values.username && errors.username}
+            error={
+              readyToNext ? errors.username : values.username && errors.username
+            }
             onChange={handleUserChange("username")}
             id="username"
             name="username"
             inputProps={{
+              value: values.username || "",
               type: "text",
               placeholder: "Enter your username",
             }}
@@ -42,11 +48,12 @@ const PersonalProfile = ({
         <Grid item xs={12}>
           <CustomInput
             title="Email Address"
-            error={readyToNext ? errors.email: values.email && errors.email}
+            error={readyToNext ? errors.email : values.email && errors.email}
             onChange={handleUserChange("email")}
             id="email"
             name="email"
             inputProps={{
+              value: values.email || "",
               type: "email",
               placeholder: "Enter your email address",
             }}
@@ -58,8 +65,13 @@ const PersonalProfile = ({
             onChange={handleUserChange("phoneNumber")}
             id="phoneNumber"
             name="phoneNumber"
-            error={readyToNext ? errors.phoneNumber: values.phoneNumber && errors.phoneNumber}
+            error={
+              readyToNext
+                ? errors.phoneNumber
+                : values.phoneNumber && errors.phoneNumber
+            }
             inputProps={{
+              value: values.phoneNumber || "",
               type: "number",
               placeholder: "Enter your phone number",
             }}
@@ -81,10 +93,13 @@ const PersonalProfile = ({
           <CustomInput
             title="Password"
             onChange={handleUserChange("password")}
-            error={readyToNext ? errors.password: values.password && errors.password}
+            error={
+              readyToNext ? errors.password : values.password && errors.password
+            }
             id="password"
             name="password"
             inputProps={{
+              value: values.password || "",
               type: "password",
               placeholder: ".......",
             }}
@@ -98,6 +113,7 @@ const PersonalProfile = ({
             name="confPass"
             onChange={(e) => setConfPass(e.target.value)}
             inputProps={{
+              value: confPas || "",
               type: "password",
               placeholder: ".......",
             }}

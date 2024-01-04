@@ -8,10 +8,14 @@ import { rgbaToHex } from "@/app/utils/rgba-to-hex";
 import IconifyIcon from "@/app/components/icon";
 import OptionsMenu from "@/app/components/option-menu";
 import { OrderProductView } from "@/app/components/templates/productView";
+import useSWR from "swr";
 
 const OrderPage = () => {
+  const { data: result } = useSWR("/user/order");
+  const orderArray = result?.data || [];
   const [dateInterval, setDateInterval] = useState("March 2023 - October 2023");
   const [orderShowing, setOrderShowing] = useState("Completed Orders");
+  const [clipboard, setIsCopied] = useState("");
   return (
     <HomeWrapper>
       <Box>
@@ -217,11 +221,26 @@ const OrderPage = () => {
           </Box>
 
           {/* order list  */}
-          <Box className="!mt-16 md:mt-6">
-            <OrderProductView />
-            <OrderProductView />
-            <OrderProductView />
-            <OrderProductView />
+          <Box className="!mt-20 md:mt-6">
+            {orderArray.length > 0 ? (
+              orderArray.map((res, i) => (
+                <OrderProductView
+                  clipboard={clipboard}
+                  setIsCopied={setIsCopied}
+                  product={res.items.storeProducts}
+                  status={res.status}
+                  orderSlug={res.orderSlug}
+                  orderId={res._id}
+                  createdAt={res.createdAt}
+                  store={res.store}
+                />
+              ))
+            ) : (
+              <Box className="mt-20 md:mt-6 w-full h-32 flex flex-col items-center rounded-md justify-center bg-white">
+                <IconifyIcon icon="tabler:truck-delivery" className="text-blue-500" />
+                <Typography variant="caption">No record found</Typography>
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>

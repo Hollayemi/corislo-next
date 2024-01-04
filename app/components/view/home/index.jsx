@@ -5,7 +5,7 @@ import Header from "./header";
 import HomeFooter from "./footer";
 import SearchPage from "@/app/(pages)/custom/searchPage";
 
-const HomeWrapper = ({ children, bg, customersReview }) => {
+const HomeWrapper = ({ children, bg, customersReview, noFooter }) => {
   const [search, setSearch] = useState("");
   const page = {
     0: children,
@@ -27,9 +27,12 @@ const HomeWrapper = ({ children, bg, customersReview }) => {
         </Box>
         <Box className="relative !flex-grow">{page[showing]}</Box>
 
-        <br />
-        <br />
-        <HomeFooter customersReview={customersReview} />
+        {!noFooter && (
+          <>
+            <br />
+            <HomeFooter customersReview={customersReview} />
+          </>
+        )}
       </Box>
     </Box>
   );

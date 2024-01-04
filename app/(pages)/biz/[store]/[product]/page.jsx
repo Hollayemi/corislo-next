@@ -8,7 +8,7 @@ import { summarizeFollowers } from "@/app/utils/format";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Box, Button, Grid, Rating, Tab, Typography } from "@mui/material";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ProdDescription } from "./tabs";
 import { SectionTitle } from "@/app/components/cards/homeCards";
 import { hotDealData, popularProducts } from "@/app/data/home/homepage";
@@ -22,6 +22,7 @@ import { removeOrAddToArray } from "@/app/utils/arrayFunctions";
 import { useDispatch } from "react-redux";
 import { addCartHandler } from "@/app/redux/state/slices/home/cart";
 import { useUserData } from "@/app/hooks/useData";
+import { addNewViewProduct } from "@/app/redux/state/slices/home/view/view";
 
 const ProductDisplay = ({ params }) => {
   const dispatch = useDispatch();
@@ -31,7 +32,6 @@ const ProductDisplay = ({ params }) => {
     `/products?prodName=${prodNameParam.split("-").join(" ")}`
   );
   const product = prod ? prod?.data[0] : {};
-  console.log(prodNameParam, product);
   const ImagesArray = [1, 2, 3, 4, 5, 6, 7];
   // ** State
   const [colors, setColors] = useState([]);
@@ -45,6 +45,19 @@ const ProductDisplay = ({ params }) => {
   const filteredSizes = productSizes.filter(
     (obj) => obj.size.split("-")[0] === "EU"
   );
+
+  useEffect(() => {
+    addNewViewProduct(
+      {
+        productId: product?._id,
+        branchId: product?.branchId,
+        store: product?.store,
+        branch: product?.branches,
+      },
+      dispatch
+    );
+  }, [product]);
+
   const payload = {
     productId: product?._id,
     color: colors,
@@ -52,6 +65,7 @@ const ProductDisplay = ({ params }) => {
     store: product?.store,
     branch: product?.branches,
   };
+
   const colorArray = [
     "#eefabb",
     "#aecabb",
@@ -61,6 +75,7 @@ const ProductDisplay = ({ params }) => {
     "#34ee",
     "#000",
   ];
+
   const [showingImage, showImage] = useState(null);
   return (
     <HomeWrapper>

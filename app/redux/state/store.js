@@ -25,21 +25,15 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, myReducers);
 
 export const store = configureStore({
-    reducer: {
-        reducer: persistedReducer,
-    },
+  reducer: {
+    reducer: persistedReducer,
+  },
 
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-            serializableCheck: {
-                ignoredActions: [
-                    FLUSH,
-                    REHYDRATE,
-                    PAUSE,
-                    PERSIST,
-                    PURGE,
-                    REGISTER,
-                ],
-            },
-        }),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        ignoredPaths: ["chatsContacts.0.chat.lastMessage.time"],
+      },
+    }),
 });

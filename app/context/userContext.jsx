@@ -8,6 +8,7 @@ const { createContext, useEffect } = require("react");
 
 const defaultProvider = {
   cartedProds: [],
+  following: [],
   cartData: {},
   userInfo: {},
   selectedAddress: {},
@@ -19,7 +20,6 @@ const UserDataProvider = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
   const { userData } = useSelector((state) => state.reducer.loginReducer);
-
 
   const getPath = pathname.split("/");
   useEffect(() => {
@@ -42,7 +42,6 @@ const UserDataProvider = ({ children }) => {
     if (userData?.accessToken && getLocalToken) {
       // const decodedToken = jwt_decode(userData?.accessToken); // Decode the JWT token
       // const currentTime = Date.now() / 1000; // Get the current time in seconds
-
       // // Check if the token is still valid based on its expiration time
       // return decodedToken.exp < currentTime;
     }
@@ -72,13 +71,21 @@ const UserDataProvider = ({ children }) => {
     error: cartErr,
     isLoading: cartIsLoading,
   } = useSWR(!isOffline() && "/user/cart");
+
+  // fetch stores you follow
+  //
+  const {
+    data: following,
+    error: folErr,
+    isLoading: folIsLoading,
+  } = useSWR(!isOffline() && "/user/following");
   return (
     <DataContext.Provider
       value={{
         cartedProds:
           (!cartErr && !cartIsLoading && cartData?.data?.cartedProds) || [],
-        cartData:
-          (!cartErr && !cartIsLoading && cartData?.data) || {},
+        following: (!folErr && !folIsLoading && following?.data) || [],
+        cartData: (!cartErr && !cartIsLoading && cartData?.data) || {},
         userInfo: (!userErr && !userIsLoading && userInfo?.user) || {},
         selectedAddress: {},
         isOffline: isOffline(),

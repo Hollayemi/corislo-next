@@ -287,3 +287,12 @@ export const summarizeFollowers = (followers) => {
     return `${abbreviatedValue}M`;
   }
 };
+
+
+export const mySubstring = (string = "", num = 15) => {
+  if (string.length < num) {
+    return string;
+  } else {
+    return string.substring(0, parseInt(num)) + "...";
+  }
+};

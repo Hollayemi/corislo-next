@@ -4,23 +4,30 @@ import { GroupCartProducts } from "@/app/components/templates/productView";
 import HomeWrapper from "@/app/components/view/home";
 import { userGroupCartData } from "@/app/data/home/homepage";
 import { useUserData } from "@/app/hooks/useData";
+import { addNewOrder } from "@/app/redux/state/slices/home/order";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import Image from "next/image";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import useSWR from "swr";
 
 const Checkout = () => {
+  const dispatch = useDispatch()
   const { cartedProds } = useUserData()
   const { data: carts, error } = useSWR("/user/cart-group");
+  const { data: pickups, pickupError } = useSWR("/user/pickup");
   const groupedCart = carts ? carts.data : [];
-  console.log(groupedCart);
+  const pickers = pickups ? pickups.data : [];
+  console.log(groupedCart, pickers);
 
   const [payload, updatePayload] = useState({
     products: cartedProds,
     delivery: {},
+    deliveryFee: {},
     picker: {},
-    address: {},
+    shippingAddress: {},
   });
+  console.log(payload);
 
   return (
     <HomeWrapper>
@@ -63,6 +70,8 @@ const Checkout = () => {
                       branchPrice={each.branchCheckout}
                       branch={each.fromBranch}
                       updatePayload={updatePayload}
+                      payload={payload}
+                      pickers={pickers}
                     />
                     {groupedCart.length > i + 1 && (
                       <Box className="w-full border-[1px] my-5"></Box>
@@ -157,6 +166,7 @@ const Checkout = () => {
                       <input type="radio" />
                       <Image
                         src="/images/misc/visa.png"
+                        alt="visa"
                         width={150}
                         height={150}
                         className="w-14 h-10 ml-3"
@@ -182,6 +192,7 @@ const Checkout = () => {
                 <Button
                   variant="contained"
                   className="w-full !mt-6 !h-12 !rounded-full !border-none !text-[14px] !text-white"
+                  onClick={() => addNewOrder(payload, dispatch)}
                 >
                   Place Order
                 </Button>

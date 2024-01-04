@@ -11,7 +11,6 @@ import ReactSlickSlider from "@/app/components/wrapper/react-slick";
 import { useRouter } from "next/navigation";
 import {
   hotDealData,
-  moreProducts,
   popularProducts,
 } from "@/app/data/home/homepage";
 import {
@@ -228,6 +227,7 @@ const UserCart = () => {
             {popularProducts.map((prod, i) => (
               <PopularProduct
                 key={i}
+                small
                 image={prod.image}
                 prodName={prod.prodName}
                 price={prod.price}
@@ -241,6 +241,7 @@ const UserCart = () => {
             {hotDealData.map((prod, i) => (
               <HotDeal
                 key={i}
+                small
                 image={prod.image}
                 prodName={prod.prodName}
                 price={prod.price}

@@ -8,8 +8,19 @@ import {
 import Image from "next/image";
 import IconifyIcon from "../icon";
 import { useDispatch } from "react-redux";
-import { addCartHandler, changeQuantity } from "@/app/redux/state/slices/home/cart";
-import { removeOrAddToArray } from "@/app/utils/arrayFunctions";
+import {
+  addCartHandler,
+  changeQuantity,
+} from "@/app/redux/state/slices/home/cart";
+import {
+  getCommonValuesInArrays,
+  removeOrAddToArray,
+} from "@/app/utils/arrayFunctions";
+import OptionsMenu from "../option-menu";
+import { formatDateToMonthShort } from "@/app/utils/format";
+import Link from "next/link";
+import { copyToClipboard } from "@/app/utils/clipboard";
+import { deleteOrder } from "@/app/redux/state/slices/home/order";
 
 export const CartProductView = ({
   image,
@@ -63,6 +74,7 @@ export const CartProductView = ({
         <Box className="flex items-start w-full">
           <Image
             src={image || "/images/more/2.png"}
+            alt="prod_image"
             width={150}
             height={150}
             className="w-20 h-20 flex-shrink-0 !rounded-xl"
@@ -147,7 +159,19 @@ export const CartProductView = ({
   );
 };
 
-export const GroupCartProducts = ({ store, branch, branchPrice }) => {
+export const GroupCartProducts = ({
+  store,
+  branch,
+  branchPrice,
+  updatePayload,
+  payload,
+  pickers,
+}) => {
+  const getCommonDeliveryMethods = getCommonValuesInArrays(
+    ...branch.map((x) => x.product.delivery || ["pickup"])
+  );
+  const deliveryType = payload.delivery[store];
+  const picker = payload.picker[store];
   return (
     <Box>
       <Box className="w-full flex justify-between items-center !mt-5">
@@ -157,9 +181,39 @@ export const GroupCartProducts = ({ store, branch, branchPrice }) => {
         >
           {store}
         </Typography>
-        <Typography variant="body2" className="!text-[13px] !font-bold">
-          Waybill Fee: NGN {branchPrice?.toFixed(2)}
-        </Typography>
+        {deliveryType === "waybilling" ? (
+          <Typography variant="body2" className="!text-[13px] !font-bold">
+            {`${deliveryType} fee: ${branchPrice}` || "Pickup"}
+          </Typography>
+        ) : (
+          <OptionsMenu
+            icon={
+              <Button
+                variant="outlined"
+                className="!text-xs !rounded-full !text-blue-600"
+                endIcon={
+                  <IconifyIcon
+                    icon="tabler:chevron-down"
+                    className="!ml-3 !text-[14px]"
+                  />
+                }
+              >
+                {picker || "You"}
+              </Button>
+            }
+            options={pickers?.map((x) => x?.fullname)}
+            setOption={(x) =>
+              updatePayload((prev) => {
+                return { ...prev, picker: { ...prev.picker, [store]: x } };
+              })
+            }
+            iconButtonProps={{
+              size: "small",
+              sx: { color: "text.disabled", cursor: "pointer" },
+              disableRipple: true,
+            }}
+          />
+        )}
       </Box>
 
       <Box className="px-2 !mt-4">
@@ -175,24 +229,73 @@ export const GroupCartProducts = ({ store, branch, branchPrice }) => {
           />
         ))}
 
-        <Box className="flex items-center justify-between py-4 cursor-pointer">
-          <Box>
-            <Typography variant="body2" className="!text-[13px]">
-              <span className="!font-bold mr-3">Shipping Method:</span>{" "}
-              Way-Billing
-            </Typography>
-            <Typography variant="body2" className="!text-[11px] !text-gray-400">
-              Delivery is between July 26 and August 1 (7 - 13 Days).
-            </Typography>
-          </Box>
-          <IconifyIcon icon="tabler:chevron-right" className="text-[14px]" />
-        </Box>
+        <OptionsMenu
+          icon={
+            <Box className="flex items-center justify-between py-4 w-full cursor-pointer">
+              <Box className="text-left">
+                <Typography variant="body2" className="!text-[13px]">
+                  <span className="!font-bold !text-gray-600 mr-3">
+                    Shipping Method:
+                  </span>{" "}
+                  {deliveryType || "Pickup"}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  className="!text-[11px] !text-gray-400"
+                >
+                  Delivery is between July 26 and August 1 (7 - 13 Days).
+                </Typography>
+              </Box>
+              <IconifyIcon
+                icon="tabler:chevron-right"
+                className="text-[14px]"
+              />
+            </Box>
+          }
+          options={getCommonDeliveryMethods}
+          setOption={(x) =>
+            updatePayload((prev) => {
+              return { ...prev, delivery: { ...prev.delivery, [store]: x } };
+            })
+          }
+          iconButtonProps={{
+            size: "small",
+            sx: { color: "text.disabled", cursor: "pointer" },
+            disableRipple: true,
+            className: "!w-full",
+          }}
+        />
       </Box>
     </Box>
   );
 };
 
-export const OrderProductView = ({ image, prodName, store, prodPrice=16000 }) => {
+export const OrderProductView = ({
+  clipboard,
+  setIsCopied,
+  image,
+  product,
+  orderSlug,
+  orderId,
+  createdAt,
+  store,
+  status,
+}) => {
+  const dispatch = useDispatch()
+  const TitleValue = ({ title, value, allowCopy }) => (
+    <Box className="flex items-center">
+      <Typography variant="body2" className="!text-xs">
+        {title} <span className="ml-2 !text-black">{value}</span>
+      </Typography>
+      {allowCopy && (
+        <IconifyIcon
+          icon={clipboard === value ? "tabler:clipboard-check" : "tabler:copy"}
+          className="ml-2"
+          onClick={() => copyToClipboard(value, setIsCopied)}
+        />
+      )}
+    </Box>
+  );
   return (
     <Box className="px-1.5 md:px-6 pb-2 rounded-md bg-white mb-5">
       <Box className="flex justify-between px-3 items-center py-5 border-b-2">
@@ -200,25 +303,36 @@ export const OrderProductView = ({ image, prodName, store, prodPrice=16000 }) =>
           variant="body2"
           className="!text-[13px] !font-semibold !text-gray-900"
         >
-          Ongoing Order
+          {status}
         </Typography>
         <Box className="flex justify-evenly items-center">
-          <Box className="flex items-center cursor-pointer">
-            <Typography variant="body2" className="!text-[11px] !text-gray-600">
-              Order Details
-            </Typography>
-            <IconifyIcon
-              icon="tabler:chevron-right"
-              className="text-[14px] !ml-3"
-            />
-          </Box>
+          <Link href={`/order/${orderId}`}>
+            <Box className="flex items-center cursor-pointer">
+              <Typography
+                variant="body2"
+                className="!text-[11px] !text-gray-600"
+              >
+                Order Details
+              </Typography>
+              <IconifyIcon
+                icon="tabler:chevron-right"
+                className="text-[14px] !ml-3"
+              />
+            </Box>
+          </Link>
           <Box className="h-5 border mx-2 md:mx-4"></Box>
-          <Box className="flex items-center cursor-pointer">
+          <Box
+            className="flex items-center cursor-pointer"
+            onClick={() => deleteOrder(orderId, dispatch)}
+          >
             <IconifyIcon
               icon="tabler:trash"
               className="text-[14px] !mx-1 !text-red-500"
             />
-            <Typography variant="body2" className="!text-[11px] !text-red-500 hidden md:block">
+            <Typography
+              variant="body2"
+              className="!text-[11px] !text-red-500 hidden md:block"
+            >
               Delete
             </Typography>
           </Box>
@@ -229,6 +343,7 @@ export const OrderProductView = ({ image, prodName, store, prodPrice=16000 }) =>
         <Box className="flex items-start">
           <Image
             src={image || "/images/more/2.png"}
+            alt="prod_img"
             width={150}
             height={150}
             className="w-20 h-20 md:w-24 md:h-28 flex-shrink-0 !rounded-xl"
@@ -238,21 +353,26 @@ export const OrderProductView = ({ image, prodName, store, prodPrice=16000 }) =>
               variant="body2"
               className="!text-[11px] !text-blue-900 !mb-2"
             >
-              {store} Gourmet Store
+              {store}
             </Typography>
             <Typography
               variant="body2"
               className="!font-semibold !text-black !text-[12px] md:!text-[16px] !mb-1 md:!mb-2"
             >
-              {prodName ||
-                "Flangesio Ultra-Cool Design Men's Sneakers PU Leather Trend Casual Shoes"}
+              {product.prodName}
             </Typography>
 
-            <TitleValue title="Order date:" value="Aug 10, 2023" />
+            <TitleValue
+              title="Order date:"
+              value={formatDateToMonthShort(createdAt)}
+            />
             <Box className="md:flex items-center">
-              <TitleValue title="Order ID:" value="ORD-2083U0452334" />
+              <TitleValue title="Order ID:" value={orderSlug} allowCopy />
               <span className="hidden md:block px-5"></span>
-              <TitleValue title="No of Products:" value="6" />
+              <TitleValue
+                title="No of Products:"
+                value={product.quantity || 0}
+              />
             </Box>
           </Box>
         </Box>
@@ -262,7 +382,7 @@ export const OrderProductView = ({ image, prodName, store, prodPrice=16000 }) =>
               variant="body2"
               className="!font-extrabold !text-black md:!text-[16px] !-mt-1 md:!my-px !p-0 absolute md:relative !pr-2 md:!pr-0 top-0 right-0"
             >
-              NGN{prodPrice.toLocaleString()}
+              NGN{product.prodPrice?.toLocaleString()}
             </Typography>
           </Box>
           <Box className="flex items-center flex-nowrap !mt-3 md:!mt-6">
@@ -284,12 +404,3 @@ export const OrderProductView = ({ image, prodName, store, prodPrice=16000 }) =>
     </Box>
   );
 };
-
-export const TitleValue = ({title, value}) => (
-  <Box>
-    <Typography variant="body2" className="!text-xs">
-      {title} <span className="ml-2 !text-black">{value}</span>
-    </Typography>
-  </Box>
-)
-

@@ -71,9 +71,9 @@ const OptionsMenu = props => {
 
   return (
     <>
-      <IconButton aria-haspopup='true' onClick={handleClick} {...iconButtonProps}>
+      <Box aria-haspopup='true' onClick={handleClick} {...iconButtonProps}>
         {icon ? icon : <Icon icon='tabler:dots-vertical' {...iconProps} />}
-      </IconButton>
+      </Box>
       <Menu
         keepMounted
         anchorEl={anchorEl}
@@ -88,7 +88,11 @@ const OptionsMenu = props => {
         {options.map((option, index) => {
           if (typeof option === 'string') {
             return (
-              <MenuItem key={index} onClick={() => optionClick(option)}>
+              <MenuItem
+                key={index}
+                className="!min-w-[200px]"
+                onClick={() => optionClick(option)}
+              >
                 {option}
               </MenuItem>
             );

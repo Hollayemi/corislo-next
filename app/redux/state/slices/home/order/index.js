@@ -2,34 +2,28 @@ import { createAsyncThunk, unwrapResult } from "@reduxjs/toolkit";
 import toaster from "@/app/configs/toaster";
 import martApi from "../../api/baseApi";
 import { jsonHeader } from "../../api/setAuthHeaders";
-import tokens from "@/app/configs/tokens";
 
-const addOrderApi = createAsyncThunk("post/myOrder", async (body) => {
-  const userToken = tokens.auth;
+const addOrderApi = createAsyncThunk("post/myOrder", async (payload) => {
   const { data } = await martApi
-    .post("/user/order", body, jsonHeader(userToken))
+    .post("/user/order", payload, jsonHeader())
     .then((e) => e)
     .catch((e) => e.response);
   return data;
 });
 
-export const addNewOrder = (body, dispatch) => {
-  dispatch(addOrderApi(body))
+export const addNewOrder = (payload, dispatch) => {
+  dispatch(addOrderApi(payload))
     .then(unwrapResult)
     .then((res) => {
-      console.log(res);
       toaster({ ...res });
-      if (res.type === "success") {
-        FetchOrderHandler(body.userId, dispatch, null);
-      }
+      mutate("/user/order");
     })
     .catch((e) => {});
 };
 
 const fetchOrder = createAsyncThunk("post/fetchOrder", async (payload) => {
-  const userToken = tokens.auth;
   const { data } = await martApi
-    .get(`/user/order`, jsonHeader(userToken))
+    .get(`/user/order`, jsonHeader())
     .then((e) => e)
     .catch((e) => e.response);
   return data;
@@ -47,25 +41,23 @@ export const FetchOrderHandler = (dispatch, setState) => {
     .catch((e) => {});
 };
 
-const continueOrderApi = createAsyncThunk(
-  "post/continueOrder",
+const deleteOrderApi = createAsyncThunk(
+  "post/deleteOrder",
   async (payload) => {
-    const userToken = tokens.auth;
     const { data } = await martApi
-      .patch(`/user/continue-order/${payload}`, {}, jsonHeader(userToken))
+      .patch(`/user/delete-order/${payload}`, {}, jsonHeader())
       .then((e) => e)
       .catch((e) => e.response);
     return data;
   }
 );
 
-export const continueOrder = (orderId, dispatch) => {
-  dispatch(continueOrderApi(orderId))
+export const deleteOrder = (orderId, dispatch) => {
+  dispatch(deleteOrderApi(orderId))
     .then(unwrapResult)
     .then((res) => {
-      if (res.type === "success") {
-        window.location.reload();
-      }
+      toaster({ ...res });
+      mutate("/user/order");
     })
     .catch((e) => {});
 };
@@ -73,9 +65,8 @@ export const continueOrder = (orderId, dispatch) => {
 const cancelOrderApi = createAsyncThunk(
   "patch/cancelOrder",
   async (payload) => {
-    const userToken = tokens.auth;
     const { data } = await martApi
-      .patch(`/branch/cancel-order/${payload}`, {}, jsonHeader(userToken))
+      .patch(`/branch/cancel-order/${payload}`, {}, jsonHeader())
       .then((e) => e)
       .catch((e) => e.response);
     return data;

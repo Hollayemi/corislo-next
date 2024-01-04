@@ -15,6 +15,7 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
             id="bussname"
             hideCheck
             inputProps={{
+              value: values?.businessName || "",
               type: "text",
               placeholder: "Enter your business name",
             }}
@@ -28,6 +29,7 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
             id="store"
             // hideCheck
             inputProps={{
+              value: values?.store || "",
               type: "text",
               placeholder: "Set your store a name",
             }}
@@ -41,6 +43,7 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
             hideCheck
             id="busstype"
             inputProps={{
+              value: values?.businessType || "",
               type: "select",
               values: [
                 {
@@ -64,6 +67,7 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
             id="bussRegNumber"
             hideCheck
             inputProps={{
+              value: values?.businessRegNum || "",
               type: "number",
               placeholder: "Enter your registration number",
             }}
@@ -77,6 +81,7 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
             id="emailAddress"
             hideCheck
             inputProps={{
+              value: values?.businessEmail || "",
               type: "email",
               placeholder: "email address",
             }}
@@ -90,6 +95,7 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
             id="buzzAddress"
             hideCheck
             inputProps={{
+              value: values?.address || "",
               type: "text",
               placeholder: "Business location",
             }}
@@ -103,6 +109,7 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
             id="city"
             hideCheck
             inputProps={{
+              value: values?.city || "",
               type: "text",
               placeholder: "City",
             }}
@@ -116,6 +123,7 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
             id="state"
             hideCheck
             inputProps={{
+              value: values?.state || "",
               type: "text",
               placeholder: "State/Region",
             }}
@@ -130,6 +138,7 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
             multiline
             hideCheck
             inputProps={{
+              value: values?.about_store || "",
               type: "text",
               placeholder: "About your business",
             }}

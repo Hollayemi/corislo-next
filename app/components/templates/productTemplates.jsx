@@ -9,23 +9,23 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { formatCurrency } from "@/app/utils/format";
 
-export const PopularProduct = ({ image, prodName, price }) => {
+export const PopularProduct = ({ image, prodName, store, price, small }) => {
   const router = useRouter();
   return (
-    <Box className="!w-44 !h-56 m-2 ">
-      <Box onClick={() => router.push(`/biz/Corisio-Store/${prodName}`)}>
+    <Box className={`${small ? "!w-28 !h-44 m-1 " : "!w-28 !h-44 md:!w-44 md:!h-56 m-0.5 md:m-2 "}`}>
+      <Box onClick={() => router.push(`/biz/${store}/${prodName}`)}>
         <img
           src={image}
           alt="product_image"
-          className="!w-44 !h-44 rounded-md"
+          className={`!w-full ${small ? "!h-28" : "!h-28 md:!h-44"} rounded-md`}
         />
       </Box>
       <Box className="py-1">
-        <Link href={`/biz/Corisio-Store/${prodName}`}>
+        <Link href={`/biz/${store}/${prodName}`}>
           <Box>
             <Typography
               variant="body2"
-              className="!text-[12px] !h-8 overflow-hidden"
+              className="!text-[10px] md:!text-[12px] !h-7 md:!h-8 overflow-hidden"
             >
               {prodName}
             </Typography>
@@ -43,20 +43,26 @@ export const PopularProduct = ({ image, prodName, price }) => {
     </Box>
   );
 };
-export const HotDeal = ({ image, prodName, price, unit, of }) => {
+export const HotDeal = ({ image, prodName, small, price, store, unit, of }) => {
   const percentage = (unit / of) * 100;
   const router = useRouter();
   return (
-    <Box className="!w-44 !h-60 m-2 ">
-      <Box onClick={() => router.push(`/biz/Corisio-Store/${prodName}`)}>
+    <Box
+      className={`${
+        small
+          ? "!w-28 !h-44 m-1 "
+          : "!w-28 !h-44 md:!w-44 md:!h-60 m-0.5 md:m-2 "
+      }`}
+    >
+      <Box onClick={() => router.push(`/biz/${store}/${prodName}`)}>
         <img
           src={image}
           alt="product_image"
-          className="!w-44 !h-44 rounded-md"
+          className={`!w-full ${small ? "!h-28" : "!h-28 md:!h-44"} rounded-md`}
         />
       </Box>
       <Box className="pt-1">
-        <Link href={`/biz/Corisio-Store/${prodName}`}>
+        <Link href={`/biz/${store}/${prodName}`}>
           <Box>
             <Typography
               variant="body2"
@@ -68,8 +74,8 @@ export const HotDeal = ({ image, prodName, price, unit, of }) => {
         </Link>
         <Box className="flex items-center justify-between">
           <Typography
-            variant="body-2"
-            className="whitespace-nowrap text-ellipsis !font-bold"
+            variant="body2"
+            className="whitespace-nowrap text-ellipsis !font-bold !text-[11px] md:!text-[13px]"
           >
             {formatCurrency(price || 6400.54)}
           </Typography>
@@ -162,23 +168,27 @@ export const ProductOnCategory = ({
 export const ProductOnShowcase = ({
   image,
   store,
+  branch,
   prodName,
   prodPrice,
   star,
 }) => {
   const router = useRouter();
-  const reshapedProdName = prodName.split(" ").join("-").toLowerCase()
+  const reshapedProdName = prodName.split(" ").join("-").toLowerCase();
   return (
-    <Box className="w-5/12 min-w-[150px] max-w-[170px] md:w-44 !h-64 mx-1.5 md:mx-2 my-2.5 ">
-      <Box onClick={() => router.push(`/biz/Corisio-Store/${reshapedProdName}`)}>
+    <Box className="w-4/12 min-w-[100px] max-w-[140px] md:max-w-[170px] md:w-44 h-48 md:!h-64 md:mx-2 my-2.5 ">
+      <Box
+        onClick={() => router.push(`/biz/${store}/${reshapedProdName}`)}
+        className="!px-0.5"
+      >
         <img
           src={image}
           alt="product_image"
-          className="!w-full !h-48 rounded-md"
+          className="!w-full px-0.5 !h-28 md:!h-48 rounded-md"
         />
       </Box>
       <Box className="pt-1 px-px">
-        <Link href={`/biz/Corisio-Store/${reshapedProdName}`}>
+        <Link href={`/biz/${store}/${reshapedProdName}`}>
           <Box>
             <Typography
               variant="body2"
@@ -205,19 +215,19 @@ export const ProductOnShowcase = ({
             name="size-small"
             size="small"
           />
-          <Typography
-            variant="caption"
-            className="whitespace-nowrap text-ellipsis !text-[9px]"
-          >
-            {store}
-          </Typography>
+          <Link href={`/biz/${store}-${branch}/`}>
+            <Typography
+              variant="caption"
+              className="whitespace-nowrap text-ellipsis !text-[9px]"
+            >
+              {store}
+            </Typography>
+          </Link>
         </Box>
       </Box>
     </Box>
   );
 };
-
-
 
 export const OfflineProductOnCartView = ({
   product,
@@ -226,7 +236,7 @@ export const OfflineProductOnCartView = ({
 }) => {
   const { offline } = {};
   const dispatch = useDispatch();
-  
+
   const { data, loading, error } = useSWR(`/products?prodId=${product}`);
 
   useEffect(() => {

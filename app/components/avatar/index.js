@@ -22,8 +22,8 @@ const CustomAvatar = forwardRef((props, ref) => {
       avatarStyles = { ...bgColors[`${skinColor}Light`] }
     } else if (skin === 'light-static') {
       avatarStyles = {
-        color: bgColors[`${skinColor}Light`].color,
-        backgroundColor: lighten(theme.palette[skinColor].main, 0.88)
+        color: bgColors[`${skinColor}Light`]?.color,
+        backgroundColor: lighten(theme.palette[skinColor]?.main, 0.88)
       }
     } else {
       avatarStyles = { ...bgColors[`${skinColor}Filled`] }
