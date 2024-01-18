@@ -10,7 +10,8 @@ import Box from '@mui/material/Box'
 
 // ** Icon Imports
 import Icon from "@/app/components/icon";
-import { sendMessage } from '@/app/redux/state/slices/chat'
+import { directSocketConnect } from "@/app/utils/socket.io";
+// import { sendMessage } from '@/app/redux/state/slices/chat'
 
 // ** Styled Components
 const ChatFormWrapper = styled(Box)(({ theme }) => ({
@@ -33,11 +34,13 @@ const SendMsgForm = props => {
   const handleSendMsg = e => {
     e.preventDefault()
     if (store && store.selectedChat && msg.trim().length) {
-      sendMessage(
+      directSocketConnect("user_token").emit(
+        "sendMessage",
         {
-          ...store.selectedChat,
+          chatId: store?.selectedChat?.contact?.chat?.id,
+          // storeContact.userId,
           message: msg,
-          by: "customer",
+          by: store.userProfile.role,
           branchId: store?.selectedChat?.contact?.branchId,
         },
         dispatch
@@ -48,7 +51,16 @@ const SendMsgForm = props => {
 
   return (
     <Form onSubmit={handleSendMsg} className="w-full flex justify-center">
-      <ChatFormWrapper className='!rounded-full !bg-gray-200 !border w-full md:!w-11/12 py-1 px-2 '>
+      <ChatFormWrapper className="!rounded-full !bg-gray-50 !border w-full md:!w-11/12 py-1 px-2 ">
+        <IconButton
+          size="small"
+          component="label"
+          htmlFor="upload-img"
+          sx={{ mr: 0.5, color: "text.primary" }}
+        >
+          <Icon icon="tabler:paperclip" />
+          <input hidden type="file" id="upload-img" />
+        </IconButton>
         <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
           <TextField
             fullWidth
@@ -65,23 +77,16 @@ const SendMsgForm = props => {
               },
               "& fieldset": { border: "0 !important" },
             }}
+            className="mx-1"
           />
         </Box>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {/* <IconButton size="small" sx={{ color: "text.primary" }}>
             <Icon icon="tabler:microphone" />
           </IconButton> */}
-          <IconButton
-            size="small"
-            component="label"
-            htmlFor="upload-img"
-            sx={{ mr: 2.5, color: "text.primary" }}
-          >
-            <Icon icon="tabler:photo" />
-            <input hidden type="file" id="upload-img" />
-          </IconButton>
+
           <Button type="submit" variant="text">
-            Send
+            <Icon icon="tabler:send-2" />
           </Button>
         </Box>
       </ChatFormWrapper>

@@ -29,14 +29,14 @@ const BusinessPage = ({ params, searchParams }) => {
   const { data, error } = useSWR(
     `/branch/info?store=${getStore[0]}&branch=${getStore[1]}`
   );
-  const branchInfo = data ? data?.data[0] : {}
+  const branchInfo = data ? data?.data : {}
   // ** State
   const [open, setOpen] = useState(true);
 
   const handleClick = () => {
     setOpen(!open);
   };
-  const isIncluded = following.includes(branchInfo?._id);
+  const isIncluded = following.includes(branchInfo?.branchId);
 
   const page = {
     0: <StoreProducts />,
@@ -166,7 +166,9 @@ const BusinessPage = ({ params, searchParams }) => {
                         }
                       />
                     }
-                    onClick={() => followStore(branchInfo?._id, dispatch)}
+                    onClick={() =>
+                      followStore(branchInfo?.branchId, dispatch, isIncluded)
+                    }
                   >
                     {isIncluded ? "Unfollow" : "Follow"}
                   </Button>

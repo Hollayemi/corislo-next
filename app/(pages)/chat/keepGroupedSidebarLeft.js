@@ -43,6 +43,7 @@ const SidebarLeft = (props) => {
     store,
     hidden,
     mdAbove,
+    dispatch,
     statusObj,
     userStatus,
     selectChat,
@@ -51,6 +52,7 @@ const SidebarLeft = (props) => {
     selectContact,
     setUserStatus,
     leftSidebarOpen,
+    removeSelectedChat,
     userProfileLeftOpen,
     formatDateToMonthShort,
     handleLeftSidebarToggle,
@@ -89,31 +91,31 @@ const SidebarLeft = (props) => {
   }, []);
 
   const hasActiveId = (id) => {
-    if (store.chat !== null) {
-      const arr = store.chat.filter((i) => i.id === id);
+    if (store.byFollowing !== null) {
+      const arr = store.byFollowing.filter((i) => i.id === id);
       return !!arr.length;
     }
   };
 
-  const renderChats = () => {
-    if (store && store.chat?.length) {
+  const renderChats = (group) => {
+    if (store && store[group] && store[group].length) {
       if (query.length && !filteredChat.length) {
         return (
           <ListItem>
             <Typography sx={{ color: "text.secondary" }}>
-              No Store Found
+              No Chats Found
             </Typography>
           </ListItem>
         );
       } else {
         const arrToMap =
-          query.length && filteredChat.length ? filteredChat : store.chat;
+          query.length && filteredChat.length ? filteredChat : store[group];
 
         return arrToMap.map((chat, index) => {
           const { lastMessage, id } = chat.chat;
           const activeCondition =
             (active && active.id === id) ||
-            (active && active.id === `new_chat-${index}`);
+            (active && active.id === `new_chat-${group}-${index}`);
 
           return (
             <ListItem
@@ -126,7 +128,7 @@ const SidebarLeft = (props) => {
                 onClick={() =>
                   handleChatClick(
                     "chat",
-                    id.length ? id : `new_chat-${index}`,
+                    id.length ? id : `new_chat-${group}-${index}`,
                     chat
                   )
                 }
@@ -180,7 +182,7 @@ const SidebarLeft = (props) => {
                     {chat.avatar ? (
                       <MuiAvatar
                         src={chat.avatar}
-                        alt={chat.chatName}
+                        alt={chat.businessName}
                         sx={{
                           width: 38,
                           height: 38,
@@ -208,7 +210,7 @@ const SidebarLeft = (props) => {
                             }`,
                         }}
                       >
-                        {getInitials(chat.chatName || "")}
+                        {getInitials(chat.businessName)}
                       </CustomAvatar>
                     )}
                   </Badge>
@@ -228,7 +230,7 @@ const SidebarLeft = (props) => {
                       className="!font-bold !text-[14px]"
                       sx={{ fontWeight: 500 }}
                     >
-                      {chat.chatName}
+                      {chat.businessName}
                     </Typography>
                   }
                   secondary={
@@ -293,12 +295,12 @@ const SidebarLeft = (props) => {
 
   const handleFilter = (e) => {
     setQuery(e.target.value);
-    if (store.chat !== null && store.contacts !== null) {
+    if (store.byFollowing !== null && store.contacts !== null) {
       const searchFilterFunction = (contact) =>
-        contact.chatName
+        contact.businessName
           .toLowerCase()
           .includes(e.target.value.toLowerCase());
-      const filteredChatsArr = store.chat.filter(searchFilterFunction);
+      const filteredChatsArr = store.byFollowing.filter(searchFilterFunction);
       const filteredContactsArr = store.contacts.filter(searchFilterFunction);
       setFilteredChat(filteredChatsArr);
       setFilteredContacts(filteredContactsArr);
@@ -376,7 +378,7 @@ const SidebarLeft = (props) => {
             >
               <MuiAvatar
                 src={store.userProfile.avatar}
-                alt={store.userProfile.chatName}
+                alt={store.userProfile.businessName}
                 sx={{
                   width: "2.375rem",
                   height: "2.375rem",
@@ -392,7 +394,7 @@ const SidebarLeft = (props) => {
             onChange={handleFilter}
             className="border-none"
             placeholder="Search for store..."
-            sx={{ "& .MuiInputBase-root": { borderRadius: 5, border: "none" }, border: "none" }}
+            sx={{ "& .MuiInputBase-root": { borderRadius: 5, border: 0 } }}
             InputProps={{
               className: "!bg-gray-50 !border-none",
               startAdornment: (
@@ -414,15 +416,23 @@ const SidebarLeft = (props) => {
 
         <StyleList sx={{ height: "calc(100vh - 13.9375rem)" }}>
           <Box className="overflow-hidden">
-            <Box sx={{ p: (theme) => theme.spacing(2, 2, 2) }}>
-              {/* <Typography
+            <Box sx={{ p: (theme) => theme.spacing(4, 2, 2) }}>
+              <Typography
                 variant="h6"
                 className="!text-[16px] !font-bold"
                 sx={{ ml: 1.5, mb: 1.5, color: "primary.main" }}
               >
                 Following Stores
-              </Typography> */}
-              <List sx={{ mb: 2.5, p: 0 }}>{renderChats()}</List>
+              </Typography>
+              <List sx={{ mb: 2.5, p: 0 }}>{renderChats("byFollowing")}</List>
+              <Typography
+                variant="h6"
+                className="!text-[16px] !font-bold"
+                sx={{ ml: 1.5, mb: 1.5, color: "primary.main" }}
+              >
+                Viewed Stores
+              </Typography>
+              <List sx={{ p: 0 }}>{renderChats("byProductView")}</List>
             </Box>
           </Box>
         </StyleList>

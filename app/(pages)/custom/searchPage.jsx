@@ -29,7 +29,7 @@ const SearchPage = ({ search, setSearch }) => {
        return (
          <OptionsMenu
            icon={
-             <Box className="!text-xs !rounded-full !text-black bg-white px-4 py-1 flex items-center">
+             <Box className="!text-xs !rounded-full !text-black bg-white px-4 m-1 py-1 flex items-center">
                <Typography variant="caption" className="">{name}</Typography>
                <IconifyIcon icon="tabler:chevron-down" className="ml-5" />
                {/* <IconifyIcon icon="tabler:chevron-up" className="ml-5" /> */}
@@ -77,7 +77,7 @@ const SearchPage = ({ search, setSearch }) => {
           </Box>
         </Box>
       </Box>
-      <Box className="relative mt-10 w-full flex flex-wrap justify-center items-center">
+      <Box className="relative mt-10 w-full flex flex-wrap justify-center items-center px-3">
         <Typography variant="body2" className="!text-black !text-[12px] !mr-4">
           Filter:
         </Typography>
@@ -91,12 +91,12 @@ const SearchPage = ({ search, setSearch }) => {
           name="Shipping Method"
           options={["Men", "women", "children"]}
         />
-        <Typography variant="body2" className="!text-black !text-[12px] !ml-4">
+        <Typography variant="body2" className="!text-black !text-[12px] !ml-4 !m-2 !h-6">
           Reset filter
         </Typography>
       </Box>
 
-      <Box className="md:px-8">
+      <Box className="px-2 md:px-8">
         <Box className="!mt-6 flex flex-wrap justify-center">
           {moreProducts.map((prod, i) => (
             <ProductOnShowcase

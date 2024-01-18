@@ -28,9 +28,12 @@ import ChatContent from "./ChatContent";
 import HomeWrapper from "@/app/components/view/home";
 import useSWR from "swr";
 import { useUserData } from "@/app/hooks/useData";
-import UserProfileRight, { UserProfileRightComponent } from "./UserProfileRight";
+import UserProfileRight, {
+  UserProfileRightComponent,
+} from "./UserProfileRight";
+import socketSetup from "@/app/utils/socket.io";
 
-const AppChat = () => {
+const AppChat = ({ searchParams }) => {
   // ** States
   const [userStatus, setUserStatus] = useState("online");
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false);
@@ -38,22 +41,24 @@ const AppChat = () => {
   const [userProfileRightOpen, setUserProfileRightOpen] = useState(false);
   const [selectedChat, selectChat] = useState("");
   const [selectedContact, selectContact] = useState({});
+  const [socket, setSocket] = useState(null)
 
   // ** Hooks
   const theme = useTheme();
   const dispatch = useDispatch();
   const hidden = useMediaQuery(theme.breakpoints.down("lg"));
   const { userInfo } = useUserData();
-  const store = useSelector((state) => state.chat);
 
   const { data, isLoading: storeListLoading } = useSWR("/chat/stores");
+  const { data: itNewBranchChat, isLoading: branchLoading } = useSWR(
+    searchParams.new && `/branch/info?branchId=${searchParams.new}`
+  );
   const storeList = (data && data?.data) || {};
   const itIsNewChat = selectedChat.split("-")[0] === "new_chat";
   const { data: storeChat, isLoading: loadingChat } = useSWR(
     selectedChat && !itIsNewChat && `/chat/messages?chatId=${selectedChat}`
   );
   const messageLog = storeChat?.data || [];
-
   // ** Vars
   const smAbove = useMediaQuery(theme.breakpoints.up("sm"));
   const sidebarWidth = smAbove ? 340 : 300;
@@ -65,10 +70,23 @@ const AppChat = () => {
     online: "success",
     offline: "secondary",
   };
+
   useEffect(() => {
-    // dispatch(fetchUserProfile())
-    // dispatch(fetchChatsContacts())
-  }, [dispatch]);
+    // Example: Connect to the socket and listen for events
+    console.log(socketSetup("user_token", setSocket));
+    // socketSetup("user_token", setSocket);
+    // if (socket) {
+    //   socket.on("newMessage", (messageData) => {
+    //     console.log(messageData);
+    //   });
+    // }
+
+    // Clean up the socket connection when the component unmounts
+    return () => {
+      // socket("user_token").disconnect();
+    };
+  }, []);
+
   const handleLeftSidebarToggle = () => setLeftSidebarOpen(!leftSidebarOpen);
   const handleUserProfileLeftSidebarToggle = () =>
     setUserProfileLeftOpen(!userProfileLeftOpen);
@@ -359,6 +377,25 @@ const AppChat = () => {
     avatar: "/images/misc/shop/1.png",
   };
 
+  if (!branchLoading && itNewBranchChat) {
+    storeList.selectedChat = {
+      chat: {
+        id: 1,
+        userId: userInfo._id,
+        unseenMsgs: 3,
+        chat: null,
+      },
+      contact: {
+        ...itNewBranchChat,
+        chatName: itNewBranchChat?.data?.businessName,
+        branchId: itNewBranchChat?.data?.branchId,
+        avatar: "/images/misc/shop/2.png",
+      },
+    };
+  }
+
+  // const openChatWithIdIfConnected = data.chat
+
   if (!storeListLoading && !loadingChat && storeChat && data) {
     storeList.selectedChat = {
       chat: {
@@ -387,22 +424,23 @@ const AppChat = () => {
       },
     };
   }
+  
 
-   const ScrollWrapper = ({ children }) => {
-     if (hidden) {
-       return (
-         <Box sx={{ height: "100%", overflowY: "auto", overflowX: "hidden" }}>
-           {children}
-         </Box>
-       );
-     } else {
-       return (
-         <PerfectScrollbar options={{ wheelPropagation: false }}>
-           {children}
-         </PerfectScrollbar>
-       );
-     }
-   };
+  const ScrollWrapper = ({ children }) => {
+    if (hidden) {
+      return (
+        <Box sx={{ height: "100%", overflowY: "auto", overflowX: "hidden" }}>
+          {children}
+        </Box>
+      );
+    } else {
+      return (
+        <PerfectScrollbar options={{ wheelPropagation: false }}>
+          {children}
+        </PerfectScrollbar>
+      );
+    }
+  };
 
   return (
     <HomeWrapper noFooter>
@@ -439,7 +477,7 @@ const AppChat = () => {
             }
           />
         </Box>
-        <Box className="flex-grow">
+        <Box className="flex-grow rounded-md overflow-hidden">
           <ChatContent
             store={storeList}
             hidden={hidden}
@@ -457,21 +495,25 @@ const AppChat = () => {
             }
           />
         </Box>
-        <Box className="!flex-shrink-0 !w-fit !min-w-fit pl-3 !rounded-md overflow-hidden hidden lg:block">
-          <UserProfileRightComponent
-            hideCancel
-            hidden={hidden}
-            store={storeList}
-            statusObj={statusObj}
-            getInitials={getInitials}
-            sidebarWidth={sidebarWidth}
-            ScrollWrapper={ScrollWrapper}
-            userProfileRightOpen={userProfileRightOpen}
-            handleUserProfileRightSidebarToggle={
-              handleUserProfileRightSidebarToggle
-            }
-          />
-        </Box>
+        {storeList?.selectedChat && (
+          <Box
+            className={`!flex-shrink-0 !ml-3 !rounded-md overflow-hidden hidden !bg-white lg:block !w-[340px] !min-w-[340px]`}
+          >
+            <UserProfileRightComponent
+              hideCancel
+              hidden={hidden}
+              store={storeList}
+              statusObj={statusObj}
+              getInitials={getInitials}
+              sidebarWidth={sidebarWidth}
+              ScrollWrapper={ScrollWrapper}
+              userProfileRightOpen={userProfileRightOpen}
+              handleUserProfileRightSidebarToggle={
+                handleUserProfileRightSidebarToggle
+              }
+            />
+          </Box>
+        )}
       </Box>
     </HomeWrapper>
   );

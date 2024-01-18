@@ -281,19 +281,14 @@ export const OrderProductView = ({
   store,
   status,
 }) => {
-  const dispatch = useDispatch()
+  console.log(product);
+  const dispatch = useDispatch();
   const TitleValue = ({ title, value, allowCopy }) => (
     <Box className="flex items-center">
       <Typography variant="body2" className="!text-xs">
         {title} <span className="ml-2 !text-black">{value}</span>
       </Typography>
-      {allowCopy && (
-        <IconifyIcon
-          icon={clipboard === value ? "tabler:clipboard-check" : "tabler:copy"}
-          className="ml-2"
-          onClick={() => copyToClipboard(value, setIsCopied)}
-        />
-      )}
+      {allowCopy && copyToClipboard}
     </Box>
   );
   return (
@@ -340,7 +335,7 @@ export const OrderProductView = ({
       </Box>
 
       <Box className="flex flex-col md:flex-row items-start w-full my-3 relative">
-        <Box className="flex items-start">
+        <Box className="flex items-start w-full">
           <Image
             src={image || "/images/more/2.png"}
             alt="prod_img"
@@ -355,13 +350,14 @@ export const OrderProductView = ({
             >
               {store}
             </Typography>
-            <Typography
-              variant="body2"
-              className="!font-semibold !text-black !text-[12px] md:!text-[16px] !mb-1 md:!mb-2"
-            >
-              {product.prodName}
-            </Typography>
-
+            <Box className="flex items-center">
+              <Typography
+                variant="body2"
+                className="!font-semibold !text-black !text-[12px] md:!text-[16px] !mb-1 md:!mb-2"
+              >
+                {`${product[0]?.prodName}`}
+              </Typography>
+            </Box>
             <TitleValue
               title="Order date:"
               value={formatDateToMonthShort(createdAt)}
@@ -371,7 +367,7 @@ export const OrderProductView = ({
               <span className="hidden md:block px-5"></span>
               <TitleValue
                 title="No of Products:"
-                value={product.quantity || 0}
+                value={product?.length || 0}
               />
             </Box>
           </Box>

@@ -1,14 +1,23 @@
 "use client";
 import IconifyIcon from "@/app/components/icon";
-import { CartProductView, TitleValue } from "@/app/components/templates/productView";
+import { CartProductView } from "@/app/components/templates/productView";
 import HomeWrapper from "@/app/components/view/home";
 import { moreProducts } from "@/app/data/home/homepage";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
+import TimelineLeft, { OrderStages } from "../timeline";
 
-const OrderDetails = () => {
+const OrderDetails = ({ params }) => {
+  console.log(params);
+   const TitleValue = ({ title, value }) => (
+     <Box className="flex items-center">
+       <Typography variant="body2" className="!text-xs">
+         {title} <span className="ml-2 !text-black">{value}</span>
+       </Typography>
+     </Box>
+   );
   const emojis = ["Bad", "Poor", "Average", "Good", "Best"]
   return (
     <HomeWrapper>
@@ -32,9 +41,11 @@ const OrderDetails = () => {
                   </Typography>
                 </Box>
                 <Button
-                    variant="outlined"
-                    className="!rounded-full !text-[14px] !w-32 !shadow-none !mt-1"
-                  >Return Order</Button>
+                  variant="outlined"
+                  className="!rounded-full !text-[14px] !w-32 !shadow-none !mt-1"
+                >
+                  Return Order
+                </Button>
               </Box>
               <Box className="bg-white w-full rounded-md py-5 px-2 md:px-4 mt-5">
                 <Typography
@@ -45,7 +56,7 @@ const OrderDetails = () => {
                 </Typography>
                 <Box className="flex items-center mt-3">
                   {emojis.map((tag, i) => (
-                    <EmojiRating name={tag} key={1} />
+                    <EmojiRating name={tag} key={i} />
                   ))}
                 </Box>
 
@@ -119,6 +130,22 @@ const OrderDetails = () => {
                     NGN37,940
                   </Typography>
                 </Box>
+              </Box>
+              <Box className="bg-white rounded-md px-4 py-10 md:p-14 mt-6">
+                <Typography variant="body2" className="!font-bold !text-[16px]">
+                  Tracking Details
+                </Typography>
+                <Box>
+                  <OrderStages
+                    date={new Date()}
+                    at={3}
+                    status="completed"
+                    price={500000}
+                  />
+                </Box>
+                <br />
+                <br />
+                <TimelineLeft />
               </Box>
             </Box>
           </Grid>

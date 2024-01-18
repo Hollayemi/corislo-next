@@ -40,6 +40,7 @@ const ChatContent = (props) => {
     sendMsg,
     mdAbove,
     dispatch,
+    chatType,
     statusObj,
     getInitials,
     sidebarWidth,
@@ -178,7 +179,7 @@ const ChatContent = (props) => {
                       <MuiAvatar
                         sx={{ width: 38, height: 38 }}
                         src={selectedChat.contact.avatar}
-                        alt={selectedChat.contact.businessName}
+                        alt={selectedChat.contact.chatName}
                       />
                     ) : (
                       <CustomAvatar
@@ -186,13 +187,13 @@ const ChatContent = (props) => {
                         color={selectedChat.contact.avatarColor}
                         sx={{ width: 38, height: 38, fontSize: "1rem" }}
                       >
-                        {getInitials(selectedChat.contact.businessName)}
+                        {getInitials(selectedChat.contact.chatName)}
                       </CustomAvatar>
                     )}
                   </Badge>
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Typography sx={{ fontWeight: 500 }}>
-                      {selectedChat.contact.businessName}
+                      {selectedChat.contact.chatName}
                     </Typography>
                     <Typography sx={{ color: "text.disabled" }}>
                       {selectedChat.contact.role}
@@ -210,8 +211,8 @@ const ChatContent = (props) => {
                     <IconButton size="small" sx={{ color: "text.secondary" }}>
                       <Icon icon="tabler:video" />
                     </IconButton> */}
-                    <IconButton size="small" sx={{ color: "text.secondary" }}>
-                      <Icon icon="tabler:search" />
+                    <IconButton size="small" className="!text-red-500">
+                      <Icon icon="tabler:delete" />
                     </IconButton>
                   </Fragment>
                 ) : null}
@@ -242,18 +243,19 @@ const ChatContent = (props) => {
             ) : null}
 
             <SendMsgForm store={store} dispatch={dispatch} />
-
-            <UserProfileRight
-              store={store}
-              hidden={hidden}
-              statusObj={statusObj}
-              getInitials={getInitials}
-              sidebarWidth={sidebarWidth}
-              userProfileRightOpen={userProfileRightOpen}
-              handleUserProfileRightSidebarToggle={
-                handleUserProfileRightSidebarToggle
-              }
-            />
+            {chatType !== "store" &&
+              <UserProfileRight
+                store={store}
+                hidden={hidden}
+                statusObj={statusObj}
+                getInitials={getInitials}
+                sidebarWidth={sidebarWidth}
+                userProfileRightOpen={userProfileRightOpen}
+                handleUserProfileRightSidebarToggle={
+                  handleUserProfileRightSidebarToggle
+                }
+              />
+            }
           </Box>
         );
       }

@@ -18,6 +18,7 @@ import CustomAvatar from "@/app/components/avatar";
 // ** Utils Imports
 import { getInitials } from "@/app/utils/get-initials";
 import { StyleList } from "./Styled";
+import { directSocketConnect } from "@/app/utils/socket.io";
 
 const PerfectScrollbar = styled(PerfectScrollbarComponent)(({ theme }) => ({
   padding: theme.spacing(5),
@@ -27,6 +28,16 @@ const ChatLog = (props) => {
   // ** Props
   const { data, hidden } = props;
 
+  console.log(data);
+  const storeContact = data?.contact;
+  console.log(storeContact);
+  if (!storeContact?.storeJoined) {
+    directSocketConnect("store").emit("joinRoom", {
+      customer: storeContact.userId,
+      branchId: storeContact.branchId,
+      store: data?.userContact?.role,
+    });
+  }
   // ** Ref
   const chatArea = useRef(null);
 
@@ -94,7 +105,7 @@ const ChatLog = (props) => {
               "& svg": { mr: 0.5, color: "text.secondary" },
             }}
           >
-            <Icon icon="tabler:check" fontSize="1.125rem" />
+            <Icon icon="tabler:check" fontSize="0.825rem" />
           </Box>
         );
       } else if (feedback.isSent && feedback.isDelivered) {
@@ -109,7 +120,7 @@ const ChatLog = (props) => {
               },
             }}
           >
-            <Icon icon="tabler:checks" fontSize="1.125rem" />
+            <Icon icon="tabler:checks" fontSize="0.825rem" />
           </Box>
         );
       } else {
@@ -211,6 +222,7 @@ const ChatLog = (props) => {
                       {renderMsgFeedback(isSender, chat.feedback)}
                       <Typography
                         variant="body2"
+                        className="!text-[11px]"
                         sx={{ color: "text.disabled" }}
                       >
                         {time
@@ -235,23 +247,12 @@ const ChatLog = (props) => {
   const ScrollWrapper = ({ children }) => {
     if (hidden) {
       return (
-        <Box
-          ref={chatArea}
-          className="!h-full"
-        >
+        <Box ref={chatArea} className="!h-full">
           {children}
         </Box>
       );
     } else {
-      return (
-        <Box
-          ref={chatArea}
-          
-          
-        >
-          {children}
-        </Box>
-      );
+      return <Box ref={chatArea}>{children}</Box>;
     }
   };
 

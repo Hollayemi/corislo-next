@@ -160,7 +160,7 @@ const OrderPage = () => {
                 iconButtonProps={{
                   size: "small",
                   sx: { color: "text.disabled", cursor: "pointer" },
-                  disableRipple: true,
+                  // disableRipple: true,
                 }}
               />
             </Box>
@@ -193,7 +193,7 @@ const OrderPage = () => {
                   iconButtonProps={{
                     size: "small",
                     sx: { color: "text.disabled", cursor: "pointer" },
-                    disableRipple: true,
+                    // disableRipple: true,
                   }}
                 />
               </Box>
@@ -225,6 +225,7 @@ const OrderPage = () => {
             {orderArray.length > 0 ? (
               orderArray.map((res, i) => (
                 <OrderProductView
+                  key={i}
                   clipboard={clipboard}
                   setIsCopied={setIsCopied}
                   product={res.items.storeProducts}
@@ -237,7 +238,10 @@ const OrderPage = () => {
               ))
             ) : (
               <Box className="mt-20 md:mt-6 w-full h-32 flex flex-col items-center rounded-md justify-center bg-white">
-                <IconifyIcon icon="tabler:truck-delivery" className="text-blue-500" />
+                <IconifyIcon
+                  icon="tabler:truck-delivery"
+                  className="text-blue-500"
+                />
                 <Typography variant="caption">No record found</Typography>
               </Box>
             )}

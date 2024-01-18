@@ -14,6 +14,7 @@ import { jsonHeader } from "../redux/state/slices/api/setAuthHeaders";
 import { Toaster } from "react-hot-toast";
 import ReactHotToast from "@/app/styles/react-hot-toast";
 import { UserDataProvider } from "../context/userContext";
+import handleSubscribeToNotification from "../redux/state/slices/api/webpush";
 
 const metadata = {
   title:
@@ -26,15 +27,28 @@ const persistor = persistStore(store);
 
 // ** Pace Loader
 export default function RootLayout({ children }) {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then((registration) => {
+        handleSubscribeToNotification();
+        console.log("Service Worker registered:");
+      })
+      .catch((error) => {
+        console.error("Service Worker registration failed:", error);
+      });
+  }
+
   return (
     <html lang="en">
-      <Head>
+      <head>
         <link
           rel="apple-touch-icon"
           sizes="180x180"
           href="/images/logo/icon/main.png"
         />
         <link rel="shortcut icon" href="/images/logo/icon/main.jpg" />
+        <link rel="icon" href="/images/logo/icon/main.jpg" />
         <meta charSet="UTF-8" />
         <meta
           name="description"
@@ -57,7 +71,7 @@ export default function RootLayout({ children }) {
         <meta property="og:image" content="/images/logo/horizontal/1.png" />
         <meta property="og:url" content="https:corislo.vercel.app" />
         <meta property="og:type" content="product" />
-      </Head>
+      </head>
       <body className="">
         <SWRConfig
           value={{
