@@ -37,13 +37,14 @@ const ChatContent = (props) => {
   const {
     store,
     hidden,
-    sendMsg,
+    socket,
     mdAbove,
     dispatch,
     chatType,
     statusObj,
     getInitials,
     sidebarWidth,
+    setMessageLog,
     userProfileRightOpen,
     handleLeftSidebarToggle,
     handleUserProfileRightSidebarToggle,
@@ -239,11 +240,17 @@ const ChatContent = (props) => {
               <ChatLog
                 hidden={hidden}
                 data={{ ...selectedChat, userContact: store.userProfile }}
+                socket={socket}
               />
             ) : null}
 
-            <SendMsgForm store={store} dispatch={dispatch} />
-            {chatType !== "store" &&
+            <SendMsgForm
+              store={store}
+              dispatch={dispatch}
+              socket={socket}
+              setMessageLog={setMessageLog}
+            />
+            {chatType !== "store" && (
               <UserProfileRight
                 store={store}
                 hidden={hidden}
@@ -255,7 +262,7 @@ const ChatContent = (props) => {
                   handleUserProfileRightSidebarToggle
                 }
               />
-            }
+            )}
           </Box>
         );
       }

@@ -18,7 +18,6 @@ import CustomAvatar from "@/app/components/avatar";
 // ** Utils Imports
 import { getInitials } from "@/app/utils/get-initials";
 import { StyleList } from "./Styled";
-import { directSocketConnect } from "@/app/utils/socket.io";
 
 const PerfectScrollbar = styled(PerfectScrollbarComponent)(({ theme }) => ({
   padding: theme.spacing(5),
@@ -26,15 +25,11 @@ const PerfectScrollbar = styled(PerfectScrollbarComponent)(({ theme }) => ({
 
 const ChatLog = (props) => {
   // ** Props
-  const { data, hidden } = props;
-
-  console.log(data);
+  const { data, hidden, socket } = props;
   const storeContact = data?.contact;
-  console.log(storeContact);
   if (!storeContact?.storeJoined) {
-    directSocketConnect("store").emit("joinRoom", {
-      customer: storeContact.userId,
-      branchId: storeContact.branchId,
+    socket.emit("joinRoom", {
+      chatId: storeContact?.chat?.id,
       store: data?.userContact?.role,
     });
   }

@@ -1,53 +1,55 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState } from "react";
 
 // ** MUI Imports
-import Button from '@mui/material/Button'
-import { styled } from '@mui/material/styles'
-import TextField from '@mui/material/TextField'
-import IconButton from '@mui/material/IconButton'
-import Box from '@mui/material/Box'
-
-// ** Icon Imports
+import Button from "@mui/material/Button";
+import { styled } from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import Box from "@mui/material/Box";
 import Icon from "@/app/components/icon";
-import { directSocketConnect } from "@/app/utils/socket.io";
-// import { sendMessage } from '@/app/redux/state/slices/chat'
 
 // ** Styled Components
 const ChatFormWrapper = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-}))
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+}));
 
-const Form = styled('form')(({ theme }) => ({
-  padding: theme.spacing(0, 1.5, 1.5)
-}))
+const Form = styled("form")(({ theme }) => ({
+  padding: theme.spacing(0, 1.5, 1.5),
+}));
 
-const SendMsgForm = props => {
+const SendMsgForm = (props) => {
   // ** Props
-  const { store, dispatch, sendMsg } = props
+  const { store, dispatch, sendMsg, socket, setMessageLog } = props;
 
   // ** State
-  const [msg, setMsg] = useState('')
+  const [msg, setMsg] = useState("");
 
-  const handleSendMsg = e => {
-    e.preventDefault()
+  const handleSendMsg = (e) => {
+    e.preventDefault();
     if (store && store.selectedChat && msg.trim().length) {
-      directSocketConnect("user_token").emit(
-        "sendMessage",
-        {
-          chatId: store?.selectedChat?.contact?.chat?.id,
-          // storeContact.userId,
-          message: msg,
-          by: store.userProfile.role,
-          branchId: store?.selectedChat?.contact?.branchId,
-        },
-        dispatch
-      );
+      const messageToEmit = {
+        chatId: store?.selectedChat?.contact?.chat?.id,
+        message: msg,
+        by: store.userProfile.role,
+        branchId: store?.selectedChat?.contact?.branchId,
+      };
+
+      socket.emit("sendMessage", messageToEmit, dispatch);
+      setMessageLog((prev) => {
+        const newLog = [...prev.log, {
+          ...messageToEmit,
+          feedback: { isSent: false, isDelivered: false, isSeen: false },
+          time: new Date(),
+        }];
+        return { ...prev, log: newLog };
+      });
     }
-    setMsg('')
-  }
+
+    setMsg("");
+  };
 
   return (
     <Form onSubmit={handleSendMsg} className="w-full flex justify-center">
@@ -92,6 +94,6 @@ const SendMsgForm = props => {
       </ChatFormWrapper>
     </Form>
   );
-}
+};
 
-export default SendMsgForm
+export default SendMsgForm;

@@ -21,7 +21,6 @@ import SidebarLeft from "../../chat/SidebarLeft";
 import ChatContent from "../../chat/ChatContent";
 import useSWR from "swr";
 import { useStoreData } from "@/app/hooks/useData";
-import socketSetup from "@/app/utils/socket.io";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 
 const AppChat = () => {
@@ -32,13 +31,13 @@ const AppChat = () => {
   const [userProfileRightOpen, setUserProfileRightOpen] = useState(false);
   const [selectedChat, selectChat] = useState("");
   const [selectedContact, selectContact] = useState({});
-  const [socket, setSocket] = useState(null);
+  const [messageLog, setMessageLog] = useState({});
 
   // ** Hooks
   const theme = useTheme();
   const dispatch = useDispatch();
   const hidden = useMediaQuery(theme.breakpoints.down("lg"));
-  const { storeInfo } = useStoreData();
+  const { storeInfo, socket } = useStoreData();
 
   const { data, isLoading: storeListLoading } = useSWR("/chat/users");
   const storeList = (data && data?.data) || {};
@@ -46,7 +45,6 @@ const AppChat = () => {
   const { data: storeChat, isLoading: loadingChat } = useSWR(
     selectedChat && !itIsNewChat && `/chat/messages?chatId=${selectedChat}`
   );
-  const messageLog = storeChat?.data || [];
 
   // ** Vars
   const smAbove = useMediaQuery(theme.breakpoints.up("sm"));
@@ -60,21 +58,21 @@ const AppChat = () => {
     online: "success",
     offline: "secondary",
   };
-  useEffect(() => {
-    // Example: Connect to the socket and listen for events
-    console.log(socketSetup("user_token", setSocket));
-    socketSetup("user_token", setSocket);
-    if (socket) {
-      socket.on("newMessage", (messageData) => {
-        console.log(messageData);
-      });
-    }
 
-    // Clean up the socket connection when the component unmounts
-    return () => {
-      // socket("user_token").disconnect();
-    };
-  }, []);
+  useEffect(() => {
+    socket?.on("newMessage", (data) => {
+      console.log(data, messageLog);
+      setMessageLog(data);
+    });
+  }, [socket, messageLog]);
+
+  console.log(messageLog);
+
+  useEffect(() => {
+    setMessageLog(storeChat?.data || {});
+  }, [storeChat]);
+  
+  
   const handleLeftSidebarToggle = () => setLeftSidebarOpen(!leftSidebarOpen);
   const handleUserProfileLeftSidebarToggle = () =>
     setUserProfileLeftOpen(!userProfileLeftOpen);
@@ -157,6 +155,7 @@ const AppChat = () => {
         <Box className="!flex-shrink-0 !w-fit !min-w-fit">
           <SidebarLeft
             store={storeList}
+            socket={socket}
             hidden={hidden}
             mdAbove={mdAbove}
             statusObj={statusObj}
@@ -179,6 +178,7 @@ const AppChat = () => {
         <Box className="flex-grow rounded-md overflow-hidden">
           <ChatContent
             hidden={hidden}
+            socket={socket}
             store={storeList}
             mdAbove={mdAbove}
             chatType={chatType}
@@ -187,6 +187,7 @@ const AppChat = () => {
             getInitials={getInitials}
             sidebarWidth={sidebarWidth}
             selectedChat={selectedChat}
+            setMessageLog={setMessageLog}
             userProfileRightOpen={userProfileRightOpen}
             handleLeftSidebarToggle={handleLeftSidebarToggle}
             handleUserProfileRightSidebarToggle={
@@ -198,6 +199,6 @@ const AppChat = () => {
     </StoreLeftSideBar>
   );
 };
-AppChat.contentHeightFixed = true;
 
+AppChat.contentHeightFixed = true;
 export default AppChat;

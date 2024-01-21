@@ -68,7 +68,7 @@ const TimelineLeft = () => {
               </Typography>
               <Typography variant="caption">{formatDate(item.date)}</Typography>
             </Box>
-            <Typography variant="body2" sx={{ color: "text.primary" }}>
+            <Typography variant="caption" sx={{ color: "text.primary" }} className="!text-[12px] !mb-3">
               {item.info}
             </Typography>
           </TimelineContent>

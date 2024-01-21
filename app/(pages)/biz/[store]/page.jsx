@@ -24,7 +24,7 @@ import { Fragment, useState } from "react";
 import useSWR from "swr";
 
 const BusinessPage = ({ params, searchParams }) => {
-  const { following } = useUserData();
+  const { following, socket } = useUserData();
   const getStore = params.store.split("-");
   const { data, error } = useSWR(
     `/branch/info?store=${getStore[0]}&branch=${getStore[1]}`
@@ -167,7 +167,7 @@ const BusinessPage = ({ params, searchParams }) => {
                       />
                     }
                     onClick={() =>
-                      followStore(branchInfo?.branchId, dispatch, isIncluded)
+                      followStore(branchInfo?.branchId, dispatch, socket, isIncluded)
                     }
                   >
                     {isIncluded ? "Unfollow" : "Follow"}

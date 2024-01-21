@@ -9,12 +9,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 // ** Store & Actions Imports
 import { useDispatch, useSelector } from "react-redux";
-import {
-  sendMsg,
-  fetchUserProfile,
-  fetchChatsContacts,
-  removeSelectedChat,
-} from "@/app/redux/state/slices/chat";
 
 import PerfectScrollbar from "react-perfect-scrollbar";
 
@@ -31,7 +25,6 @@ import { useUserData } from "@/app/hooks/useData";
 import UserProfileRight, {
   UserProfileRightComponent,
 } from "./UserProfileRight";
-import socketSetup from "@/app/utils/socket.io";
 
 const AppChat = ({ searchParams }) => {
   // ** States
@@ -41,13 +34,13 @@ const AppChat = ({ searchParams }) => {
   const [userProfileRightOpen, setUserProfileRightOpen] = useState(false);
   const [selectedChat, selectChat] = useState("");
   const [selectedContact, selectContact] = useState({});
-  const [socket, setSocket] = useState(null)
+  const [messageLog, setMessageLog] = useState({});
 
   // ** Hooks
   const theme = useTheme();
   const dispatch = useDispatch();
   const hidden = useMediaQuery(theme.breakpoints.down("lg"));
-  const { userInfo } = useUserData();
+  const { userInfo, socket } = useUserData();
 
   const { data, isLoading: storeListLoading } = useSWR("/chat/stores");
   const { data: itNewBranchChat, isLoading: branchLoading } = useSWR(
@@ -58,12 +51,10 @@ const AppChat = ({ searchParams }) => {
   const { data: storeChat, isLoading: loadingChat } = useSWR(
     selectedChat && !itIsNewChat && `/chat/messages?chatId=${selectedChat}`
   );
-  const messageLog = storeChat?.data || [];
   // ** Vars
   const smAbove = useMediaQuery(theme.breakpoints.up("sm"));
   const sidebarWidth = smAbove ? 340 : 300;
   const mdAbove = useMediaQuery(theme.breakpoints.up("md"));
-
   const statusObj = {
     busy: "error",
     away: "warning",
@@ -72,20 +63,17 @@ const AppChat = ({ searchParams }) => {
   };
 
   useEffect(() => {
-    // Example: Connect to the socket and listen for events
-    console.log(socketSetup("user_token", setSocket));
-    // socketSetup("user_token", setSocket);
-    // if (socket) {
-    //   socket.on("newMessage", (messageData) => {
-    //     console.log(messageData);
-    //   });
-    // }
+    socket?.on("newMessage", (data) => {
+      console.log(data, messageLog);
+      setMessageLog(data);
+    });
+  }, [socket, messageLog]);
 
-    // Clean up the socket connection when the component unmounts
-    return () => {
-      // socket("user_token").disconnect();
-    };
-  }, []);
+  console.log(messageLog);
+
+  useEffect(() => {
+    setMessageLog(storeChat?.data || {});
+  }, [storeChat]);
 
   const handleLeftSidebarToggle = () => setLeftSidebarOpen(!leftSidebarOpen);
   const handleUserProfileLeftSidebarToggle = () =>
@@ -382,7 +370,7 @@ const AppChat = ({ searchParams }) => {
       chat: {
         id: 1,
         userId: userInfo._id,
-        unseenMsgs: 3,
+        unseenMsgs: 0,
         chat: null,
       },
       contact: {
@@ -424,7 +412,6 @@ const AppChat = ({ searchParams }) => {
       },
     };
   }
-  
 
   const ScrollWrapper = ({ children }) => {
     if (hidden) {
@@ -457,6 +444,7 @@ const AppChat = ({ searchParams }) => {
         <Box className="!flex-shrink-0 !w-fit !min-w-fit">
           <SidebarLeft
             store={storeList}
+            socket={socket}
             hidden={hidden}
             mdAbove={mdAbove}
             dispatch={dispatch}
@@ -480,14 +468,15 @@ const AppChat = ({ searchParams }) => {
         <Box className="flex-grow rounded-md overflow-hidden">
           <ChatContent
             store={storeList}
+            socket={socket}
             hidden={hidden}
-            sendMsg={sendMsg}
             mdAbove={mdAbove}
             dispatch={dispatch}
             statusObj={statusObj}
             getInitials={getInitials}
             sidebarWidth={sidebarWidth}
             selectedChat={selectedChat}
+            setMessageLog={setMessageLog}
             userProfileRightOpen={userProfileRightOpen}
             handleLeftSidebarToggle={handleLeftSidebarToggle}
             handleUserProfileRightSidebarToggle={

@@ -1,10 +1,10 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
-import jwt_decode from "jwt-decode";
 import useSWR from "swr";
+import io from "socket.io-client";
 
-const { createContext, useEffect } = require("react");
+const { createContext, useEffect, useState } = require("react");
 
 const defaultProvider = {
   cartedProds: [],
@@ -13,12 +13,17 @@ const defaultProvider = {
   userInfo: {},
   selectedAddress: {},
   isOffline: true,
+  loading: false,
+  setLoading: () => {},
+  socket: null,
 };
 const DataContext = createContext(defaultProvider);
 
 const UserDataProvider = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
+  const [loading, setLoading] = useState(false);
+  const [socket, setSocket] = useState(null);
   const { userData } = useSelector((state) => state.reducer.loginReducer);
 
   const getPath = pathname.split("/");
@@ -47,6 +52,40 @@ const UserDataProvider = ({ children }) => {
     }
     return !Boolean(getLocalToken);
   };
+
+
+
+  
+  useEffect(() => {
+    if (!socket) {
+      const newSocket = io("http://localhost:3033", {
+        query: {
+          token: localStorage.getItem("user_token"),
+          by: "user_token",
+        },
+      });
+      setSocket(newSocket);
+
+      newSocket.on("connect", () => {
+        console.log("Socket connected");
+      });
+
+      newSocket.on("disconnect", () => {
+        console.log("Socket disconnected");
+      });
+
+      newSocket.on("roomJoined", ({ room }) => {
+        // console.log(`Successfully joined room: ${room}`);
+      });
+    }
+
+    // Cleanup when the component unmounts
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
+  }, [socket]);
 
   //
   //
@@ -88,6 +127,9 @@ const UserDataProvider = ({ children }) => {
         cartData: (!cartErr && !cartIsLoading && cartData?.data) || {},
         userInfo: (!userErr && !userIsLoading && userInfo?.user) || {},
         selectedAddress: {},
+        socket,
+        loading,
+        setLoading: setLoading,
         isOffline: isOffline(),
       }}
     >

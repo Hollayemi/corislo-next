@@ -210,7 +210,7 @@ export const GroupCartProducts = ({
             iconButtonProps={{
               size: "small",
               sx: { color: "text.disabled", cursor: "pointer" },
-              disableRipple: true,
+              // disableRipple: true,
             }}
           />
         )}
