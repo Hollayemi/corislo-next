@@ -22,6 +22,7 @@ import { useTheme } from '@emotion/react';
 import themeConfig from '@/app/configs/themeConfig'
 import Image from 'next/image';
 import { Avatar } from '@mui/material';
+import { useStoreData } from '@/app/hooks/useData';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -90,6 +91,7 @@ export default function StoreDashboardAppBar({
   staffInfo,
 }) {
   const theme = useTheme();
+  const { showOverlay } = useStoreData()
   const [anchorEl, setAnchorEl] = useState();
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState();
 
@@ -169,7 +171,7 @@ export default function StoreDashboardAppBar({
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
       sx={{
-        bgcolor: alpha(theme.palette.common.white, 0.4),
+        bgcolor: alpha(theme?.palette?.common?.white, 0.4),
       }}
     >
       <MenuItem>
@@ -180,14 +182,14 @@ export default function StoreDashboardAppBar({
         </Icons>
         <p>Messages</p>
       </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={() => alert("notification")}>
         <Icons
           size="large"
           aria-label="show 17 new notifications"
           color="inherit"
         >
           <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
+            <NotificationsIcon  />
           </Badge>
         </Icons>
         <p>Notifications</p>
@@ -263,6 +265,7 @@ export default function StoreDashboardAppBar({
           </SearchIconWrapper>
           <StyledInputBase
             placeholder="Search anything"
+            onFocus={() => showOverlay("appSearch")}
             inputProps={{ "aria-label": "search" }}
           />
         </Search>
@@ -271,6 +274,7 @@ export default function StoreDashboardAppBar({
             size="large"
             aria-label="show 17 new notifications"
             color="inherit"
+            onClick={() => showOverlay("notification")}
           >
             <Badge badgeContent={17} color="error">
               <NotificationsIcon />
@@ -280,8 +284,16 @@ export default function StoreDashboardAppBar({
             onClick={handleProfileMenuOpen}
             className="flex items-center cursor-pointer ml-6 w-40"
           >
-            <Avatar alt="Remy Sharp" src="/images/avatar/stephen.jpeg" className="mr-2" />
-            <Typography noWrap variant="body2" className="font-bold flex items-center text-ellipsis text-sm ml-6 text-black">
+            <Avatar
+              alt="Remy Sharp"
+              src="/images/avatar/stephen.jpeg"
+              className="mr-2"
+            />
+            <Typography
+              noWrap
+              variant="body2"
+              className="font-bold flex items-center text-ellipsis text-sm ml-6 text-black"
+            >
               {staffInfo.username}
             </Typography>
             <Box className="text-black flex items-center ml-2">

@@ -296,3 +296,5 @@ export const mySubstring = (string = "", num = 15) => {
     return string.substring(0, parseInt(num)) + "...";
   }
 };
+
+export const ngnPrice = (price) => `NGN${price?.toLocaleString()}`

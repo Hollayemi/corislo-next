@@ -23,7 +23,8 @@ import {
 } from "@mui/material";
 import InnerBar from "./InnerBar";
 import BottomBar from "./BottomBar";
-import { useStoreData } from "@/app/hooks/useData";
+import { useStoreData, useUserData } from "@/app/hooks/useData";
+import StoreOverlay from "./components/storeOverlay";
 
 const drawerWidth = 260;
 
@@ -109,10 +110,10 @@ const Drawer = styled(MuiDrawer, {
 
 const StoreLeftSideBar = React.memo(
   ({ children, path, InnerList, BottomList, breadCrumbChild }) => {
-    const { staffInfo } = useStoreData();
-  
-    const theme = useTheme();
+    const { staffInfo, overLay, showOverlay } = useStoreData();
     const [open, setOpen] = React.useState(false);
+    const theme = useTheme();
+
 
     const onSideBar = !path?.sidebar ? "" : `/${path.sidebar}`;
     const handleDrawerOpen = () => {
@@ -146,6 +147,7 @@ const StoreLeftSideBar = React.memo(
           drawerWidth={drawerWidth}
           staffInfo={staffInfo}
         />
+        {overLay && <StoreOverlay />}
         <Drawer
           variant="permanent"
           open={open}
@@ -165,7 +167,7 @@ const StoreLeftSideBar = React.memo(
               />
             </Box>
           </DrawerHeader>
-          <StyleList className="overflow-scroll">
+          <StyleList className="overflow-y-scroll">
             <List
               className="overflow-hidden shrink-0"
               sx={{ bgcolor: "custom.bodyLight" }}
@@ -290,7 +292,7 @@ const StoreLeftSideBar = React.memo(
             </Box>
           </StyleList>
         </Drawer>
-        <Box className="top-0 left-0 w-full flex-shrink-0 h-full !pr-3 md:!pr-16">
+        <Box className="top-0 left-0 w-full flex-shrink-0 h-full md:pl-4 !pr-3 md:!pr-16">
           {/* <Box className=""> */}
 
           <Box className="flex flex-col w-full sticky top-0 pt-20 md:px-7 px-3">

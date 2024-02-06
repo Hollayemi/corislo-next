@@ -11,6 +11,8 @@ import {
   Checkbox,
   Button,
   MenuItem,
+  Select,
+  Autocomplete,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import {
@@ -29,16 +31,24 @@ const AddNewProduct = ({ params }) => {
   const theme = useTheme();
   const brk = theme.breakpoints.down;
   const [selectedSizes, setSelectedSizes] = useState([]);
+  const [specifications, setSpecifications] = useState([]);
+  const [newSpec, setNewSpec] = useState("");
+  const [specValue, setSpecValue] = useState("");
+  const [specId, setspecId] = useState(null);
   const [delivery, selectDelivery] = useState(["pickup"]);
-  const { data: getData, error } = useSWR("/store/collections");
-  const collections = getData ? getData?.data : [];
+  const { data: getData, error } = useSWR("/store/collections/thread");
+  const { data: specData } = useSWR(
+    specId && `/corisio/get-spec?specId=${specId}`
+  );
+  const collections = getData ? getData?.data : [{}];
+  const specInfo = specData && specData?.data?.spec;
 
   const [formData, setFormData] = useState({
     prodName: "",
     prodPrice: "",
     prodKey: "",
     prodInfo: "",
-    specifications: "",
+    specifications: {},
     images: "",
     totInStock: "",
     collectionId: "",
@@ -51,15 +61,17 @@ const AddNewProduct = ({ params }) => {
     delivery,
   });
 
+  console.log(newSpec, specValue);
+
   const fromCollection = collections.filter(
     (x) => x.collectionId === formData.collectionId
   )[0];
-  console.log(formData, fromCollection);
+  console.log(fromCollection);
 
   const dispatch = useDispatch();
 
   const handleChange = (prop) => (event) => {
-    setFormData({ ...formData, [prop]: event.target.value });
+    setFormData({ ...formData, [prop]: event?.target?.value || "" });
   };
 
   const deliveryHandler = (value) => {
@@ -80,6 +92,15 @@ const AddNewProduct = ({ params }) => {
       subCollection: _id,
       collectionName: fromCollection.collectionName,
     });
+    setspecId(null);
+  };
+  const handleProductGroupSelection = (event) => {
+    const { _id, spec } = event.target.value;
+    setFormData({
+      ...formData,
+      productGroup: _id,
+    });
+    setspecId(spec);
   };
 
   return (
@@ -140,11 +161,11 @@ const AddNewProduct = ({ params }) => {
               />
               <SimpleDropDown
                 render={fromCollection?.group?.map((res, i) => (
-                  <MenuItem key={i} value={res._id}>
+                  <MenuItem key={i} value={res}>
                     {res.label}
                   </MenuItem>
                 ))}
-                onChange={handleChange("productGroup")}
+                onChange={handleProductGroupSelection}
                 label="Product Class"
                 sx={{ mb: 2 }}
               />
@@ -238,49 +259,130 @@ const AddNewProduct = ({ params }) => {
             <Box className="pl-2 md:pl-4 mb-5">
               <FileUploader />
               <Box className="flex items-center justify-between">
-                <Typography
-                  color="custom.bodyGray"
-                  sx={{ fontWeight: "bold", fontSize: "10px", mb: 0.5 }}
-                >
+                <Typography variant="caption" className="!mt-2">
                   Supported formats: JPG, PNG, MP3
                 </Typography>
-                <Typography
-                  color="custom.bodyGray"
-                  sx={{ fontWeight: "bold", fontSize: "10px", mb: 0.5 }}
-                >
+                <Typography variant="caption" className="!mt-2">
                   Maximum length of video is 30 secs
                 </Typography>
               </Box>
             </Box>
-            <Typography className="font-black mb-5">Select Size</Typography>
-            <Box className="pl-2 md:pl-4 mb-4">
-              <SizeComponent
-                selectedSizes={selectedSizes}
-                setSelectedSizes={setSelectedSizes}
-              />
-            </Box>
 
-            {selectedSizes.length > 0 && (
-              <Typography className="font-black mb-5">
-                Select Quantity
-              </Typography>
-            )}
-            <Box className="pl-2 md:pl-4 mb-4">
-              <QuantityComponent
-                selectedSizes={selectedSizes}
-                setSelectedSizes={setSelectedSizes}
-              />
-            </Box>
+            {!specInfo ? (
+              <>
+                <Typography className="font-black mb-5">Select Size</Typography>
+                <Box className="pl-2 md:pl-4 mb-4">
+                  <SizeComponent
+                    selectedSizes={selectedSizes}
+                    setSelectedSizes={setSelectedSizes}
+                  />
+                </Box>
 
-            {selectedSizes.length > 0 && (
-              <Typography className="font-black mb-5">Select Color</Typography>
+                {selectedSizes.length > 0 && (
+                  <Typography className="font-black mb-5">
+                    Select Quantity
+                  </Typography>
+                )}
+                <Box className="pl-2 md:pl-4 mb-4">
+                  <QuantityComponent
+                    selectedSizes={selectedSizes}
+                    setSelectedSizes={setSelectedSizes}
+                  />
+                </Box>
+
+                {selectedSizes.length > 0 && (
+                  <Typography className="font-black mb-5">
+                    Select Color
+                  </Typography>
+                )}
+                <Box className="pl-2 md:pl-4 mb-4">
+                  <ColorComponent
+                    selectedSizes={selectedSizes}
+                    setSelectedSizes={setSelectedSizes}
+                  />
+                </Box>
+              </>
+            ) : (
+              <>
+                <Box className="flex justify-center px-2 w-full !mb-14">
+                  <Box className="flex flex-col w-full">
+                    <Autocomplete
+                      options={Object.keys(specInfo)}
+                      onChange={(e, newValue) => setNewSpec(newValue)}
+                      value={newSpec}
+                      onInputChange={(e, newValue) =>
+                        newValue && setNewSpec(newValue)
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder="Select / Add Variation"
+                          sx={{ border: 0 }}
+                          value={newSpec}
+                          onChange={() => {}}
+                          size="small"
+                          fullWidth
+                          className="!w-full outline-0 !mb-4"
+                        />
+                      )}
+                    />
+                    <Box className="flex items-center w-full">
+                      <Autocomplete
+                        options={specInfo[newSpec] || []}
+                        className="!w-8/12 mr-3 outline-0 !mb-2"
+                        value={specValue}
+                        onChange={(e, newValue) => setSpecValue(newValue)}
+                        onInputChange={(e, newValue) =>
+                          newValue && setSpecValue(newValue)
+                        }
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            placeholder="Select / Add Value"
+                            sx={{ border: 0 }}
+                            value={specValue}
+                            onChange={() => {}}
+                            size="small"
+                            fullWidth
+                            className="!w-full mr-3 outline-0"
+                          />
+                        )}
+                      />
+                      <Button
+                        variant="contained"
+                        className="!text-[12px] h-10 !mt-3 md:!mt-0 w-4/12 !shadow-none"
+                        onClick={() => {
+                          if (newSpec && specValue) {
+                            setFormData({
+                              ...formData,
+                              specifications: {
+                                ...formData.specifications,
+                                [newSpec.replaceAll(" ", "_")]: specValue,
+                              },
+                            });
+                            setNewSpec("");
+                            setSpecValue("");
+                          }
+                        }}
+                      >
+                        Add
+                      </Button>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box className="px-4">
+                  {Object.keys(formData.specifications).map((val) => {
+                    console.log(val);
+                    // const key = Object.keys(val)[0];
+                    return (
+                      <Box>
+                        {val.replace("_", " ")} : {formData.specifications[val]}{" "}
+                      </Box>
+                    );
+                  })}
+                </Box>
+              </>
             )}
-            <Box className="pl-2 md:pl-4 mb-4">
-              <ColorComponent
-                selectedSizes={selectedSizes}
-                setSelectedSizes={setSelectedSizes}
-              />
-            </Box>
           </Grid>
           {/* 
 
@@ -298,7 +400,10 @@ const AddNewProduct = ({ params }) => {
                 {
                   ...formData,
                   delivery,
-                  specifications: { sizes: selectedSizes },
+                  specifications: {
+                    sizes: selectedSizes,
+                    variations: formData.specifications,
+                  },
                 },
                 dispatch
               )

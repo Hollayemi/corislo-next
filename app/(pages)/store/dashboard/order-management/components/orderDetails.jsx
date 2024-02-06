@@ -29,6 +29,8 @@ import {
 const OrderDetails = ({ order }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [subAnchorEl, setSubAnchorEl] = useState(null);
+  
+  const [payload, setPayload] = useState({ orderId: order });
   const open = Boolean(anchorEl);
   const openSub = Boolean(subAnchorEl);
 
@@ -42,7 +44,7 @@ const OrderDetails = ({ order }) => {
     data: prodInfo,
     error: prodErr,
     isLoading: prodLoading,
-  } = useSWR(`/user/order-product/${order}`);
+  } = useSWR(`/branch/order-product/${order}`);
 
   const handleButtonClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -53,10 +55,19 @@ const OrderDetails = ({ order }) => {
     setSubAnchorEl(null);
   };
 
-  const handleMenuItemClick = (action) => () => {
+  const handleChange = (prop) => (event) => {
+    setPayload({ ...payload, [prop]: event?.target?.value });
+  };
+
+  const handleChange2 = (prop, aux) => {
+    console.log(aux);
+    setPayload({ ...payload, [prop]: aux });
+  };
+
+  const handleMenuItemClick = (action) => (e) => {
+    handleChange2("status", action);
     // Handle action here
-    console.log(`Action "${action}" clicked for row with ID:`);
-    if (action === "updateStatus") {
+    if (action === "") {
       setSubAnchorEl(true);
     } else {
       setAnchorEl(null);
@@ -75,6 +86,7 @@ const OrderDetails = ({ order }) => {
         color={status?.color}
         label={status?.title}
         sx={{ "& .MuiChip-label": { textTransform: "capitalize" } }}
+        className="flex-shrink-0"
       />
     );
   };
@@ -87,19 +99,22 @@ const OrderDetails = ({ order }) => {
       onClose={handleMenuClose}
     >
       <MenuItem
-        onClick={handleMenuItemClick("updateStatus")}
+        onClick={handleMenuItemClick("")}
         className="flex items-center  justify-between w-full"
       >
         Update Order Status{" "}
         <ChevronRightIcon className="text-[15px] ml-5 md:ml-8" />
       </MenuItem>
       <MenuItem
-        onClick={handleMenuItemClick("Edit")}
+        onClick={handleMenuItemClick("Refund")}
         className="text-orange-500"
       >
         Refund
       </MenuItem>
-      <MenuItem onClick={handleMenuItemClick("Edit")} className="text-red-500">
+      <MenuItem
+        onClick={handleMenuItemClick("Cancelled")}
+        className="text-red-500"
+      >
         Cancel Order
       </MenuItem>
     </Menu>
@@ -118,7 +133,7 @@ const OrderDetails = ({ order }) => {
       >
         Processing
       </MenuItem>
-      <MenuItem onClick={handleMenuItemClick("Delivery")}>
+      <MenuItem onClick={handleMenuItemClick("Out for Delivery")}>
         Out for Delivery
       </MenuItem>
       <MenuItem onClick={handleMenuItemClick("On Hold")}>On Hold</MenuItem>
@@ -132,16 +147,17 @@ const OrderDetails = ({ order }) => {
     <Box className="">
       {!orderLoading && !orderErr && (
         <Box className="">
-          <Grid container spacing={3} className="md:px-5">
-            <Grid item xs={6} md={3} className="md:px-5">
+          <Box className="flex items-center">
+            <Box className="md:ml-4">
               <Typography
                 variant="h5"
-                className="!text-xs !font-bold !leading-10 !flex !items-center"
+                noWrap
+                className="!text-xs overflow-hidden w-40 !font-bold !leading-10 !flex !items-center"
               >
-                Order ID: <b className="ml-3">{row.orderId}</b>
+                Order ID: <b className="ml-1.5 md:ml-3">{row.orderId}</b>
               </Typography>
-            </Grid>
-            <Grid item xs={6} md={3} className="md:px-5">
+            </Box>
+            <Box className="md:pl-10">
               <Typography
                 variant="h5"
                 className="!text-xs !font-bold !flex !items-center !leading-10"
@@ -150,8 +166,8 @@ const OrderDetails = ({ order }) => {
                 <b className="ml-2 md:ml-3">{formatDate(row.dateAdded)}.</b>
                 <b className="ml-2 md:ml-3">10:00 am</b>
               </Typography>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
           <Grid container spacing={3} className="md:!px-5">
             <Grid item xs={12} md={6} className="md:!px-5">
               <Typography
@@ -159,7 +175,7 @@ const OrderDetails = ({ order }) => {
                 className="!text-xs !leading-10 !flex !items-center"
               >
                 <b className="font-bold mr-4">Status:</b>{" "}
-                {customizeStatus(row.status)}
+                {customizeStatus(row.status || "...")}
               </Typography>
             </Grid>
 
@@ -169,9 +185,10 @@ const OrderDetails = ({ order }) => {
                   <Button
                     fullWidth
                     onClick={handleButtonClick}
-                    className="!flex !items-center !justify-between px-4 !text-gray-300 !bg-gray-500"
+                    variant="contained"
+                    className="!flex !items-center !justify-between px-4 !text-white"
                   >
-                    Change Status{" "}
+                    {payload.status || "Change Status"}
                     {open ? (
                       <ExpandLessIcon className="text-[15px]" />
                     ) : (
@@ -188,7 +205,7 @@ const OrderDetails = ({ order }) => {
                     variant="contained"
                     fullWidth
                     className=""
-                    disabled
+                    disabled={!(payload.status || payload.comment)}
                     startIcon={<Icon icon="tabler:device-floppy" />}
                   >
                     Save
@@ -235,14 +252,14 @@ const OrderDetails = ({ order }) => {
                   key: "Order Total Price",
                   value: formatCurrency(row.totalPrice),
                 },
-                {
-                  key: "Est Delivery Date",
-                  value: calculateDateDiff(
-                    row.deliveryDateSpan,
-                    row.dateAdded,
-                    "+"
-                  ),
-                },
+                // {
+                //   key: "Est Delivery Date",
+                //   value: calculateDateDiff(
+                //     row.deliveryDateSpan,
+                //     row.dateAdded,
+                //     "+"
+                //   ),
+                // },
               ]}
             />
 
@@ -283,7 +300,7 @@ const OrderDetails = ({ order }) => {
         Products
       </Typography>
       {!prodLoading && !prodErr && (
-        <Box className="w-full !overflow-auto md:!overflow-auto">
+        <Box className="w-full !overflow-auto">
           <OrderProductList rows={products[0].products} />
         </Box>
       )}

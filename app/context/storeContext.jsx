@@ -4,24 +4,39 @@ import { useSelector } from "react-redux";
 import jwt_decode from "jwt-decode";
 import useSWR from "swr";
 import io from "socket.io-client";
+import { useUserData } from "../hooks/useData";
 
 const { createContext, useEffect, useState } = require("react");
 
 const defaultProvider = {
   staffInfo: {},
   storeInfo: {},
+  showOverlay: () => {},
   connection: false,
+  overLay: null,
   socket: null,
 };
 const StoreDataContext = createContext(defaultProvider);
 
 const StoreDataProvider = ({ children }) => {
+  const { setOverflow } = useUserData();
   const router = useRouter();
   const pathname = usePathname();
   const [socket, setSocket] = useState(null);
+  const [overLay, setOpenOverlay] = useState(null);
   const { userData } = useSelector((state) => state.reducer.loginReducer);
 
   const getPath = pathname.split("/");
+
+  const showOverlay = (pageName = null) => {
+    if (overLay) {
+      setOverflow(false);
+      setOpenOverlay(null);
+    } else {
+      setOverflow(true);
+      setOpenOverlay(pageName);
+    }
+  };
 
   // useEffect(() => {
   //   if (
@@ -37,29 +52,35 @@ const StoreDataProvider = ({ children }) => {
 
   useEffect(() => {
     if (!socket) {
-      const newSocket = io("http://localhost:3033", {
-        query: {
-          token: localStorage.getItem("store_token"),
-          by: "store_token",
-        },
-      });
-      setSocket(newSocket);
+      let server = "http://localhost:3033";
+      if (process.env.NODE_ENV === "production") {
+        console.log("in production");
+        server = "https://corislo-backend.onrender.com";
+      }
+      // const newSocket = io(server, {
+      //   query: {
+      //     token: localStorage.getItem("store_token"),
+      //     by: "store_token",
+      //   },
+      //   port: 3033
+      // });
+      // setSocket(newSocket);
 
-      newSocket.on("connect", () => {
-        console.log("Socket connected");
-      });
+      // newSocket.on("connect", () => {
+      //   console.log("Socket connected");
+      // });
 
-      newSocket.on("disconnect", () => {
-        console.log("Socket disconnected");
-      });
+      // newSocket.on("disconnect", () => {
+      //   console.log("Socket disconnected");
+      // });
 
-      newSocket.on("roomJoined", ({ room }) => {
-        // console.log(`Successfully joined room: ${room}`);
-      });
+      // newSocket.on("roomJoined", ({ room }) => {
+      //   console.log(`Successfully joined room: ${room}`);
+      // });
 
-      newSocket.on("newMessage", (data) => {
-        // console.log(data);
-      });
+      // newSocket.on("newMessage", (data) => {
+      //   console.log(data);
+      // });
     }
 
     // Cleanup when the component unmounts
@@ -90,14 +111,20 @@ const StoreDataProvider = ({ children }) => {
   const connection = () => {
     const getLocalToken =
       typeof window !== "undefined" && localStorage.getItem("store_token");
-    if (userData?.accessToken && getLocalToken) {
-      // const decodedToken = jwt_decode(userData?.accessToken); // Decode the JWT token
-      // const currentTime = Date.now() / 1000; // Get the current time in seconds
+    if (getLocalToken) {
+      const decodedToken = jwt_decode(getLocalToken); // Decode the JWT token
+      const currentTime = Date.now() / 1000; // Get the current time in seconds
       // // Check if the token is still valid based on its expiration time
-      // return decodedToken.exp < currentTime;
+      return decodedToken.exp > currentTime;
     }
     return Boolean(getLocalToken);
   };
+
+  useEffect(() => {
+    if (!connection() && getPath[1] === "store" && getPath[2] !== "login") {
+      router.replace(`/store/login`);
+    }
+  }, [getPath, router]);
 
   //
   //
@@ -132,6 +159,8 @@ const StoreDataProvider = ({ children }) => {
         storeInfo: (!storeErr && !storeIsLoading && storeInfo) || {},
         selectedAddress: {},
         connection: connection(),
+        showOverlay,
+        overLay,
         socket,
       }}
     >

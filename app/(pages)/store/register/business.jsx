@@ -12,8 +12,8 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
             title="Bussname Name"
             onChange={handleStoreChange("businessName")}
             error={values.businessName && errors.businessName}
+            hideCheck={!values.businessName}
             id="bussname"
-            hideCheck
             inputProps={{
               value: values?.businessName || "",
               type: "text",
@@ -26,8 +26,8 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
             title="Store"
             onChange={handleStoreChange("store")}
             error={values.store && errors.store}
+            hideCheck={!values.store}
             id="store"
-            // hideCheck
             inputProps={{
               value: values?.store || "",
               type: "text",
@@ -40,7 +40,7 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
             title="Bussname Type"
             onChange={handleStoreChange("businessType")}
             error={values.businessType && errors.businessType}
-            hideCheck
+            hideCheck={!values.businessType}
             id="busstype"
             inputProps={{
               value: values?.businessType || "",
@@ -64,8 +64,8 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
             title="Business registration Number"
             onChange={handleStoreChange("businessRegNum")}
             error={values.businessRegNum && errors.businessRegNum}
+            hideCheck={!values.businessRegNum}
             id="bussRegNumber"
-            hideCheck
             inputProps={{
               value: values?.businessRegNum || "",
               type: "number",
@@ -78,8 +78,8 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
             title="Business email address"
             onChange={handleStoreChange("businessEmail")}
             error={values.businessEmail && errors.businessEmail}
+            hideCheck={!values.businessEmail}
             id="emailAddress"
-            hideCheck
             inputProps={{
               value: values?.businessEmail || "",
               type: "email",
@@ -91,9 +91,9 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
           <CustomInput
             title="Businesss Address"
             onChange={handleStoreChange("address")}
-            error={values.address && errors.addressame}
+            error={values.address && errors.address}
+            hideCheck={!values.address}
             id="buzzAddress"
-            hideCheck
             inputProps={{
               value: values?.address || "",
               type: "text",
@@ -105,9 +105,9 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
           <CustomInput
             title="city"
             onChange={handleStoreChange("city")}
-            error={values.city && errors.cityllname}
+            error={values.city && errors.city}
+            hideCheck={!values.city}
             id="city"
-            hideCheck
             inputProps={{
               value: values?.city || "",
               type: "text",
@@ -119,9 +119,9 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
           <CustomInput
             title="State/ Region"
             onChange={handleStoreChange("state")}
-            error={values.state && errors.statelname}
+            error={values.state && errors.state}
+            hideCheck={!values.state}
             id="state"
-            hideCheck
             inputProps={{
               value: values?.state || "",
               type: "text",
@@ -134,9 +134,9 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
             title="About"
             onChange={handleStoreChange("about_store")}
             error={values.about_store && errors.about_store}
+            hideCheck={!values.about_store}
             id="state"
             multiline
-            hideCheck
             inputProps={{
               value: values?.about_store || "",
               type: "text",

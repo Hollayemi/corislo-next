@@ -64,7 +64,7 @@ const SupportPage = () => {
       </Box>
 
       <Box className="flex justify-center px-2 w-full">
-        <Box className="flex flex-col md:flex-row w-full">
+        <Box className="flex flex-col md:flex-row">
           <Box className="flex items-center w-full">
             <TextField
               placeholder="Type Keyword"

@@ -13,7 +13,7 @@ const OrderManagement = ({ params, searchParams }) => {
 
   const { data, error, isLoading } = useSWR("/branch/order-request");
   console.log(data, error, isLoading);
-  console.log(params);
+  console.log(params, searchParams);
   const router = useRouter()
 
   const path = { ...params, sidebar: "order-management" };
@@ -22,7 +22,7 @@ const OrderManagement = ({ params, searchParams }) => {
     <StoreLeftSideBar path={path} subListBar={false}>
       <Box className="px-3 md:px-6 py-8 rounded-md" bgcolor="custom.bodyLight">
         <Box className="flex items-center !pb-5">
-          {searchParams.order && (
+          {searchParams?.order && (
             <Box
               className="flex items-center text-xs mr-5 cursor-pointer"
               onClick={() => router.push("/store/dashboard/order-management")}
@@ -35,7 +35,7 @@ const OrderManagement = ({ params, searchParams }) => {
             Order Details
           </Typography>
         </Box>
-        {!searchParams.order ? (
+        {!searchParams?.order ? (
           !error && !isLoading && <OrderTable selectRow={data} />
         ) : (
           <OrderDetails order={searchParams.order} />

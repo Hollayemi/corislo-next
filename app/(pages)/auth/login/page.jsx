@@ -17,6 +17,7 @@ import Image from 'next/image';
 import { loginHandler } from '@/app/redux/state/slices/auth/Login';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
+import { server } from '@/app/redux/state/slices/api/baseApi';
 
 const LoginV1 = () => {
   const router = useRouter()
@@ -25,6 +26,23 @@ const LoginV1 = () => {
     password: '',
     email: false
   })
+
+  
+  // .then(response => {
+  //   if (!response.ok) {
+  //     throw new Error('Network response was not ok');
+  //   }
+  //   return response.json();
+  // })
+  // .then(data => {
+  //   console.log(data);
+  //   // Handle the JSON data returned by the server
+  // })
+  // .catch(error => {
+  //   console.error('There was a problem with your fetch operation:', error);
+  //   // Handle errors
+  // });
+
 
   // ** Hook
   const theme = useTheme()
@@ -38,10 +56,11 @@ const LoginV1 = () => {
   // }
 
   return (
-    <Box className="!mt-16 w-full max-w-[380px]">
+    <Box className="!mt-10 mb-16 w-full max-w-[380px]">
       <CustomInput
         title="Email Adderess"
         onChange={handleChange("email")}
+        hideCheck={true}
         id="email"
         inputProps={{ type: "text", placeholder: "Enter your email address" }}
       />
@@ -50,6 +69,7 @@ const LoginV1 = () => {
         title="Password"
         onChange={handleChange("password")}
         id="password"
+        hideCheck={true}
         inputProps={{ type: "password", placeholder: "Password" }}
       />
 
@@ -62,6 +82,7 @@ const LoginV1 = () => {
       </Button>
       <Button
         variant="outlined"
+        onClick={() => fetch(`${server}auth/google`)}
         className="w-full !h-10 !rounded-full !text-gray-600 !text-[17px] !mt-6"
       >
         <Image

@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 // };
 
 const config = {
-  login: { title: "Sign In to Account" },
+  login: { title: "Sign In to Account", center: true },
   register: { title: "Create Account" },
   forgot_password: { title: "Forgot your Password?" },
   reset_password: { title: "Sign In to Account" },

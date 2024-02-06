@@ -86,6 +86,22 @@ input::placeholder, textarea::placeholder{
     list-style-type: disc !important;
 }
 
+.header-zindex{
+    z-index: 10000000000000 !important;
+}
+
 .dfdgfd li{
     font-weight: 400 !important;
+}
+
+.overflowStyle::-webkit-scrollbar{
+    width: 5px;
+}
+.overflowStyle::-webkit-scrollbar-thumb{
+    background-color: #bdbdbd;
+    border-radius: 4px;
+}
+
+.overflowStyle::-webkit-scrollbar-track{
+    background-color: #f0eeee;
 }

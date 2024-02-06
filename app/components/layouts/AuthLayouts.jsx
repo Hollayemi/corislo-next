@@ -58,10 +58,12 @@ export default function AuthLayout({ children, reverse, image, ...others }) {
         </Box>
 
         <Box
-          className="w-full h-full px-3 overflow-y-auto"
+          className="w-full h-full px-3 overflow-hidden"
           bgcolor="custom.bodyGray"
         >
-          <Box className="flex flex-col md:justify-center my-4 md:my-0 px-2 items-center h-full">
+          <Box
+            className={`flex flex-col ${others.center ? "justify-center" : "!pt-1 md:!pt-10"} overflow-auto  my-4 md:my-0 px-2 items-center h-full`}
+          >
             <Box className="flex flex-col items-center mt-14 md:mt-0 ">
               <Image
                 src={themeConfig.vertical1}

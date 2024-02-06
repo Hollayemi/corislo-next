@@ -6,25 +6,13 @@ import { REQUEST_STATUS } from "../../constants";
 import { deleteHandler } from "../delete";
 import { myBusinessFiles, storeFiles } from "../display/displayAll";
 import tokens from "@/app/configs/tokens";
+import { mutate } from "swr";
 
-export const allCollections = createAsyncThunk(
-  "post/allCollections",
-  async (payload) => {
-    const storeToken = tokens.store;
-    const { data } = martApi
-      .post(`/store/collection`, payload, jsonHeader(storeToken))
-      .then((res) => res.response)
-      .catch((e) => e.response);
-    return data;
-  }
-);
-
-export const createCollection = createAsyncThunk(
+const createCollection = createAsyncThunk(
   "post/createCollection",
   async (payload) => {
-    const storeToken = tokens.store;
     const { data } = await martApi
-      .post(`/store/collection`, payload, jsonHeader(storeToken))
+      .post(`/store/collection/new`, payload, jsonHeader("store"))
       .then((res) => res)
       .catch((e) => e.response);
     return data;
@@ -35,33 +23,19 @@ export const createCollection = createAsyncThunk(
 //
 //
 //
-export const createHandler = (
-  status,
-  formData,
-  selectedCate,
-  dispatch,
-  setFiles,
-  reFetchData
-) => {
-  if (status === REQUEST_STATUS.VERIFIED) {
-    const payload = {
-      collectionName: formData.collectionName,
-      category: selectedCate,
-      collectionInfo: formData.collectionInfo,
-    };
-    dispatch(createCollection(payload))
-      .then(unwrapResult)
-      .then((res) => {
-        toaster({ ...res });
-        if (res.type === "success") {
-        }
-        storeFiles(dispatch, setFiles);
-        reFetchData();
-      })
-      .catch((e) => {});
-  } else {
-    toaster({ type: "error", message: "Error Occured" });
-  }
+export const createHandler = (values, dispatch, setDone) => {
+  dispatch(createCollection(values))
+    .then(unwrapResult)
+    .then((res) => {
+      console.log(res);
+      toaster({ ...res });
+      if (res.type === "success") {
+        
+      }
+      mutate("/store/brief-categories");
+      reFetchData();
+    })
+    .catch((e) => {});
 };
 
 //

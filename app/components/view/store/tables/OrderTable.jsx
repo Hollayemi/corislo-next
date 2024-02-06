@@ -51,12 +51,12 @@ const OrderTable = ({ columns, rows, onRowClick = () => {} }) => {
     }
   }
   return (
-    <Grid container>
-      <Grid
-        item
-        xs={12}
-        className="!w-[385px] !max-w-[385px] md:!w-full md:!max-w-full overflow-scroll md:overflow-auto border md:border-none shadow md:shadow-none"
-      >
+    // <Grid container>
+    //   <Grid
+    //     item
+    //     xs={12}
+    //     className="!w-[385px] !max-w-[385px] md:!w-full md:!max-w-full overflow-scroll md:overflow-auto border md:border-none shadow md:shadow-none"
+    //   >
         <DataGrid
           autoHeight
           columns={columns}
@@ -84,11 +84,11 @@ const OrderTable = ({ columns, rows, onRowClick = () => {} }) => {
             },
           }}
           // minWidth={300}
-          className="w-[1220px]  md:w-full"
+          // className="w-[1220px]  md:w-full"
           sx={{ border: "none" }}
         />
-      </Grid>
-    </Grid>
+    //   </Grid>
+    // </Grid>
   );
 }
 

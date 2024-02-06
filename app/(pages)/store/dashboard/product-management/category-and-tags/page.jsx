@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { prodInnerList } from "@/app/data/store/innerList";
 import OverViewCard from "../overview";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
-import { Box, Typography, Grid } from '@mui/material';
+import { Box, Typography, Grid, Button } from '@mui/material';
 import { categoriesBriefData, categoryDataExpand } from '@/app/data/store/productData'
 import CardStatsHorizontal from '@/app/components/cards/iconHorizontal'
 import Icon from '@/app/components/icon'
@@ -12,6 +12,8 @@ import { alpha, styled } from '@mui/material/styles'
 import MuiTreeView from '@mui/lab/TreeView'
 import tokens from "@/app/configs/tokens";
 import useSWR from 'swr';
+import { Add } from '@mui/icons-material';
+import { useStoreData } from '@/app/hooks/useData';
 
 const CategoryAndTags = ({ params }) => {
   const path={...params, sidebar: "product-management", sublist: "category-and-tags"}
@@ -37,6 +39,7 @@ const CategoryAndTags = ({ params }) => {
 }
 
 const BriefCategories = ({ selectedCate, setSelectedCate }) => {
+  const { showOverlay } = useStoreData()
     const { data, error, isLoading } = useSWR("/store/brief-categories");
     const allCategories = !error && !isLoading ? data.data.map((item, i) => {
         return (
@@ -54,18 +57,34 @@ const BriefCategories = ({ selectedCate, setSelectedCate }) => {
         )
     }): null
     return (
-        <>
-            <Typography className="!font-bold">Categories</Typography>
-            <Typography className="!text-xs !mt-3 !mb-5 !leading-5" variant="body1" color="">
-                This section is dedicated to efficiently managing your product categories across all store branches. 
-                {/* As the administrator, you have full control over every aspect  */}
-                {/* of your product categories, ensuring seamless organization and a delightful shopping experience for your customers. */}
-            </Typography>
-            <Grid container spacing={2}>
-                {allCategories}
-            </Grid>
-        </>
-    )
+      <Box>
+        <Box className="flex justify-between items-center">
+          <Typography className="!font-bold">Categories</Typography>
+          <Button
+            startIcon={<Add />}
+            variant="contained"
+            className=""
+            onClick={() => showOverlay("newCollection")}
+          >
+            {" "}
+            Add Collection
+          </Button>
+        </Box>
+        <Typography
+          className="!text-xs !mt-3 !mb-5 !leading-5"
+          variant="body1"
+          color=""
+        >
+          This section is dedicated to efficiently managing your product
+          categories across all store branches.
+          {/* As the administrator, you have full control over every aspect  */}
+          {/* of your product categories, ensuring seamless organization and a delightful shopping experience for your customers. */}
+        </Typography>
+        <Grid container spacing={2}>
+          {allCategories}
+        </Grid>
+      </Box>
+    );
 }
 
 export default CategoryAndTags

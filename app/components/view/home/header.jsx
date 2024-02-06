@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import {
+  Badge,
+  Box,
+  Button,
+  IconButton,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import Link from "next/link";
 import IconifyIcon from "../../icon";
@@ -13,8 +20,12 @@ import CustomAvatar from "../../avatar";
 import { getInitials } from "@/app/utils/get-initials";
 import { useRouter } from "next/navigation";
 import { userLogout } from "@/app/redux/state/slices/auth/Login";
+import {
+  NotificationsActiveOutlined,
+  ShoppingCartCheckout,
+} from "@mui/icons-material";
 
-function Header({ search, setSearch }) {
+function Header({ search, setSearch, showNotif }) {
   const router = useRouter();
   const { isOffline, userInfo, cartedProds } = useUserData();
 
@@ -35,19 +46,22 @@ function Header({ search, setSearch }) {
   ];
 
   const MyCartBtn = ({ num }) => (
-    <Box className="flex items-center my-2">
+    <Box className="flex items-center">
       <Box
-        color={theme.palette.primary.main}
-        className="!mr-1.5 w-5 h-5 flex-shrink-0 bg-white !rounded-full flex items-center !text-sm justify-center font-bold"
+        bgcolor={theme.palette.primary.main}
+        className="!mr-0.5 md:!mr-1 w-[18px] h-[18px] flex-shrink-0 !text-white !rounded-full flex items-center !text-[12px] justify-center font-bold"
       >
         {num}
       </Box>
-      <ShoppingCartIcon className="text-white !text-[18px] !flex-shrink-0" />
+      <ShoppingCartCheckout
+        color="primary"
+        className="!text-[16px] !flex-shrink-0"
+      />
     </Box>
   );
 
   return (
-    <Box className="!px-2 sm:!px-8 py-4 h-14 !bg-white flex items-center md:justify-between">
+    <Box className="!px-2 sm:!px-8 py-4 h-14 !bg-white flex items-center md:justify-between header-zindex">
       <Box className="flex items-center mr-1 md:mr-0 !flex-shrink-0">
         <Box className="md:hidden !flex-shrink-0">
           <IconButton
@@ -101,17 +115,26 @@ function Header({ search, setSearch }) {
             className="!text-[17px] text-gray-400 absolute top-2 ml-4"
           />
         </Box>
+        {!isOffline && (
+          <Box className="mr-3 md:!mr-5">
+            <Badge badgeContent={5} size="small" variant="dot" color="primary">
+              <NotificationsActiveOutlined
+                onClick={showNotif}
+                color="primary"
+                className="!text-[24px] !flex-shrink-0"
+              />
+            </Badge>
+          </Box>
+        )}
         {!isOffline ? (
           <>
-            <Chip
+            <Box
               onClick={() => router.push("/cart")}
-              sx={{ backgroundColor: theme.palette.primary.main }}
-              className="h-9 min-h-9 py-2 !rounded-full w-16 hover:!bg-blue-900"
-              label={
-                <MyCartBtn variant="contained" num={cartedProds?.length || 0} />
-              }
-              size="large"
-            />
+              sx={{ borderColor: theme.palette.primary.main, border: 1 }}
+              className="h-7 !cursor-pointer min-h-7 py-2 !border !rounded-full w-14 px-1 md:w-12 !bg-white flex justify-center items-center"
+            >
+              <MyCartBtn variant="contained" num={cartedProds?.length || 0} />
+            </Box>
             <Typography
               noWrap
               variant="body2"

@@ -6,19 +6,28 @@ import { moreProducts } from "@/app/data/home/homepage";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
+import useSWR from "swr";
 import TimelineLeft, { OrderStages } from "../timeline";
+import { formatDate, ngnPrice } from "@/app/utils/format";
 
 const OrderDetails = ({ params }) => {
-  console.log(params);
-   const TitleValue = ({ title, value }) => (
-     <Box className="flex items-center">
-       <Typography variant="body2" className="!text-xs">
-         {title} <span className="ml-2 !text-black">{value}</span>
-       </Typography>
-     </Box>
-   );
-  const emojis = ["Bad", "Poor", "Average", "Good", "Best"]
+  const { data: result } = useSWR(`/user/order/${params.detail}`);
+  const orderProducts = result?.data[0] || {};
+  const { data: branchInfo } = useSWR(
+    orderProducts._id &&
+      `/branch/info?branch=${orderProducts._id.branch}&store=${orderProducts._id.store}`
+  );
+  const [mouseOn, setMouseOn] = useState(-1)
+  const orderFrom = branchInfo?.data || {};
+  const TitleValue = ({ title, value }) => (
+    <Box className="flex items-center">
+      <Typography variant="body2" className="!text-xs">
+        {title} <span className="ml-2 !text-black">{value}</span>
+      </Typography>
+    </Box>
+  );
+  const emojis = ["Bad", "Poor", "Average", "Good", "Best"];
   return (
     <HomeWrapper>
       <Box className="!px-2 my-5 sm:!px-16 md:!px-24 lg:!px-32 md:!py-7 relative">
@@ -56,21 +65,23 @@ const OrderDetails = ({ params }) => {
                 </Typography>
                 <Box className="flex items-center mt-3">
                   {emojis.map((tag, i) => (
-                    <EmojiRating name={tag} key={i} />
+                    <EmojiRating name={tag} index={i} key={i} mouseOn={mouseOn} setMouseOn={setMouseOn} />
                   ))}
                 </Box>
 
-                <Box className="block md:flex md:items-start mt-4">
+                <Box className="md:flex md:items-start mt-4">
                   <textarea
                     placeholder="Write about your experience in this section"
                     className="w-full md:w-9/12 h-32 rounded bg-gray-100 px-5 py-3 resize-none outline-none border-blue-800 focus:border"
                   ></textarea>
-                  <Button
-                    variant="contained"
-                    className="!rounded-full !text-[14px] !w-32 !shadow-none md:!mx-4"
-                  >
-                    Send
-                  </Button>
+                  <Box className="w-full md:w-fit flex !justify-end mt-1 md:mt-0">
+                    <Button
+                      variant="contained"
+                      className="!rounded-full !text-[14px] !h-10 !w-32 !shadow-none md:!mx-4"
+                    >
+                      Send
+                    </Button>
+                  </Box>
                 </Box>
               </Box>
               <Box className="bg-white w-full rounded-md py-5 px-2 md:px-4 mt-5">
@@ -78,19 +89,26 @@ const OrderDetails = ({ params }) => {
                   Product Details
                 </Typography>
                 <Box className="flex justify-between items-center mt-3 !mb-5">
-                  <TitleValue title="Order date:" value="Aug 10, 2023" />
-                  <TitleValue title="Order ID:" value="63728283747483829" />
+                  <TitleValue
+                    title="Order date:"
+                    value={formatDate(orderProducts?._id?.dateAdded)}
+                  />
+                  <TitleValue
+                    title="Order ID:"
+                    value={orderProducts?._id?.orderSlug}
+                  />
                 </Box>
-                {moreProducts.map(
+                {orderProducts?.products?.map(
                   (each, i) =>
                     i < 4 && (
                       <Box key={i}>
                         <CartProductView
                           hideQtyFunc
                           hideCheckbox
-                          prodName={each.prodName}
+                          prodName={each.productName}
+                          quantity={each.qty}
                           image={`/images/more/${i + 1}.png`}
-                          prodPrice={each.prodPrice}
+                          prodPrice={each.totalAmount}
                         />
                       </Box>
                     )
@@ -101,7 +119,7 @@ const OrderDetails = ({ params }) => {
                     Sub total
                   </Typography>
                   <Typography variant="body2" className="!text-[12px]">
-                    NGN54,200
+                    {ngnPrice(orderProducts?.allSubTotal)}
                   </Typography>
                 </Box>
                 <Box className="w-full flex justify-between items-center !mt-2">
@@ -112,7 +130,7 @@ const OrderDetails = ({ params }) => {
                     variant="body2"
                     className="!text-[12px] !text-red-500"
                   >
-                    -NGN16,260
+                    -{ngnPrice(orderProducts?._id?.discount)}
                   </Typography>
                 </Box>
 
@@ -127,7 +145,11 @@ const OrderDetails = ({ params }) => {
                     variant="body2"
                     className="!text-[13px] !font-bold"
                   >
-                    NGN37,940
+                    {ngnPrice(
+                      orderProducts?.allSubTotal -
+                        orderProducts?._id?.discount ||
+                        orderProducts?.allSubTotal
+                    )}
                   </Typography>
                 </Box>
               </Box>
@@ -178,19 +200,22 @@ const OrderDetails = ({ params }) => {
                 >
                   Store Support (Sender)
                 </Typography>
-                <TitleWithValueUnder title="Store Name" value="Gourmet Store" />
+                <TitleWithValueUnder
+                  title="Store Name"
+                  value={orderFrom.businessName}
+                />
                 <TitleWithValueUnder
                   title="Store Phone Number"
-                  value="+234 (901) 234 5678"
+                  value={orderFrom.phone}
                 />
                 <TitleWithValueUnder
                   title="Delivery Address"
-                  value="54, Adelubido crescent, opposite chicken republic (Ondo State, Nigeria)"
+                  value={orderFrom.address}
                 />
                 <TitleWithValueUnder
                   title="Store Support Email Address"
-                  value="support@gourmet.shop"
-                  link="mailto:support@gourmet.shop"
+                  value={orderFrom.email}
+                  link={`mailto:${orderFrom.email}`}
                 />
               </Box>
             </Box>
@@ -204,40 +229,48 @@ const OrderDetails = ({ params }) => {
 export default OrderDetails;
 
 const TitleWithValueUnder = ({ title, value, link }) => {
-    return (
-      <Box className="mb-5">
-        <Typography
-          variant="body2"
-          className="!font-bold !text-black  !text-[11x]"
-        >
-          {title}
+  return (
+    <Box className="mb-5">
+      <Typography
+        variant="body2"
+        className="!font-bold !text-black  !text-[11x]"
+      >
+        {title}
+      </Typography>
+      {!link ? (
+        <Typography variant="caption" className="!text-[14px]">
+          {value}
         </Typography>
-        {!link ? (
-          <Typography variant="caption" className="!text-[14px]">
+      ) : (
+        <Link href={link}>
+          <Typography
+            variant="caption"
+            className="!text-[14px] !text-blue-700 underline"
+          >
             {value}
           </Typography>
-        ) : (
-          <Link href={link}>
-            <Typography variant="caption" className="!text-[14px] !text-blue-700 underline">
-              {value}
-            </Typography>
-          </Link>
-        )}
-      </Box>
-    );
-}
+        </Link>
+      )}
+    </Box>
+  );
+};
 
-const EmojiRating = ({ name }) => {
-    return (
-      <Box className="flex flex-col items-center justify-center mx-2">
-        <Image src={`/images/misc/emoji/${name.toLowerCase()}.png`} alt="emoji" width={100} height={100} className="w-10 h-10 !mb-2" />
-        <Typography
-          variant="caption"
-          color="custom.sec"
-          className="!text-[12px]"
-        >
-          {name}
-        </Typography>
-      </Box>
-    );
-}
+const EmojiRating = ({ name, index, mouseOn, setMouseOn }) => {
+  return (
+    <Box className="flex flex-col items-center justify-center mx-2">
+      <Image
+        src={`/images/misc/emoji/${index + 1}.png`}
+        alt="emoji"
+        width={100}
+        onMouseEnter={() => setMouseOn(index + 1)}
+        height={100}
+        className={`w-10 h-10 !mb-2 !filter ${
+          mouseOn <= index ? "!grayscale" : "!grayscale-0"
+        }`}
+      />
+      <Typography variant="caption" color="custom.sec" className="!text-[12px]">
+        {name}
+      </Typography>
+    </Box>
+  );
+};

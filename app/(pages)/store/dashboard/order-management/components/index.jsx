@@ -46,7 +46,7 @@ export const OrderListComponents = ({ value, setValue, rows }) => {
   }
 
   return (
-    <TabContext value={value} className="w-5/6">
+    <TabContext value={value} className="w-full md:w-5/6">
       <TabList
         onChange={handleChange}
         orientation={isSmallScreen ? "vertical" : "horizontal"}
@@ -60,11 +60,8 @@ export const OrderListComponents = ({ value, setValue, rows }) => {
         <Tab value="Processed" label="Processed Orders (2,869)" />
         <Tab value="Cancelled" label="Cancelled Orders (97)" />
       </TabList>
-      <TabPanel value="all">
-        <Box
-          className={`w-auto !relative !px-1 !md:px-0 !pb-5 !rounded-md`}
-          bgcolor="custom.bodyLight"
-        >
+      <TabPanel value="all" className="!px-px">
+        <Box className={`w-full !pb-5 !rounded-md`} bgcolor="custom.bodyLight">
           <OrderTable
             columns={allOrderColumns(actionFunctions)}
             rows={sortBy()}
@@ -72,7 +69,7 @@ export const OrderListComponents = ({ value, setValue, rows }) => {
           />
         </Box>
       </TabPanel>
-      <TabPanel value="new">
+      <TabPanel value="new" className="!px-px">
         <OrderTable
           columns={ordersColumns(actionFunctions)}
           rows={sortBy("pending")}
@@ -105,6 +102,7 @@ export const statusObj = [
   { title: "processed", color: "success" },
   { title: "cancelled", color: "error" },
   { title: "waiting", color: "warning" },
+  { title: "unpaid", color: "warning" },
   { title: "pending", color: "info" },
 ];
 
@@ -139,7 +137,7 @@ export const DetailsDesign = ({ icon, title, info, btnFunc, btnText, color }) =>
         </Box>
 
         {btnText && (
-          <Button className="!text-xs !border bg-slate-100" onClick={btnFunc}>
+          <Button className="!text-xs !border !bg-blue-100" onClick={btnFunc}>
             {btnText}
           </Button>
         )}

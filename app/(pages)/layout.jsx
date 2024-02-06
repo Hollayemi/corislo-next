@@ -15,7 +15,8 @@ import { Toaster } from "react-hot-toast";
 import ReactHotToast from "@/app/styles/react-hot-toast";
 import { UserDataProvider } from "../context/userContext";
 import handleSubscribeToNotification from "../redux/state/slices/api/webpush";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import LineLoading from "./loading";
 
 const metadata = {
   title:
@@ -28,6 +29,7 @@ const persistor = persistStore(store);
 
 // ** Pace Loader
 export default function RootLayout({ children }) {
+  const [hideOverflow, setOverflow] = useState(false)
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
@@ -86,7 +88,7 @@ export default function RootLayout({ children }) {
         <meta property="og:url" content="https:corislo.vercel.app" />
         <meta property="og:type" content="product" />
       </head>
-      <body className="">
+      <body className={`${hideOverflow && "!overflow-hidden"}`}>
         <SWRConfig
           value={{
             refreshInterval: false,
@@ -101,7 +103,8 @@ export default function RootLayout({ children }) {
         >
           <NextProgress />
           <Provider store={store}>
-            <UserDataProvider>
+            <UserDataProvider  setOverflow={setOverflow}>
+              <LineLoading />
               <PersistGate loading={null} persistor={persistor}>
                 <ThemeComponent>
                   {children}

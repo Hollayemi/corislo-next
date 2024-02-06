@@ -47,8 +47,8 @@ const CardStatsHorizontal = props => {
           <Icon icon={icon} fontSize={iconSize} />
         </CustomAvatar>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-            <Typography variant='h6' className="text-[16px] font-bold">{category}</Typography>
-            <Typography variant='body2' className="text-xs">{subCateNum} Sub-Categories</Typography>
+            <Typography variant='h6' className="!text-[13px] !font-bold">{category}</Typography>
+            <Typography variant='body2' className="!text-xs">{subCateNum} Sub-Categories</Typography>
             <Box className="flex items-center justify-between mt-4 text-xs">
                 <Box className="text-xs mr-2 flex items-center"><div className="w-2 h-2 rounded-full bg-green-500 mr-0.5"></div>{status}</Box>
                 <Box className="text-xs flex items-center"><Icon icon='tabler:plus' className="bg-blue-500 h-3 w-3 mr-0.5 rounded-full text-white" fontSize={8} /> Featured Items</Box>

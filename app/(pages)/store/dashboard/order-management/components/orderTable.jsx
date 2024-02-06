@@ -5,8 +5,8 @@ import { OrderListComponents } from ".";
 const OrderTable = ({ selectRow }) => {
     const [value, setValue] = useState("all");
     return (
-      <>
-        <Box className="md:px-5">
+      <Box className="w-full">
+        <Box className="">
           <Typography variant="caption" className="text-xs">
             Access a comprehensive overview of orders, including customer
             details, dates, and status. Seamlessly update order statuses and
@@ -19,8 +19,7 @@ const OrderTable = ({ selectRow }) => {
           </Typography>
         </Box>
 
-        <Grid container spacing={0}>
-          <Grid item xs={12}>
+        
             <Box className="mt-6">
               <OrderListComponents
                 value={value}
@@ -28,9 +27,8 @@ const OrderTable = ({ selectRow }) => {
                 setValue={setValue}
               />
             </Box>
-          </Grid>
-        </Grid>
-      </>
+          
+      </Box>
     );
 }
 

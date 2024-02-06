@@ -61,17 +61,19 @@ const RegisterAccount = () => {
 
 
   return (
-    <Box className="w-[360px] md:w-[550px] !mt-8 ">
+    <Box className="w-[360px] md:w-[550px] !my-10">
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <CustomInput
             title="Full Name"
             id="fullname"
+            hideCheck={!values.fullname}
             error={values.fullname && errors.fullname}
             name="fullname"
             onChange={handleChange("fullname")}
             inputProps={{
               type: "text",
+              value: values.fullname,
               placeholder: "Enter your full name",
             }}
           />
@@ -82,9 +84,11 @@ const RegisterAccount = () => {
             error={values.username && errors.username}
             onChange={handleChange("username")}
             id="username"
+            hideCheck={!values.username}
             name="username"
             inputProps={{
               type: "text",
+              value: values.username,
               placeholder: "Enter your username",
             }}
           />
@@ -93,11 +97,13 @@ const RegisterAccount = () => {
           <CustomInput
             title="Email Address"
             error={values.email && errors.email}
+            hideCheck={!values.email}
             onChange={handleChange("email")}
             id="email"
             name="email"
             inputProps={{
               type: "email",
+              value: values.email,
               placeholder: "Enter your email address",
             }}
           />
@@ -107,10 +113,12 @@ const RegisterAccount = () => {
             title="Phone Number"
             onChange={handleChange("phoneNumber")}
             id="phoneNumber"
+            hideCheck={!values.phoneNumber}
             name="phoneNumber"
             error={values.phoneNumber && errors.phoneNumber}
             inputProps={{
               type: "number",
+              value: values.phoneNumber,
               placeholder: "Enter your phone number",
             }}
           />
@@ -120,9 +128,11 @@ const RegisterAccount = () => {
             title="State"
             id="state"
             name="state"
+            hideCheck={!values.state}
             onChange={handleChange("state")}
             inputProps={{
               type: "text",
+              value: values.state,
               placeholder: "Enter your state",
             }}
           />
@@ -132,10 +142,12 @@ const RegisterAccount = () => {
             title="Password"
             onChange={handleChange("password")}
             error={values.password && errors.password}
+            hideCheck={!values.password}
             id="password"
             name="password"
             inputProps={{
               type: "password",
+              value: values.password,
               placeholder: ".......",
             }}
           />
@@ -151,6 +163,7 @@ const RegisterAccount = () => {
             id="confPass"
             error={values.password !== confPass}
             name="confPass"
+            hideCheck={!confPass}
             onChange={(e) => setConfPass(e.target.value)}
             inputProps={{
               type: "password",

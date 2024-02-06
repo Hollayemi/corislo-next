@@ -1,6 +1,7 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
+import jwt_decode from "jwt-decode";
 import useSWR from "swr";
 import io from "socket.io-client";
 
@@ -13,13 +14,14 @@ const defaultProvider = {
   userInfo: {},
   selectedAddress: {},
   isOffline: true,
+  notifications: [],
   loading: false,
   setLoading: () => {},
   socket: null,
 };
 const DataContext = createContext(defaultProvider);
 
-const UserDataProvider = ({ children }) => {
+const UserDataProvider = ({ children, setOverflow }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [loading, setLoading] = useState(false);
@@ -44,24 +46,37 @@ const UserDataProvider = ({ children }) => {
   const isOffline = () => {
     const getLocalToken =
       typeof window !== "undefined" && localStorage.getItem("user_token");
-    if (userData?.accessToken && getLocalToken) {
-      // const decodedToken = jwt_decode(userData?.accessToken); // Decode the JWT token
-      // const currentTime = Date.now() / 1000; // Get the current time in seconds
+    if (userData?.accessToken || getLocalToken) {
+      const decodedToken = jwt_decode(getLocalToken); // Decode the JWT token
+      const currentTime = Date.now() / 1000; // Get the current time in seconds
       // // Check if the token is still valid based on its expiration time
-      // return decodedToken.exp < currentTime;
+      return decodedToken.exp < currentTime;
     }
     return !Boolean(getLocalToken);
   };
 
+  useEffect(() => {
+    if (
+      isOffline() &&
+      getPath[1] !== "auth" &&
+      getPath[1] !== "store" &&
+      getPath[2] !== "login"
+    ) {
+      router.replace(`/auth/login`);
+    }
+  }, [userData, getPath, router]);
 
-
-  
   useEffect(() => {
     if (!socket) {
-      const newSocket = io("http://localhost:3033", {
+      let server = "http://localhost:5001";
+      if (process.env.NODE_ENV === "production") {
+        server = "https://corislo-backend.onrender.com";
+      }
+      const newSocket = io(server, {
         query: {
           token: localStorage.getItem("user_token"),
           by: "user_token",
+          port: 3033,
         },
       });
       setSocket(newSocket);
@@ -75,7 +90,11 @@ const UserDataProvider = ({ children }) => {
       });
 
       newSocket.on("roomJoined", ({ room }) => {
-        // console.log(`Successfully joined room: ${room}`);
+        console.log(`Successfully joined room: ${room}`);
+      });
+
+      newSocket.on("newMessage", (data) => {
+        console.log(data);
       });
     }
 
@@ -102,6 +121,15 @@ const UserDataProvider = ({ children }) => {
     error: userErr,
     isLoading: userIsLoading,
   } = useSWR(!isOffline() && "/user/get-account");
+
+  //
+  // fetch userInfo
+  //
+  const {
+    data: notif,
+    error: notifErr,
+    isLoading: notifIsLoading,
+  } = useSWR(!isOffline() && "/user/notification");
   //
   // fetch CARTiNFO
   //
@@ -126,10 +154,12 @@ const UserDataProvider = ({ children }) => {
         following: (!folErr && !folIsLoading && following?.data) || [],
         cartData: (!cartErr && !cartIsLoading && cartData?.data) || {},
         userInfo: (!userErr && !userIsLoading && userInfo?.user) || {},
+        notifications: (!notifErr && !notifIsLoading && notif?.data) || [],
         selectedAddress: {},
         socket,
         loading,
         setLoading: setLoading,
+        setOverflow: setOverflow,
         isOffline: isOffline(),
       }}
     >

@@ -143,8 +143,8 @@ const statusColumn = {
           rounded
           size="small"
           skin="light"
-          color={status.color}
-          label={status.title}
+          color={status?.color}
+          label={status?.title}
           sx={{ "& .MuiChip-label": { textTransform: "capitalize" } }}
         />
       );

@@ -30,11 +30,12 @@ const StoreLogin = () => {
   };
 
   return (
-    <AuthLayout title="Sign in to your store">
+    <AuthLayout title="Sign in to your store" center>
       <Box className="!mt-16 w-full max-w-[380px]">
         <CustomInput
           title="Business / Personnel Email Address"
           onChange={handleChange("store")}
+          hideCheck={true}
           id="email"
           inputProps={{ type: "text", placeholder: "Enter your email address" }}
         />
@@ -42,6 +43,7 @@ const StoreLogin = () => {
         <CustomInput
           title="Username"
           onChange={handleChange("username")}
+          hideCheck={true}
           id="username"
           inputProps={{ type: "text", placeholder: "Enter your username" }}
         />
@@ -49,6 +51,7 @@ const StoreLogin = () => {
         <CustomInput
           title="Password"
           onChange={handleChange("password")}
+          hideCheck={true}
           id="password"
           inputProps={{ type: "password", placeholder: "Password" }}
         />
@@ -78,7 +81,7 @@ const StoreLogin = () => {
           <Typography className="!text-[13px] !mt-5">
             Don’t have an account?{" "}
             <Link
-              href="/auth/register"
+              href="/store/register"
               color="custom.pri"
               className="!font-semibold"
             >

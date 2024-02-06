@@ -10,7 +10,7 @@ const TextInput = ({ inputProps, id, onChange, multiline }) =>
       {...inputProps}
       id={id}
       onChange={onChange}
-      className="outline-none border-none w-full h-6 pr-5 !bg-white autofill:!px-4"
+      className="outline-none border-none w-full font-normal h-6 pr-5 !bg-white autofill:-px-4 !autofill:bg-transparent"
     />
   ) : (
     <textarea
@@ -46,7 +46,7 @@ export const CustomInput = ({
   onChange,
 }) => (
   <Box>
-    <Box className="px-4 relative py-1.5 flex flex-col w-full bg-white rounded-md border-2 border-white focus-within:border-blue-800 overflow-hidden">
+    <Box className="px-4 relative py-px pb-1.5 flex flex-col w-full bg-white rounded-md border-2 border-white focus-within:border-blue-800 overflow-hidden">
       <label htmlFor={id} className="!text-[11px]">
         {title}
       </label>

@@ -13,10 +13,10 @@ const validationStoreSchema = yup.object({
   store: yup
     .string()
     .required("Store name is required")
-    .min(8, "Store must be at least 5 characters")
+    .min(5, "Store must be at least 5 characters")
     .matches(
       /^[a-z0-9]+$/,
-      "Store must have an uppercase letter, no space and a unique symbol"
+      "Store must NOT contain: uppercase letter, space or symbol"
     ),
   address: yup.string().required("Address is required"),
   state: yup.string().required("State is required"),

@@ -21,6 +21,7 @@ const PersonalProfile = ({
               readyToNext ? errors.fullname : values.fullname && errors.fullname
             }
             name="fullname"
+            hideCheck={!values.fullname}
             onChange={handleUserChange("fullname")}
             inputProps={{
               value: values.fullname || "",
@@ -37,6 +38,7 @@ const PersonalProfile = ({
             }
             onChange={handleUserChange("username")}
             id="username"
+            hideCheck={!values.username}
             name="username"
             inputProps={{
               value: values.username || "",
@@ -52,6 +54,7 @@ const PersonalProfile = ({
             onChange={handleUserChange("email")}
             id="email"
             name="email"
+            hideCheck={!values.email}
             inputProps={{
               value: values.email || "",
               type: "email",
@@ -65,6 +68,7 @@ const PersonalProfile = ({
             onChange={handleUserChange("phoneNumber")}
             id="phoneNumber"
             name="phoneNumber"
+            hideCheck={!values.phoneNumber}
             error={
               readyToNext
                 ? errors.phoneNumber
@@ -82,6 +86,7 @@ const PersonalProfile = ({
             title="State"
             id="state"
             name="state"
+            hideCheck={!values.state}
             onChange={handleUserChange("state")}
             inputProps={{
               type: "text",
@@ -97,6 +102,7 @@ const PersonalProfile = ({
               readyToNext ? errors.password : values.password && errors.password
             }
             id="password"
+            hideCheck={!values.password}
             name="password"
             inputProps={{
               value: values.password || "",
@@ -112,6 +118,7 @@ const PersonalProfile = ({
             error={values.password !== confPas ? "Password not match" : false}
             name="confPass"
             onChange={(e) => setConfPass(e.target.value)}
+            hideCheck={!confPas}
             inputProps={{
               value: confPas || "",
               type: "password",
