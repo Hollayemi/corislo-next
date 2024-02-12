@@ -20,7 +20,10 @@ import { ReviewTab } from "./reviewTab";
 import useSWR from "swr";
 import { removeOrAddToArray } from "@/app/utils/arrayFunctions";
 import { useDispatch } from "react-redux";
-import { addCartHandler } from "@/app/redux/state/slices/home/cart";
+import {
+  addCartHandler,
+  saveProduct,
+} from "@/app/redux/state/slices/home/cart";
 import { useUserData } from "@/app/hooks/useData";
 import { addNewViewProduct } from "@/app/redux/state/slices/home/view/view";
 
@@ -60,8 +63,10 @@ const ProductDisplay = ({ params }) => {
 
   const payload = {
     productId: product?._id,
-    color: colors,
-    size: size,
+    variation: {
+      size: size,
+      color: colors,
+    },
     store: product?.store,
     branch: product?.branches,
   };
@@ -168,7 +173,7 @@ const ProductDisplay = ({ params }) => {
                     />
                   </Typography>
                 </Box>
-                <Box>
+                <Box onClick={() => saveProduct(payload, dispatch)}>
                   <Typography variant="caption" className="!text-black">
                     Add to wishlist
                   </Typography>
@@ -239,7 +244,7 @@ const ProductDisplay = ({ params }) => {
                 </Typography>
                 <Button
                   variant="contained"
-                  className="!rounded-full h-10 w-36 !shadow-none !text[11px] !my-3"
+                  className="!rounded-full h-10 !w-44 !shadow-none !mx-1 !text[10px] !my-3"
                   onClick={() => addCartHandler(payload, dispatch)}
                   startIcon={
                     <IconifyIcon

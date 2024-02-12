@@ -26,8 +26,6 @@ export const addCartHandler = (payload, dispatch) => {
     .catch((e) => {});
 };
 
-
-
 const cartQuantityApi = createAsyncThunk(
   "post/cart-quantity",
   async (payload) => {
@@ -39,7 +37,8 @@ const cartQuantityApi = createAsyncThunk(
   }
 );
 
-export const changeQuantity = (payload, dispatch) => {
+export const changeQuantity = (payload, dispatch, newQty) => {
+  newQty((res) => res + 1);
   dispatch(cartQuantityApi(payload))
     .then(unwrapResult)
     .then((res) => {
@@ -67,6 +66,90 @@ export const deleteBulkCart = (payload, dispatch) => {
     .then((res) => {
       toaster({ ...res });
       mutate("/user/cart");
+    })
+    .catch((e) => {});
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const saveProductApi = createAsyncThunk("post/myCart", async (payload) => {
+  const { data } = await martApi
+    .post("/user/save-item", payload, jsonHeader())
+    .then((e) => e)
+    .catch((e) => e.response);
+  return data;
+});
+
+export const saveProduct = (payload, dispatch) => {
+  dispatch(saveProductApi(payload))
+    .then(unwrapResult)
+    .then((res) => {
+      toaster({ ...res });
+      if (res.type === "success") {
+        mutate("/user/saved-items/group");
+      }
+    })
+    .catch((e) => {});
+};
+
+
+const savedQuantityApi = createAsyncThunk(
+  "post/cart-quantity",
+  async (payload) => {
+    const { data } = await martApi
+      .get(
+        `/user/saved-item/qty?id=${payload.id}&operator=${payload.operator}`,
+        jsonHeader()
+      )
+      .then((e) => e)
+      .catch((e) => e.response);
+    return data;
+  }
+);
+
+export const savedQuantity = (payload, dispatch, newQty) => {
+  newQty(res => res +1)
+  dispatch(savedQuantityApi(payload))
+    .then(unwrapResult)
+    .then((res) => {
+      toaster({ ...res });
+      mutate("/user/saved-items/group");
+    })
+    .catch((e) => {});
+};
+
+
+
+const deleteBulkSavedApi = createAsyncThunk(
+  "post/cart-quantity",
+  async (payload) => {
+    const { data } = await martApi
+      .post(`/user/saved-items/delete-bulk`, payload, jsonHeader())
+      .then((e) => e)
+      .catch((e) => e.response);
+    return data;
+  }
+);
+
+export const deleteBulkSaved = (payload, dispatch) => {
+  dispatch(deleteBulkSavedApi(payload))
+    .then(unwrapResult)
+    .then((res) => {
+      toaster({ ...res });
+      mutate("/user/saved-items/group");
     })
     .catch((e) => {});
 };

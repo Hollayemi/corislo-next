@@ -1,13 +1,12 @@
 import { createAsyncThunk, unwrapResult } from "@reduxjs/toolkit";
+import toaster from "@/app/configs/toaster";
 import martApi from "../../api/baseApi";
 import { jsonHeader } from "../../api/setAuthHeaders";
-import tokens from "@/app/configs/tokens";
+import { mutate } from "swr";
 
-const toWaitingApi = createAsyncThunk("post/toWaiting", async (payload) => {
-  const storeToken = tokens.store;
-  console.log(storeToken);
+const updateOrderApi = createAsyncThunk("post/update", async (payload) => {
   const { data } = await martApi
-    .post("/branch/order-waiting", payload.body, jsonHeader(storeToken))
+    .post("/branch/order-update", payload, jsonHeader("store"))
     .then((res) => {
       console.log(res);
       return res;
@@ -19,50 +18,16 @@ const toWaitingApi = createAsyncThunk("post/toWaiting", async (payload) => {
   return data;
 });
 
-export const toWaiting = (dispatch, orderId, info, user, store, setState) => {
-  const ReactionArr = info.map((x) => (x[1] === "rejected" ? x[0] : ""));
-  const messArray = ReactionArr.filter((x) => x !== "" && x);
-  const pre_mess = messArray.length > 1 ? messArray.join(", ") : messArray[0];
-  const mess = `${pre_mess} ${
-    messArray.length > 1 ? "are" : "is"
-  } not available at the moment from ${store} store, you can check later or try another store`;
-  const payload = {
-    body: {
-      orderId,
-      message: mess,
-      user,
-      store,
-    },
-  };
-  dispatch(toWaitingApi(payload))
+export const storeUpdateOrder = (dispatch, payload) => {
+  dispatch(updateOrderApi(payload))
     .then(unwrapResult)
-    .then((res) => res.type === "success" && setState(res.data))
+    .then((res) => {
+      if (res.type === "success") {
+        mutate(`/branch/order-request?order=${payload.orderId}`);
+        toaster({ ...res });
+      }
+    })
     .catch((err) => {
       console.log(err);
     });
-};
-
-const toProcessingApi = createAsyncThunk(
-  "post/toProcessing",
-  async (payload) => {
-    const storeToken = tokens.store;
-    const { data } = await martApi
-      .post("/branch/order-processing", payload.body, jsonHeader(storeToken))
-      .then((res) => res)
-      .catch((e) => e.response);
-    return data;
-  }
-);
-
-export const toProcessing = (dispatch, orderId, Reactions, store, setState) => {
-  console.log(Reactions);
-  const products = Reactions.map((x) => x[0]);
-  console.log(products);
-  const payload = {
-    body: { orderId, store, products },
-  };
-  dispatch(toProcessingApi(payload))
-    .then(unwrapResult)
-    .then((res) => res.type === "success" && setState(res.data))
-    .catch((err) => {});
 };

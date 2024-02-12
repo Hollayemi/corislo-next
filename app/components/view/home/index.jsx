@@ -17,7 +17,6 @@ const HomeWrapper = ({ children, bg, customersReview, noFooter }) => {
     0: children,
     1: <SearchPage search={search} setSearch={setSearch} />,
   };
-  console.log(notifications);
   let showing = 0;
   if (search) showing = 1;
 

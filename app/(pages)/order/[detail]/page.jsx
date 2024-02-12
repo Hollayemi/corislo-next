@@ -9,7 +9,12 @@ import Image from "next/image";
 import React, { useState } from "react";
 import useSWR from "swr";
 import TimelineLeft, { OrderStages } from "../timeline";
-import { formatDate, ngnPrice } from "@/app/utils/format";
+import {
+  formatDate,
+  formatDateToMonthShort,
+  ngnPrice,
+} from "@/app/utils/format";
+import { OrderActionBtn, trackMainSteps } from "./components";
 
 const OrderDetails = ({ params }) => {
   const { data: result } = useSWR(`/user/order/${params.detail}`);
@@ -18,7 +23,7 @@ const OrderDetails = ({ params }) => {
     orderProducts._id &&
       `/branch/info?branch=${orderProducts._id.branch}&store=${orderProducts._id.store}`
   );
-  const [mouseOn, setMouseOn] = useState(-1)
+  const [mouseOn, setMouseOn] = useState(-1);
   const orderFrom = branchInfo?.data || {};
   const TitleValue = ({ title, value }) => (
     <Box className="flex items-center">
@@ -28,6 +33,9 @@ const OrderDetails = ({ params }) => {
     </Box>
   );
   const emojis = ["Bad", "Poor", "Average", "Good", "Best"];
+  const orderStatus = orderProducts?._id?.status;
+  
+  console.log(orderStatus, trackMainSteps["paid"]);
   return (
     <HomeWrapper>
       <Box className="!px-2 my-5 sm:!px-16 md:!px-24 lg:!px-32 md:!py-7 relative">
@@ -40,50 +48,63 @@ const OrderDetails = ({ params }) => {
                     variant="body2"
                     className="!font-bold !text-[20px]"
                   >
-                    Completed Order
+                    {orderProducts?._id?.status} Order
                   </Typography>
                   <Typography
                     variant="caption"
                     className="!text-black !text-[12px]"
                   >
-                    as of today 12 November 2023.
+                    as of today{" "}
+                    {formatDateToMonthShort(new Date(), false, {
+                      month: "long",
+                      year: "numeric",
+                    })}
+                    .
                   </Typography>
                 </Box>
-                <Button
-                  variant="outlined"
-                  className="!rounded-full !text-[14px] !w-32 !shadow-none !mt-1"
-                >
-                  Return Order
-                </Button>
+                {
+                  <OrderActionBtn
+                    action={orderStatus?.toLowerCase()}
+                    orderId={params.detail}
+                  />
+                }
               </Box>
-              <Box className="bg-white w-full rounded-md py-5 px-2 md:px-4 mt-5">
-                <Typography
-                  variant="caption"
-                  className="!text-black !text-[13px]"
-                >
-                  How was your experience with the seller?
-                </Typography>
-                <Box className="flex items-center mt-3">
-                  {emojis.map((tag, i) => (
-                    <EmojiRating name={tag} index={i} key={i} mouseOn={mouseOn} setMouseOn={setMouseOn} />
-                  ))}
-                </Box>
+              {orderStatus?.toLowerCase() === "completed" && (
+                <Box className="bg-white w-full rounded-md py-5 px-2 md:px-4 mt-5">
+                  <Typography
+                    variant="caption"
+                    className="!text-black !text-[13px]"
+                  >
+                    How was your experience with the seller?
+                  </Typography>
+                  <Box className="flex items-center mt-3">
+                    {emojis.map((tag, i) => (
+                      <EmojiRating
+                        name={tag}
+                        index={i}
+                        key={i}
+                        mouseOn={mouseOn}
+                        setMouseOn={setMouseOn}
+                      />
+                    ))}
+                  </Box>
 
-                <Box className="md:flex md:items-start mt-4">
-                  <textarea
-                    placeholder="Write about your experience in this section"
-                    className="w-full md:w-9/12 h-32 rounded bg-gray-100 px-5 py-3 resize-none outline-none border-blue-800 focus:border"
-                  ></textarea>
-                  <Box className="w-full md:w-fit flex !justify-end mt-1 md:mt-0">
-                    <Button
-                      variant="contained"
-                      className="!rounded-full !text-[14px] !h-10 !w-32 !shadow-none md:!mx-4"
-                    >
-                      Send
-                    </Button>
+                  <Box className="md:flex md:items-start mt-4">
+                    <textarea
+                      placeholder="Write about your experience in this section"
+                      className="w-full md:w-9/12 h-32 rounded bg-gray-100 px-5 py-3 resize-none outline-none border-blue-800 focus:border"
+                    ></textarea>
+                    <Box className="w-full md:w-fit flex !justify-end mt-1 md:mt-0">
+                      <Button
+                        variant="contained"
+                        className="!rounded-full !text-[14px] !h-10 !w-32 !shadow-none md:!mx-4"
+                      >
+                        Send
+                      </Button>
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
+              )}
               <Box className="bg-white w-full rounded-md py-5 px-2 md:px-4 mt-5">
                 <Typography variant="body2" className="!font-bold !text-[14px]">
                   Product Details
@@ -159,15 +180,19 @@ const OrderDetails = ({ params }) => {
                 </Typography>
                 <Box>
                   <OrderStages
-                    date={new Date()}
-                    at={3}
-                    status="completed"
+                    at={
+                      trackMainSteps[orderStatus?.toLowerCase()?.replaceAll(" ", "_")] || 0
+                    }
                     price={500000}
+                    delivery={orderProducts?._id?.deliveryMedium}
                   />
                 </Box>
                 <br />
                 <br />
-                <TimelineLeft />
+                <TimelineLeft
+                  orderSlug={params.detail}
+                  currentStatus={orderStatus}
+                />
               </Box>
             </Box>
           </Grid>

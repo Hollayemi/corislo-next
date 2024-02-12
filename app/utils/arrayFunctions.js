@@ -1,10 +1,27 @@
-export const removeOrAddToArray = (item, array, func, steps) => {
-  if (array.includes(item)) {
-    const newItem = array.filter((x) => x !== item);
+export const removeOrAddToArray = (item, array, func, itemIsArray) => {
+  console.log(item, array, itemIsArray);
+  if (array.includes(item) || isArraySubset(item, array, itemIsArray)) {
+    const newItem = array.filter((x) =>
+      itemIsArray ? item.includes(x) : x !== item
+    );
     func(() => newItem);
   } else {
-    func([...array, item]);
+    if (itemIsArray) {
+      func([...array, ...item]);
+    } else {
+      func([...array, item]);
+    }
   }
+};
+
+export const isArraySubset = (
+  subsetArray = [],
+  supersetArray = [],
+  itemIsArray
+) => {
+  return (
+    itemIsArray && subsetArray.every((item) => supersetArray.includes(item))
+  );
 };
 
 export const getCommonValuesInArrays = (...arrays) => {

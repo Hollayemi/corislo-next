@@ -1,33 +1,36 @@
-'use client';
+"use client";
 // ** React Imports
-import { useState } from 'react'
+import { useState } from "react";
 
 // ** Next Import
-import Link from 'next/link'
+import Link from "next/link";
 
 // ** MUI Components
-import Box from '@mui/material/Box'
-import { styled, useTheme } from '@mui/material/styles'
-import MuiCard from '@mui/material/Card'
-import MuiFormControlLabel from '@mui/material/FormControlLabel'
+import Box from "@mui/material/Box";
+import { styled, useTheme } from "@mui/material/styles";
+import MuiCard from "@mui/material/Card";
+import MuiFormControlLabel from "@mui/material/FormControlLabel";
 
-import { CustomInput } from '@/app/components/cards/auth/components';
-import { Button, Typography } from '@mui/material';
-import Image from 'next/image';
-import { loginHandler } from '@/app/redux/state/slices/auth/Login';
-import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
-import { server } from '@/app/redux/state/slices/api/baseApi';
+import { CustomInput } from "@/app/components/cards/auth/components";
+import { Button, Typography } from "@mui/material";
+import Image from "next/image";
+import { loginHandler } from "@/app/redux/state/slices/auth/Login";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { server } from "@/app/redux/state/slices/api/baseApi";
+import { useUserData } from "@/app/hooks/useData";
 
 const LoginV1 = () => {
-  const router = useRouter()
-  const dispatch = useDispatch()
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const searchParams = useSearchParams();
+  const returnUrl = searchParams.get("returnurl");
+  const { setLoading } = useUserData();
   const [values, setValues] = useState({
-    password: '',
-    email: false
-  })
+    password: "",
+    email: false,
+  });
 
-  
   // .then(response => {
   //   if (!response.ok) {
   //     throw new Error('Network response was not ok');
@@ -43,13 +46,11 @@ const LoginV1 = () => {
   //   // Handle errors
   // });
 
-
   // ** Hook
-  const theme = useTheme()
 
-  const handleChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
 
   // const handleClickShowPassword = () => {
   //   setValues({ ...values, showPassword: !values.showPassword })
@@ -76,7 +77,15 @@ const LoginV1 = () => {
       <Button
         variant="contained"
         className="w-full !h-10 !rounded-full !text-gray-100 !text-[17px] !mt-6"
-        onClick={() => loginHandler(values, router, dispatch)}
+        onClick={() =>
+          loginHandler(
+            values,
+            router,
+            dispatch,
+            returnUrl,
+            setLoading
+          )
+        }
       >
         Sign In
       </Button>
@@ -109,6 +118,6 @@ const LoginV1 = () => {
       </Box>
     </Box>
   );
-}
+};
 
-export default LoginV1
+export default LoginV1;

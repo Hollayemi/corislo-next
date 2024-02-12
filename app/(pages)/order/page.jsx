@@ -16,6 +16,7 @@ const OrderPage = () => {
   const [dateInterval, setDateInterval] = useState("March 2023 - October 2023");
   const [orderShowing, setOrderShowing] = useState("Completed Orders");
   const [clipboard, setIsCopied] = useState("");
+  console.log(orderArray);
   return (
     <HomeWrapper>
       <Box>
@@ -229,7 +230,7 @@ const OrderPage = () => {
                   clipboard={clipboard}
                   setIsCopied={setIsCopied}
                   product={res.items.storeProducts}
-                  status={res.status}
+                  status={res?.status[res?.status?.length - 1]?.state}
                   orderSlug={res.orderSlug}
                   orderId={res._id}
                   createdAt={res.createdAt}

@@ -18,18 +18,19 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import OrderProductList from "./OrderProductList";
-import tokens from "@/app/configs/tokens";
 import {
   calculateDateDiff,
   formatCurrency,
   formatDate,
   formatShippingAddress,
 } from "@/app/utils/format";
+import { storeUpdateOrder } from "@/app/redux/state/slices/shop/order";
+import { useDispatch } from "react-redux";
 
 const OrderDetails = ({ order }) => {
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [subAnchorEl, setSubAnchorEl] = useState(null);
-  
   const [payload, setPayload] = useState({ orderId: order });
   const open = Boolean(anchorEl);
   const openSub = Boolean(subAnchorEl);
@@ -40,11 +41,18 @@ const OrderDetails = ({ order }) => {
     isLoading: orderLoading,
   } = useSWR(`/branch/order-request?order=${order}`);
 
+  console.log(orderInfo);
+
   const {
     data: prodInfo,
     error: prodErr,
     isLoading: prodLoading,
   } = useSWR(`/branch/order-product/${order}`);
+
+  const row = (!orderLoading && !orderErr && orderInfo?.data[0]) || null;
+  const products = (!prodLoading && !prodErr && prodInfo?.data) || null;
+  console.log(row, products);
+
 
   const handleButtonClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -60,8 +68,7 @@ const OrderDetails = ({ order }) => {
   };
 
   const handleChange2 = (prop, aux) => {
-    console.log(aux);
-    setPayload({ ...payload, [prop]: aux });
+    setPayload({ ...payload, [prop]: aux?.toLowerCase().replaceAll(" ", "_") });
   };
 
   const handleMenuItemClick = (action) => (e) => {
@@ -76,15 +83,17 @@ const OrderDetails = ({ order }) => {
   };
 
   const customizeStatus = (text) => {
-    const status = statusObj.filter((e) => e.title === text.toLowerCase())[0];
-
+    const status = statusObj.filter(
+      (e) => e.title === text.replaceAll(" ", "_").toLowerCase()
+    )[0];
+    console.log(status, text);
     return (
       <CustomChip
         rounded
         size="small"
         skin="light"
         color={status?.color}
-        label={status?.title}
+        label={status?.title?.replaceAll("_", " ")}
         sx={{ "& .MuiChip-label": { textTransform: "capitalize" } }}
         className="flex-shrink-0"
       />
@@ -106,7 +115,7 @@ const OrderDetails = ({ order }) => {
         <ChevronRightIcon className="text-[15px] ml-5 md:ml-8" />
       </MenuItem>
       <MenuItem
-        onClick={handleMenuItemClick("Refund")}
+        onClick={handleMenuItemClick("Refunded")}
         className="text-orange-500"
       >
         Refund
@@ -133,50 +142,49 @@ const OrderDetails = ({ order }) => {
       >
         Processing
       </MenuItem>
-      <MenuItem onClick={handleMenuItemClick("Out for Delivery")}>
-        Out for Delivery
-      </MenuItem>
-      <MenuItem onClick={handleMenuItemClick("On Hold")}>On Hold</MenuItem>
-      <MenuItem onClick={handleMenuItemClick("Received")}>Received</MenuItem>
+      {row.deliveryMedium === "pickup" ? (
+        <MenuItem onClick={handleMenuItemClick("Pickable")}>Pickable</MenuItem>
+      ) : (
+        <MenuItem onClick={handleMenuItemClick("Out for delivery")}>
+          Out for Delivery
+        </MenuItem>
+      )}
+      <MenuItem onClick={handleMenuItemClick("Pending")}>On Hold</MenuItem>
+      <MenuItem onClick={handleMenuItemClick("Completed")}>Received</MenuItem>
     </Menu>
   );
-  const row = (!orderLoading && !orderErr && orderInfo?.data[0]) || null;
-  const products = (!prodLoading && !prodErr && prodInfo?.data) || null;
-  console.log(row, products);
+  
   return (
     <Box className="">
       {!orderLoading && !orderErr && (
         <Box className="">
           <Box className="flex items-center">
             <Box className="md:ml-4">
-              <Typography
-                variant="h5"
-                noWrap
+              <Box
+                
                 className="!text-xs overflow-hidden w-40 !font-bold !leading-10 !flex !items-center"
               >
                 Order ID: <b className="ml-1.5 md:ml-3">{row.orderId}</b>
-              </Typography>
+              </Box>
             </Box>
             <Box className="md:pl-10">
-              <Typography
-                variant="h5"
+              <Box
                 className="!text-xs !font-bold !flex !items-center !leading-10"
               >
                 <CalendarMonth className="text-[15px]" />{" "}
                 <b className="ml-2 md:ml-3">{formatDate(row.dateAdded)}.</b>
                 <b className="ml-2 md:ml-3">10:00 am</b>
-              </Typography>
+              </Box>
             </Box>
           </Box>
           <Grid container spacing={3} className="md:!px-5">
             <Grid item xs={12} md={6} className="md:!px-5">
-              <Typography
-                variant="h5"
+              <Box
                 className="!text-xs !leading-10 !flex !items-center"
               >
                 <b className="font-bold mr-4">Status:</b>{" "}
                 {customizeStatus(row.status || "...")}
-              </Typography>
+              </Box>
             </Grid>
 
             <Grid item xs={12} md={6} className="mt-3">
@@ -205,6 +213,7 @@ const OrderDetails = ({ order }) => {
                     variant="contained"
                     fullWidth
                     className=""
+                    onClick={() => storeUpdateOrder(dispatch, payload)}
                     disabled={!(payload.status || payload.comment)}
                     startIcon={<Icon icon="tabler:device-floppy" />}
                   >
@@ -288,10 +297,11 @@ const OrderDetails = ({ order }) => {
             fullWidth
             multiline
             id="textarea-outlined"
+            defaultValue={row?.comment?.comment || ""}
+            onChange={handleChange("comment")}
             maxRows={6}
-            placeholder="Type some notes"
+            placeholder="Comment"
             minRows={5}
-            label="Note"
           />
         </Grid>
       </Grid>

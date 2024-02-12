@@ -9,6 +9,7 @@ const { createContext, useEffect, useState } = require("react");
 
 const defaultProvider = {
   cartedProds: [],
+  savedProds: [],
   following: [],
   cartData: {},
   userInfo: {},
@@ -47,7 +48,7 @@ const UserDataProvider = ({ children, setOverflow }) => {
     const getLocalToken =
       typeof window !== "undefined" && localStorage.getItem("user_token");
     if (userData?.accessToken || getLocalToken) {
-      const decodedToken = jwt_decode(getLocalToken); // Decode the JWT token
+      const decodedToken = jwt_decode(getLocalToken || userData?.accessToken); // Decode the JWT token
       const currentTime = Date.now() / 1000; // Get the current time in seconds
       // // Check if the token is still valid based on its expiration time
       return decodedToken.exp < currentTime;
@@ -56,13 +57,15 @@ const UserDataProvider = ({ children, setOverflow }) => {
   };
 
   useEffect(() => {
-    if (
-      isOffline() &&
-      getPath[1] !== "auth" &&
-      getPath[1] !== "store" &&
-      getPath[2] !== "login"
-    ) {
-      router.replace(`/auth/login`);
+    if (getPath[1]) {
+      if (
+        isOffline() &&
+        getPath[1] !== "auth" &&
+        getPath[1] !== "store" &&
+        getPath[2] !== "login"
+      ) {
+        router.replace(`/auth/login?returnurl=${pathname.substring(1)}`);
+      }
     }
   }, [userData, getPath, router]);
 
@@ -138,6 +141,14 @@ const UserDataProvider = ({ children, setOverflow }) => {
     error: cartErr,
     isLoading: cartIsLoading,
   } = useSWR(!isOffline() && "/user/cart");
+  //
+  // fetch CARTiNFO
+  //
+  const {
+    data: savedData,
+    error: savedErr,
+    isLoading: savedIsLoading,
+  } = useSWR(!isOffline() && "/user/save-item/prods");
 
   // fetch stores you follow
   //
@@ -151,6 +162,8 @@ const UserDataProvider = ({ children, setOverflow }) => {
       value={{
         cartedProds:
           (!cartErr && !cartIsLoading && cartData?.data?.cartedProds) || [],
+        savedProds:
+          (!savedErr && !savedIsLoading && savedData?.data) || [],
         following: (!folErr && !folIsLoading && following?.data) || [],
         cartData: (!cartErr && !cartIsLoading && cartData?.data) || {},
         userInfo: (!userErr && !userIsLoading && userInfo?.user) || {},

@@ -87,7 +87,15 @@ export default UserSlice.reducer;
 
 */
 
-export const loginHandler = (payload, router, dispatch) => {
+export const loginHandler = (
+  payload,
+  router,
+  dispatch,
+  returnUrl,
+  setLoading
+) => {
+  console.log(returnUrl);
+  setLoading(true);
   dispatch(UserLoginApi(payload))
     .then(unwrapResult)
     .then((res) => {
@@ -96,34 +104,18 @@ export const loginHandler = (payload, router, dispatch) => {
       if (res.type === "success") {
         dispatch(getAccount())
           .then(unwrapResult)
-          .then((res) => {
-            if (localStorage.getItem("redirected_from")) {
-              const goTo = localStorage.getItem("redirected_from");
-              localStorage.removeItem("redirected_from");
-              if (
-                goTo === "/store/dashboard" &&
-                res?.user?.store_entryMode === "otp"
-              ) {
-                dispatch(otpHandler())
-                  .then(unwrapResult)
-                  .then((res) => {
-                    console.log(res);
-                    router.push("/store/dashboard/auth");
-                  });
-              }
-              console.log(goTo);
-              router.push(goTo);
-            } else {
-              if (!res.user.username) {
-                router.push("/");
-              }
-              router.push("/");
-            }
+          .then(() => {
+            router.push(`/${returnUrl || ""}`);
           });
+        setLoading(false);
+        }
+      router.push(`/${returnUrl || ""}`);
+      setLoading(false);
       }
-    })
+    )
     .catch((err) => {
       console.log(err);
       toaster({ message: "No Connection", type: "error" });
+      setLoading(false);
     });
 };

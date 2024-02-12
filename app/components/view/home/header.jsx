@@ -18,7 +18,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Chip from "../../chip";
 import CustomAvatar from "../../avatar";
 import { getInitials } from "@/app/utils/get-initials";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { userLogout } from "@/app/redux/state/slices/auth/Login";
 import {
   NotificationsActiveOutlined,
@@ -27,7 +27,10 @@ import {
 
 function Header({ search, setSearch, showNotif }) {
   const router = useRouter();
+  const pathname = usePathname();
   const { isOffline, userInfo, cartedProds } = useUserData();
+
+  const getPath = pathname.split("/");
 
   // let holla = "dsdsdfa".
   const theme = useTheme();
@@ -35,15 +38,26 @@ function Header({ search, setSearch, showNotif }) {
     fontSize: "0.869rem",
     fontWeight: 500,
     textDecoration: "none",
-    color: "black",
+    // color: "black",
   }));
-  const pages = [
-    { name: "Home", link: "/" },
-    // { name: "Products", link: "/products" },
-    { name: "About", link: "/about" },
-    { name: "Seller", link: "/seller" },
-    { name: "Support", link: "/support" },
-  ];
+
+  const pages = {
+    isOffline: [
+      { name: "Home", link: "/" },
+      // { name: "Products", link: "/products" },
+      { name: "About", link: "/about" },
+      { name: "Seller", link: "/seller" },
+      { name: "Support", link: "/support" },
+    ],
+
+    isOnline: [
+      { name: "Home", link: "" },
+      // { name: "Products", link: "/products" },
+      { name: "Order", link: "order" },
+      { name: "Inbox", link: "chat" },
+      { name: "Saved Items", link: "saved-items" },
+    ],
+  };
 
   const MyCartBtn = ({ num }) => (
     <Box className="flex items-center">
@@ -90,12 +104,13 @@ function Header({ search, setSearch, showNotif }) {
         />
       </Box>
       <Box className="items-center hidden md:block">
-        {pages.map((page, i) => (
+        {pages[isOffline ? "isOffline" : "isOnline"]?.map((page, i) => (
           <LinkStyled
             key={i}
-            href={page.link}
-            color={theme.palette.primary.main}
-            className="px-1 w-2 md:!mx-4 leading-10 hover:text-yellow-400"
+            href={`/${page.link}`}
+            className={`px-1 w-2 md:!mx-4 leading-10 ${
+              getPath[1] === page.link ? "text-yellow-500" : "text-black"
+            } hover:text-yellow-400`}
           >
             {page.name}
           </LinkStyled>
@@ -130,7 +145,13 @@ function Header({ search, setSearch, showNotif }) {
           <>
             <Box
               onClick={() => router.push("/cart")}
-              sx={{ borderColor: theme.palette.primary.main, border: 1 }}
+              sx={{
+                borderColor:
+                  getPath[1] === "cart"
+                    ? theme.palette.primary.main
+                    : theme.palette.secondary.main,
+                border: 1,
+              }}
               className="h-7 !cursor-pointer min-h-7 py-2 !border !rounded-full w-14 px-1 md:w-12 !bg-white flex justify-center items-center"
             >
               <MyCartBtn variant="contained" num={cartedProds?.length || 0} />

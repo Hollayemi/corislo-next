@@ -42,9 +42,9 @@ const OrderProductList = ({ rows }) => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {rows.map((row) => (
+        {rows.map((row, i) => (
           <TableRow
-            key={row.name}
+            key={i}
             sx={{
               "td, th": {
                 border: 0,

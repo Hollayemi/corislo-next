@@ -1,3 +1,4 @@
+import { Snackbar } from "@mui/material";
 import toast from "react-hot-toast";
 
 const toaster = ({ message, type, promise, error, duration, position }) => {

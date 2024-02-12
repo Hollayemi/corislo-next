@@ -19,18 +19,18 @@ export const OrderNotif = ({ data }) => {
         <IconifyIcon icon="tabler:chevron-down" className="!text-[14px]" />
       </Box>
       {data.info.map((each, i) => (
-        <Box key={i} className="flex items-start p-3 max-w-fit">
+        <Box key={i} className="flex items-start p-3 w-full">
           <Box className="w-11 h-11 flex-shrink-0">
             <Image
-              src={`/images/misc/shop/${i+1}.png`}
+              src={`/images/misc/shop/${i + 1}.png`}
               alt="display_image"
               width={100}
               height={100}
               className="rounded-full h-full w-full"
             />
           </Box>
-          <Box className="pl-3 relative">
-            <Box className="w-9/12">
+          <Box className="pl-3 relative w-full min-w-48">
+            <Box className="w-9/12 min-w-48">
               <Typography variant="body2" className="!font-bold !text-black">
                 {each.title}
               </Typography>
@@ -40,9 +40,7 @@ export const OrderNotif = ({ data }) => {
             </Box>
             {open === i && (
               <Box className="border rounded-md p-2 !mt-3 w-full !overflow-hidden">
-                {each?.orderId && (
-                  <NotifOrderDisplay orderId={each.orderId} />
-                )}
+                {each?.orderId && <NotifOrderDisplay orderId={each.orderId} />}
                 {each?.productId && (
                   <NotifProductDisplay productId={each.productId} />
                 )}

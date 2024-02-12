@@ -9,6 +9,8 @@ export const ordersColumns = (handleActionClick) => {
   return [
     {
       flex: 0.6,
+
+      minWidth: 120,
       headerName: "Order ID",
       field: "_id",
       renderCell: (params) => (
@@ -19,6 +21,8 @@ export const ordersColumns = (handleActionClick) => {
     },
     {
       flex: 1.5,
+
+      minWidth: 120,
       headerName: "Customer",
       field: "customer",
       renderCell: (params) => (
@@ -29,6 +33,8 @@ export const ordersColumns = (handleActionClick) => {
     },
     {
       flex: 1,
+
+      minWidth: 120,
       headerName: "Order Date",
       field: "dateAdded",
       renderCell: (params) => (
@@ -39,6 +45,8 @@ export const ordersColumns = (handleActionClick) => {
     },
     {
       flex: 1,
+
+      minWidth: 120,
       headerName: "Delivery Date",
       field: "deliveryDate",
       renderCell: (params) => (
@@ -49,6 +57,8 @@ export const ordersColumns = (handleActionClick) => {
     },
     {
       flex: 0.8,
+
+      minWidth: 120,
       headerName: "Total Order Price",
       field: "toatalPrice",
       renderCell: (params) => (
@@ -59,6 +69,8 @@ export const ordersColumns = (handleActionClick) => {
     },
     {
       flex: 0.8,
+
+      minWidth: 120,
       headerName: "Delivery Medium",
       field: "deliveryMedium",
       renderCell: (params) => (
@@ -70,6 +82,7 @@ export const ordersColumns = (handleActionClick) => {
 
     {
       flex: 0.5,
+      minWidth: 120,
       field: "actions",
       headerName: "Actions",
       renderCell: (params) => {
@@ -132,27 +145,27 @@ export const ordersColumns = (handleActionClick) => {
 };
 
 const statusColumn = {
-    flex: 1,
-    field: "status",
-    headerName: "Satus",
-    renderCell: (params) => {
-      const status = statusObj.filter(e => e.title === params.row.status)[0];
+  flex: 1,
+  minWidth: 120,
+  field: "status",
+  headerName: "Satus",
+  renderCell: (params) => {
+    const status = statusObj.filter((e) => e.title === params.row.status)[0];
 
-      return (
-        <CustomChip
-          rounded
-          size="small"
-          skin="light"
-          color={status?.color}
-          label={status?.title}
-          sx={{ "& .MuiChip-label": { textTransform: "capitalize" } }}
-        />
-      );
-    },
-  }
+    return (
+      <CustomChip
+        rounded
+        size="small"
+        skin="light"
+        color={status?.color}
+        label={status?.title}
+        sx={{ "& .MuiChip-label": { textTransform: "capitalize" } }}
+      />
+    );
+  },
+};
 
-  
-  export const allOrderColumns = (handleActionClick) => {
+export const allOrderColumns = (handleActionClick) => {
   const getCols = ordersColumns(handleActionClick);
   return [...getCols, statusColumn];
-}
+};

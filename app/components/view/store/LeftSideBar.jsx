@@ -109,11 +109,10 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const StoreLeftSideBar = React.memo(
-  ({ children, path, InnerList, BottomList, breadCrumbChild }) => {
+  ({ children, path, InnerList, BottomList, hideName, breadCrumbChild }) => {
     const { staffInfo, overLay, showOverlay } = useStoreData();
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
-
 
     const onSideBar = !path?.sidebar ? "" : `/${path.sidebar}`;
     const handleDrawerOpen = () => {
@@ -296,11 +295,15 @@ const StoreLeftSideBar = React.memo(
           {/* <Box className=""> */}
 
           <Box className="flex flex-col w-full sticky top-0 pt-20 md:px-7 px-3">
-            {onSideBar === "" && (
-              <Typography color="primary" className="mb-5 !font-bold !text-2xl">
-                Welcome back, {staffInfo.fullname || "Staff Name"}{" "}
-              </Typography>
-            )}
+            {onSideBar === "" ||
+              (hideName && (
+                <Typography
+                  color="primary"
+                  className="mb-5 !font-bold !text-2xl"
+                >
+                  Welcome back, {staffInfo.fullname || "Staff Name"}{" "}
+                </Typography>
+              ))}
             <Box className="flex items-center justify-between mb-6">
               <Typography color="primary" className="font-bold">
                 Breadcrumb

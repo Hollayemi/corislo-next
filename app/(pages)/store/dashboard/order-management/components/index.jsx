@@ -13,7 +13,6 @@ import { allOrderColumns, ordersColumns } from "./columns";
 import Icon from "@/app/components/icon";
 // import { rows } from "../row";
 
-
 export const OrderListComponents = ({ value, setValue, rows }) => {
   // ** Hook
   const router = useRouter();
@@ -38,12 +37,16 @@ export const OrderListComponents = ({ value, setValue, rows }) => {
       // selectRow(row);
       router.push(`/store/dashboard/order-management?order=${row._id}`);
     }
+
+    if (action === "message") {
+      router.push(`/store/chat?customer=${row.customerUsername}`);
+    }
   };
   const onRowClick = (row, id) => {
     router.push(
       `/store/dashboard/order-management?order=${row._id}&tableId=${id}`
     );
-  }
+  };
 
   return (
     <TabContext value={value} className="w-full md:w-5/6">
@@ -65,7 +68,7 @@ export const OrderListComponents = ({ value, setValue, rows }) => {
           <OrderTable
             columns={allOrderColumns(actionFunctions)}
             rows={sortBy()}
-            onRowClick={onRowClick}
+            // onRowClick={onRowClick}
           />
         </Box>
       </TabPanel>
@@ -98,15 +101,25 @@ export const OrderListComponents = ({ value, setValue, rows }) => {
 };
 
 export const statusObj = [
-  { title: "current", color: "primary" },
-  { title: "processed", color: "success" },
-  { title: "cancelled", color: "error" },
-  { title: "waiting", color: "warning" },
   { title: "unpaid", color: "warning" },
+  { title: "paid", color: "warning" },
+  { title: "processing", color: "success" },
+  { title: "out_for_delivery", color: "primary" },
+  { title: "pickable", color: "primary" },
+  { title: "completed", color: "success" },
   { title: "pending", color: "info" },
+  { title: "refunded", color: "secondary" },
+  { title: "cancelled", color: "error" },
 ];
 
-export const DetailsDesign = ({ icon, title, info, btnFunc, btnText, color }) => {
+export const DetailsDesign = ({
+  icon,
+  title,
+  info,
+  btnFunc,
+  btnText,
+  color,
+}) => {
   return (
     <Box className="flex w-full md:w-64 md:max-w-300px mt-6">
       <Box
@@ -146,7 +159,6 @@ export const DetailsDesign = ({ icon, title, info, btnFunc, btnText, color }) =>
   );
 };
 
-
 export const Summarize = ({ info }) => {
   return (
     <Box>
@@ -175,4 +187,4 @@ export const Summarize = ({ info }) => {
       })}
     </Box>
   );
-}
+};

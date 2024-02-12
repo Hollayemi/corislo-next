@@ -41,8 +41,8 @@ const AddNewProduct = ({ params }) => {
     specId && `/corisio/get-spec?specId=${specId}`
   );
   const collections = getData ? getData?.data : [{}];
-  const specInfo = specData && specData?.data?.spec;
-
+  const specInfo = specData && specData?.data;
+  const specWithSize = ["cloth_spec", "shoe_spec"]; 
   const [formData, setFormData] = useState({
     prodName: "",
     prodPrice: "",
@@ -61,12 +61,9 @@ const AddNewProduct = ({ params }) => {
     delivery,
   });
 
-  console.log(newSpec, specValue);
-
   const fromCollection = collections.filter(
     (x) => x.collectionId === formData.collectionId
   )[0];
-  console.log(fromCollection);
 
   const dispatch = useDispatch();
 
@@ -268,7 +265,7 @@ const AddNewProduct = ({ params }) => {
               </Box>
             </Box>
 
-            {!specInfo ? (
+            {specWithSize.includes(specInfo?.label) && (
               <>
                 <Typography className="font-black mb-5">Select Size</Typography>
                 <Box className="pl-2 md:pl-4 mb-4">
@@ -302,12 +299,13 @@ const AddNewProduct = ({ params }) => {
                   />
                 </Box>
               </>
-            ) : (
-              <>
-                <Box className="flex justify-center px-2 w-full !mb-14">
+            )}
+            {specInfo && (
+              <Box className="mt-4">
+                <Box className="flex justify-center px-2 !mt-3 w-full">
                   <Box className="flex flex-col w-full">
                     <Autocomplete
-                      options={Object.keys(specInfo)}
+                      options={Object.keys(specInfo?.spec)}
                       onChange={(e, newValue) => setNewSpec(newValue)}
                       value={newSpec}
                       onInputChange={(e, newValue) =>
@@ -328,8 +326,8 @@ const AddNewProduct = ({ params }) => {
                     />
                     <Box className="flex items-center w-full">
                       <Autocomplete
-                        options={specInfo[newSpec] || []}
-                        className="!w-8/12 mr-3 outline-0 !mb-2"
+                        options={specInfo.spec[newSpec] || []}
+                        className="!w-8/12 mr-3 mt-1 md:mt-0 outline-0 !mb-2"
                         value={specValue}
                         onChange={(e, newValue) => setSpecValue(newValue)}
                         onInputChange={(e, newValue) =>
@@ -350,7 +348,7 @@ const AddNewProduct = ({ params }) => {
                       />
                       <Button
                         variant="contained"
-                        className="!text-[12px] h-10 !mt-3 md:!mt-0 w-4/12 !shadow-none"
+                        className="!text-[12px] h-10  w-4/12 !shadow-none"
                         onClick={() => {
                           if (newSpec && specValue) {
                             setFormData({
@@ -370,10 +368,8 @@ const AddNewProduct = ({ params }) => {
                     </Box>
                   </Box>
                 </Box>
-                <Box className="px-4">
+                <Box className="px-4 !mb-14">
                   {Object.keys(formData.specifications).map((val) => {
-                    console.log(val);
-                    // const key = Object.keys(val)[0];
                     return (
                       <Box>
                         {val.replace("_", " ")} : {formData.specifications[val]}{" "}
@@ -381,7 +377,7 @@ const AddNewProduct = ({ params }) => {
                     );
                   })}
                 </Box>
-              </>
+              </Box>
             )}
           </Grid>
           {/* 

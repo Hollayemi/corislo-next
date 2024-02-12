@@ -141,7 +141,7 @@ const AppChat = () => {
   console.log(storeList);
 
   return (
-    <StoreLeftSideBar subListBar={false}>
+    <StoreLeftSideBar hideName subListBar={false}>
       <Box
         className="app-chat md:mx-4 md:mt-8"
         sx={{
