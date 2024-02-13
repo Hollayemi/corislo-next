@@ -88,7 +88,11 @@ export const formatDate = (
 };
 
 // ** Returns short month of passed date
-export const formatDateToMonthShort = (value, toTimeForCurrentDay = true, format = {}) => {
+export const formatDateToMonthShort = (
+  value,
+  toTimeForCurrentDay = true,
+  format = {}
+) => {
   const date = new Date(value);
   let formatting = { month: "short", day: "numeric", ...format };
   if (toTimeForCurrentDay && isToday(date)) {
@@ -104,12 +108,23 @@ const clearNumber = (value = "") => {
   return value.replace(/\D+/g, "");
 };
 
+export const detectCardType = (card) => {
+  if (/^4/.test(card) && card.length > 3) {
+    return "visa";
+  } else if (/^5/.test(card) && card.length > 3) {
+    return "mastercard";
+  } else {
+    return false;
+  }
+};
+
 // Format credit cards according to their types
 export const formatCreditCardNumber = (value, Payment) => {
   if (!value) {
     return value;
   }
   const issuer = Payment.fns.cardType(value);
+  console.log(issuer);
   const clearValue = clearNumber(value);
   let nextValue;
   switch (issuer) {
@@ -129,7 +144,7 @@ export const formatCreditCardNumber = (value, Payment) => {
       nextValue = `${clearValue.slice(0, 4)} ${clearValue.slice(
         4,
         8
-      )} ${clearValue.slice(8, 12)} ${clearValue.slice(12, 19)}`;
+      )} ${clearValue.slice(8, 12)} ${clearValue.slice(12, 16)}`;
       break;
   }
 
@@ -148,7 +163,8 @@ export const formatExpirationDate = (value) => {
     .replace(/[^\d\/]|^[\/]*$/g, "")
     .replace(/\/\//g, "/"); // Prevent entering more than 1 `/`
 
-  return finalValue;
+  return finalValue.slice(0, 5);
+  // return finalValue;
 };
 
 // Format CVC in any credit card
@@ -288,13 +304,14 @@ export const summarizeFollowers = (followers) => {
   }
 };
 
-
-export const mySubstring = (string = "", num = 15) => {
+export const mySubstring = (string = "", num = 15, start = 0) => {
   if (string.length < num) {
     return string;
   } else {
-    return string.substring(0, parseInt(num)) + "...";
+    return `${string.substring(start, parseInt(num))} ${
+      string.length > num + start ? "..." : ""
+    }`;
   }
 };
 
-export const ngnPrice = (price) => `NGN${price?.toLocaleString()}`
+export const ngnPrice = (price) => `NGN${price?.toLocaleString()}`;

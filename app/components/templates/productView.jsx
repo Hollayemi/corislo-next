@@ -25,6 +25,7 @@ import Link from "next/link";
 import { copyToClipboard } from "@/app/utils/clipboard";
 import { deleteOrder } from "@/app/redux/state/slices/home/order";
 import { useState } from "react";
+import { Delete, ShoppingCartSharp } from "@mui/icons-material";
 
 const ChangeQty = ({
   payload,
@@ -38,9 +39,9 @@ const ChangeQty = ({
   const [qty, newQty] = useState(quantity);
   return (
     <Box
-      className={`w-20  ${!isSavedView && " absolute top-2 right-0"} my-1 mr-2`}
+      className={`w-20  ${!isSavedView && " absolute top-2 right-0"} mt-1 mr-2`}
     >
-      <Box
+      {!isSavedView && <Box
         className="float-right mb-10 md:mb-6"
         onClick={() => addCartHandler(payload, dispatch)}
       >
@@ -48,7 +49,7 @@ const ChangeQty = ({
           icon="tabler:trash"
           className="!text-[18px] !text-red-600"
         />
-      </Box>
+      </Box>}
       <Box className="flex justify-between w-full my-2.5 md:my-0.5">
         <Box
           onClick={() =>
@@ -77,21 +78,23 @@ const ChangeQty = ({
 const SaveItemRightButtons = ({ payload, id }) => {
   const dispatch = useDispatch();
   return (
-    <Box className="w-20 absolute top-2 right-0 mr-2">
-      <Box className="float-right mb-10 md:mb-6">
+    <Box className="w-20 absolute top-2 right-0 -mr-7 md:mr-2">
+      <Box className="float-right mb-10 md:mb-6 ">
         <Button
           variant="contained"
-          className="!w-28 md:!w-32 !text-[11px] !rounded-full !h-9 !shadow-none"
+          className="!w-10 !min-w-10 md:!w-32 !text-[11px] !rounded-full !h-9 !shadow-none"
           onClick={() => addCartHandler(payload, dispatch)}
         >
-          Add to cart
+          <p className="hidden md:block"> Add to cart</p>
+          <ShoppingCartSharp className="md:!hidden !text-[18px]" />
         </Button>
         <Button
           variant="outlined"
-          className="!w-28 md:!w-32 !text-[11px] !rounded-full !h-9 !shadow-none !mt-2"
+          className="!w-10 !min-w-10 md:!w-32 !text-[11px] !rounded-full !h-9 !shadow-none !mt-2"
           onClick={() => saveProduct(payload, dispatch)}
         >
-          Remove Item
+          <p className="hidden md:block">Remove Item</p>
+          <Delete className="md:!hidden !text-[18px]" />
         </Button>
       </Box>
     </Box>
@@ -131,11 +134,11 @@ export const CartProductView = ({
   return (
     <Box className="flex items-start py-3 w-full relative">
       <Box
-        className={`flex items-center w-full ${hideQtyFunc ? "pr-4" : "pr-20"}`}
+        className={`flex items-center w-full ${hideQtyFunc ? "pr-6" : "pr-20"}`}
       >
         {!hideCheckbox && (
           <FormControlLabel
-            className="!mt-2 md:w-8"
+            className="-!mt-6 w-7 md:w-8"
             onChange={(e) =>
               removeOrAddToArray(productId, selected, selectCart)
             }
@@ -143,6 +146,7 @@ export const CartProductView = ({
               <Checkbox
                 checked={selected.includes(productId)}
                 disabled={false}
+                className="-!mt-6"
                 name="basic-checked"
               />
             }
@@ -342,7 +346,6 @@ export const GroupSavedProducts = ({
   const getCommonDeliveryMethods = getCommonValuesInArrays(
     ...fromBranch.map((x) => x.product.delivery || ["pickup"])
   );
-  console.log(fromBranch);
   const branchSavedIds = fromBranch.map((x) => x.productId);
   const deliveryType = payload.delivery[store];
   const picker = payload.picker[store];

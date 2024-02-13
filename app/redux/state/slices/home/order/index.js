@@ -60,3 +60,24 @@ export const orderAction = (payload, dispatch) => {
     })
     .catch((e) => {});
 };
+
+
+const orderPriceApi = createAsyncThunk(
+  "patch/orderPrice",
+  async (payload) => {
+    const { data } = await martApi
+      .post(`/user/order-price`, payload, jsonHeader())
+      .then((e) => e)
+      .catch((e) => e.response);
+    return data;
+  }
+);
+
+export const orderPrice = (payload, dispatch, setResult) => {
+  dispatch(orderPriceApi(payload))
+    .then(unwrapResult)
+    .then((res) => {
+      res.type === "success" && setResult(res.data && res.data[0]);
+    })
+    .catch((e) => {});
+};

@@ -71,6 +71,13 @@ function Header({ search, setSearch, showNotif }) {
         color="primary"
         className="!text-[16px] !flex-shrink-0"
       />
+      {/* <Image
+        src="/images/misc/bag.png"
+        alt="cart"
+        width={15}
+        height={20}
+        className="w-7"
+      /> */}
     </Box>
   );
 

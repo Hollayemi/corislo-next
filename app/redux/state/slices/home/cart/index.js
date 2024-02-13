@@ -38,7 +38,7 @@ const cartQuantityApi = createAsyncThunk(
 );
 
 export const changeQuantity = (payload, dispatch, newQty) => {
-  newQty((res) => res + 1);
+  newQty((res) => (payload.operator === "+" ? res + 1 : res - 1));
   dispatch(cartQuantityApi(payload))
     .then(unwrapResult)
     .then((res) => {
@@ -121,7 +121,7 @@ const savedQuantityApi = createAsyncThunk(
 );
 
 export const savedQuantity = (payload, dispatch, newQty) => {
-  newQty(res => res +1)
+  newQty((res) => (payload.operator === "+" ? res + 1 : res - 1));
   dispatch(savedQuantityApi(payload))
     .then(unwrapResult)
     .then((res) => {

@@ -9,10 +9,16 @@ import { useUserData } from "@/app/hooks/useData";
 import { OrderNotif } from "./Components/notication";
 import { NotifData } from "@/app/data/home/notification";
 
-const HomeWrapper = ({ children, bg, customersReview, noFooter }) => {
+const HomeWrapper = ({
+  children,
+  bg,
+  customersReview,
+  noFooter,
+  className,
+}) => {
   const [search, setSearch] = useState("");
   const [openNotif, setOpenNotif] = useState(false);
-  const { setOverflow, notifications } = useUserData()
+  const { setOverflow, notifications } = useUserData();
   const page = {
     0: children,
     1: <SearchPage search={search} setSearch={setSearch} />,
@@ -22,13 +28,13 @@ const HomeWrapper = ({ children, bg, customersReview, noFooter }) => {
 
   const showNotif = () => {
     if (openNotif) {
-      setOverflow(false)
+      setOverflow(false);
       setOpenNotif(false);
     } else {
       setOverflow(true);
       setOpenNotif(true);
     }
-  }
+  };
 
   return (
     <Box className="flex justify-center bg-black">
@@ -49,7 +55,7 @@ const HomeWrapper = ({ children, bg, customersReview, noFooter }) => {
           />
         </Box>
         <Box className={`relative !flex-grow mt-16`}>
-          {page[showing]}
+          <Box className={className}>{page[showing]}</Box>
           {openNotif && (
             <Box className="w-full h-screen fixed z-50 top-0 left-0 overflow-hidden">
               <Box

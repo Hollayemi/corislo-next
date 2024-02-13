@@ -5,10 +5,11 @@ import HomeWrapper from "@/app/components/view/home";
 import { userGroupCartData } from "@/app/data/home/homepage";
 import { useUserData } from "@/app/hooks/useData";
 import { deleteBulkSaved } from "@/app/redux/state/slices/home/cart";
-import { addNewOrder } from "@/app/redux/state/slices/home/order";
+import { addNewOrder, orderPrice } from "@/app/redux/state/slices/home/order";
+import { ngnPrice } from "@/app/utils/format";
 import { Box, Button, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
 
@@ -19,17 +20,20 @@ const Checkout = () => {
   const { data: pickups, pickupError } = useSWR("/user/pickup");
   const groupedCart = saved ? saved.data : [];
   const [selected, selectItem] = useState([]);
+  const [totalPrice, setTotalPrice] = useState([]);
   const pickers = pickups ? pickups.data : [];
 
-  console.log(savedProds, groupedCart);
-
   const [payload, updatePayload] = useState({
-    products: savedProds,
+    products: selected,
     delivery: {},
     deliveryFee: {},
     picker: {},
     shippingAddress: {},
   });
+
+  useEffect(() => {
+    orderPrice({ products: selected, model: "saved" }, dispatch, setTotalPrice);
+  }, [selected])
 
   return (
     <HomeWrapper>
@@ -117,7 +121,7 @@ const Checkout = () => {
                       Sub total
                     </Typography>
                     <Typography variant="body2" className="!text-[12px]">
-                      NGN54,200
+                      {ngnPrice(totalPrice?.sum_totalBeforeDiscount || 0)}
                     </Typography>
                   </Box>
                   <Box className="w-full flex justify-between items-center !mt-2">
@@ -128,7 +132,10 @@ const Checkout = () => {
                       variant="body2"
                       className="!text-[12px] !text-red-500"
                     >
-                      -NGN16,260
+                      {ngnPrice(
+                        totalPrice?.sum_totalPrice -
+                          totalPrice?.sum_totalBeforeDiscount || 0
+                      )}
                     </Typography>
                   </Box>
                   <Box className="w-full flex justify-between items-center !mt-2">
@@ -136,7 +143,7 @@ const Checkout = () => {
                       Way-Billing
                     </Typography>
                     <Typography variant="body2" className="!text-[12px]">
-                      NGN9,500
+                      {ngnPrice(0)}
                     </Typography>
                   </Box>
 
@@ -152,7 +159,7 @@ const Checkout = () => {
                       variant="body2"
                       className="!text-[13px] !font-bold"
                     >
-                      NGN37,940
+                      {ngnPrice(totalPrice?.sum_totalPrice || 0)}
                     </Typography>
                   </Box>
                 </Box>
@@ -214,10 +221,11 @@ const Checkout = () => {
                 </Box>
                 <Button
                   variant="contained"
+                  disabled={selected.length < 1}
                   className="w-full !mt-6 !h-12 !rounded-full !border-none !text-[14px] !text-white"
                   onClick={() => addNewOrder(payload, dispatch)}
                 >
-                  Place Order
+                  Place Order ({selected.length || 0})
                 </Button>
               </Box>
             </Grid>

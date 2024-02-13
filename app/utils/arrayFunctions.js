@@ -1,5 +1,4 @@
 export const removeOrAddToArray = (item, array, func, itemIsArray) => {
-  console.log(item, array, itemIsArray);
   if (array.includes(item) || isArraySubset(item, array, itemIsArray)) {
     const newItem = array.filter((x) =>
       itemIsArray ? item.includes(x) : x !== item
