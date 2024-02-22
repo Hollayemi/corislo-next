@@ -7,11 +7,11 @@ const LineLoading = () => {
   return (
     <div className={`bg-transparent ${!loading && "hidden"} overflow-hidden`}>
       <div className="h-screen w-full opacity-75 z-50 bg-black fixed top-0 left-0 overflow-hidden"></div>
-      <div className="h-screen w-full flex items-center absolute ml-4 top-0 left-0 z-50 bg-transparent justify-center overflow-hidden">
+      <div className="h-screen w-full flex items-center absolute ml-4 top-0 left-0 loading-zindex bg-transparent justify-center overflow-hidden">
         <LineWave
           height="100"
           width="100"
-          color="secondary"
+          color="orange"
           ariaLabel="line-wave"
           wrapperStyle={{}}
           wrapperClass=""

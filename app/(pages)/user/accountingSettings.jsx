@@ -1,13 +1,31 @@
 import { Box, Button, Typography } from "@mui/material";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { MyTextField, TitleSubtitle } from "./components";
 import { useUserData } from "@/app/hooks/useData";
+import SelectCities from "@/app/components/cards/city";
+import { Upload } from "@mui/icons-material";
+import ProfilePictureUploader from "@/app/components/cards/fileUpload";
+import { updateUserPicture } from "@/app/redux/state/slices/users/updateAccount";
+import { useDispatch } from "react-redux";
 
 const AccountingSettings = () => {
-  const { userInfo } = useUserData();
-  console.log(userInfo);
+  const { userInfo, setLoading } = useUserData();
+  const dispatch = useDispatch()
+  const [files, setFiles] = useState([]);
+  const [localFile, setLocalFiles] = useState("");
+  console.log(localFile);
   const splitFullname = userInfo?.fullname?.split(" ");
+  const updateBtn = () => {
+    updateUserPicture(
+      { picture: files[0], state: "add" },
+      dispatch,
+      setLoading
+    );
+  };
+  const deletePicBtn = () => {
+    updateUserPicture({ state: "remove" }, dispatch, setLoading);
+  };
   return (
     <Box className="">
       <TitleSubtitle
@@ -15,13 +33,35 @@ const AccountingSettings = () => {
         subtitle="Get an oversee of your account and see if they are all correct"
       />
       <Box className="flex items-center my-6">
-        <Image
-          src="/images/avatar/1.png"
-          alt="settings.png"
-          width={250}
-          height={250}
-          className="w-24 h-24 !rounded-full"
-        />
+        <Box className="relative">
+          <ProfilePictureUploader
+            setFiles={setFiles}
+            setLocalFiles={setLocalFiles}
+            component={
+              <Box className="relative w-24 h-24">
+                <img
+                  src={
+                    localFile
+                      ? URL?.createObjectURL(localFile[0])
+                      : userInfo.picture || "/images/avatar/1.png"
+                  }
+                  alt="settings.png"
+                  width={250}
+                  height={250}
+                  className="w-24 h-24 !rounded-full"
+                />
+                <Box className="flex items-center justify-center w-full h-full rounded-full absolute top-0 left-0 !text-white">
+                  <Box className="w-full h-full rounded-full bg-black opacity-30 absolute top-0 left-0"></Box>
+                  <Upload className="!text-white z-50" />
+                </Box>
+              </Box>
+            }
+          />
+
+          <Typography variant="caption" className="!text-[10px]">
+            Drag and drop image
+          </Typography>
+        </Box>
         <Box className="ml-6">
           <Typography
             variant="body2"
@@ -36,12 +76,14 @@ const AccountingSettings = () => {
             <Button
               className="!w-24 !h-7 !mr-2 !rounded-full !shadow-none !text-[10px]"
               variant="contained"
+              onClick={updateBtn}
             >
               Upload New
             </Button>
             <Button
               className="!w-20 !h-7 !mr-2 !rounded-full !shadow-none !text-[10px]"
               variant="outlined"
+              onClick={deletePicBtn}
             >
               Delete
             </Button>
@@ -73,6 +115,7 @@ const AccountingSettings = () => {
             PClassName="w-full md:w-auto"
           />
           <MyTextField title="City" PClassName="w-full md:w-auto" />
+          {/* <SelectCities /> */}
           <Button
             className="!w-full md:!w-60 !h-10 !rounded !shadow-none !text-[14px]"
             variant="contained"

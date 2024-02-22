@@ -1,7 +1,6 @@
 /* eslint-disable no-useless-escape */
 import martApi from "./baseApi";
 import { jsonHeader } from "./setAuthHeaders";
-import tokens from "@/app/configs/tokens";
 
 const PUBLIC_VAPID_KEY =
   "BPbVtUE6lBIkaSnpFJfMYutVrAtGu4kKzAOk4a4fd4dH4nHcPkRmLeMWwq-rxydhb38PlK_X2CQ287OigY9nQYU";
@@ -25,19 +24,18 @@ const handleSubscribeToNotification = async () => {
   try {
     const permission = await Notification.requestPermission();
     if (permission === "granted") {
-      const registration = await navigator.serviceWorker.ready;
       const serverKey = urlBase64ToUint8Array(PUBLIC_VAPID_KEY);
+      const registration = await navigator.serviceWorker.ready;
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: serverKey,
       });
       const sendSubscription = async (payload) => {
-        const userToken = tokens.auth;
         const { data } = await martApi
           .post(
             `/user/notifications/subscription`,
             payload,
-            jsonHeader(userToken)
+            jsonHeader()
           )
           .then((res) => res)
           .catch((e) => e);

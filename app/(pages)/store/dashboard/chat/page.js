@@ -17,8 +17,8 @@ import { getInitials } from "@/app/utils/get-initials";
 import { formatDateToMonthShort } from "@/app/utils/format";
 
 // ** Chat App Components Imports
-import SidebarLeft from "../../chat/SidebarLeft";
-import ChatContent from "../../chat/ChatContent";
+import SidebarLeft from "@/app/(pages)/chat/SidebarLeft";
+import ChatContent from "@/app/(pages)/chat/ChatContent";
 import useSWR from "swr";
 import { useStoreData } from "@/app/hooks/useData";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
@@ -62,59 +62,42 @@ const AppChat = () => {
   useEffect(() => {
     socket?.on("newMessage", (data) => {
       console.log(data, messageLog);
-      setMessageLog(data);
+      
+
+      setMessageLog((prev) => { return { ...prev, log:data } });
     });
   }, [socket, messageLog]);
-
-  console.log(messageLog);
 
   useEffect(() => {
     setMessageLog(storeChat?.data || {});
   }, [storeChat]);
-  
-  
+
+  console.log(messageLog);
+
   const handleLeftSidebarToggle = () => setLeftSidebarOpen(!leftSidebarOpen);
   const handleUserProfileLeftSidebarToggle = () =>
     setUserProfileLeftOpen(!userProfileLeftOpen);
   const handleUserProfileRightSidebarToggle = () =>
     setUserProfileRightOpen(!userProfileRightOpen);
-
   storeList.userProfile = {
-    id: storeInfo._id,
+    id: storeInfo?.profile?.branchId,
     avatar: "/images/misc/shop/1.png",
     role: "store",
-    ...storeInfo,
-    about: "",
-    status: "online",
-    settings: {
-      isTwoStepAuthVerificationEnabled: true,
-      isNotificationsOn: false,
-    },
-    avatar: "/images/misc/shop/1.png",
   };
 
   if (!storeListLoading && !loadingChat && storeChat && data) {
     storeList.selectedChat = {
-      chat: {
-        id: 1,
-        userId: storeInfo._id,
-        unseenMsgs: 3,
-        chat: itIsNewChat ? null : messageLog.log,
-      },
+      chat: itIsNewChat ? null : messageLog.log,
       contact: {
         ...selectedContact,
+        chatId: messageLog?._id,
         avatar: "/images/misc/shop/2.png",
       },
     };
   }
   if (!storeListLoading && !loadingChat && itIsNewChat) {
     storeList.selectedChat = {
-      chat: {
-        id: 1,
-        userId: storeInfo._id,
-        unseenMsgs: 3,
-        chat: null,
-      },
+      chat: null,
       contact: {
         ...selectedContact,
         avatar: "/images/misc/shop/2.png",
@@ -138,12 +121,14 @@ const AppChat = () => {
     }
   };
 
-  console.log(storeList);
-
   return (
-    <StoreLeftSideBar hideName subListBar={false}>
+    <StoreLeftSideBar
+      hidebreadCrumb
+      subListBar={false}
+      path={{ sidebar: "chat" }}
+    >
       <Box
-        className="app-chat md:mx-4 md:mt-8"
+        className="app-chat -mt-3 -mb-3"
         sx={{
           display: "flex",
           borderRadius: 1,
@@ -152,7 +137,11 @@ const AppChat = () => {
           boxShadow: 0,
         }}
       >
-        <Box className="!flex-shrink-0 !w-fit !min-w-fit">
+        <Box
+          className={`!flex-shrink-0 ${
+            selectedChat && "hidden md:block"
+          }  !w-full md:!w-fit md:!min-w-fit`}
+        >
           <SidebarLeft
             store={storeList}
             socket={socket}
@@ -184,6 +173,7 @@ const AppChat = () => {
             chatType={chatType}
             dispatch={dispatch}
             statusObj={statusObj}
+            selectChat={selectChat}
             getInitials={getInitials}
             sidebarWidth={sidebarWidth}
             selectedChat={selectedChat}

@@ -23,27 +23,31 @@ const Form = styled("form")(({ theme }) => ({
 const SendMsgForm = (props) => {
   // ** Props
   const { store, dispatch, sendMsg, socket, setMessageLog } = props;
-
+  const selectedChat = store?.selectedChat;
   // ** State
   const [msg, setMsg] = useState("");
 
   const handleSendMsg = (e) => {
     e.preventDefault();
-    if (store && store.selectedChat && msg.trim().length) {
+    if (store && selectedChat && msg.trim().length) {
       const messageToEmit = {
-        chatId: store?.selectedChat?.contact?.chat?.id,
+        chatId: selectedChat?.contact?.chatId,
         message: msg,
         by: store.userProfile.role,
-        branchId: store?.selectedChat?.contact?.branchId,
+        branchId: selectedChat?.contact?.branchId,
       };
 
       socket.emit("sendMessage", messageToEmit, dispatch);
       setMessageLog((prev) => {
-        const newLog = [...prev.log, {
-          ...messageToEmit,
-          feedback: { isSent: false, isDelivered: false, isSeen: false },
-          time: new Date(),
-        }];
+        const log = prev?.log || [];
+        const newLog = [
+          ...log,
+          {
+            ...messageToEmit,
+            feedback: { isSent: false, isDelivered: false, isSeen: false },
+            time: new Date(),
+          },
+        ];
         return { ...prev, log: newLog };
       });
     }

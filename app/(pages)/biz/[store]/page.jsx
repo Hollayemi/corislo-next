@@ -167,25 +167,32 @@ const BusinessPage = ({ params, searchParams }) => {
                       />
                     }
                     onClick={() =>
-                      followStore(branchInfo?.branchId, dispatch, socket, isIncluded)
+                      followStore(
+                        branchInfo?.branchId,
+                        dispatch,
+                        socket,
+                        isIncluded
+                      )
                     }
                   >
                     {isIncluded ? "Unfollow" : "Follow"}
                   </Button>
                 </Box>
               </Box>
-              <Button
-                variant="outlined"
-                className="!rounded-full h-10 w-40 !bg-white"
-                startIcon={
-                  <IconifyIcon
-                    icon="tabler:message-2-plus"
-                    className="!text-blue-800"
-                  />
-                }
-              >
-                Message
-              </Button>
+              <Link href={`/chat?new=${branchInfo?.branchId}`}>
+                <Button
+                  variant="outlined"
+                  className="!rounded-full h-10 w-40 !bg-white"
+                  startIcon={
+                    <IconifyIcon
+                      icon="tabler:message-2-plus"
+                      className="!text-blue-800"
+                    />
+                  }
+                >
+                  Message
+                </Button>
+              </Link>
             </Box>
             <Box className="w-full">{page[searchParams.tab || 0]}</Box>
           </Box>

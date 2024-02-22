@@ -89,6 +89,9 @@ input::placeholder, textarea::placeholder{
 .header-zindex{
     z-index: 10000000000000 !important;
 }
+.loading-zindex{
+    z-index: 500000 !important;
+}
 
 .dfdgfd li{
     font-weight: 400 !important;

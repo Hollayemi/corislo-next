@@ -11,10 +11,10 @@ import { OrderProductView } from "@/app/components/templates/productView";
 import useSWR from "swr";
 
 const OrderPage = () => {
-  const { data: result } = useSWR("/user/order");
+  const [orderShowing, setOrderShowing] = useState("All Orders");
+  const { data: result } = useSWR(`/user/order?status=${orderShowing.split(" ")[0]}`);
   const orderArray = result?.data || [];
   const [dateInterval, setDateInterval] = useState("March 2023 - October 2023");
-  const [orderShowing, setOrderShowing] = useState("Completed Orders");
   const [clipboard, setIsCopied] = useState("");
   console.log(orderArray);
   return (
@@ -186,7 +186,9 @@ const OrderPage = () => {
                   }
                   options={[
                     "All Orders",
-                    "Ongoing Orders",
+                    "Unpaid Orders",
+                    "Paid Orders",
+                    "Processing Orders",
                     "Completed Orders",
                     "Cancelled Orders",
                   ]}

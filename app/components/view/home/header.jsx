@@ -82,7 +82,7 @@ function Header({ search, setSearch, showNotif }) {
   );
 
   return (
-    <Box className="!px-2 sm:!px-8 py-4 h-14 !bg-white flex items-center md:justify-between header-zindex">
+    <Box className="!px-2 shadow md:!px-8 py-4 h-14 !bg-white flex items-center md:justify-between header-zindex">
       <Box className="flex items-center mr-1 md:mr-0 !flex-shrink-0">
         <Box className="md:hidden !flex-shrink-0">
           <IconButton
@@ -104,18 +104,19 @@ function Header({ search, setSearch, showNotif }) {
                 : themeConfig.vertical1
               : themeConfig.vertical1
           }
+          onClick={() => router.push("/")}
           alt="logo"
           width={400}
           height={400}
           className="!w-10 md:!w-28 ml-1 !flex-shrink-0"
         />
       </Box>
-      <Box className="items-center hidden md:block">
+      <Box className="items-center hidden md:block !flex-shrink-0">
         {pages[isOffline ? "isOffline" : "isOnline"]?.map((page, i) => (
           <LinkStyled
             key={i}
             href={`/${page.link}`}
-            className={`px-1 w-2 md:!mx-4 leading-10 ${
+            className={`px-1 !mx-2 lg:!mx-4 leading-10 ${
               getPath[1] === page.link ? "text-yellow-500" : "text-black"
             } hover:text-yellow-400`}
           >
@@ -166,14 +167,18 @@ function Header({ search, setSearch, showNotif }) {
             <Typography
               noWrap
               variant="body2"
-              className="!font-bold hidden md:block !text-[14px] w-fit sm:!max-w-16 md:!max-w-32 !ml-4"
+              title={userInfo?.username}
+              className="!font-bold hidden md:block !text-[14px] w-20 sm:!max-w-16 md:!max-w-24 !ml-4"
             >
               {userInfo?.username}
             </Typography>
-            {userInfo.image ? (
+            {userInfo.picture ? (
               <CustomAvatar
-                src={userInfo.image}
-                alt="Pic"
+                src={userInfo.picture}
+                alt={getInitials(userInfo?.fullname || "New User").substring(
+                  0,
+                  2
+                )}
                 className="!w-10 !h-10 !ml-2 flex-shrink-0"
               />
             ) : (

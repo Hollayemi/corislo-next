@@ -60,6 +60,7 @@ const SidebarLeft = (props) => {
   // ** States
   const [query, setQuery] = useState("");
   const [filteredChat, setFilteredChat] = useState([]);
+  const [showSearch, setShowSearch] = useState(false);
   const [filteredContacts, setFilteredContacts] = useState([]);
   const [active, setActive] = useState(null);
 
@@ -109,8 +110,8 @@ const SidebarLeft = (props) => {
         const arrToMap =
           query.length && filteredChat.length ? filteredChat : store.chat;
 
-        return arrToMap.map((chat, index) => {
-          const { lastMessage, id } = chat.chat;
+        return arrToMap.map((chatLog, index) => {
+          const { lastMessage, id } = chatLog.chat;
           const activeCondition =
             (active && active.id === id) ||
             (active && active.id === `new_chat-${index}`);
@@ -127,7 +128,7 @@ const SidebarLeft = (props) => {
                   handleChatClick(
                     "chat",
                     id.length ? id : `new_chat-${index}`,
-                    chat
+                    chatLog
                   )
                 }
                 sx={{
@@ -151,7 +152,10 @@ const SidebarLeft = (props) => {
                 }}
                 className={`${activeCondition && "!bg-[#F3F5FF]"}`}
               >
-                <ListItemAvatar sx={{ m: 0, alignSelf: "center" }}>
+                <ListItemAvatar
+                  sx={{ m: 0, alignSelf: "center" }}
+                  className="!min-w-fit !mr-4"
+                >
                   <Badge
                     overlap="circular"
                     anchorOrigin={{
@@ -164,9 +168,10 @@ const SidebarLeft = (props) => {
                         sx={{
                           width: 6,
                           height: 6,
+
                           borderRadius: "50%",
-                          color: `${statusObj[chat.status]}.main`,
-                          backgroundColor: `${statusObj[chat.status]}.main`,
+                          color: `${statusObj[chatLog.status]}.main`,
+                          backgroundColor: `${statusObj[chatLog.status]}.main`,
                           boxShadow: (theme) =>
                             `0 0 0 2px ${
                               !activeCondition
@@ -177,10 +182,10 @@ const SidebarLeft = (props) => {
                       />
                     }
                   >
-                    {chat.avatar ? (
+                    {chatLog.avatar ? (
                       <MuiAvatar
-                        src={chat.avatar}
-                        alt={chat.chatName}
+                        src={chatLog.avatar}
+                        alt={chatLog.chatName}
                         sx={{
                           width: 38,
                           height: 38,
@@ -194,7 +199,7 @@ const SidebarLeft = (props) => {
                       />
                     ) : (
                       <CustomAvatar
-                        color={chat?.avatarColor || "primary"}
+                        color={chatLog?.avatarColor || "primary"}
                         skin={activeCondition ? "filled" : "light"}
                         sx={{
                           width: 34,
@@ -208,7 +213,7 @@ const SidebarLeft = (props) => {
                             }`,
                         }}
                       >
-                        {getInitials(chat.chatName || "")}
+                        {getInitials(chatLog.chatName || "")}
                       </CustomAvatar>
                     )}
                   </Badge>
@@ -228,7 +233,7 @@ const SidebarLeft = (props) => {
                       className="!font-bold !text-[14px]"
                       sx={{ fontWeight: 500 }}
                     >
-                      {chat.chatName}
+                      {chatLog.chatName}
                     </Typography>
                   }
                   secondary={
@@ -269,10 +274,11 @@ const SidebarLeft = (props) => {
                         formatDateToMonthShort(lastMessage?.time, true)}
                     </>
                   </Typography>
-                  {chat?.chat?.unseenMsgs && chat?.chat?.unseenMsgs > 0 ? (
+                  {chatLog?.chat?.unseenMsgs &&
+                  chatLog?.chat?.unseenMsgs > 0 ? (
                     <Chip
                       color="error"
-                      label={chat.chat.unseenMsgs}
+                      label={chatLog.chat.unseenMsgs}
                       sx={{
                         mt: 0.25,
                         height: 18,
@@ -299,46 +305,21 @@ const SidebarLeft = (props) => {
           .toLowerCase()
           .includes(e.target.value.toLowerCase());
       const filteredChatsArr = store.chat.filter(searchFilterFunction);
-      const filteredContactsArr = store.contacts.filter(searchFilterFunction);
       setFilteredChat(filteredChatsArr);
-      setFilteredContacts(filteredContactsArr);
     }
   };
 
   return (
     <div className="md:pr-3 !rounded-md overflow-hidden">
-      <Drawer
-        open={leftSidebarOpen}
-        onClose={handleLeftSidebarToggle}
-        variant={mdAbove ? "permanent" : "temporary"}
-        ModalProps={{
-          disablePortal: true,
-          keepMounted: true, // Better open performance on mobile.
-        }}
-        sx={{
-          zIndex: 7,
-          height: "100%",
-          display: "block",
-          position: mdAbove ? "static" : "absolute",
-          "& .MuiDrawer-paper": {
-            boxShadow: "none",
-            borderRadius: 2,
-            elevation: 0,
-            width: sidebarWidth,
-            position: mdAbove ? "static" : "absolute",
-          },
-          "& > .MuiBackdrop-root": {
-            borderRadius: 1,
-            position: "absolute",
-            zIndex: (theme) => theme.zIndex.drawer - 1,
-          },
-        }}
-        className="!border-0 !rounded-md"
-      >
+      <Box className={`!w-full md:!w-[300px] bg-white`}>
         <Box className="h-14 border-b pt-6">
           <Box className="flex justify-between items-center px-3">
             <Typography className="!font-bold !text-[17px]">Inbox</Typography>
-            <Icon icon="tabler:search" fontSize={20} />
+            <Icon
+              icon="tabler:search"
+              fontSize={20}
+              onClick={() => setShowSearch(!showSearch)}
+            />
           </Box>
         </Box>
 
@@ -385,34 +366,42 @@ const SidebarLeft = (props) => {
               />
             </Badge>
           ) : null} */}
-          <TextField
-            fullWidth
-            size="small"
-            value={query}
-            onChange={handleFilter}
-            className="border-none"
-            placeholder="Search for store..."
-            sx={{ "& .MuiInputBase-root": { borderRadius: 5, border: "none" }, border: "none" }}
-            InputProps={{
-              className: "!bg-gray-50 !border-none",
-              startAdornment: (
-                <InputAdornment
-                  position="start"
-                  sx={{ color: "text.secondary" }}
-                >
-                  <Icon icon="tabler:search" fontSize={20} />
-                </InputAdornment>
-              ),
-            }}
-          />
-          {!mdAbove ? (
-            <IconButton sx={{ p: 1, ml: 1 }} onClick={handleLeftSidebarToggle}>
+          {mdAbove && (
+              <TextField
+                fullWidth
+                size="small"
+                value={query}
+                onChange={handleFilter}
+                className="border-none"
+                placeholder="Search for store..."
+                sx={{
+                  "& .MuiInputBase-root": { borderRadius: 5, border: "none" },
+                  border: "none",
+                }}
+                InputProps={{
+                  className: "!bg-gray-50 !border-none",
+                  startAdornment: (
+                    <InputAdornment
+                      position="start"
+                      sx={{ color: "text.secondary" }}
+                    >
+                      <Icon icon="tabler:search" fontSize={20} />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
+          {/* {!mdAbove ? (
+            <IconButton
+              sx={{ p: 1, ml: 1 }}
+              onClick={() => setShowSearch(false)}
+            >
               <Icon icon="tabler:x" />
             </IconButton>
-          ) : null}
+          ) : null} */}
         </Box>
 
-        <StyleList sx={{ height: "calc(100vh - 13.9375rem)" }}>
+        <StyleList sx={{ height: "calc(100vh - 11.5375rem)" }}>
           <Box className="overflow-hidden">
             <Box sx={{ p: (theme) => theme.spacing(2, 2, 2) }}>
               {/* <Typography
@@ -426,7 +415,7 @@ const SidebarLeft = (props) => {
             </Box>
           </Box>
         </StyleList>
-      </Drawer>
+      </Box>
 
       <UserProfileLeft
         store={store}

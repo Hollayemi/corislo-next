@@ -108,11 +108,9 @@ export const loginHandler = (
             router.push(`/${returnUrl || ""}`);
           });
         setLoading(false);
-        }
-      router.push(`/${returnUrl || ""}`);
-      setLoading(false);
       }
-    )
+      setLoading(false);
+    })
     .catch((err) => {
       console.log(err);
       toaster({ message: "No Connection", type: "error" });

@@ -74,20 +74,24 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 const StyleList = styled(List)(({ theme }) => ({
   overflowY: "auto",
   "&::-webkit-scrollbar": {
-    width: "5px", // Width of the scrollbar
+    width: "4px", // Width of the scrollbar
   },
   "&::-webkit-scrollbar-thumb": {
-    backgroundColor: "#BDBDBD", // Color of the scrollbar thumb
+    backgroundColor: "#f0eeee", // Color of the scrollbar thumb
     borderRadius: "6px", // Rounded corners of the thumb
+    display: "none !important",
   },
   "&::-webkit-scrollbar-thumb:hover": {
     backgroundColor: "#42496b", // Color of the scrollbar thumb on hover
+  },
+  "&::--webkit-scrollbar-track": {
+    backgroundColor: "#fff",
   },
   cursor: "pointer",
   transition: "all 1.5s",
   // Firefox
   scrollbarWidth: "thin", // Width of the scrollbar
-  scrollbarColor: "#888 #f1f1f1",
+  scrollbarColor: "#bdbdbd #f1f1f1",
 }));
 
 const Drawer = styled(MuiDrawer, {
@@ -109,7 +113,14 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const StoreLeftSideBar = React.memo(
-  ({ children, path, InnerList, BottomList, hideName, breadCrumbChild }) => {
+  ({
+    children,
+    path,
+    InnerList,
+    BottomList,
+    hidebreadCrumb,
+    breadCrumbChild,
+  }) => {
     const { staffInfo, overLay, showOverlay } = useStoreData();
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
@@ -166,7 +177,7 @@ const StoreLeftSideBar = React.memo(
               />
             </Box>
           </DrawerHeader>
-          <StyleList className="overflow-y-scroll">
+          <StyleList className="overflow-y-scroll overflowStyle">
             <List
               className="overflow-hidden shrink-0"
               sx={{ bgcolor: "custom.bodyLight" }}
@@ -295,22 +306,20 @@ const StoreLeftSideBar = React.memo(
           {/* <Box className=""> */}
 
           <Box className="flex flex-col w-full sticky top-0 pt-20 md:px-7 px-3">
-            {onSideBar === "" ||
-              (hideName && (
-                <Typography
-                  color="primary"
-                  className="mb-5 !font-bold !text-2xl"
-                >
-                  Welcome back, {staffInfo.fullname || "Staff Name"}{" "}
-                </Typography>
-              ))}
-            <Box className="flex items-center justify-between mb-6">
-              <Typography color="primary" className="font-bold">
-                Breadcrumb
+            {onSideBar === "" && (
+              <Typography color="primary" className="mb-5 !font-bold !text-2xl">
+                Welcome back, {staffInfo.fullname || "Staff Name"}{" "}
               </Typography>
-              {/* <Breadcrumbs /> */}
-              {/* {breadCrumbChild} */}
-            </Box>
+            )}
+            {!hidebreadCrumb && (
+              <Box className="flex items-center justify-between mb-6">
+                <Typography color="primary" className="font-bold">
+                  Breadcrumb
+                </Typography>
+                {/* <Breadcrumbs /> */}
+                {/* {breadCrumbChild} */}
+              </Box>
+            )}
           </Box>
           <Box className="flex flex-col  relative md:flex-row items-start md:px-1.5">
             {InnerList && (
@@ -322,7 +331,7 @@ const StoreLeftSideBar = React.memo(
                 />
               </Box>
             )}
-            <Box className="!w-full h-full md:px-3 m-1 rounded-md pb-14">
+            <Box className="!w-full h-full md:px-3 m-1 rounded-md b-14">
               {children}
               <Box
                 className="fixed md:hidden bottom-0 left-0 w-full"

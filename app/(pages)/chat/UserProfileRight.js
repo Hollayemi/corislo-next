@@ -108,7 +108,7 @@ export const UserProfileRightComponent = ({
           <Icon icon="tabler:chevron-down" fontSize={20} />
         </Box>
       </Box>
-      <StyleList sx={{ height: "calc(100vh - 14.3125rem)" }}>
+      <StyleList sx={{ height: "calc(100vh - 11.5125rem)" }}>
         <Box className={`!rounded-b-md`}>
           <Box sx={{ position: "relative" }}>
             {!hideCancel && (
@@ -210,10 +210,7 @@ export const UserProfileRightComponent = ({
                     className="!text-[10px]"
                     sx={{ textTransform: "lowercase" }}
                     primaryTypographyProps={{ variant: "body1" }}
-                    primary={`${store.selectedChat.contact.chatName.replace(
-                      /\s/g,
-                      "_"
-                    )}@email.com`}
+                    primary={`store@gmail.com`}
                   />
                 </ListItem>
                 <ListItem sx={{ px: 1 }}>

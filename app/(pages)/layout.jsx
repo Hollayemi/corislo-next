@@ -30,6 +30,7 @@ const persistor = persistStore(store);
 // ** Pace Loader
 export default function RootLayout({ children }) {
   const [hideOverflow, setOverflow] = useState(false)
+  // const [loading, setLoading] = useState(false)
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker

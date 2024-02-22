@@ -9,10 +9,7 @@ import { CartProductView } from "@/app/components/templates/productView";
 import HomeWrapper from "@/app/components/view/home";
 import ReactSlickSlider from "@/app/components/wrapper/react-slick";
 import { useRouter } from "next/navigation";
-import {
-  hotDealData,
-  popularProducts,
-} from "@/app/data/home/homepage";
+import { hotDealData, popularProducts } from "@/app/data/home/homepage";
 import {
   Box,
   Button,
@@ -26,18 +23,18 @@ import React, { useState } from "react";
 import { useUserData } from "@/app/hooks/useData";
 import { deleteBulkCart } from "@/app/redux/state/slices/home/cart";
 import { useDispatch } from "react-redux";
+import CustomOption from "@/app/components/option-menu/option";
+import Link from "next/link";
+import useSWR from "swr";
 
 const UserCart = () => {
   const dispatch = useDispatch();
-  const { cartData, cartedProds } = useUserData();
+  const { data: addrs } = useSWR("/user/addresses");
+  const addresses = addrs?.data || [];
+  const { cartData, cartedProds, userInfo, temp, addTemp } = useUserData();
   const [selected, selectCart] = useState([]);
   const router = useRouter();
-  // mutate(
-  //   "selectCarts",
-  //   selected.map((x) => {
-  //     return { cartId: x, dilivery: "pickup" };
-  //   })
-  // );
+  const address = temp.address || userInfo?.selectedAddress || null;
   return (
     <HomeWrapper>
       <Box className="!px-2 my-5 sm:!px-16 md:!px-24 lg:!px-32 md:!py-7 relative">
@@ -167,15 +164,41 @@ const UserCart = () => {
                 </Typography>
                 <Box className="w-full flex justify-between items-center !mt-5">
                   <Typography variant="body2" className="!text-[11px] w-8/12">
-                    54, Adelubido crescent, opposite chicken republic (Ondo
-                    State, Nigeria)
+                    {(address &&
+                      `${address.address}, ${address.state}, ${address.city} (${address.postal_code})`) ||
+                      "No address selected"}
                   </Typography>
-                  <Button
-                    variant="outlined"
-                    className="w-20 h-6 !rounded-full !border !border-blue-500 !text-[12px] !text-blue-600"
-                  >
-                    Change
-                  </Button>
+                  <CustomOption
+                    addBtn={
+                      <Link href="/user" className="!w-full">
+                        <Typography
+                          variant="body2"
+                          className="!text-[15px] !text-blue-800 mt-5"
+                        >
+                          <span className="mr-3 !text-[17px]">+</span> Add
+                          address
+                        </Typography>
+                      </Link>
+                    }
+                    icon={
+                      <Button
+                        variant="outlined"
+                        className="w-20 h-6 !rounded-full !border !border-blue-500 !text-[12px] !text-blue-600"
+                      >
+                        {address ? "Change" : "Select"}
+                      </Button>
+                    }
+                    options={addresses.map(
+                      (e) =>
+                        `${e?.address}, ${e?.state}, ${e?.city} (${e?.postal_code})`
+                    )}
+                    butPush={addresses.map((e) => e)}
+                    clickFunction={(e) =>
+                      addTemp((prev) => {
+                        return { ...prev, address: e };
+                      })
+                    }
+                  />
                 </Box>
               </Box>
               <Box className="bg-white rounded-md py-5 px-4 mt-4">

@@ -78,24 +78,24 @@ const ChangeQty = ({
 const SaveItemRightButtons = ({ payload, id }) => {
   const dispatch = useDispatch();
   return (
-    <Box className="w-20 absolute top-2 right-0 -mr-7 md:mr-2">
-      <Box className="float-right mb-10 md:mb-6 ">
-        <Button
+    <Box className="w-20 absolute bottom-4 md:top-2 right-0 -mr-3 md:mr-2">
+      <Box className="float-right items-center md:mb-6 ">
+        <Box
           variant="contained"
-          className="!w-10 !min-w-10 md:!w-32 !text-[11px] !rounded-full !h-9 !shadow-none"
+          className="!w-9 !min-w-10 md:!w-24 bg-blue-800 text-white !text-[12px] flex cursor-pointer justify-center items-center !rounded-full !h-9 !shadow-none"
           onClick={() => addCartHandler(payload, dispatch)}
         >
           <p className="hidden md:block"> Add to cart</p>
           <ShoppingCartSharp className="md:!hidden !text-[18px]" />
-        </Button>
-        <Button
+        </Box>
+        <Box
           variant="outlined"
-          className="!w-10 !min-w-10 md:!w-32 !text-[11px] !rounded-full !h-9 !shadow-none !mt-2"
+          className="!w-9 !min-w-10 md:!w-24 border border-blue-800 text-blue-800 !text-[12px] flex cursor-pointer justify-center items-center !rounded-full !h-9 !shadow-none !mt-2"
           onClick={() => saveProduct(payload, dispatch)}
         >
           <p className="hidden md:block">Remove Item</p>
           <Delete className="md:!hidden !text-[18px]" />
-        </Button>
+        </Box>
       </Box>
     </Box>
   );

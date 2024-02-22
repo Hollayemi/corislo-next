@@ -141,10 +141,10 @@ export const formatCreditCardNumber = (value, Payment) => {
       )} ${clearValue.slice(10, 14)}`;
       break;
     default:
-      nextValue = `${clearValue.slice(0, 4)} ${clearValue.slice(
+      nextValue = `${clearValue.slice(0, 4)}   ${clearValue.slice(
         4,
         8
-      )} ${clearValue.slice(8, 12)} ${clearValue.slice(12, 16)}`;
+      )}  ${clearValue.slice(8, 12)}  ${clearValue.slice(12, 16)}`;
       break;
   }
 

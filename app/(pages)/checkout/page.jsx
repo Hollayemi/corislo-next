@@ -5,17 +5,26 @@ import HomeWrapper from "@/app/components/view/home";
 import { userGroupCartData } from "@/app/data/home/homepage";
 import { useUserData } from "@/app/hooks/useData";
 import { addNewOrder } from "@/app/redux/state/slices/home/order";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, FormControlLabel, Grid, Typography } from "@mui/material";
 import Image from "next/image";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
+import { TitleSubtitle } from "../user/components";
+import CustomOption from "@/app/components/option-menu/option";
+import { detectCardType } from "@/app/utils/format";
+import { CardTemplate } from "../user/billingAndAddress";
+import Link from "next/link";
 
 const Checkout = () => {
-  const dispatch = useDispatch()
-  const { cartedProds } = useUserData()
+  const dispatch = useDispatch();
+  const { cartedProds, userInfo, temp } = useUserData();
   const { data: carts, error } = useSWR("/user/cart-group");
   const { data: pickups, pickupError } = useSWR("/user/pickup");
+  const { data: addrs } = useSWR("/user/addresses");
+  const { data: cards } = useSWR("/user/billings");
+  const addresses = addrs?.data || [];
+  const billings = cards?.data || [];
   const groupedCart = carts ? carts.data : [];
   const pickers = pickups ? pickups.data : [];
   console.log(groupedCart, pickers);
@@ -25,10 +34,12 @@ const Checkout = () => {
     delivery: {},
     deliveryFee: {},
     picker: {},
-    shippingAddress: {},
+    shippingAddress: temp.address || userInfo?.selectedAddress || null,
+    billingCard: userInfo?.selectedBilling || null,
   });
   console.log(payload);
-
+  const address = payload.shippingAddress;
+  const card = payload.billingCard;
   return (
     <HomeWrapper>
       <Box>
@@ -41,15 +52,43 @@ const Checkout = () => {
                 </Typography>
                 <Box className="w-full flex justify-between items-center !mt-5">
                   <Typography variant="body2" className="!text-[11px] w-8/12">
-                    54, Adelubido crescent, opposite chicken republic (Ondo
-                    State, Nigeria)
+                    {address
+                      ? `${address?.address}, ${address?.state}, ${address?.city} (${address?.postal_code})`
+                      : "No address"}
                   </Typography>
-                  <Button
-                    variant="outlined"
-                    className="w-20 h-6 !rounded-full !border !border-blue-500 !text-[12px] !text-blue-600"
-                  >
-                    Change
-                  </Button>
+                  <CustomOption
+                    addBtn={
+                      <Link href="/user" className="!w-full">
+                        <Typography
+                          variant="body2"
+                          className="!text-[15px] !text-blue-800 mt-5"
+                        >
+                          <span className="mr-3 !text-[17px]">+</span> Add
+                          address
+                        </Typography>
+                      </Link>
+                    }
+                    icon={
+                      <Button
+                        variant="outlined"
+                        className="w-20 h-6 !rounded-full !border !border-blue-500 !text-[12px] !text-blue-600"
+                      >
+
+                        {address ? "Change " : "Select "}
+                      </Button>
+                    }
+                    template={<TitleSubtitle />}
+                    options={addresses.map(
+                      (e) =>
+                        `${e?.address}, ${e?.state}, ${e?.city} (${e?.postal_code})`
+                    )}
+                    butPush={addresses.map((e) => e)}
+                    clickFunction={(e) =>
+                      updatePayload((prev) => {
+                        return { ...prev, shippingAddress: e };
+                      })
+                    }
+                  />
                 </Box>
                 <Box className="w-full flex justify-between !text-black px-4 py-3 !rounded-md bg-red-100 items-center !mt-8">
                   <Typography variant="body2" className="!text-[11px]">
@@ -161,33 +200,71 @@ const Checkout = () => {
                   >
                     Payment Option
                   </Typography>
-                  <Box className="w-full flex justify-between items-center !mt-5">
+                  <Box className="w-full flex justify-between items-center !my-5">
                     <Box className="flex items-center">
-                      <input type="radio" />
-                      <Image
-                        src="/images/misc/visa.png"
-                        alt="visa"
-                        width={150}
-                        height={150}
-                        className="w-14 h-10 ml-3"
-                      />
-                    </Box>
-                    <Box className="flex justify-between items-center w-2/3">
-                      <Typography variant="body2" className="!text-[12px]">
-                        4253********4356
-                      </Typography>
-                      <Typography variant="body2" className="!text-[12px]">
-                        05/24
-                      </Typography>
+                      {card ? (
+                        <CardTemplate
+                          cardType={detectCardType(card?.openDigits[0])}
+                          name={card?.name}
+                          openDigits={card?.openDigits}
+                          id={card?._id}
+                          expiry={card?.expiry}
+                          hideDelete
+                        />
+                      ) : (
+                        <Typography
+                          variant="body2"
+                          className="!text-[14px] !text-black !mb-5 !text-center !w-full"
+                        >
+                          No card selected
+                        </Typography>
+                      )}
                     </Box>
                   </Box>
-                  <Typography
-                    variant="body2"
-                    className="!text-[11px] !text-blue-800 mt-5"
-                  >
-                    <span className="mr-3 !text-[15px]">+</span> Add new payment
-                    option
-                  </Typography>
+                  {/* <Link href="/user">
+                    <Typography
+                      variant="body2"
+                      className="!text-[15px] !text-blue-800 mt-5"
+                    >
+                      <span className="mr-3 !text-[17px]">+</span> Add payment
+                      option
+                    </Typography>
+                  </Link> */}
+                  <CustomOption
+                    addBtn={
+                      <Link href="/user" className="!w-full">
+                        <Typography
+                          variant="body2"
+                          className="!text-[15px] !text-blue-800 mt-5"
+                        >
+                          <span className="mr-3 !text-[17px]">+</span> Add
+                          Payment
+                        </Typography>
+                      </Link>
+                    }
+                    icon={
+                      <Typography
+                        variant="body2"
+                        className="!text-[15px] !text-blue-800 mt-5"
+                      >
+                        <span className="mr-3 !text-[17px]">+</span>{" "}
+                        {card ? "Change " : "Select "}
+                        payment option
+                      </Typography>
+                    }
+                    options={billings?.map(
+                      (e) =>
+                        `${e?.name}, ${e?.openDigits[0]}****${
+                          e?.openDigits[1]
+                        }, ${e?.expiry}. (${detectCardType(e?.openDigits[0])})`
+                    )}
+                    butPush={billings.map((e) => e)}
+                    clickFunction={(e) =>
+                      updatePayload((prev) => {
+                        return { ...prev, billingCard: e };
+                      })
+                    }
+                  />
                 </Box>
                 <Button
                   variant="contained"
@@ -206,3 +283,21 @@ const Checkout = () => {
 };
 
 export default Checkout;
+
+const SelectedAddressTemplate = ({ data, onClick, checked }) => {
+  return (
+    <FormControlLabel
+      className="!w-full !mb-5"
+      label={
+        <Box className="flex !w-full justify-between items-start">
+          <TitleSubtitle
+            title={data.address}
+            subtitle={`${data.state}, Nigeria, ${data.postal_code}"`}
+            titleClass="!text-[13px]"
+          />
+        </Box>
+      }
+      control={<Radio onClick={onClick} checked={checked} />}
+    />
+  );
+};

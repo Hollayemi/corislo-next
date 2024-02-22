@@ -27,10 +27,11 @@ const ChatLog = (props) => {
   // ** Props
   const { data, hidden, socket } = props;
   const storeContact = data?.contact;
-  if (!storeContact?.storeJoined) {
+  const userProfile = data?.userProfile;
+  if (storeContact?.storeJoined && userProfile.role === "store") {
     socket.emit("joinRoom", {
       chatId: storeContact?.chat?.id,
-      store: data?.userContact?.role,
+      role: userProfile.role,
     });
   }
   // ** Ref
@@ -51,9 +52,7 @@ const ChatLog = (props) => {
   const formattedChatData = () => {
     let chatLog = [];
     if (data.chat) {
-      if (data.chat.chat) {
-        chatLog = data.chat.chat;
-      }
+      chatLog = data.chat;
     }
     const formattedChatLog = [];
     let chatMessageBy = chatLog[0] ? chatLog[0].by : null;
@@ -91,7 +90,7 @@ const ChatLog = (props) => {
 
   const renderMsgFeedback = (isSender, feedback) => {
     if (isSender) {
-      if (feedback.isSent && !feedback.isDelivered) {
+      if (feedback?.isSent && !feedback.isDelivered) {
         return (
           <Box
             component="span"
@@ -103,7 +102,7 @@ const ChatLog = (props) => {
             <Icon icon="tabler:check" fontSize="0.825rem" />
           </Box>
         );
-      } else if (feedback.isSent && feedback.isDelivered) {
+      } else if (feedback?.isSent && feedback?.isDelivered) {
         return (
           <Box
             component="span"
@@ -124,7 +123,7 @@ const ChatLog = (props) => {
     }
   };
   useEffect(() => {
-    if (data && data.chat && data.chat?.chat?.length) {
+    if (data && data.chat?.length) {
       scrollToBottom();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,18 +132,21 @@ const ChatLog = (props) => {
   // ** Renders user chat
   const renderChats = () => {
     return formattedChatData().map((item, index) => {
-      const isSender = item.by === data.userContact.role;
-
+      const isSender = item.by === userProfile.role;
+      const isNotif = item.by === "notification";
       return (
         <Box
           key={index}
           sx={{
             display: "flex",
-            flexDirection: !isSender ? "row" : "row-reverse",
+            flexDirection: isNotif ? "" : !isSender ? "row" : "row-reverse",
             mb: index !== formattedChatData().length - 1 ? 4 : undefined,
           }}
+          className={`${
+            isNotif && "justify-center !text-gray-400 text-[12px] "
+          } px-3`}
         >
-          <div>
+          <div className={`${isNotif && "hidden"}`}>
             <CustomAvatar
               skin="light"
               className="border"
@@ -161,13 +163,13 @@ const ChatLog = (props) => {
               {...(data.contact.avatar && !isSender
                 ? {
                     src: data.contact.avatar,
-                    alt: data.contact.fullName,
+                    alt: data.contact.chatName,
                   }
                 : {})}
               {...(isSender
                 ? {
-                    src: data.userContact.avatar,
-                    alt: data.userContact.fullName,
+                    src: userProfile.avatar,
+                    alt: userProfile.fullName,
                   }
                 : {})}
             >
@@ -196,9 +198,11 @@ const ChatLog = (props) => {
                         borderTopLeftRadius: !isSender ? 0 : undefined,
                         borderTopRightRadius: isSender ? 0 : undefined,
                         color: "text.secondary",
-                        backgroundColor: isSender
-                          ? "custom.bodyGray"
-                          : "custom.lightSec",
+                        backgroundColor: !isNotif
+                          ? isSender
+                            ? "custom.bodyGray"
+                            : "custom.lightSec"
+                          : "",
                       }}
                       className="!text-[13px]"
                     >
@@ -213,6 +217,7 @@ const ChatLog = (props) => {
                         alignItems: "center",
                         justifyContent: isSender ? "flex-end" : "flex-start",
                       }}
+                      className={`${isNotif && "!hidden"}`}
                     >
                       {renderMsgFeedback(isSender, chat.feedback)}
                       <Typography
@@ -252,18 +257,12 @@ const ChatLog = (props) => {
   };
 
   return (
-    <Box sx={{ height: "calc(100vh - 13.9375rem)" }}>
+    <Box sx={{ height: "calc(100vh - 11.5375rem)" }}>
       <StyleList
         sx={{ height: "calc(100% - 0.7375rem)" }}
         className="!overflow-x-hidden px- md:px-4 py-5"
         ref={chatArea}
       >
-        <Box className="flex justify-center !mb-8">
-          <Typography variant="caption" className="!text-gray-400 text-[12px]">
-            {data.userContact.username} has been connected to{" "}
-            {data?.contact?.store}
-          </Typography>
-        </Box>
         {renderChats()}
       </StyleList>
     </Box>

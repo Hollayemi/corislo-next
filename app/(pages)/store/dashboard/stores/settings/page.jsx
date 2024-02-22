@@ -129,11 +129,11 @@ const StorePage = ({ params }) => {
     >
       <Box className="px-10 !hidden sm:!flex z-50 -mt-7">
         <Link href="/store/dashboard/stores">
-          <Typography className="pb-1 border-b-2 cursor-pointer text-sm font-semibold w-24 text-center border-transparent">
+          <Typography className="pb-1 border-b-2 cursor-pointer !text-[13px] !w-24 text-center border-transparent">
             Store Profile
           </Typography>
         </Link>
-        <Typography className="pb-1 border-b-2 cursor-pointer text-sm font-semibold w-28 !ml-6 text-center border-blue-900">
+        <Typography className="pb-1 border-b-2 cursor-pointer !text-[13px] !w-28 !ml-6 text-center border-blue-900">
           Store Settings
         </Typography>
       </Box>

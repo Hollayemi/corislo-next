@@ -19,6 +19,8 @@ const defaultProvider = {
   loading: false,
   setLoading: () => {},
   socket: null,
+  temp: {},
+  addTemp: () => {},
 };
 const DataContext = createContext(defaultProvider);
 
@@ -27,7 +29,10 @@ const UserDataProvider = ({ children, setOverflow }) => {
   const pathname = usePathname();
   const [loading, setLoading] = useState(false);
   const [socket, setSocket] = useState(null);
+  const [temp, addTemp] = useState({});
   const { userData } = useSelector((state) => state.reducer.loginReducer);
+
+  useEffect(() => setOverflow(loading), [loading]);
 
   const getPath = pathname.split("/");
   useEffect(() => {
@@ -162,8 +167,7 @@ const UserDataProvider = ({ children, setOverflow }) => {
       value={{
         cartedProds:
           (!cartErr && !cartIsLoading && cartData?.data?.cartedProds) || [],
-        savedProds:
-          (!savedErr && !savedIsLoading && savedData?.data) || [],
+        savedProds: (!savedErr && !savedIsLoading && savedData?.data) || [],
         following: (!folErr && !folIsLoading && following?.data) || [],
         cartData: (!cartErr && !cartIsLoading && cartData?.data) || {},
         userInfo: (!userErr && !userIsLoading && userInfo?.user) || {},
@@ -174,6 +178,8 @@ const UserDataProvider = ({ children, setOverflow }) => {
         setLoading: setLoading,
         setOverflow: setOverflow,
         isOffline: isOffline(),
+        temp,
+        addTemp,
       }}
     >
       {children}

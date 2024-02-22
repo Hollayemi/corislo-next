@@ -51,47 +51,43 @@ const StoreDataProvider = ({ children }) => {
   // }, [userData, getPath, router]);
 
   useEffect(() => {
-    if (!socket) {
-      let server = "http://localhost:3033";
-      if (process.env.NODE_ENV === "production") {
-        console.log("in production");
-        server = "https://corislo-backend.onrender.com";
-      }
-      // const newSocket = io(server, {
-      //   query: {
-      //     token: localStorage.getItem("store_token"),
-      //     by: "store_token",
-      //   },
-      //   port: 3033
-      // });
-      // setSocket(newSocket);
+     if (!socket) {
+       let server = "http://localhost:5001";
+       if (process.env.NODE_ENV === "production") {
+         server = "https://corislo-backend.onrender.com";
+       }
+       const newSocket = io(server, {
+         query: {
+           token: localStorage.getItem("store_token"),
+           by: "store_token",
+           port: 3033,
+         },
+       });
+       setSocket(newSocket);
 
-      // newSocket.on("connect", () => {
-      //   console.log("Socket connected");
-      // });
+       newSocket.on("connect", () => {
+         console.log("Socket connected");
+       });
 
-      // newSocket.on("disconnect", () => {
-      //   console.log("Socket disconnected");
-      // });
+       newSocket.on("disconnect", () => {
+         console.log("Socket disconnected");
+       });
 
-      // newSocket.on("roomJoined", ({ room }) => {
-      //   console.log(`Successfully joined room: ${room}`);
-      // });
+       newSocket.on("roomJoined", ({ room }) => {
+         console.log(`Successfully joined room: ${room}`);
+       });
 
-      // newSocket.on("newMessage", (data) => {
-      //   console.log(data);
-      // });
-    }
+       newSocket.on("newMessage", (data) => {
+         console.log(data);
+       });
+     }
 
-    // Cleanup when the component unmounts
-    return () => {
-      if (socket) {
-        socket.on("newMessage", (data) => {
-          console.log(data);
-        });
-        socket.disconnect();
-      }
-    };
+     // Cleanup when the component unmounts
+     return () => {
+       if (socket) {
+         socket.disconnect();
+       }
+     };
   }, [socket]);
 
   useEffect(() => {

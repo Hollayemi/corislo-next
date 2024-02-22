@@ -10,6 +10,7 @@ import {
 import React, { useState } from "react";
 import { MyTextField, TitleSubtitle } from "./components";
 import { Add, Remove } from "@mui/icons-material";
+import useSWR from "swr";
 import Image from "next/image";
 import {
   detectCardType,
@@ -21,8 +22,24 @@ import {
 import Chip from "@/app/components/chip";
 import IconifyIcon from "@/app/components/icon";
 import Payment from "payment";
+import {
+  deleteAddress,
+  saveNewAddress,
+} from "@/app/redux/state/slices/users/address";
+import {
+  deleteBilling,
+  saveBilling,
+} from "@/app/redux/state/slices/users/billing";
+import { selectAsDefault } from "@/app/redux/state/slices/users";
+import { useDispatch } from "react-redux";
+import { useUserData } from "@/app/hooks/useData";
 
 const BillingAndAddress = () => {
+  const { userInfo } = useUserData();
+  const { data: addrs } = useSWR("/user/addresses");
+  const { data: cards } = useSWR("/user/billings");
+  const addresses = addrs?.data || [];
+  const billings = cards?.data || [];
   const [newCard, openNewCard] = useState(false);
   const [newAddress, openNewAddress] = useState(false);
   const [cardPayload, setCardData] = useState({
@@ -31,6 +48,20 @@ const BillingAndAddress = () => {
     expiry: "",
     name: "",
   });
+  const [addressPayload, setAddressData] = useState({
+    address: "",
+    state: "",
+    city: "",
+    postal_code: "",
+  });
+  const dispatch = useDispatch();
+  const handleAddressData =
+    (prop) =>
+    ({ target }) => {
+      setAddressData((data) => {
+        return { ...data, [prop]: target.value };
+      });
+    };
   const handleInputChange =
     (prop) =>
     ({ target }) => {
@@ -47,7 +78,6 @@ const BillingAndAddress = () => {
         setCardData({ ...cardPayload, [prop]: target.value });
       }
     };
-  console.log(cardPayload);
   const AddBtn = ({ btnText, click }) => (
     <Button
       variant="text"
@@ -119,7 +149,12 @@ const BillingAndAddress = () => {
                   PClassName="w-full sm:w-1/2 px-1 !tracking-wider"
                 />
               </Box>
-              <Button fullWidth variant="contained" className="!h-10 !w-full">
+              <Button
+                onClick={() => saveBilling(cardPayload, dispatch)}
+                fullWidth
+                variant="contained"
+                className="!h-10 !w-full"
+              >
                 Save Card
               </Button>
               <br />
@@ -133,35 +168,30 @@ const BillingAndAddress = () => {
           </Typography>
 
           <Box className="mt-4 w-full">
-            <FormControlLabel
-              className="!w-full !mb-2"
-              onChange={(e) => {}}
-              label={
-                <CardTemplate
-                  cardType="Visa"
-                  name="Creative Box"
-                  first4={2342}
-                  last4={6796}
-                  status="Expired"
-                />
-              }
-              control={<Radio name="holla" size="small" />}
-            />
-
-            <FormControlLabel
-              className="!mb-2 w-full"
-              onChange={(e) => {}}
-              label={
-                <CardTemplate
-                  cardType="mastercard"
-                  name="Oluwasusi Stephen"
-                  first4={3343}
-                  last4={2323}
-                  status="Active"
-                />
-              }
-              control={<Radio name="holla" size="small" />}
-            />
+            {billings.map((each, i) => (
+              <FormControlLabel
+                key={i}
+                className="!w-full !mb-2"
+                onChange={(e) => {}}
+                label={
+                  <CardTemplate
+                    cardType={detectCardType(each?.openDigits[0])}
+                    name={each.name}
+                    openDigits={each?.openDigits}
+                    id={each?._id}
+                    expiry={each.expiry}
+                  />
+                }
+                control={
+                  <Radio
+                    onClick={() =>
+                      selectAsDefault({ field: "card", data: each }, dispatch)
+                    }
+                    checked={userInfo?.selectedBilling?._id === each._id}
+                  />
+                }
+              />
+            ))}
           </Box>
         </Grid>
         <Grid item xs={12} md={6} className="!mt-10 md:!mt-0">
@@ -173,6 +203,48 @@ const BillingAndAddress = () => {
             btnText={newAddress ? "Close" : "Add Address"}
             click={openNewAddress}
           />
+          {newAddress && (
+            <Box className="lg:pr-10">
+              <Box className="flex items-center justify-between flex-wrap w-full">
+                <MyTextField
+                  title="Enter your shipping address"
+                  value={addressPayload.address}
+                  onChange={handleAddressData("address")}
+                  PClassName="w-full sm:w-1/2 px-1 !tracking-wider"
+                />
+                <MyTextField
+                  title="State"
+                  value={addressPayload.state}
+                  onChange={handleAddressData("state")}
+                  type="text"
+                  PClassName="w-full sm:w-1/2 px-1 !tracking-wider"
+                />
+              </Box>
+              <Box className="flex items-center justify-between flex-wrap w-full">
+                <MyTextField
+                  title="City"
+                  value={addressPayload.city}
+                  onChange={handleAddressData("city")}
+                  PClassName="w-full sm:w-1/2 px-1 !tracking-wider"
+                />
+                <MyTextField
+                  title="Zip Code"
+                  value={addressPayload.postal_code}
+                  onChange={handleAddressData("postal_code")}
+                  type="text"
+                  PClassName="w-full sm:w-1/2 px-1 !tracking-wider"
+                />
+              </Box>
+              <Button
+                onClick={() => saveNewAddress(addressPayload, dispatch)}
+                fullWidth
+                variant="contained"
+                className="!h-10 !w-full"
+              >
+                Save Address
+              </Button>
+            </Box>
+          )}
           <br />
           <Typography
             variant="body2"
@@ -182,31 +254,37 @@ const BillingAndAddress = () => {
           </Typography>
 
           <Box className="mt-4 w-full">
-            <FormControlLabel
-              className="!w-full !mb-3"
-              onChange={(e) => {}}
-              label={
-                <TitleSubtitle
-                  title="Flat 23, Obamukuro Estate, Lekki"
-                  subtitle="Lagos State, Nigeria, 345292"
-                  titleClass="!text-[13px]"
-                />
-              }
-              control={<Radio name="holla" size="small" label="sddfds" />}
-            />
-
-            <FormControlLabel
-              className="!mb-3"
-              onChange={(e) => {}}
-              label={
-                <TitleSubtitle
-                  title="No 35, Omuaran Street, Magodo"
-                  subtitle="Lagos State, Nigeria, 345292"
-                  titleClass="!text-[13px]"
-                />
-              }
-              control={<Radio name="holla" size="small" />}
-            />
+            {addresses.map((each, i) => (
+              <FormControlLabel
+                className="!w-full !mb-5"
+                key={i}
+                label={
+                  <Box className="flex !w-full justify-between items-start">
+                    <TitleSubtitle
+                      title={each.address}
+                      subtitle={`${each.state}, Nigeria, ${each.postal_code}"`}
+                      titleClass="!text-[13px]"
+                    />
+                    <IconifyIcon
+                      icon="tabler:trash"
+                      onClick={() => deleteAddress(each._id, dispatch)}
+                      className="!text-red-500 !text-[16px] md:!text-[18px] !ml-2 md:!ml-6"
+                    />
+                  </Box>
+                }
+                control={
+                  <Radio
+                    onClick={() =>
+                      selectAsDefault(
+                        { field: "address", data: each },
+                        dispatch
+                      )
+                    }
+                    checked={userInfo?.selectedAddress?._id === each._id}
+                  />
+                }
+              />
+            ))}
           </Box>
         </Grid>
       </Grid>
@@ -216,56 +294,98 @@ const BillingAndAddress = () => {
 
 export default BillingAndAddress;
 
-const CardTemplate = ({
+export const CardTemplate = ({
   cardType,
   name,
-  first4,
-  last4,
-  date = new Date(),
-  status = "Active",
-}) => (
-  <Box className="flex items-center justify-evenly w-full mb-2">
-    <Image
-      src={`/images/misc/others/${cardType.toLowerCase()}.png`}
-      alt="mastercard"
-      width={200}
-      height={200}
-      className="w-6 h-6 md:w-10 md:h-10 !mx-1 md:!mx-2.5"
+  openDigits,
+  id,
+  expiry,
+  hideDelete,
+}) => {
+  const dispatch = useDispatch();
+  const expiryDate = expiry.split("/");
+  const currDate = new Date();
+  const status =
+    currDate.getMonth() + 1 <= expiryDate[0] &&
+    parseInt(expiryDate[1]) + 2000 >= currDate.getFullYear()
+      ? "Active"
+      : "Expire";
+  return (
+    <Box className="flex items-center justify-evenly !w-full">
+      <Image
+        src={`/images/misc/others/${cardType.toLowerCase()}.png`}
+        alt="mastercard"
+        width={200}
+        height={200}
+        className="w-6 h-6 md:w-10 md:h-10 !mx-1 md:!mr-2.5"
+      />
+      <Typography
+        variant="body2"
+        noWrap
+        className="!text-black w- !text-[12px] md:!text-[13px] !mx-1 md:!mx-2.5"
+      >
+        {mySubstring(name, 7)}
+      </Typography>
+      <Typography
+        variant="body2"
+        className="!text-black !text-[12px] md:!text-[13px] !mx-1 md:!mx-2.5"
+      >
+        {`${openDigits[0]}****${openDigits[0]}`}
+      </Typography>
+      <Typography
+        variant="body2"
+        className="!text-black !text-[12px] md:!text-[13px] !mx-1 md:!mx-2.5"
+      >
+        {expiry}
+      </Typography>
+      {!hideDelete && <Chip
+        rounded
+        size="small"
+        skin="light"
+        color={status === "Active" ? "success" : "error"}
+        label={status}
+        className="!mx-1 md:!mx-2.5 !w-16"
+        sx={{ "& .MuiChip-label": { textTransform: "capitalize" } }}
+      />
+      }
+      {!hideDelete && (
+        <IconifyIcon
+          icon="tabler:trash"
+          onClick={() => deleteBilling(id, dispatch)}
+          className="!text-red-500 !text-[16px] md:!text-[18px] md:!mx-2 !flex-shrink-0"
+        />
+      )}
+    </Box>
+  );
+};
+
+const selectedAddressTemplate = () => {
+  return (
+    <FormControlLabel
+      className="!w-full !mb-5"
+      key={i}
+      label={
+        <Box className="flex !w-full justify-between items-start">
+          <TitleSubtitle
+            title={each.address}
+            subtitle={`${each.state}, Nigeria, ${each.postal_code}"`}
+            titleClass="!text-[13px]"
+          />
+          <IconifyIcon
+            icon="tabler:trash"
+            onClick={() => deleteAddress(each._id, dispatch)}
+            className="!text-red-500 !text-[16px] md:!text-[18px] !ml-2 md:!ml-6"
+          />
+        </Box>
+      }
+      control={
+        <Radio
+          onClick={() =>
+            selectAsDefault({ field: "address", data: each }, dispatch)
+          }
+          checked={userInfo?.selectedAddress?._id === each._id}
+        />
+      }
     />
-    <Typography
-      variant="body2"
-      noWrap
-      className="!text-black w- !text-[12px] md:!text-[13px] !mx-1 md:!mx-2.5"
-    >
-      {mySubstring(name, 7)}
-    </Typography>
-    <Typography
-      variant="body2"
-      className="!text-black !text-[12px] md:!text-[13px] !mx-1 md:!mx-2.5"
-    >
-      {`${first4}****${last4}`}
-    </Typography>
-    <Typography
-      variant="body2"
-      className="!text-black !text-[12px] md:!text-[13px] !mx-1 md:!mx-2.5"
-    >
-      {`${date.getMonth() + 1}/${date
-        .getFullYear()
-        .toString()
-        .substring(2, 4)}`}
-    </Typography>
-    <Chip
-      rounded
-      size="small"
-      skin="light"
-      color={status === "Active" ? "success" : "error"}
-      label={status}
-      className="!mx-1 md:!mx-2.5 !w-16"
-      sx={{ "& .MuiChip-label": { textTransform: "capitalize" } }}
-    />
-    <IconifyIcon
-      icon="tabler:trash"
-      className="!text-red-500 !text-[16px] md:!mx-2"
-    />
-  </Box>
-);
+  );
+};

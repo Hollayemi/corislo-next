@@ -19,11 +19,13 @@ import SendMsgForm from "./SendMsgForm";
 import CustomAvatar from "@/app/components/avatar";
 import OptionsMenu from "@/app/components/option-menu";
 import UserProfileRight from "./UserProfileRight";
+import SidebarLeft from "./SidebarLeft";
+import { ChevronLeft } from "@mui/icons-material";
 
 // ** Styled Components
 const ChatWrapperStartChat = styled(Box)(({ theme }) => ({
   flexGrow: 1,
-  height: "calc(100vh - 5.9375rem)",
+  height: "calc(100vh - 5.0375rem)",
   display: "flex",
   borderRadius: 1,
   alignItems: "center",
@@ -42,6 +44,7 @@ const ChatContent = (props) => {
     dispatch,
     chatType,
     statusObj,
+    selectChat,
     getInitials,
     sidebarWidth,
     setMessageLog,
@@ -128,7 +131,7 @@ const ChatContent = (props) => {
             <Box
               sx={{
                 py: 1,
-                px: 2.5,
+                px: 1.5,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
@@ -138,8 +141,9 @@ const ChatContent = (props) => {
             >
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 {mdAbove ? null : (
-                  <IconButton onClick={handleLeftSidebarToggle} sx={{ mr: 2 }}>
-                    <Icon icon="tabler:menu-2" />
+                  <IconButton onClick={() => selectChat("")} sx={{ mr: 1 }}>
+                    {/* <Icon icon="tabler:menu-2" /> */}
+                    <ChevronLeft />
                   </IconButton>
                 )}
                 <Box
@@ -239,7 +243,7 @@ const ChatContent = (props) => {
             {selectedChat && store.userProfile ? (
               <ChatLog
                 hidden={hidden}
-                data={{ ...selectedChat, userContact: store.userProfile }}
+                data={{ ...selectedChat, userProfile: store.userProfile }}
                 socket={socket}
               />
             ) : null}
