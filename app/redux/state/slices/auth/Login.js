@@ -49,11 +49,9 @@ const UserSlice = createSlice({
   initialState,
   reducers: {
     userLogout: () => {
-      clearCart();
       localStorage.removeItem("user_token");
       localStorage.removeItem("store_token");
-      localStorage.removeItem("downloadPwa");
-      localStorage.removeItem("redirected_from");
+      window && window.location.replace("/")
       return initialState;
     },
   },
@@ -105,7 +103,11 @@ export const loginHandler = (
         dispatch(getAccount())
           .then(unwrapResult)
           .then(() => {
-            router.push(`/${returnUrl || ""}`);
+            if (returnUrl) {
+              router.push(`/${returnUrl}`);
+            } else {
+              router.push(`/`);
+            }
           });
         setLoading(false);
       }

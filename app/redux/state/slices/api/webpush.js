@@ -1,9 +1,10 @@
 /* eslint-disable no-useless-escape */
+import toaster from "@/app/configs/toaster";
 import martApi from "./baseApi";
 import { jsonHeader } from "./setAuthHeaders";
 
-const PUBLIC_VAPID_KEY =
-  "BPbVtUE6lBIkaSnpFJfMYutVrAtGu4kKzAOk4a4fd4dH4nHcPkRmLeMWwq-rxydhb38PlK_X2CQ287OigY9nQYU";
+const PUBLIC_VAPID_KEY2 =
+  "BIwYNcvySA9ZGvxuslfYOqMY41e_ZMMwkTZ31jGk8Q0mh2NIt9zoB-tkWzUBCwmOnZ1TfjgdJGdd25XXEEYJaUE";
 
 const handleSubscribeToNotification = async () => {
   function urlBase64ToUint8Array(base64String) {
@@ -24,19 +25,16 @@ const handleSubscribeToNotification = async () => {
   try {
     const permission = await Notification.requestPermission();
     if (permission === "granted") {
-      const serverKey = urlBase64ToUint8Array(PUBLIC_VAPID_KEY);
+      const serverKey = urlBase64ToUint8Array(PUBLIC_VAPID_KEY2);
       const registration = await navigator.serviceWorker.ready;
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: serverKey,
       });
+      console.log(subscription, "sub");
       const sendSubscription = async (payload) => {
         const { data } = await martApi
-          .post(
-            `/user/notifications/subscription`,
-            payload,
-            jsonHeader()
-          )
+          .post(`/user/notifications/subscription`, payload, jsonHeader())
           .then((res) => res)
           .catch((e) => e);
         return data;

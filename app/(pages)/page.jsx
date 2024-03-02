@@ -31,6 +31,7 @@ import {
   WhoIsWaiting,
 } from "@/app/components/view/home/Components/Footer";
 import useSWR from "swr";
+import { NumberExplained } from "../components/cards/sellerCards";
 
 const HomePage = ({ searchParams }) => {
   const { data: prods, isLoading, error } = useSWR("/products");
@@ -44,14 +45,14 @@ const HomePage = ({ searchParams }) => {
             <Box className="w-80 flex flex-col justify-end h-full">
               <Typography
                 variant="body1"
-                className="!text-6xl !font-black"
+                className="!text-5xl md:!text-6xl !font-black"
                 color="primary"
               >
                 Trendy
               </Typography>
               <Typography
                 variant="body1"
-                className="!text-6xl !font-black"
+                className="!text-5xl md:!text-6xl !font-black"
                 color="secondary"
               >
                 Collection
@@ -59,7 +60,7 @@ const HomePage = ({ searchParams }) => {
               <br />
               <Typography
                 variant="body2"
-                className="!text-[13px] text-gray-500"
+                className="!text-[13px] text-gray-600"
               >
                 Prepare yourself for an extraordinary and highly personalized
                 shopping journey that seamlessly connects you with the vibrant
@@ -68,15 +69,20 @@ const HomePage = ({ searchParams }) => {
 
               <Button
                 variant="contained"
-                bgcolor="custom.sec"
-                className="!text-[10px] !w-40 !h-10 !rounded-full !mt-10"
+                className="!text-[10px] !text-white !bg-[#fcb415] !w-40 !h-10 !rounded-full !mt-8"
               >
                 Shop Now
               </Button>
+
+              <Box className="flex items-center !my-6">
+                <NumberExplained parent="100K+" small info="Happy Customers" />
+                <Box className=""></Box>
+                <NumberExplained parent="230" small info="Store Owners" />
+              </Box>
             </Box>
           </Grid>
           <Grid item xs={12} md={7}>
-            <Box className="relative md:ml-20">
+            <Box className="relative mt-6 md:ml-20">
               <Box className="flex justify-center md:justify-start items-center relative h-[400px]">
                 <Image
                   src="/images/more/landingpage.png"
@@ -86,7 +92,7 @@ const HomePage = ({ searchParams }) => {
                   className="w-[700px] md:w-[650px] md:-ml-60 bottom-0 relative -mt-28 md:mt-16 z-30  left-0"
                 />
               </Box>
-              <Box className="bg-yellow-50 shadow-md !rounded-md p-2 h-24 w-52 md:h-28 md:w-36 absolute !z-30 left-0 md:left-auto md:!right-10 -bottom-2">
+              <Box className="bg-yellow-50 shadow-md !rounded-2xl p-2 h-24 w-36 md:h-28 md:w-44 z-40 !absolute !right-0 -top-16">
                 <Typography
                   variant="body1"
                   className="!text-2xl md:!text-4xl !font-black !z-30 relative"
@@ -94,13 +100,13 @@ const HomePage = ({ searchParams }) => {
                 >
                   14K+
                 </Typography>
-                <Typography variant="caption" className="">
+                <Typography variant="caption" className="!text-blue-900 !font-medium !text-[14px] !leading-6">
                   Worldwide Product Sales Per Year
                 </Typography>
               </Box>
               <Button
                 variant="outlined"
-                className="!rounded-full p-2 h-10 w-40 !z-30 !absolute !right-2 -top-14"
+                className="!rounded-full p-2 h-10 w-40 !z-40 !-mr-20 md:!mr-0 !absolute mt-10 !right-1/2 md:!right-2 bottom-0"
                 bgcolor="custom.bodyLight"
                 startIcon={<IconifyIcon icon="tabler:player-play-filled" />}
               >
@@ -122,9 +128,9 @@ const HomePage = ({ searchParams }) => {
         {/*  */}
         {/*  */}
         <Box className="sm:px-5 md:px-14">
-          <Box className="!mt-28 px-2 md:px-10">
+          <Box className="!mt-20 px-2 md:px-10">
             <SectionMiddleTitle black="Shop by" blue="Categories" />
-            <Box className="flex items-center justify-center overflow-auto pb-5">
+            <Box className="flex items-center justify-cener overflow-auto pb-5">
               {categoryData.map((cate, i) => (
                 <Box
                   key={i}

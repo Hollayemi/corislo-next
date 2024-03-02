@@ -2,6 +2,7 @@ import { createAsyncThunk, unwrapResult } from '@reduxjs/toolkit';
 
 import toaster from "@/app/configs/toaster";
 import martApi from '../api/baseApi';
+import { jsonHeader } from "../api/setAuthHeaders";
 
 const resetPasswordApi = createAsyncThunk('post/RP', async (payload) => {
     console.log(payload);
@@ -21,6 +22,28 @@ export const ResetPasswordHandler = (formData, navigate, dispatch) => {
             if (res.type === 'success') {
                 navigate('/login');
             }
+        })
+        .catch((err) => {
+            toaster({ message: "No Connection", type: "error" });
+        });
+};
+
+
+const changePasswordApi = createAsyncThunk('post/changePassword', async (payload) => {
+    console.log(payload);
+    const { data } = await martApi
+      .patch("/auth/change-password", payload, jsonHeader())
+      .then((res) => res)
+      .catch((err) => err.response);
+
+    return data;
+});
+
+export const changePasswordHandler = (payload, dispatch) => {
+    dispatch(changePasswordApi(payload))
+        .then(unwrapResult)
+        .then((res) => {
+            toaster(res)
         })
         .catch((err) => {
             toaster({ message: "No Connection", type: "error" });

@@ -14,7 +14,6 @@ import Image from "next/image";
 import themeConfig from "@/app/configs/themeConfig";
 import { useUserData } from "@/app/hooks/useData";
 import MenuIcon from "@mui/icons-material/Menu";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Chip from "../../chip";
 import CustomAvatar from "../../avatar";
 import { getInitials } from "@/app/utils/get-initials";
@@ -23,12 +22,25 @@ import { userLogout } from "@/app/redux/state/slices/auth/Login";
 import {
   NotificationsActiveOutlined,
   ShoppingCartCheckout,
+  Search,
 } from "@mui/icons-material";
 
-function Header({ search, setSearch, showNotif }) {
+function Header({ search, setSearch, setPinSearch }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { isOffline, userInfo, cartedProds } = useUserData();
+  const { isOffline, userInfo, cartedProds, overLay, showOverlay } =
+    useUserData();
+
+  const IconImage = ({ image, className, onClick }) => (
+    <Image
+      src={`/images/misc/${image}.png`}
+      alt="image"
+      width={700}
+      onClick={onClick}
+      height={700}
+      className={className}
+    />
+  );
 
   const getPath = pathname.split("/");
 
@@ -67,22 +79,16 @@ function Header({ search, setSearch, showNotif }) {
       >
         {num}
       </Box>
-      <ShoppingCartCheckout
+      {/* <ShoppingCartCheckout
         color="primary"
         className="!text-[16px] !flex-shrink-0"
-      />
-      {/* <Image
-        src="/images/misc/bag.png"
-        alt="cart"
-        width={15}
-        height={20}
-        className="w-7"
       /> */}
+      <IconImage image="bag" className="w-7 md:w-4" />
     </Box>
   );
 
   return (
-    <Box className="!px-2 shadow md:!px-8 py-4 h-14 !bg-white flex items-center md:justify-between header-zindex">
+    <Box className="!px-2 shadow md:!px-8 py-4 h-14 !bg-white flex items-center !justify-between header-zindex">
       <Box className="flex items-center mr-1 md:mr-0 !flex-shrink-0">
         <Box className="md:hidden !flex-shrink-0">
           <IconButton
@@ -90,25 +96,23 @@ function Header({ search, setSearch, showNotif }) {
             aria-label="account of current user"
             aria-controls="menu-appbar"
             aria-haspopup="true"
-            className="!w-7 !h-7"
-            onClick={() => {}}
+            className="!w-12 !h-12 !text-black !text-[40px]"
+            onClick={showOverlay("sidebar")}
           >
-            <MenuIcon />
+            {overLay !== "sidebar" ? (
+              <IconifyIcon icon="tabler:menu" />
+            ) : (
+              <IconifyIcon icon="tabler:x" />
+            )}
           </IconButton>
         </Box>
         <Image
-          src={
-            typeof window !== "undefined"
-              ? window.innerWidth < 640
-                ? themeConfig.main1_sm
-                : themeConfig.vertical1
-              : themeConfig.vertical1
-          }
+          src={themeConfig.vertical1}
           onClick={() => router.push("/")}
           alt="logo"
           width={400}
           height={400}
-          className="!w-10 md:!w-28 ml-1 !flex-shrink-0"
+          className="!w-28 ml-1 md:ml-1 !flex-shrink-0 cursor-pointer"
         />
       </Box>
       <Box className="items-center hidden md:block !flex-shrink-0">
@@ -124,8 +128,8 @@ function Header({ search, setSearch, showNotif }) {
           </LinkStyled>
         ))}
       </Box>
-      <Box className="flex items-center w-full md:w-auto">
-        <Box className="relative mr-2 md:mr-4 md:block w-full md:w-auto px-2 md:px-0">
+      <Box className="flex items-center md:w-auto">
+        <Box className="relative hidden mr-4 md:block w-full md:w-auto px-2 md:px-0">
           <input
             type="text"
             placeholder="Search by keyword"
@@ -133,24 +137,27 @@ function Header({ search, setSearch, showNotif }) {
             className="w-full md:w-40 pl-10 text-[13px] !bg-[#F3F5FF] pr-4 h-8 border rounded-xl transition-all outline-none  md:focus:w-64"
             onChange={(e) => setSearch(e.target.value)}
           />
-          <IconifyIcon
-            icon="tabler:search"
-            className="!text-[17px] text-gray-400 absolute top-2 ml-4"
-          />
+          <IconImage image="search" className="w-4 absolute top-2 ml-4" />
         </Box>
+        <IconImage
+          image="search"
+          onClick={() => setPinSearch((prev) => !prev)}
+          className="w-6 md:hidden mx-3"
+        />
         {!isOffline && (
-          <Box className="mr-3 md:!mr-5">
+          <Box className="mx-3 md:!mr-5">
             <Badge badgeContent={5} size="small" variant="dot" color="primary">
-              <NotificationsActiveOutlined
-                onClick={showNotif}
-                color="primary"
-                className="!text-[24px] !flex-shrink-0"
+              <IconImage
+                image="notification"
+                className="w-6 !flex-shrink-0"
+                onClick={showOverlay("notification")}
               />
             </Badge>
           </Box>
         )}
         {!isOffline ? (
           <>
+            {/* display cart on desktop view */}
             <Box
               onClick={() => router.push("/cart")}
               sx={{
@@ -160,15 +167,30 @@ function Header({ search, setSearch, showNotif }) {
                     : theme.palette.secondary.main,
                 border: 1,
               }}
-              className="h-7 !cursor-pointer min-h-7 py-2 !border !rounded-full w-14 px-1 md:w-12 !bg-white flex justify-center items-center"
+              className="h-7 hidden md:flex !cursor-pointer min-h-7 py-2 !border !rounded-full w-12 px-1 !bg-white justify-center items-center"
             >
               <MyCartBtn variant="contained" num={cartedProds?.length || 0} />
+            </Box>
+            {/* display cart on phone view */}
+            <Box className="mx-3 md:hidden">
+              <Badge
+                badgeContent={5}
+                size="small"
+                variant="dot"
+                color="primary"
+              >
+                <IconImage
+                  image="bag-black"
+                  onClick={() => router.push("/cart")}
+                  className="w-6 !flex-shrink-0"
+                />
+              </Badge>
             </Box>
             <Typography
               noWrap
               variant="body2"
               title={userInfo?.username}
-              className="!font-bold hidden md:block !text-[14px] w-20 sm:!max-w-16 md:!max-w-24 !ml-4"
+              className="!font-bold hidden md:block !text-[14px] w-20 sm:!max-w-16 md:!max-w-28 !ml-4"
             >
               {userInfo?.username}
             </Typography>
@@ -179,13 +201,13 @@ function Header({ search, setSearch, showNotif }) {
                   0,
                   2
                 )}
-                className="!w-10 !h-10 !ml-2 flex-shrink-0"
+                className="!w-10 !hidden md:!block !h-10 !ml-2 flex-shrink-0"
               />
             ) : (
               <CustomAvatar
                 skin="light"
                 color="primary"
-                className="!w-10 !h-10 !font-black !text-[15px] !ml-2 flex-shrink-0"
+                className="!w-10 !hidden md:!flex !h-10 !font-black !text-[15px] !ml-2 flex-shrink-0"
                 onClick={() => userLogout()}
                 // sx={{ ml: 3, width: 30, height: 30, fontSize: "0.85rem" }}
               >
@@ -195,22 +217,17 @@ function Header({ search, setSearch, showNotif }) {
           </>
         ) : (
           <>
-            <IconifyIcon
-              icon="tabler:shopping-cart"
-              className="!text-[19px] mx-1 flex-shrink-0 md:mx-2 "
-            />
-
             <Button
-              variant="outlined"
-              className="!rounded-2xl !text-xs h-8 w-20 ml-2 md:!ml-5"
+              variant="text"
+              className="!rounded-2xl !text-xs h-8 !w-fit !text-black md:!text-blue-900 md:!w-20 !ml-1 md:!ml-5"
               size="small"
               onClick={() => router.push("/auth/login")}
             >
               Login
             </Button>
             <Button
-              variant="contained"
-              className="!rounded-2xl !hidden md:!block h-8 w-20 !text-xs !ml-2 md:!ml-5"
+              variant="text"
+              className="!rounded-2xl h-8 !w-fit md:!w-20 !text-xs !ml-1 md:!ml-5"
               size="small"
             >
               Register

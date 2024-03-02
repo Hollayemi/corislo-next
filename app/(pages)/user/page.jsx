@@ -11,7 +11,7 @@ import SecuritySettings from "./securitySettings";
 import HelpAndSupport from "./helpAndSupport";
 
 const UserSettings = () => {
-  const [value, setTabValue] = useState("1");
+  const [value, setTabValue] = useState("3");
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
   };

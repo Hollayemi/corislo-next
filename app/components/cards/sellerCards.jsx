@@ -1,14 +1,14 @@
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 
-export const NumberExplained = ({ parent, info }) => {
+export const NumberExplained = ({ parent, info, small }) => {
   return (
-    <Box className="flex items-center w-40">
-      <Typography variant="body2" className="!text-4xl !font-black !mr-1">
+    <Box className={`flex ${small && "flex-col"} items-center w-32`}>
+      <Typography variant="body2" className={`${small ? "!text-2xl" : "!text-4xl"} !font-black !mr-1"`}>
         {parent}
       </Typography>
       <Box className="">
-        <Typography variant="body2" className="!w-fit !text-[11px] ">
+        <Typography variant="body2" className="!w-fit !text-[12px] ">
           {info}
         </Typography>
       </Box>

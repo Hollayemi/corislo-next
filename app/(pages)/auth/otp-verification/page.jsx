@@ -7,13 +7,13 @@ import Box from "@mui/material/Box";
 import { Button, Typography } from "@mui/material";
 import OtpInput from "./component";
 import { useUserData } from "@/app/hooks/useData";
-import { verifyOtp } from "@/app/redux/state/slices/auth/otp";
+import { verifyOtp, resendOtp } from "@/app/redux/state/slices/auth/otp";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 
-const OtpVerification = () => {
-  const router = useRouter()
-  const dispatch = useDispatch()
+const OtpVerification = ({ searchParams }) => {
+  const router = useRouter();
+  const dispatch = useDispatch();
   const { userInfo } = useUserData();
 
   // usestate hooks
@@ -21,8 +21,15 @@ const OtpVerification = () => {
   const [countdown, setCountdown] = useState(60); // Initial countdown value in seconds
   const [resendDisabled, setResendDisabled] = useState(false);
   const [inputValues, setInputValues] = useState(["", "", "", "", "", ""]);
-
+  console.log(searchParams);
   const otpValues = inputValues.join("");
+  useEffect(() => {
+    searchParams.redirected &&
+      resendOtp(
+        { email: userInfo.email, action: "email-verification" },
+        dispatch
+      );
+  }, []);
   useEffect(() => {
     let intervalId;
 
@@ -39,17 +46,17 @@ const OtpVerification = () => {
   }, [countdown]);
 
   const buttonFunc = () => {
-    verifyOtp({ userId: userInfo._id, otp: otpValues }, router, dispatch);
+    verifyOtp({ email: userInfo.email, otp: otpValues }, router, dispatch);
     if (!openInput) {
       setOpenInput(true);
     }
   };
 
-
   const handleResend = () => {
-    // Handle OTP resend logic here
-    // You can initiate the OTP resend process
-    // and then reset the countdown timer
+    resendOtp(
+      { email: userInfo.email, action: "email-verification" },
+      dispatch
+    );
     setCountdown(60);
     setResendDisabled(true);
   };
@@ -60,7 +67,7 @@ const OtpVerification = () => {
       <br />
       <br />
       <Typography variant="caption" className="!text-[13px] !text-center">
-        This code will expire will no longer be valid after 10 minutes, so
+        This code will expire will no longer be valid after 30 minutes, so
         please enter it promptly. If you did not request this OTP, please ignore
         this message.
       </Typography>

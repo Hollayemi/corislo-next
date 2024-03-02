@@ -1,6 +1,6 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import jwt_decode from "jwt-decode";
 import useSWR from "swr";
 import io from "socket.io-client";
@@ -19,6 +19,7 @@ const defaultProvider = {
   loading: false,
   setLoading: () => {},
   socket: null,
+  overLay: null,
   temp: {},
   addTemp: () => {},
 };
@@ -26,10 +27,12 @@ const DataContext = createContext(defaultProvider);
 
 const UserDataProvider = ({ children, setOverflow }) => {
   const router = useRouter();
+  const dispatch = useDispatch()
   const pathname = usePathname();
   const [loading, setLoading] = useState(false);
   const [socket, setSocket] = useState(null);
   const [temp, addTemp] = useState({});
+  const [overLay, setOpenOverlay] = useState(null);
   const { userData } = useSelector((state) => state.reducer.loginReducer);
 
   useEffect(() => setOverflow(loading), [loading]);
@@ -114,6 +117,18 @@ const UserDataProvider = ({ children, setOverflow }) => {
     };
   }, [socket]);
 
+  //  Overlays
+  const showOverlay = (pageName = null) =>  (e) => {
+    console.log(pageName, overLay)
+    if ((overLay && !pageName) || pageName === overLay) {
+      setOverflow(false);
+      setOpenOverlay(null);
+    } else {
+      setOverflow(true);
+      setOpenOverlay(pageName);
+    }
+  };
+
   //
   //
   //
@@ -129,6 +144,10 @@ const UserDataProvider = ({ children, setOverflow }) => {
     error: userErr,
     isLoading: userIsLoading,
   } = useSWR(!isOffline() && "/user/get-account");
+
+  useEffect(() => {
+    userInfo && !userInfo?.isVerified && router.push("/auth/otp-verification?redirected=true");
+  }, [])
 
   //
   // fetch userInfo
@@ -177,6 +196,8 @@ const UserDataProvider = ({ children, setOverflow }) => {
         loading,
         setLoading: setLoading,
         setOverflow: setOverflow,
+        showOverlay: showOverlay,
+        overLay: overLay,
         isOffline: isOffline(),
         temp,
         addTemp,

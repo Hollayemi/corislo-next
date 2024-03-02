@@ -31,8 +31,33 @@ export const verifyOtp = (payload, router, dispatch) => {
       toaster({ ...res });
       console.log("here");
       if (res.type === "success") {
-        router.push(res.to || "");
+        router.push(res.to || "/");
       }
+    })
+    .catch((err) => {
+      toaster({ message: "No Connection", type: "error" });
+    });
+};
+
+const resendOtpApi = createAsyncThunk("post/resendOtp", async (payload) => {
+  const { data } = await martApi
+    .post("/new/otp", payload)
+    .then((e) => {
+      return e;
+    })
+    .catch((err) => {
+      console.log(err);
+      return err.response;
+    });
+  return data;
+});
+
+export const resendOtp = (payload, dispatch) => {
+  dispatch(resendOtpApi(payload))
+    .then(unwrapResult)
+    .then((res) => {
+      alert(res?.otp);
+      toaster({ ...res });
     })
     .catch((err) => {
       toaster({ message: "No Connection", type: "error" });

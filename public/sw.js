@@ -38,8 +38,8 @@ self.addEventListener("push", (e) => {
   const data = e.data.json();
   self.registration.showNotification(data.title, {
     ...data,
-    icon: "/images/logo/horizontal/1.png",
-    image: "/images/logo/horizontal/1.png",
+    icon: "/images/logo/icon/main.jpg",
+    image: "/images/logo/icon/main.jpg",
   });
   // e.waitUntil(
   //     self.registration.showNotification(data.title, options)

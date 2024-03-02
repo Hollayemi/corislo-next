@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 4001",
+    "dev": "next dev -p 4001 --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -25,7 +25,7 @@
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.10",
     "jwt-decode": "^3.1.2",
-    "next": "13.4.10",
+    "next": "^14.1.0",
     "next-auth": "^4.22.1",
     "nextjs-progressbar": "^0.0.16",
     "payment": "^2.4.6",

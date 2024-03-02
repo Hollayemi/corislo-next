@@ -1,14 +1,49 @@
 import { Dot } from "@/app/components/cards";
 import IconifyIcon from "@/app/components/icon";
-import { formatCurrency, formatDate, formatDateToMonthShort, mySubstring } from "@/app/utils/format";
-import { ArrowDropDown, ArrowUpwardTwoTone, Star } from "@mui/icons-material";
+import {
+  formatCurrency,
+  formatDate,
+  formatDateToMonthShort,
+  mySubstring,
+} from "@/app/utils/format";
+import { CancelOutlined } from "@mui/icons-material";
 import { useState } from "react";
+import { useUserData } from "@/app/hooks/useData";
 import useSWR from "swr";
 
 const { Box, Typography, Rating } = require("@mui/material");
 const { default: Image } = require("next/image");
 
-export const OrderNotif = ({ data }) => {
+
+const Notification = () => {
+  const { notifications, showOverlay } = useUserData();
+  return (
+    <Box className="mt-20 relative md:absolute right-2 px-2">
+      <Box className="w-full md:w-[420px] h-[600px] md:h-[500px]  bg-white rounded-xl md:mr-10 flex flex-col">
+        <Box className="flex justify-between items-center px-4 h-14 border-b !w-full flex-shrink-0">
+          <Typography variant="body2" className="!font-bold">
+            Notification
+          </Typography>
+          <Box onClick={showOverlay(null)}>
+            <CancelOutlined />
+          </Box>
+        </Box>
+        <Box className="flex-grow-1 h-auto md:h-[400px] max-h-[450px] w-full !overflow-auto overflowStyle">
+          {notifications.map((data, i) => (
+            <OrderNotif key={i} data={data} />
+          ))}
+        </Box>
+        <Box className="h-14 flex items-center justify-center !text-[12px] w-full text-center ">
+          See all notifications
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
+export default Notification
+
+const OrderNotif = ({ data }) => {
   const [open, setOpen] = useState(-1);
   return (
     <Box className="w-full border-b">
@@ -75,7 +110,7 @@ export const OrderNotif = ({ data }) => {
 };
 
 const NotifProductDisplay = ({ productId }) => {
-   const { data: prod, error } = useSWR(`/products?productId=${productId}`);
+  const { data: prod, error } = useSWR(`/products?productId=${productId}`);
   const product = prod ? prod?.data[0] : {};
   console.log(product);
   return (

@@ -30,20 +30,20 @@ const persistor = persistStore(store);
 // ** Pace Loader
 export default function RootLayout({ children }) {
   const [hideOverflow, setOverflow] = useState(false)
-  // const [loading, setLoading] = useState(false)
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
         .register("/sw.js")
         .then((registration) => {
           handleSubscribeToNotification();
-          console.log("Service Worker registered:");
+          console.log("Service Worker registered: ", registration);
         })
         .catch((error) => {
           console.error("Service Worker registration failed:", error);
         });
     }
   }, []);
+
   // if ("serviceWorker" in navigator) {
   //   navigator.serviceWorker
   //     .register("/sw.js")
