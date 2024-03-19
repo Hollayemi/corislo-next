@@ -175,7 +175,7 @@ const BusinessPage = ({ params, searchParams }) => {
                       )
                     }
                   >
-                    {isIncluded ? "Unfollow" : "Follow"}
+                    {isIncluded ? "Following" : "Follow"}
                   </Button>
                 </Box>
               </Box>

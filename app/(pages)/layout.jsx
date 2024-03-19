@@ -36,7 +36,7 @@ export default function RootLayout({ children }) {
         .register("/sw.js")
         .then((registration) => {
           handleSubscribeToNotification();
-          console.log("Service Worker registered: ", registration);
+          // console.log("Service Worker registered: ", registration);
         })
         .catch((error) => {
           console.error("Service Worker registration failed:", error);

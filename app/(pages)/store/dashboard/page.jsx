@@ -1,17 +1,37 @@
 "use client";
-import { useEffect } from "react";
+import useSWR from "swr";
 import { useDispatch } from "react-redux";
-import { Typography, Grid, Box } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { Grid, Box } from "@mui/material";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 import { BranchesSales, TopCards } from "./components";
 import DashboardLineChart from "@/app/components/chart/ChartjsLineChart";
 import DashboardBubbleChart from "@/app/components/chart/ChartjsBubbleChart";
 import "chart.js/auto";
-import PurchaseHistory from "@/app/components/view/store/tables/purchaseHostory";
-import { StoreSalesApi } from "@/app/redux/state/slices/shop/overview/sales";
+import OrderTable from "@/app/components/view/store/tables/OrderTable";
+import { ordersColumns } from "./order-management/components/columns";
 
 const DashboardOverview = ({ params }) => {
-  const dispatch = useDispatch();
+  const router = useRouter();
+  const {
+    data: orderData,
+    error: orderErr,
+    isLoading: orderLoading,
+  } = useSWR(`/branch/order-request`);
+
+  console.log(orderData);
+  const rows = orderData?.data || [];
+
+  const actionFunctions = (row, action) => {
+    if (action === "modify") {
+      // selectRow(row);
+      router.push(`/store/dashboard/order-management?order=${row._id}`);
+    }
+
+    if (action === "message") {
+      router.push(`/store/chat?customer=${row.customerUsername}`);
+    }
+  };
   return (
     <StoreLeftSideBar path={params}>
       <Box className="px-2">
@@ -32,10 +52,11 @@ const DashboardOverview = ({ params }) => {
           </Grid>
         </Box>
       </Box>
-      {/* <OrderTable
-          columns={allOrderColumns(actionFunctions)}
-          rows={sortBy()}
-        /> */}
+      {rows.length && (
+        <Box className="bg-white !px-3 py-4 rounded-md my-6">
+          <OrderTable columns={ordersColumns(actionFunctions)} rows={rows} />
+        </Box>
+      )}
     </StoreLeftSideBar>
   );
 };

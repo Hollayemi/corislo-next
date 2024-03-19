@@ -24,7 +24,7 @@ export const OrderListComponents = ({ value, setValue, rows }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const sortBy = (by) => {
+  const sortBy = (by = "all") => {
     if (!by || by === "all") {
       return rows || [];
     } else {

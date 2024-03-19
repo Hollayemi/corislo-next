@@ -4,7 +4,7 @@ import martApi from "./baseApi";
 import { jsonHeader } from "./setAuthHeaders";
 
 const PUBLIC_VAPID_KEY2 =
-  "BIwYNcvySA9ZGvxuslfYOqMY41e_ZMMwkTZ31jGk8Q0mh2NIt9zoB-tkWzUBCwmOnZ1TfjgdJGdd25XXEEYJaUE";
+  "BCttWS18Th1RaDR7gVIVtlXOw_P-nE7qJVkXZxEOW2a1yHOS4vKEuEWtRN-A5lX9_lmDjM3nPivWeF3rZoCi8Rk";
 
 const handleSubscribeToNotification = async () => {
   function urlBase64ToUint8Array(base64String) {

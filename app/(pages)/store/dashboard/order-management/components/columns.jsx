@@ -47,7 +47,7 @@ export const ordersColumns = (handleActionClick) => {
       flex: 1,
 
       minWidth: 120,
-      headerName: "Delivery Date",
+      headerName: "Est. Delivery Date",
       field: "deliveryDate",
       renderCell: (params) => (
         <Typography variant="body2" sx={{ color: "text.primary" }}>

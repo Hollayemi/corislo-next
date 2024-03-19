@@ -1,23 +1,19 @@
 import Icon from "@/app/components/icon";
 import { useTheme } from "@mui/material/styles";
+import { useState } from "react";
 import CustomAvatar from "@/app/components/avatar";
 import {
   Box,
   Grid,
   Typography,
-  Card,
-  CardHeader,
-  CardContent,
   LinearProgress,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
+  Button,
 } from "@mui/material";
 
 // ** Custom Components Imports
 import CustomChip from "@/app/components/chip";
-
+import CustomOption from "@/app/components/option-menu/option";
+import { formatCurrency } from "@/app/utils/format";
 
 const data = [
   {
@@ -57,16 +53,18 @@ const data = [
   },
 ];
 
-
 export const TopCards = () => {
-  
-    const theme = useTheme();
-    return (
-      <Box className="">
-        <Grid container spacing={0.5}>
-          {data.map((item, index) => (
-            <Grid item xs={6} sm={6} md={3} key={index}>
-              <Box bgcolor="custom.bodyLight" className="px-2 py-3 md:!p-3 !rounded-md">
+  const theme = useTheme();
+  return (
+    <Box className="">
+      <Grid container spacing={0.5}>
+        {data.map((item, index) => (
+          <Grid item xs={6} sm={6} md={3} key={index}>
+            <Box className="md:p-1">
+              <Box
+                bgcolor="custom.bodyLight"
+                className="px-2 py-3 md:!p-3 !rounded-md"
+              >
                 <Box className="border-l-4 border-slate-600 pl-3">
                   <Box
                     sx={{
@@ -116,78 +114,89 @@ export const TopCards = () => {
                   <h5 className="ml-1">Since last month.</h5>
                 </Box>
               </Box>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-    );
-}
-
-
-
-
+            </Box>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
+  );
+};
 
 const storesSales = [
   {
     progress: 85,
-    chipColor: 'success',
-    subtitle: 'subscriber'
+    chipColor: "success",
+    progressColor: "info",
+    subtitle: "Goument Store",
   },
   {
     progress: 65,
-    chipColor: 'success',
-    progressColor: 'info',
-    subtitle: 'new orders'
-  }
-]
+    chipColor: "success",
+    progressColor: "info",
+    subtitle: "Tenxun Store",
+  },
+];
 
 export const BranchesSales = () => {
+  const [interval, selectedInterval] = useState("7 days");
   const renderData = storesSales.map((item, index) => (
-    <Box key={index} sx={{ ...(index !== storesSales.length - 1 && { mb: 0.5 }) }}>
-      <Box sx={{ gap: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Typography className="text-xs">{item.subtitle}</Typography>
-        <Typography variant='body2' sx={{ color: 'text.disabled' }}>
+    <Box
+      key={index}
+      sx={{ ...(index !== storesSales.length - 1 && { mb: 1.5 }) }}
+    >
+      <Box
+        sx={{
+          gap: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography variant="caption" className="!text-xs">{item.subtitle}</Typography>
+        <Typography variant="body2" sx={{ color: "text.disabled" }}>
           {`${item.progress}%`}
         </Typography>
       </Box>
-      <LinearProgress variant='determinate' className="!rounded-md" value={item.progress} color={item.progressColor} sx={{ height: 8 }} />
+      <LinearProgress
+        variant="determinate"
+        className="!rounded-md"
+        value={item.progress}
+        color={item.progressColor}
+        sx={{ height: 10 }}
+      />
     </Box>
-  ))
+  ));
+
+  const dayInterval = [
+    "3 days",
+    "7 days",
+    "2 weeks",
+    "1 month",
+    "3 months",
+    "6 months",
+    "1 year",
+  ];
 
   return (
     <Box
-      className="!h-full shadow-sm shadow-gray-400 rounded-md pb-6 px-2"
+      className="!h-full rounded-md pb-6 px-2"
       bgcolor="custom.bodyLight"
     >
-      <Box className="!py-3 !flex !items-center !justify-between">
-        <Typography className="text-[13px] font-bold">
+      <Box className="!py-1.5 !flex !items-center !justify-between">
+        <Typography variant="caption" className="!text-[13px] !font-medium">
           Sales by Stores
         </Typography>
 
-        <FormControl
-          variant="standard"
-          className="!border-0 !outline-none !ring-0"
-        >
-          <Select
-            label="weekly"
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            defaultValue="7_days"
-            className="w-20 !px-1 text-xs !border-none !outline-none !ring-0"
-            size="small"
-          >
-            <MenuItem value="3_days">3 days</MenuItem>
-            <MenuItem value="7_days">weekly</MenuItem>
-            <MenuItem value="2_weeks">2 weeks</MenuItem>
-            <MenuItem value="1_month">monthly</MenuItem>
-            <MenuItem value="3_months">3 months</MenuItem>
-            <MenuItem value="6_months">6 months</MenuItem>
-            <MenuItem value="1_year">yearly</MenuItem>
-          </Select>
-        </FormControl>
+        <CustomOption
+          icon={<Button className="!text-[13px]">{interval}</Button>}
+          options={dayInterval}
+          clickFunction={(e) => selectedInterval(e)}
+        />
       </Box>
-      <Typography variant="h5" className="!font-bold ">₦367,000</Typography>
+      <Typography variant="body2" className="!font-bold !text-[18px]">
+        {formatCurrency("367000")}
+      </Typography>
       <Box className="px-1 mt-3">{renderData}</Box>
     </Box>
   );
-}
+};

@@ -63,6 +63,10 @@ input::placeholder, textarea::placeholder{
     z-index: 10000 !important;
 }
 
+.hideArrow .slick-prev, .hideArrow .slick-next{
+    display: none !important;
+}
+
 @media screen and (max-width: 700px) {
     .custom-slider .slick-next {
         position: absolute;

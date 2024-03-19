@@ -20,6 +20,8 @@ const defaultProvider = {
   setLoading: () => {},
   socket: null,
   overLay: null,
+  showMapScreen: () => {},
+  popMap: false,
   temp: {},
   addTemp: () => {},
 };
@@ -33,6 +35,8 @@ const UserDataProvider = ({ children, setOverflow }) => {
   const [socket, setSocket] = useState(null);
   const [temp, addTemp] = useState({});
   const [overLay, setOpenOverlay] = useState(null);
+  const [popMap, setMapPopup] = useState(true);
+
   const { userData } = useSelector((state) => state.reducer.loginReducer);
 
   useEffect(() => setOverflow(loading), [loading]);
@@ -64,18 +68,18 @@ const UserDataProvider = ({ children, setOverflow }) => {
     return !Boolean(getLocalToken);
   };
 
-  useEffect(() => {
-    if (getPath[1]) {
-      if (
-        isOffline() &&
-        getPath[1] !== "auth" &&
-        getPath[1] !== "store" &&
-        getPath[2] !== "login"
-      ) {
-        router.replace(`/auth/login?returnurl=${pathname.substring(1)}`);
-      }
-    }
-  }, [userData, getPath, router]);
+  // useEffect(() => {
+  //   if (getPath[1]) {
+  //     if (
+  //       isOffline() &&
+  //       getPath[1] !== "auth" &&
+  //       getPath[1] !== "store" &&
+  //       getPath[2] !== "login"
+  //     ) {
+  //       router.replace(`/auth/login?returnurl=${pathname.substring(1)}`);
+  //     }
+  //   }
+  // }, [userData, getPath, router]);
 
   useEffect(() => {
     if (!socket) {
@@ -129,15 +133,25 @@ const UserDataProvider = ({ children, setOverflow }) => {
     }
   };
 
+  const showMapScreen = () => {
+    console.log("hello")
+    if (popMap) {
+      setOverflow(false);
+      setMapPopup(false);
+    } else {
+      setOverflow(true);
+      setMapPopup(true);
+    }
+  };
+
   //
   //
   //
   //
   //
   //data fetching functions
-
   //
-  // fetch userInfo
+  //
   //
   const {
     data: userInfo,
@@ -197,6 +211,8 @@ const UserDataProvider = ({ children, setOverflow }) => {
         setLoading: setLoading,
         setOverflow: setOverflow,
         showOverlay: showOverlay,
+        showMapScreen: showMapScreen,
+        popMap: popMap,
         overLay: overLay,
         isOffline: isOffline(),
         temp,

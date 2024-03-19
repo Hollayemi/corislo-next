@@ -358,7 +358,7 @@ const HomePage = ({ searchParams }) => {
             <Box className="px-3 md:px-10">
               <SectionTitle black="Top" blue="Selling Stores" />
               <Box className="!mt-6 flex flex-col md:flex-row justify-center">
-                <Box className="w-full md:w-2/6">
+                <Box className="w-full md:w-2/6 md:pr-6">
                   <Typography
                     variant="body2"
                     className="!text-xl !font-extrabold"

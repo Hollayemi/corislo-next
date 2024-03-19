@@ -19,9 +19,9 @@ const configs = {
 }
 
 
-const ReactSlickSlider = ({ config = 1, children, noArrowStyle }) => {
+const ReactSlickSlider = ({ config = 1, children, noArrowStyle, hideArrow }) => {
   return (
-    <Box className={`${!noArrowStyle && "custom-slider"}`}>
+    <Box className={`${!noArrowStyle && "custom-slider"} ${hideArrow && "hideArrow"}`}>
       <Slider {...configs[config]}>{children}</Slider>
     </Box>
   );

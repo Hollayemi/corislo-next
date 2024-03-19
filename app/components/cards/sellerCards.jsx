@@ -130,7 +130,7 @@ export const CoreValues = ({ top, bottom, text, className }) => {
 export const CheckPoint = ({ title, info }) => {
   return (
     <Box>
-      <Box className="flex items-start mb-2">
+      <Box className="flex items-start mb-3">
         <Image
           src="/images/misc/check.png"
           alt="check"
@@ -139,8 +139,8 @@ export const CheckPoint = ({ title, info }) => {
           className="w-3 h-3 mt-2 mr-1"
         />
         <Box>
-          <Typography variant="caption">
-            <b>{title}</b>{" "}{info}
+          <Typography variant="caption" className="!text-[13px]">
+            <b className="!text-[14px] !text-blue-900">{title}</b> {info}
           </Typography>
         </Box>
       </Box>

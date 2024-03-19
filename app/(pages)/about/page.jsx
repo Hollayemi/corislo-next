@@ -3,7 +3,7 @@
 import { SectionTitle } from "@/app/components/cards/homeCards";
 import { CheckPoint, CoreValues } from "@/app/components/cards/sellerCards";
 import HomeWrapper from "@/app/components/view/home";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 
 const About = () => {
@@ -67,7 +67,11 @@ const About = () => {
             </Typography>
           </Box>
           <Box className="ml-10 md:ml-36 mt-3">
-            <Typography variant="caption" className="!font-bold" color="black">
+            <Typography
+              variant="caption"
+              className="!font-bold !text-[12px]"
+              color="black"
+            >
               Founded in 2023, Corisio has quickly evolved from a visionary
               concept into a leading force in the B2B e-commerce sphere. Our
               founders, Founder Names, envisioned a world where businesses of
@@ -84,7 +88,7 @@ const About = () => {
 
       <Box>
         <Box className="flex justify-center !mt-16 w-full">
-          <Box className="flex flex-col md:flex-row items-center w-full px-3 md:w-4/5">
+          <Box className="flex flex-col md:flex-row items-center w-full px-3 lg:w-4/5">
             <Image
               src="/images/misc/vision.png"
               alt="req-right-rounded"
@@ -110,7 +114,7 @@ const About = () => {
       </Box>
 
       <Box className="flex justify-center !mt-16">
-        <Box className="px-5 w-full md:w-4/5">
+        <Box className="px-5 w-full lg:w-4/5">
           <SectionTitle black="Core" blue="Value" />
           <Box className="!mt-6 flex flex-col md:flex-row items-center">
             <CoreValues
@@ -132,56 +136,58 @@ const About = () => {
         </Box>
       </Box>
 
-      <Box className="flex justify-center !mt-16">
-        <Box className="w-full md:w-4/5 px-4 mt-3 flex flex-col-reverse justify-center items-center">
-          <Box className="mt-3 md:w-1/2">
-            <Typography variant="caption" className="!text-[12px] !mb-5">
-              Are you ready to take your business to the next level? At Corisio,
-              we're not just an e-commerce platform; we're your gateway to
-              success. Here's why choosing Corisio is the right move for your
-              business:
+      <Box className="flex flex-col items-center">
+        <Box className="w-full lg:w-4/5 px-4 ">
+          <Box className="md:w-72 !mt-16">
+            <Typography
+              variant="body2"
+              className="!font-bold !text-[13px] !mb-2"
+              color="secondary"
+            >
+              Why choose Corisio
             </Typography>
-            <Box className="mt-5">
-              <CheckPoint
-                title="Limitless Opportunities:"
-                info="Corisio opens the doors to a world of opportunities. Join our thriving community of businesses to expand your network, collaborate with like-minded entrepreneurs, and discover new markets."
-              />
-              <CheckPoint
-                title="Efficiency Redefined:"
-                info="Say goodbye to time-consuming processes. Corisio offers streamlined solutions for both buyers and sellers, making every transaction efficient and hassle-free."
-              />
-              <CheckPoint
-                title="Trust and Security:"
-                info="Your business's security is our top priority. Corisio prioritizes transparency and security, providing a trustworthy platform for all your business needs."
-              />
-              <CheckPoint
-                title="Innovation at Your Fingertips:"
-                info="Benefit from cutting-edge e-commerce technologies that keep you ahead of the competition. Corisio is committed to innovation and staying at the forefront of industry trends."
-              />
-              <CheckPoint
-                title="Dedicated Support:"
-                info="With Corisio, you're never alone on your business journey. Gain access to dedicated customer support and a wealth of resources to help you thrive."
-              />
-            </Box>
+            <SectionTitle blue="Unlock Your Business Potential with Corisio" />
           </Box>
-          <Box className="md:w-1/2 md:!ml-28">
-            <Box className="md:w-72">
-              <Typography
-                variant="body2"
-                className="!font-bold !text-[13px] !mb-2"
-                color="secondary"
-              >
-                Why choose Corisio
+          <Box className="mt-3 flex flex-col-reverse md:flex-row  justify-center items-center">
+            <Box className="mt-3 md:w-1/2">
+              <Typography variant="caption" className="!text-[13px] !mb-5">
+                Are you ready to take your business to the next level? At
+                Corisio, we're not just an e-commerce platform; we're your
+                gateway to success. Here's why choosing Corisio is the right
+                move for your business:
               </Typography>
-              <SectionTitle blue="Unlock Your Business Potential with Corisio" />
+              <Box className="mt-5">
+                <CheckPoint
+                  title="Limitless Opportunities:"
+                  info="Corisio opens the doors to a world of opportunities. Join our thriving community of businesses to expand your network, collaborate with like-minded entrepreneurs, and discover new markets."
+               />
+                <CheckPoint
+                  title="Efficiency Redefined:"
+                  info="Say goodbye to time-consuming processes. Corisio offers streamlined solutions for both buyers and sellers, making every transaction efficient and hassle-free."
+                />
+                <CheckPoint
+                  title="Trust and Security:"
+                  info="Your business's security is our top priority. Corisio prioritizes transparency and security, providing a trustworthy platform for all your business needs."
+                />
+                <CheckPoint
+                  title="Innovation at Your Fingertips:"
+                  info="Benefit from cutting-edge e-commerce technologies that keep you ahead of the competition. Corisio is committed to innovation and staying at the forefront of industry trends."
+                />
+                <CheckPoint
+                  title="Dedicated Support:"
+                  info="With Corisio, you're never alone on your business journey. Gain access to dedicated customer support and a wealth of resources to help you thrive."
+                />
+              </Box>
             </Box>
-            <Image
-              src="/images/misc/storeImage2.png"
-              alt="check"
-              width={1000}
-              height={1000}
-              className="w-84 h-[500px] mt-2 mr-1"
-            />
+            <Box className="md:w-1/2 md:ml-10">
+              <Image
+                src="/images/misc/storeImage2.png"
+                alt="check"
+                width={1000}
+                height={1000}
+                className="w-84 h-[500px] mt-2 mr-1"
+              />
+            </Box>
           </Box>
         </Box>
       </Box>

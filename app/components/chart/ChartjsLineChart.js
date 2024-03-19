@@ -118,7 +118,7 @@ const DashboardLineChart = (props) => {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full !shadow-none">
       <Box className="!px-3 !py-3 w-full">
         <Typography className="text-[13px] font-bold">
           Income Statement Chart

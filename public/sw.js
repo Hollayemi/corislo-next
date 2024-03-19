@@ -35,11 +35,13 @@ const urlsToCache = ["/", "index.html"];
 // });
 
 self.addEventListener("push", (e) => {
+
+  let jikj
   const data = e.data.json();
   self.registration.showNotification(data.title, {
     ...data,
     icon: "/images/logo/icon/main.jpg",
-    image: "/images/logo/icon/main.jpg",
+    // image: "/images/logo/icon/main.jpg",
   });
   // e.waitUntil(
   //     self.registration.showNotification(data.title, options)

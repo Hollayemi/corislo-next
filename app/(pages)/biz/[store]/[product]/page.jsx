@@ -4,7 +4,6 @@ import IconifyIcon from "@/app/components/icon";
 import HomeWrapper from "@/app/components/view/home";
 import ReactSlickSlider from "@/app/components/wrapper/react-slick";
 import { productSizes } from "@/app/data/store/productData";
-import { summarizeFollowers } from "@/app/utils/format";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Box, Button, Grid, Rating, Tab, Typography } from "@mui/material";
 import Image from "next/image";
@@ -26,13 +25,16 @@ import {
 } from "@/app/redux/state/slices/home/cart";
 import { useUserData } from "@/app/hooks/useData";
 import { addNewViewProduct } from "@/app/redux/state/slices/home/view/view";
+import { ProductSellerCard } from "@/app/components/cards/seller/product.sellercard";
+
 
 const ProductDisplay = ({ params }) => {
   const dispatch = useDispatch();
   const { product: prodNameParam } = params;
   const { cartedProds } = useUserData();
+  console.log(prodNameParam.split("%2B").join(" "));
   const { data: prod, error } = useSWR(
-    `/products?prodName=${prodNameParam.split("-").join(" ")}`
+    `/products?prodName=${prodNameParam.split("%2B").join(" ")}`
   );
   const product = prod ? prod?.data[0] : {};
   const ImagesArray = [1, 2, 3, 4, 5, 6, 7];
@@ -272,77 +274,7 @@ const ProductDisplay = ({ params }) => {
               </Box>
             </Box>
 
-            <Box className="bg-white w-full rounded-xl p-4 mt-4">
-              <Box className="flex  justify-between">
-                <Box className="flex item-start">
-                  <Image
-                    src="/images/misc/shop/1.png"
-                    alt="store_logo"
-                    width={100}
-                    height={100}
-                    className="w-14 h-14 border border-blue-700 !rounded-full"
-                  />
-                  <Box className="mt-3 ml-2">
-                    <Typography
-                      variant="body2"
-                      className="!text-[14px] !font-[400] !leading-3"
-                      color="custom.pri"
-                    >
-                      Clothing Store
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      className="!text-[11px] !text-gray-400 !leading-3"
-                      color="custom.pri"
-                    >
-                      Lagos State
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box className="flex items-center justify-center">
-                  <Button
-                    variant="outlined"
-                    className="!rounded-full h-9 w-14 md:w-32 !bg-white !shadow-none"
-                    startIcon={
-                      <IconifyIcon
-                        icon="tabler:message-2-plus"
-                        className="!text-blue-800"
-                      />
-                    }
-                  >
-                    <span className="hidden md:block">Message</span>
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    className="!rounded-full h-9 w-14 md:w-28 !bg-white !shadow-none !ml-3"
-                    startIcon={<IconifyIcon icon="tabler:user-plus" />}
-                  >
-                    <span className="hidden md:block">Follow</span>
-                  </Button>
-                </Box>
-              </Box>
-              <Box className="mt-3 flex flex-col md:flex-row ">
-                <Box className="flex items-center justify-evenly md:w-3/5">
-                  <StoreNumberStatus status="Items" value={1400} />
-                  <Box className="w-0.5 h-6 bg-gray-300"></Box>
-                  <StoreNumberStatus
-                    status="Followers"
-                    value={summarizeFollowers(3300)}
-                  />
-                  <Box className="w-0.5 h-6 bg-gray-300"></Box>
-                  <StoreNumberStatus status="Reviews" value={524} />
-                </Box>
-
-                <Box className="mt-2 md:mt-0 md:w-2/5 block">
-                  <TickCheck
-                    title="Order Fufilment Rate:"
-                    icon
-                    result="Average"
-                  />
-                  <TickCheck title="Customer Rating:" icon result="Good" />
-                </Box>
-              </Box>
-            </Box>
+            <ProductSellerCard branchId={product?.branchId} />
           </Grid>
         </Grid>
 
@@ -449,48 +381,6 @@ const TitleValue = ({ title, value }) => (
         className="!text-black !text-[12px] !leading-5 !ml-2 md:!ml-0 !mr-5 md:!mr-0 "
       >
         {value}
-      </Typography>
-    </Box>
-  </Box>
-);
-const StoreNumberStatus = ({ status, value }) => (
-  <Box className="flex items-center">
-    <Box className="">
-      <Typography
-        variant="caption"
-        className="!text-black !font-bold !text-[16px]"
-      >
-        {value}
-      </Typography>
-    </Box>
-
-    <Box>
-      <Typography
-        variant="body2"
-        className="!text-gray-400 !text-[10px] !pb-px !ml-1"
-      >
-        {status}
-      </Typography>
-    </Box>
-  </Box>
-);
-
-const TickCheck = ({ title, result, icon }) => (
-  <Box className="flex items-center my-1">
-    <Box className="flex items-center">
-      {icon && (
-        <IconifyIcon
-          icon="tabler:check"
-          className="w-3.5 h-3.5 !text-white p-px !rounded-full bg-green-600 mr-1"
-        />
-      )}
-      <Typography variant="body2" className="!text-gray-400 !text-[13px]">
-        {title}
-      </Typography>
-    </Box>
-    <Box>
-      <Typography variant="body2" className="!text-black !text-[13px] !ml-4">
-        {result}
       </Typography>
     </Box>
   </Box>

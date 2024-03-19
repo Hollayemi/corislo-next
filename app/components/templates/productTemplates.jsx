@@ -7,7 +7,9 @@ import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import Link from "next/link";
 import { useEffect } from "react";
-import { formatCurrency } from "@/app/utils/format";
+import { formatCurrency, ngnPrice } from "@/app/utils/format";
+import { Map } from "@mui/icons-material";
+import { useUserData } from "@/app/hooks/useData";
 
 export const PopularProduct = ({ image, prodName, store, price, small }) => {
   const router = useRouter();
@@ -33,7 +35,7 @@ export const PopularProduct = ({ image, prodName, store, price, small }) => {
         </Link>
         <Box className="flex items-center justify-between">
           <Typography
-            variant="body-2"
+            variant="body2"
             className="whitespace-nowrap text-ellipsis !font-bold"
           >
             {formatCurrency(price || 6400.54)}
@@ -173,8 +175,9 @@ export const ProductOnShowcase = ({
   prodPrice,
   star,
 }) => {
+  const { showMapScreen } = useUserData()
   const router = useRouter();
-  const reshapedProdName = prodName.split(" ").join("-").toLowerCase();
+  const reshapedProdName = prodName.split(" ").join("+").toLowerCase();
   return (
     <Box className="w-4/12 min-w-[100px] max-w-[140px] md:max-w-[170px] md:w-44 h-48 md:!h-64 md:mx-2 my-2.5 ">
       <Box
@@ -192,7 +195,7 @@ export const ProductOnShowcase = ({
           <Box>
             <Typography
               variant="body2"
-              className="!whitespace-nowrap !text-[11px] !font-bold !overflow-hidden !text-ellipsis"
+              className="!whitespace-nowrap !text-[12px] !font-bold !overflow-hidden !text-ellipsis"
             >
               {prodName}
             </Typography>
@@ -201,28 +204,42 @@ export const ProductOnShowcase = ({
 
         <Box className="flex items-center justify-between">
           <Typography
-            variant="body-2"
+            variant="body2"
             className="whitespace-nowrap !text-md text-ellipsis !font-black"
           >
-            {formatCurrency(prodPrice)}
+            {ngnPrice(prodPrice)}
           </Typography>
         </Box>
 
-        <Box className="flex flex-col items-start justify-between">
+        <Box className="flex flex-col items-start justify-between w-full">
           <Rating
             defaultValue={star || 0}
             className="!text-[13px]"
             name="size-small"
             size="small"
           />
-          <Link href={`/biz/${store}-${branch}/`}>
-            <Typography
-              variant="caption"
-              className="whitespace-nowrap text-ellipsis !text-[9px]"
-            >
-              {store}
-            </Typography>
-          </Link>
+          <Box className="flex justify-between items-center w-full mt-1">
+            <Link href={`/biz/${store}-${branch}/`}>
+              <Typography
+                variant="body2"
+                className="whitespace-nowrap text-ellipsis !text-[10px]"
+              >
+                {store}
+              </Typography>
+            </Link>
+            <Box className="flex items-center cursor-pointer" onClick={() => showMapScreen()}>
+              <IconifyIcon
+                icon="tabler:map-pin-filled"
+                className="!mr-1 !text-[15px]"
+              />
+              <Typography
+                variant="body2"
+                className="whitespace-nowrap text-ellipsis !text-[10px]"
+              >
+                24cm
+              </Typography>
+            </Box>
+          </Box>
         </Box>
       </Box>
     </Box>

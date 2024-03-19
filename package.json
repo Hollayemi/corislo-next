@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 4001 --turbo",
+    "dev": "next dev -p 4001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -13,10 +13,13 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.5",
+    "@googlemaps/js-api-loader": "^1.16.6",
+    "@googlemaps/markerclusterer": "^2.5.3",
     "@mui/icons-material": "^5.14.0",
     "@mui/lab": "^5.0.0-alpha.137",
     "@mui/material": "^5.14.0",
     "@mui/x-data-grid": "^6.10.1",
+    "@react-google-maps/api": "^2.19.3",
     "@reduxjs/toolkit": "^1.9.5",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",

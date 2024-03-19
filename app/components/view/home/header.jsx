@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Badge,
   Box,
@@ -25,22 +25,23 @@ import {
   Search,
 } from "@mui/icons-material";
 
+
+ export const IconImage = ({ image, className, onClick }) => (
+   <Image
+     src={`/images/misc/${image}.png`}
+     alt="image"
+     width={700}
+     onClick={onClick}
+     height={700}
+     className={className}
+   />
+ );
+
 function Header({ search, setSearch, setPinSearch }) {
   const router = useRouter();
   const pathname = usePathname();
   const { isOffline, userInfo, cartedProds, overLay, showOverlay } =
     useUserData();
-
-  const IconImage = ({ image, className, onClick }) => (
-    <Image
-      src={`/images/misc/${image}.png`}
-      alt="image"
-      width={700}
-      onClick={onClick}
-      height={700}
-      className={className}
-    />
-  );
 
   const getPath = pathname.split("/");
 
@@ -55,11 +56,11 @@ function Header({ search, setSearch, setPinSearch }) {
 
   const pages = {
     isOffline: [
-      { name: "Home", link: "/" },
-      // { name: "Products", link: "/products" },
-      { name: "About", link: "/about" },
-      { name: "Seller", link: "/seller" },
-      { name: "Support", link: "/support" },
+      { name: "Home", link: "" },
+      // { name: "Products", link: "products" },
+      { name: "About", link: "about" },
+      { name: "Seller", link: "seller" },
+      { name: "Support", link: "support" },
     ],
 
     isOnline: [
@@ -67,9 +68,21 @@ function Header({ search, setSearch, setPinSearch }) {
       // { name: "Products", link: "/products" },
       { name: "Order", link: "order" },
       { name: "Inbox", link: "chat" },
+      { name: "Account", link: "user" },
       { name: "Saved Items", link: "saved-items" },
     ],
   };
+  const onlinePages = pages.isOnline.map((x) => x.link.toLowerCase());
+
+  useEffect(() => {
+    if (
+      isOffline &&
+      onlinePages.includes(getPath[1].toLowerCase()) &&
+      getPath[1] !== ""
+    ) {
+      router.push(`/auth/login?returnurl=${getPath[1]}`);
+    }
+  }, [onlinePages, isOffline]);
 
   const MyCartBtn = ({ num }) => (
     <Box className="flex items-center">

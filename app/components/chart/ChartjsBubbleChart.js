@@ -108,7 +108,7 @@ const DashboardBubbleChart = props => {
   };
 
   return (
-    <Card>
+    <Card className="!shadow-none">
       <Box className="!p-3">
         <Typography className="text-[13px] font-bold">New buyer</Typography>
       </Box>
