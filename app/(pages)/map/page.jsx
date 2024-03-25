@@ -10,11 +10,14 @@ const libraries = ["places"]; // Optional for additional features like place sea
 
 const MyMapComponent = () => {
   const [map, setMap] = useState(null);
-  const center = { lat: -34.397, lng: 150.644 }; // Your desired center coordinates
-  const zoom = 8; // Your desired zoom level
+  const center = {
+    lat: 7.1762595,
+    lng: 4.7280668,
+  }; // Your desired center coordinates
+  const zoom = 20; // Your desired zoom level
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyCeQLtnNDROKSSqq_k3nQ_NTpnsv7srU_Y", // API key from environment variable
+    googleMapsApiKey: "AIzaSyAc1nh-S1_hL3n_sLzzR-tLkgOy9PHenHQ", // API key from environment variable
     libraries,
   });
 

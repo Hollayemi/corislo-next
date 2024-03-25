@@ -57,7 +57,7 @@ const SendMsgForm = (props) => {
 
   return (
     <Form onSubmit={handleSendMsg} className="w-full flex justify-center">
-      <ChatFormWrapper className="!rounded-full !bg-gray-50 !border w-full md:!w-11/12 py-1 px-2 ">
+      <ChatFormWrapper className="!rounded-md !bg-gray-50 !border w-full md:!w-11/12 py-1 px-2 ">
         <IconButton
           size="small"
           component="label"
@@ -67,11 +67,14 @@ const SendMsgForm = (props) => {
           <Icon icon="tabler:paperclip" />
           <input hidden type="file" id="upload-img" />
         </IconButton>
-        <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
+        <Box sx={{ flexGrow: 1, display: "flex", alignItems: "flex-end" }} className="-mt-2">
           <TextField
             fullWidth
             value={msg}
             size="small"
+            minRows={1}
+            maxRows={4}
+            multiline
             placeholder="Type your message here…"
             onChange={(e) => setMsg(e.target.value)}
             sx={{
@@ -79,7 +82,7 @@ const SendMsgForm = (props) => {
                 "&.Mui-focused": { boxShadow: "none" },
               },
               "& .MuiOutlinedInput-input": {
-                p: (theme) => theme.spacing(0.875, 1.5),
+                p: (theme) => theme.spacing(0.2875, 0.5),
               },
               "& fieldset": { border: "0 !important" },
             }}

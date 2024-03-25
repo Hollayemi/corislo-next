@@ -10,6 +10,7 @@ import { CancelOutlined } from "@mui/icons-material";
 import { useState } from "react";
 import { useUserData } from "@/app/hooks/useData";
 import useSWR from "swr";
+import Link from "next/link";
 
 const { Box, Typography, Rating } = require("@mui/material");
 const { default: Image } = require("next/image");
@@ -189,7 +190,7 @@ const NotifProductDisplay = ({ productId }) => {
     </Box>
   );
 };
-const NotifOrderDisplay = ({ orderId }) => {
+export const NotifOrderDisplay = ({ orderId }) => {
   console.log(orderId);
   const { data: result } = useSWR(`/user/order/${orderId}`);
   const orderProducts = result?.data[0] || {};
@@ -241,12 +242,14 @@ const NotifOrderDisplay = ({ orderId }) => {
           </Box>
         </Box>
         <Box className="absolute bottom-0 md:top-0 right-0 flex flex-col items-end">
-          <Box className="flex justify-center items-center w-6 h-6 md:w-9 md:h-9 mt-2 cursor-pointer rounded-full border border-black">
-            <IconifyIcon
-              icon="tabler:arrow-up-right"
-              className="!text-[16px] md:!text-[26px]"
-            />
-          </Box>
+          <Link href={`/order/${orderId}`}>
+            <Box className="flex justify-center items-center w-6 h-6 md:w-9 md:h-9 mt-2 cursor-pointer rounded-full border border-black">
+              <IconifyIcon
+                icon="tabler:arrow-up-right"
+                className="!text-[16px] md:!text-[26px]"
+              />
+            </Box>
+          </Link>
         </Box>
       </Box>
     </Box>

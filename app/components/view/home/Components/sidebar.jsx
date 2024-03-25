@@ -3,11 +3,14 @@ import Link from "next/link";
 import { useUserData } from "@/app/hooks/useData";
 const { Box, Button } = require("@mui/material");
 import { usePathname, useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { userLogout } from "@/app/redux/state/slices/auth/Login";
 
 const UserSideBar = ({ data }) => {
-  const { overLay, isOffline, showOverlay  } = useUserData();
+  const { overLay, isOffline, showOverlay } = useUserData();
   const pathname = usePathname();
   const router = useRouter();
+  const dispatch = useDispatch();
   const getPath = pathname.split("/");
 
   const LinkStyled = styled(Link)(({}) => ({
@@ -55,9 +58,11 @@ const UserSideBar = ({ data }) => {
             {page.name}
           </LinkStyled>
         ))}
-        </Box>
-        <Box className="flex items-center !mt-4">
-        <Button
+      </Box>
+      <Box className="flex items-center !mt-4">
+        {isOffline ? (
+          <>
+            <Button
               variant="outlined"
               className="!rounded-full !text-xs h-8 w-16 ml-2 md:!ml-5"
               size="small"
@@ -72,7 +77,18 @@ const UserSideBar = ({ data }) => {
             >
               Register
             </Button>
-        </Box>
+          </>
+        ) : (
+          <Button
+            variant="outlined"
+            className="!rounded-full !text-xs h-8 w-16 ml-2 md:!ml-5"
+            size="small"
+            onClick={() => dispatch(userLogout())}
+          >
+            Logout
+          </Button>
+        )}
+      </Box>
     </Box>
   );
 };

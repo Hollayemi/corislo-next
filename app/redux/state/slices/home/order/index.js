@@ -55,23 +55,22 @@ export const orderAction = (payload, dispatch) => {
   dispatch(orderActionApi(payload))
     .then(unwrapResult)
     .then(() => {
+      payload.orderStatus &&
+        mutate(`/user/order?status=${payload.orderStatus}`);
       mutate(`/user/order/${payload.orderId}`);
+      mutate(`/user/order-count`);
       mutate(`/user/order-track?order=${payload.orderId}`);
     })
     .catch((e) => {});
 };
 
-
-const orderPriceApi = createAsyncThunk(
-  "patch/orderPrice",
-  async (payload) => {
-    const { data } = await martApi
-      .post(`/user/order-price`, payload, jsonHeader())
-      .then((e) => e)
-      .catch((e) => e.response);
-    return data;
-  }
-);
+const orderPriceApi = createAsyncThunk("patch/orderPrice", async (payload) => {
+  const { data } = await martApi
+    .post(`/user/order-price`, payload, jsonHeader())
+    .then((e) => e)
+    .catch((e) => e.response);
+  return data;
+});
 
 export const orderPrice = (payload, dispatch, setResult) => {
   dispatch(orderPriceApi(payload))

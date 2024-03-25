@@ -6,20 +6,54 @@ import IconifyIcon from "@/app/components/icon";
 import Direction from "./direction";
 import AboutStore from "./store";
 import Maps from "./mapTypes";
-const { Box, Button, Typography, TextField } = require("@mui/material");
+import MapGraph from "./map";
+import useSWR from "swr";
+import { Box, Button, Typography, TextField } from "@mui/material";
+import { CircleLoader } from "@/app/components/cards/loader"
 
 const MapOverlay = () => {
-  
   const { showMapScreen, popMap } = useUserData();
   const [search, setSearch] = useState("");
-  const [stage, setStage] = useState("map_type");
-  
+  const [stage, setStage] = useState("");
+  const [mapType, setMapType] = useState("default");
+  const [markers, setMarkers] = useState([
+    {
+      lat: 7.1762595,
+      lng: 4.7260668,
+      info: "Coristen",
+      branchId: "65ac80101cc3db0407fa00c9",
+    },
+    {
+      lat: 7.1768595,
+      lng: 4.7290668,
+      info: "Marker 2",
+      branchId: "65ac80101cc3db0407fa00c9",
+    },
+    {
+      lat: 7.1768393,
+      lng: 4.7280468,
+      info: "Corisio",
+      branchId: "65ac80101cc3db0407fa00c9",
+    },
+  ]);
+
+  const { data: storeSearch, isLoading: searchLoading } = useSWR(
+    `/store-search?search=${search}`
+  );
+
+  const searchResult = storeSearch?.data || [];
+
   const stages = {
     direction: <Direction setStage={setStage} />,
     store: <AboutStore setStage={setStage} />,
-    map_type: <Maps setStage={setStage} />,
+    map_type: (
+      <Maps
+        setStage={setStage}
+        setMapType={setMapType}
+        mapType={mapType}
+      />
+    ),
   };
-
 
   const MapStageBtn = ({ icon, name }) => (
     <Box
@@ -37,23 +71,41 @@ const MapOverlay = () => {
     </Box>
   );
 
-  const SearchResults = ({ name }) => (
-    <Box className="flex justify-between p-1.5 mt-px cursor-pointer parent">
-      <Box className="flex items-center">
-        <IconifyIcon icon="tabler:map-pin" className="!text-[16px] mr-2.5" />
-        <Typography
-          variant="body2"
-          className="!text-[12px] !text-gray-400 parent-hover:!text-black !flex-shrink-0"
-        >
-          {name}
-        </Typography>
+  const SearchResults = ({ name, click }) => {
+    const resultClick = () => {
+      setSearch("");
+      const storeLoc = searchResult.map((each) => {
+        return {
+          lat: 7.1762595,
+          lng: 4.7260668,
+          info: each.businessName,
+          branchId: each.branchId,
+        };
+      });
+
+      setMarkers(storeLoc);
+    };
+    return (
+      <Box
+        className="flex justify-between p-1.5 mt-px cursor-pointer parent"
+        onClick={resultClick}
+      >
+        <Box className="flex items-center">
+          <IconifyIcon icon="tabler:map-pin" className="!text-[16px] mr-2.5" />
+          <Typography
+            variant="body2"
+            className="!text-[12px] !text-gray-400 parent-hover:!text-black !flex-shrink-0"
+          >
+            {name}
+          </Typography>
+        </Box>
+        <IconifyIcon
+          icon="tabler:corner-up-left"
+          className="!text-[16px] mr-2.5"
+        />
       </Box>
-      <IconifyIcon
-        icon="tabler:corner-up-left"
-        className="!text-[16px] mr-2.5"
-      />
-    </Box>
-  );
+    );
+  };
 
   return (
     <Box className="w-full h-screen fixed z-50 top-0 left-0 overflow-hidden">
@@ -68,12 +120,7 @@ const MapOverlay = () => {
               width={1000}
               height={1000}
             /> */}
-            <iframe
-              className="w-full h-full"
-              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeQLtnNDROKSSqq_k3nQ_NTpnsv7srU_Y&loading=async&callback=initMap"
-              width={300}
-              height={150}
-            ></iframe>
+            <MapGraph mapType={mapType} markers={markers} />
           </Box>
           <Box className="absolute z-50 top-2 left-2 w-full">
             <Button
@@ -122,16 +169,26 @@ const MapOverlay = () => {
                     >
                       Search for stores or locations
                     </Typography>
-                    <SearchResults name="Next In Town Store" />
-                    <SearchResults name="Nifis Store" />
-                    <SearchResults name="Nggget Store" />
+                    {searchLoading ? (
+                      <Box className="h-20 w-full flex justify-center items-center">
+                        <CircleLoader />
+                      </Box>
+                    ) : (
+                      searchResult.map((each, i) => (
+                        <SearchResults
+                          name={`${each.businessName} (${each.store})`}
+                          key={i}
+                          click
+                        />
+                      ))
+                    )}
                   </Box>
                 )}
               </Box>
             </Box>
 
             {stage && (
-              <Box className=" w-[330px] md:w-[360px] h-auto pb-3 shadow-xl bg-white rounded-xl absolute right-20 top-4 px-3">
+              <Box className=" w-[300px] md:w-[360px] h-auto pb-3 shadow-xl bg-white rounded-xl absolute right-20 top-20 md:top-4 px-3">
                 {stages[stage]}
               </Box>
             )}

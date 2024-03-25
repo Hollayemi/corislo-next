@@ -4,9 +4,12 @@ import Image from "next/image";
 import IconifyIcon from "@/app/components/icon";
 import useSWR from "swr";
 import { BriefStoreWithFuntions } from "./components";
+import { CircleLoader } from "@/app/components/cards/loader";
 
 const AboutStore = ({ setStage }) => {
-  const { data } = useSWR("/branch/info?branchId=65e29c4266575a7988cc52b9");
+  const { data, isLoading } = useSWR(
+    "/branch/info?branchId=65e29c4266575a7988cc52b9"
+  );
   const info = data?.data || {};
 
   const Comp = ({ name, icon }) => (
@@ -21,6 +24,13 @@ const AboutStore = ({ setStage }) => {
     </Box>
   );
 
+  if (isLoading)
+    return (
+      <Box className="flex justify-center w-full py-8">
+        <CircleLoader />
+      </Box>
+    );
+
   return (
     <Box className="pt-4 w-full">
       <ReactSlickSlider noArrowStyle hideArrow>
@@ -29,21 +39,21 @@ const AboutStore = ({ setStage }) => {
           alt="gallery"
           width={800}
           height={800}
-          className="!w-80 !min-w-80 h-44 rounded-md"
+          className="!w-64 !min-w-64 md:!w-80 md:!min-w-80 h-40 md:h-44 rounded-md"
         />
         <Image
           src="/images/more/store-gallery2.png"
           alt="gallery"
           width={800}
           height={800}
-          className="!w-80 !min-w-80 h-44 rounded-md"
+          className="!w-64 !min-w-64 md:!w-80 md:!min-w-80 h-40 md:h-44 rounded-md"
         />
         <Image
           src="/images/more/store-gallery3.png"
           alt="gallery"
           width={800}
           height={800}
-          className="!w-80 !min-w-80 h-44 rounded-md"
+          className="!w-64 !min-w-64 md:!w-80 md:!min-w-80 h-40 md:h-44 rounded-md"
         />
       </ReactSlickSlider>
       <Box
@@ -78,9 +88,9 @@ const AboutStore = ({ setStage }) => {
 
       <Box className="py-3 ">
         <Comp icon="tabler:map-pin" name={info.address} />
-        <Comp icon="tabler:x" name={"Mon - Sat, 09:00 - 18:00"} />
-        <Comp icon="tabler:x" name={info.phone} />
-        <Comp icon="tabler:x" name={info.email} />
+        <Comp icon="tabler:clock-pin" name={"Mon - Sat, 09:00 - 18:00"} />
+        <Comp icon="tabler:phone-call" name={info.phone} />
+        <Comp icon="tabler:mail" name={info.email} />
       </Box>
     </Box>
   );

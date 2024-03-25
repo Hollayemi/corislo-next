@@ -44,6 +44,7 @@ export default function RootLayout({ children }) {
     }
   }, []);
 
+
   // if ("serviceWorker" in navigator) {
   //   navigator.serviceWorker
   //     .register("/sw.js")
@@ -88,7 +89,10 @@ export default function RootLayout({ children }) {
         <meta property="og:image" content="/images/logo/horizontal/1.png" />
         <meta property="og:url" content="https:corislo.vercel.app" />
         <meta property="og:type" content="product" />
+  
       </head>
+   
+     
       <body className={`${hideOverflow && "!overflow-hidden"}`}>
         <SWRConfig
           value={{
@@ -104,7 +108,7 @@ export default function RootLayout({ children }) {
         >
           <NextProgress />
           <Provider store={store}>
-            <UserDataProvider  setOverflow={setOverflow}>
+            <UserDataProvider setOverflow={setOverflow}>
               <LineLoading />
               <PersistGate loading={null} persistor={persistor}>
                 <ThemeComponent>

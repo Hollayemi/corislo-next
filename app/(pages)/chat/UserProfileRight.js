@@ -2,29 +2,31 @@
 import { Fragment } from "react";
 
 // ** MUI Imports
-import Box from "@mui/material/Box";
+import {
+  Box,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+} from "@mui/material";
 import List from "@mui/material/List";
 import Badge from "@mui/material/Badge";
 import MuiAvatar from "@mui/material/Avatar";
-import ListItem from "@mui/material/ListItem";
-import FormGroup from "@mui/material/FormGroup";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemButton from "@mui/material/ListItemButton";
+import Rating from "@mui/material/Rating";
 
 // ** Icon Imports
 import Icon from "@/app/components/icon";
+import { NotifOrderDisplay } from "@/app/components/view/home/Components/notification";
 
 // ** Third Party Components
 import PerfectScrollbar from "react-perfect-scrollbar";
-
 // ** Custom Component Imports
 import Sidebar from "@/app/components/sidebar";
 import CustomAvatar from "@/app/components/avatar";
 import { StyleList } from "./Styled";
 import Image from "next/image";
+import useSWR from "swr";
 
 const UserProfileRight = (props) => {
   const {
@@ -97,34 +99,56 @@ export const UserProfileRightComponent = ({
   sidebarWidth,
   userProfileRightOpen,
   handleUserProfileRightSidebarToggle,
-}) =>
-  store && store.selectedChat ? (
-    <>
+}) => {
+  const contact = store.selectedChat.contact;
+  const { data: result } = useSWR(
+    `/user/order?store=${contact.store}&branch=${contact.branch}`
+  );
+  console.log(result);
+  const MyListItem = ({ info, title, infoComponent }) => (
+    <Box className="flex items-center mb-2">
+      <Typography
+        variant="body2"
+        className="!text-[12px] !text-gray-400 parent-hover:!text-black !flex-shrink-0 !w-32"
+      >
+        {title}
+      </Typography>
+      {!infoComponent && (
+        <Typography
+          variant="body2"
+          className="!text-[12px] !text-gray-600 parent-hover:!text-black !flex-shrink-0"
+        >
+          {info}
+        </Typography>
+      )}
+
+      {infoComponent}
+    </Box>
+  );
+
+  return (
+    <Box>
       <Box className="h-14 border-b pt-6 !rounded-t-md">
         <Box className="flex justify-between items-center px-3">
           <Typography className="!font-bold !text-[17px]">
             Store Information
           </Typography>
-          <Icon icon="tabler:chevron-down" fontSize={20} />
+          {!hideCancel && (
+            <IconButton
+              size="small"
+              onClick={handleUserProfileRightSidebarToggle}
+              sx={{
+                color: "text.disabled",
+              }}
+            >
+              <Icon icon="tabler:x" />
+            </IconButton>
+          )}
         </Box>
       </Box>
       <StyleList sx={{ height: "calc(100vh - 11.5125rem)" }}>
         <Box className={`!rounded-b-md`}>
           <Box sx={{ position: "relative" }}>
-            {!hideCancel && (
-              <IconButton
-                size="small"
-                onClick={handleUserProfileRightSidebarToggle}
-                sx={{
-                  top: "0.5rem",
-                  right: "0.5rem",
-                  position: "absolute",
-                  color: "text.disabled",
-                }}
-              >
-                <Icon icon="tabler:x" />
-              </IconButton>
-            )}
             <Box
               sx={{
                 display: "flex",
@@ -146,28 +170,24 @@ export const UserProfileRightComponent = ({
                         width: 10,
                         height: 10,
                         borderRadius: "50%",
-                        color: `${
-                          statusObj[store.selectedChat.contact.status]
-                        }.main`,
+                        color: `${statusObj[contact.status]}.main`,
                         boxShadow: (theme) =>
                           `0 0 0 2px ${theme.palette.background.paper}`,
-                        backgroundColor: `${
-                          statusObj[store.selectedChat.contact.status]
-                        }.main`,
+                        backgroundColor: `${statusObj[contact.status]}.main`,
                       }}
                     />
                   }
                 >
-                  {store.selectedChat.contact.avatar ? (
+                  {contact.avatar ? (
                     <MuiAvatar
                       sx={{ width: "5rem", height: "5rem" }}
-                      src={store.selectedChat.contact.avatar}
-                      alt={store.selectedChat.contact.chatName}
+                      src={contact.avatar}
+                      alt={contact.chatName}
                     />
                   ) : (
                     <CustomAvatar
                       skin="light"
-                      color={store.selectedChat.contact.avatarColor}
+                      color={contact.avatarColor}
                       sx={{
                         width: "5rem",
                         height: "5rem",
@@ -175,7 +195,7 @@ export const UserProfileRightComponent = ({
                         fontSize: "2rem",
                       }}
                     >
-                      {getInitials(store.selectedChat.contact.chatName)}
+                      {getInitials(contact.chatName)}
                     </CustomAvatar>
                   )}
                 </Badge>
@@ -191,10 +211,10 @@ export const UserProfileRightComponent = ({
                 className="!font-bold !text-[15]"
                 sx={{ textAlign: "center" }}
               >
-                {store.selectedChat.contact.chatName}
+                {contact.chatName}
               </Typography>
               <Typography sx={{ textAlign: "center", color: "text.secondary" }}>
-                {store.selectedChat.contact.role}
+                {contact.role}
               </Typography>
             </Box>
           </Box>
@@ -202,116 +222,54 @@ export const UserProfileRightComponent = ({
           <Box className="px-4">
             <Box sx={{ mb: 3 }}>
               <List dense sx={{ p: 0 }}>
-                <ListItem sx={{ px: 1 }}>
-                  {/* <ListItemIcon sx={{ mr: 0.5 }} className="!w-6 !min-w-6"> */}
-                    <Icon icon="tabler:mail" className="mr-4 text-gray-500"ize="1.1rem" />
-                  {/* </ListItemIcon> */}
-                  <ListItemText
-                    className="!text-[10px]"
-                    sx={{ textTransform: "lowercase" }}
-                    primaryTypographyProps={{ variant: "body1" }}
-                    primary={`store@gmail.com`}
-                  />
-                </ListItem>
-                <ListItem sx={{ px: 1 }}>
-                  {/* <ListItemIcon sx={{ mr: 0.5 }} className="!w-6 !min-w-6"> */}
-                    <Icon icon="tabler:phone-call" className="mr-4 text-gray-500" fontSize="1.1rem" />
-                  {/* </ListItemIcon> */}
-                  <ListItemText
-                    className="!text-[10px]"
-                    primaryTypographyProps={{ variant: "body1" }}
-                    primary="+1(123) 456 - 7890"
-                  />
-                </ListItem>
-                <ListItem sx={{ px: 1 }}>
-                  {/* <ListItemIcon sx={{ mr: 0.5 }} className="!w-6 !min-w-6"> */}
-                    <Icon icon="tabler:clock" className="mr-4 text-gray-500" size="1.1rem" />
-                  {/* </ListItemIcon> */}
-                  <ListItemText
-                    className="!text-[10px]"
-                    primaryTypographyProps={{ variant: "body1" }}
-                    primary="Mon - Fri 10AM - 8PM"
-                  />
-                </ListItem>
+                <MyListItem title="Store Email Address:" info={contact.email} />
+                <MyListItem title="Phone Number:" info={contact.phone} />
+                <MyListItem title="Physical Address:" info={contact.address} />
+                <MyListItem
+                  title="Store Rating:"
+                  infoComponent={
+                    <Box className="flex items-center flex-shrink-0">
+                      <Rating
+                        size="small"
+                        value={3 / 5}
+                        readOnly
+                        max={1}
+                        precision={0.1}
+                      />
+                      <Typography
+                        variant="body2"
+                        className="!text-[13px] !font-bold !px-2 pt-0.5 !text-black"
+                      >
+                        4/5
+                      </Typography>
+                    </Box>
+                  }
+                />
               </List>
             </Box>
-
-            <div>
-              <Typography
-                variant="body2"
-                sx={{
-                  mb: 1.9,
-                  color: "text.disabled",
-                  textTransform: "uppercase",
-                }}
-              >
-                Options
-              </Typography>
-              <List dense sx={{ p: 0 }}>
-                <ListItem disablePadding>
-                  <ListItemButton sx={{ px: 1 }}>
-                    {/* <ListItemIcon sx={{ mr: 0.5 }} className="!w-6 !min-w-6"> */}
-                      <Icon icon="tabler:badge" className="mr-4 text-gray-500" size="1.1rem" />
-                    {/* </ListItemIcon> */}
-                    <ListItemText
-                      className="!text-[10px]"
-                      primary="Add Tag"
-                      primaryTypographyProps={{ variant: "body1" }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton sx={{ px: 1 }}>
-                    {/* <ListItemIcon sx={{ mr: 0.5 }} className="!w-6 !min-w-6"> */}
-                      <Icon icon="tabler:star" className="mr-4 text-gray-500"ize="1.1rem" />
-                    {/* </ListItemIcon> */}
-                    <ListItemText
-                      className="!text-[10px]"
-                      primary="Important Contact"
-                      primaryTypographyProps={{ variant: "body1" }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton sx={{ px: 1 }}>
-                    {/* <ListItemIcon sx={{ mr: 0.5 }} className="!w-6 !min-w-6"> */}
-                      <Icon icon="tabler:photo" className="mr-4 text-gray-500" size="1.1rem" />
-                    {/* </ListItemIcon> */}
-                    <ListItemText
-                      className="!text-[10px]"
-                      primary="Shared Media"
-                      primaryTypographyProps={{ variant: "body1" }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton sx={{ px: 1 }}>
-                    {/* <ListItemIcon sx={{ mr: 0.5 }} className="!w-6 !min-w-6"> */}
-                      <Icon icon="tabler:trash" className="mr-4 text-gray-500" size="1.1rem" />
-                    {/* </ListItemIcon> */}
-                    <ListItemText
-                      className="!text-[10px]"
-                      primary="Delete Contact"
-                      primaryTypographyProps={{ variant: "body1" }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton sx={{ px: 1 }}>
-                    {/* <ListItemIcon sx={{ mr: 0.5 }} className="!w-6 !min-w-6"> */}
-                      <Icon icon="tabler:ban" className="mr-4 text-gray-500"ze="1.1rem" />
-                    {/* </ListItemIcon> */}
-                    <ListItemText
-                      className="!text-[10px]"
-                      primary="Block Contact"
-                      primaryTypographyProps={{ variant: "body1" }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              </List>
-            </div>
+            <Box>
+              <Accordion expanded className="!bg-transparent !shadow-none ">
+                <AccordionSummary
+                  className="!border-b border-2 !outline- !h-8"
+                  expandIcon={
+                    <Icon fontSize="1.25rem" icon="tabler:chevron-down" />
+                  }
+                >
+                  <Typography variant="body2" className="!font-black">
+                    Order Made
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  {result &&
+                    result.data.map((res, i) => (
+                      <NotifOrderDisplay key={i} orderId={res._id} />
+                    ))}
+                </AccordionDetails>
+              </Accordion>
+            </Box>
           </Box>
         </Box>
       </StyleList>
-    </>
-  ) : null;
+    </Box>
+  );
+};

@@ -100,6 +100,7 @@ const AppChat = ({ searchParams }) => {
   if (!branchLoading && branchInfo) {
     storeList.selectedChat = {
       chat: null,
+      loadingChat,
       contact: {
         ...branchInfo,
         branchId: branchInfo?.branchId,
@@ -107,13 +108,14 @@ const AppChat = ({ searchParams }) => {
       },
     };
   }
-  if (!storeListLoading && !loadingChat && storeChat && data) {
+  if (!storeListLoading && storeChat && data) {
     storeList.selectedChat = {
-      chat: itIsNewChat ? null : messageLog?.log,
+      chat: itIsNewChat && loadingChat ? null : messageLog?.log,
+      loadingChat,
       contact: {
         ...selectedContact,
         chatId: messageLog?._id,
-        chatName: selectedContact.businessName,
+        chatName: selectedContact.chatName,
         avatar: "/images/misc/shop/2.png",
       },
     };
@@ -123,7 +125,7 @@ const AppChat = ({ searchParams }) => {
       chat: null,
       contact: {
         ...selectedContact,
-        chatName: selectedContact.businessName,
+        chatName: selectedContact.chatName,
         avatar: "/images/misc/shop/2.png",
       },
     };
@@ -144,6 +146,8 @@ const AppChat = ({ searchParams }) => {
       );
     }
   };
+
+  console.log(storeList);
 
   return (
     <HomeWrapper noFooter>
@@ -205,7 +209,7 @@ const AppChat = ({ searchParams }) => {
             }
           />
         </Box>
-        {storeList?.selectedChat && (
+        {storeList?.selectedChat?.contact?.branchId && (
           <Box
             className={`!flex-shrink-0 !ml-3 !rounded-md overflow-hidden hidden !bg-white lg:block !w-[340px] !min-w-[340px]`}
           >

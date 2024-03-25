@@ -112,3 +112,10 @@ input::placeholder, textarea::placeholder{
 .overflowStyle::-webkit-scrollbar-track{
     background-color: #f0eeee;
 }
+
+.gm-controls .gm-style-map-type-control {
+    display: none !important;
+  }
+.gmnoprint {
+    display: none !important;
+  }

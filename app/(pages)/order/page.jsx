@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import HomeWrapper from "@/app/components/view/home";
@@ -12,11 +12,37 @@ import useSWR from "swr";
 
 const OrderPage = () => {
   const [orderShowing, setOrderShowing] = useState("All Orders");
-  const { data: result } = useSWR(`/user/order?status=${orderShowing.split(" ")[0]}`);
-  const orderArray = result?.data || [];
+  const { data: result } = useSWR(
+    `/user/order?status=${orderShowing.split(" ")[0]}`
+  );
+  const { data: count } = useSWR(`/user/order-count`);
+  const counter = count?.data || {}
+  const fetchedOrder = result?.data || [];
   const [dateInterval, setDateInterval] = useState("March 2023 - October 2023");
   const [clipboard, setIsCopied] = useState("");
-  console.log(orderArray);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredOrder, setFilteredOrder] = useState([]);
+  console.log(fetchedOrder);
+
+  const handleFilter = (input) => {
+    setSearchQuery(input);
+    if (fetchedOrder.length) {
+      const searchFilterFunction = (order) =>
+        order.store.toLowerCase().includes(input.toLowerCase()) ||
+        order.orderSlug.toLowerCase().includes(input.toLowerCase()) ||
+        order.items.tracker.toLowerCase().includes(input.toLowerCase());
+      const filteredOrdersArr = fetchedOrder.filter(searchFilterFunction);
+      setFilteredOrder(filteredOrdersArr);
+    }
+  };
+
+  useEffect(() => {
+    setSearchQuery("");
+    setFilteredOrder([]);
+  }, [orderShowing]);
+
+  const orderArray = !filteredOrder.length ? fetchedOrder : filteredOrder;
+
   return (
     <HomeWrapper>
       <Box>
@@ -25,25 +51,25 @@ const OrderPage = () => {
             <OrderBoxes
               image="/images/misc/all-orders.png"
               title="All Orders"
-              value={23}
+              value={counter.all}
               color="#D65C48"
             />
             <OrderBoxes
               image="/images/misc/cancel-orders.png"
-              title="Canceled Orders"
-              value={23}
+              title="Cancelled Orders"
+              value={counter.cancelled}
               color="#9736BE"
             />
             <OrderBoxes
               image="/images/misc/ongoing-orders.png"
               title="Ongoing orders"
-              value={23}
+              value={counter.ongoing}
               color="#2FA794"
             />
             <OrderBoxes
               image="/images/misc/completed-orders.png"
               title="Completed Orders"
-              value={23}
+              value={counter.completed}
               color="#3B47AF"
             />
           </Box>
@@ -204,9 +230,9 @@ const OrderPage = () => {
                 <Box className="w-full relative !overflow-hidden">
                   <input
                     type="text"
-                    value=""
-                    placeholder="Search using the order id, product name, or store."
-                    onChange={() => {}}
+                    value={searchQuery}
+                    placeholder="Search using the order id, track id, or store."
+                    onChange={(e) => handleFilter(e.target.value)}
                     className="h-10 w-full bg-white rounded-full pl-12 pr-8 focus outline-none border-blue-200 focus:border"
                   />
                   <IconifyIcon
@@ -225,21 +251,8 @@ const OrderPage = () => {
 
           {/* order list  */}
           <Box className="!mt-20 md:mt-6">
-            {orderArray.length > 0 ? (
-              orderArray.map((res, i) => (
-                <OrderProductView
-                  key={i}
-                  clipboard={clipboard}
-                  setIsCopied={setIsCopied}
-                  product={res.items.storeProducts}
-                  status={res?.status[res?.status?.length - 1]?.state}
-                  orderSlug={res.orderSlug}
-                  orderId={res._id}
-                  createdAt={res.createdAt}
-                  store={res.store}
-                />
-              ))
-            ) : (
+            {(searchQuery.length && !filteredOrder.length) ||
+            !orderArray.length ? (
               <Box className="mt-20 md:mt-6 w-full h-32 flex flex-col items-center rounded-md justify-center bg-white">
                 <IconifyIcon
                   icon="tabler:truck-delivery"
@@ -247,6 +260,23 @@ const OrderPage = () => {
                 />
                 <Typography variant="caption">No record found</Typography>
               </Box>
+            ) : (
+              orderArray.map((res, i) => (
+                <OrderProductView
+                  key={i}
+                  clipboard={clipboard}
+                  setIsCopied={setIsCopied}
+                  deliveryMedium={res.deliveryMedium}
+                  totalAmount={parseInt(res.totalAmount)}
+                  product={res.items.storeProducts}
+                  status={res?.status[res?.status?.length - 1]?.state}
+                  orderSlug={res.orderSlug}
+                  orderId={res._id}
+                  createdAt={res.createdAt}
+                  store={res.store}
+                  mutateStatus={orderShowing.split(" ")[0]}
+                />
+              ))
             )}
           </Box>
         </Box>

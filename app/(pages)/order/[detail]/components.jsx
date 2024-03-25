@@ -3,14 +3,24 @@ import { orderAction } from "@/app/redux/state/slices/home/order";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 
-export const OrderActionBtn = ({ orderId, action }) => {
+export const OrderActionBtn = ({
+  orderId,
+  action,
+  variant = "outlined",
+  mutateStatus,
+}) => {
   const dispatch = useDispatch();
   const { name, to } = statusActionName[action] || {};
   return (
     <Button
-      variant="outlined"
+      variant={variant}
       className="!rounded-full !text-[14px] !w-32 !shadow-none !mt-1"
-      onClick={() => orderAction({ action: to, orderId }, dispatch)}
+      onClick={() =>
+        orderAction(
+          { action: to, orderId, orderStatus: mutateStatus },
+          dispatch
+        )
+      }
     >
       {name}
     </Button>
@@ -82,12 +92,13 @@ export const orderStatusMessages = {
 // tracking system,
 
 export const trackMainSteps = {
-  paid: 1,
-  processing: 2,
-  out_for_delivery: 3,
-  pickable: 3,
-  completed: 4,
-  review: 5,
+  unpaid: 1,
+  paid: 2,
+  processing: 3,
+  out_for_delivery: 4,
+  pickable: 5,
+  completed: 6,
+  review: 6,
 };
 
 export const nextSteps = {

@@ -61,7 +61,6 @@ const SidebarLeft = (props) => {
   const [query, setQuery] = useState("");
   const [filteredChat, setFilteredChat] = useState([]);
   const [showSearch, setShowSearch] = useState(false);
-  const [filteredContacts, setFilteredContacts] = useState([]);
   const [active, setActive] = useState(null);
 
   // ** Hooks

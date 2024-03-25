@@ -3,10 +3,12 @@ import IconifyIcon from "@/app/components/icon";
 import { Box, Typography } from"@mui/material";
 import Image from"next/image";
 
-const Maps = ({ setStage }) => {
-  const [type, setType] = useState("default");
+const Maps = ({ setStage, mapType, setMapType }) => {
   const MapSample = ({ name }) => (
-    <Box onClick={() => setType(name)} className="relative my-3">
+    <Box
+      onClick={() => setMapType(name.toLowerCase())}
+      className="relative my-3"
+    >
       <Image
         src={`/images/misc/${name.toLowerCase()}-map.png`}
         alt="map-type"
@@ -16,7 +18,7 @@ const Maps = ({ setStage }) => {
       />
       <Box
         className={`absolute top-0 left-0 w-full h-full bg-purple-400 opacity-40 ${
-          type !== name && "hidden"
+          mapType !== name.toLowerCase() && "hidden"
         } hover:!block `}
       ></Box>
       <Typography
@@ -36,7 +38,7 @@ const Maps = ({ setStage }) => {
         <IconifyIcon icon="tabler:x" className="!text-gray-600 !text-[15px]" />
       </Box>
       <MapSample name="Default" />
-      <MapSample name="Satalite" />
+      <MapSample name="Satallite" />
       <MapSample name="Terrain" />
     </Box>
   );

@@ -85,9 +85,10 @@ const AppChat = () => {
     role: "store",
   };
 
-  if (!storeListLoading && !loadingChat && storeChat && data) {
+  if (!storeListLoading && storeChat && data) {
     storeList.selectedChat = {
-      chat: itIsNewChat ? null : messageLog.log,
+      chat: itIsNewChat && loadingChat ? null : messageLog?.log,
+      loadingChat,
       contact: {
         ...selectedContact,
         chatId: messageLog?._id,

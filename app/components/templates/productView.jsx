@@ -26,6 +26,8 @@ import { copyToClipboard } from "@/app/utils/clipboard";
 import { deleteOrder } from "@/app/redux/state/slices/home/order";
 import { useState } from "react";
 import { Delete, ShoppingCartSharp } from "@mui/icons-material";
+import { OrderActionBtn, trackMainSteps } from "@/app/(pages)/order/[detail]/components";
+import { OrderStages } from "@/app/(pages)/order/timeline";
 
 const ChangeQty = ({
   payload,
@@ -491,19 +493,27 @@ export const OrderProductView = ({
   setIsCopied,
   image,
   product,
+  totalAmount,
+  deliveryMedium,
   orderSlug,
   orderId,
   createdAt,
   store,
   status,
+  mutateStatus,
 }) => {
   const dispatch = useDispatch();
   const TitleValue = ({ title, value, allowCopy }) => (
     <Box className="flex items-center">
       <Typography variant="body2" className="!text-xs">
-        {title} <span className="ml-2 !text-black">{value}</span>
+        {title}{" "}
+        <span
+          className="ml-2 !text-black"
+          onClick={() => allowCopy && copyToClipboard(value, setIsCopied)}
+        >
+          {value}
+        </span>
       </Typography>
-      {allowCopy && copyToClipboard}
     </Box>
   );
   return (
@@ -593,25 +603,31 @@ export const OrderProductView = ({
               variant="body2"
               className="!font-extrabold !text-black md:!text-[16px] !-mt-1 md:!my-px !p-0 absolute md:relative !pr-2 md:!pr-0 top-0 right-0"
             >
-              NGN{product.prodPrice?.toLocaleString()}
+              NGN{totalAmount}
             </Typography>
           </Box>
           <Box className="flex items-center flex-nowrap !mt-3 md:!mt-6">
             <Button
               variant="outlined"
-              className="w-32 h-9 md:h-10 !rounded-full !text-[14px] !shadow-none"
+              className="w-32 h-9 md:h-10 !mr-4 !rounded-full !text-[14px] !shadow-none"
             >
               Track items
             </Button>
-            <Button
+
+            <OrderActionBtn
+              action={status?.toLowerCase()}
+              orderId={orderId}
               variant="contained"
-              className="w-32 h-9 md:h-10 !rounded-full !text-[14px] !shadow-none !ml-4"
-            >
-              Re - order
-            </Button>
+              mutateStatus={mutateStatus}
+            />
           </Box>
         </Box>
       </Box>
+      {/* <OrderStages
+        at={trackMainSteps[status?.toLowerCase()?.replaceAll(" ", "_")] || 0}
+        price={totalAmount}
+        delivery={deliveryMedium}
+      /> */}
     </Box>
   );
 };

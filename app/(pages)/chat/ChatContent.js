@@ -20,6 +20,7 @@ import CustomAvatar from "@/app/components/avatar";
 import OptionsMenu from "@/app/components/option-menu";
 import UserProfileRight from "./UserProfileRight";
 import SidebarLeft from "./SidebarLeft";
+import { Circles } from "react-loader-spinner";
 import { ChevronLeft } from "@mui/icons-material";
 
 // ** Styled Components
@@ -72,7 +73,7 @@ const ChatContent = (props) => {
   const renderContent = () => {
     if (store) {
       const selectedChat = store.selectedChat;
-      if (!selectedChat) {
+      if (!selectedChat?.contact?.branchId) {
         return (
           <ChatWrapperStartChat
             sx={{
@@ -91,8 +92,26 @@ const ChatContent = (props) => {
                 height: 110,
                 boxShadow: 3,
               }}
+              // className=" mb-4 p-5 h-[110px] w-[110px] shadow-md flex justify-center items-center"
             >
-              <Icon icon="tabler:message" fontSize="6.125rem" />
+              {selectedChat?.loadingChat ? (
+                <Box className=" -mt-1.5 ">
+                  <Circles
+                    height="500"
+                    width="50"
+                    color="white"
+                    ariaLabel="line-wave"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                    firstLineColor=""
+                    middleLineColor=""
+                    lastLineColor=""
+                  />
+                </Box>
+              ) : (
+                <Icon icon="tabler:message" fontSize="6.125rem" />
+              )}
             </MuiAvatar>
             <Box
               onClick={handleStartConversation}
@@ -112,7 +131,7 @@ const ChatContent = (props) => {
                   lineHeight: "normal",
                 }}
               >
-                Start Conversation
+                {selectedChat?.loadingChat ? "Loading" : "Start"} Conversation
               </Typography>
             </Box>
           </ChatWrapperStartChat>

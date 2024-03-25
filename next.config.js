@@ -1,4 +1,16 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Configure Content Security Policy for client-side scripts
+      config.module.rules.push({
+        test: /maps\.googleapis\.com/,
+        use: ["script-loader"],
+      });
+    }
 
-module.exports = nextConfig
+    return config;
+  },
+};
+
+module.exports = nextConfig;

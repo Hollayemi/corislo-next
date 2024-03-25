@@ -22,32 +22,35 @@ const MyMapComponent = () => {
     { lat: -33.8541, lng: 151.2168, info: "Marker 2" },
     { lat: 7.1762393, lng: 4.7280468, info: "Corisio" },
   ]); // Array to store marker data
-  const center = { lat: -34.397, lng: 150.644 }; // Your desired center coordinates
-  const zoom = 20; // Your desired zoom level
+  const center = {
+    lat: 7.1762595,
+    lng: 4.7280668,
+  }; // Your desired center coordinates
+  const zoom = 15; // Your desired zoom level
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY,
+    googleMapsApiKey: "AIzaSyAc1nh-S1_hL3n_sLzzR-tLkgOy9PHenHQ",
     libraries,
   });
 
-//   useEffect(() => {
-//     if (map && markers.length > 0) {
-//       // Create markers and cluster them
-//       if (window.google) {
-//         const googleMarkers = markers.map((marker) => {
-//           return new window.google.maps.Marker({
-//             position: { lat: marker.lat, lng: marker.lng },
-//             map,
-//           });
-//         });
-//       }
+  //   useEffect(() => {
+  //     if (map && markers.length > 0) {
+  //       // Create markers and cluster them
+  //       if (window.google) {
+  //         const googleMarkers = markers.map((marker) => {
+  //           return new window.google.maps.Marker({
+  //             position: { lat: marker.lat, lng: marker.lng },
+  //             map,
+  //           });
+  //         });
+  //       }
 
-//       const markerCluster = new MarkerClusterer({
-//         markers: googleMarkers,
-//         map,
-//       });
-//     }
-//   }, [map, markers]); // Run only when map or markers change
+  //       const markerCluster = new MarkerClusterer({
+  //         markers: googleMarkers,
+  //         map,
+  //       });
+  //     }
+  //   }, [map, markers]); // Run only when map or markers change
 
   if (loadError) return <div>Map failed to load</div>;
   if (!isLoaded) return <div>Loading map...</div>;

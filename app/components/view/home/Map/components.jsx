@@ -2,46 +2,77 @@ import { Box, Typography, Rating } from "@mui/material";
 import Image from "next/image";
 import IconifyIcon from "@/app/components/icon";
 import useSWR from "swr";
+import { CircleLoader } from "@/app/components/cards/loader";
 
-export const BriefStoreOnMap = ({ image, open, shopName }) => {
+export const BriefStoreOnMap = ({ image, open, branchId, storeView }) => {
+  const { data, isLoading } = useSWR(`/branch/info?branchId=${branchId}`);
+  console.log(branchId);
+  const info = data?.data || {};
+  if (isLoading)
+    return (
+      <Box className="p-3">
+        <CircleLoader />
+      </Box>
+    );
   return (
-    <Box className="flex items-center">
-      <Image
-        src={image}
-        alt="store"
-        width={200}
-        height={200}
-        className="w-14 h-14 rounded-full border"
-      />
-      <Box>
-        <Typography
-          variant="body2"
-          className="!text-[14px] !font-bold !px-2 !text-black"
-        >
-          {shopName}
-        </Typography>
-        <Box
-          className={`flex items-center ml-1.5 ${
-            open ? "!text-green-500" : "!text-red-500"
-          }`}
-        >
-          <IconifyIcon icon="tabler:x" className="!text-[15px]" />
-          <Box className="flex items-center">
-            <span className="!text-[12px]">{open ? "Open now" : "Closed"}</span>
-          </Box>
+    <Box>
+      {storeView && (
+        <Image
+          src={storeView}
+          alt="store"
+          width={900}
+          height={900}
+          className="w-full h-28 rounded-xl mb-2"
+        />
+      )}
+      <Box className="flex items-center">
+        <Image
+          src={image || "/images/misc/shop/1.png"}
+          alt="store"
+          width={200}
+          height={200}
+          className="w-14 h-14 rounded-full border"
+        />
+        <Box>
           <Typography
             variant="body2"
-            className="!text-[11px] !px-2 pt-0.5 !text-black"
+            className="!text-[14px] !font-bold !px-2 !text-black"
           >
-            Mon - Sat, 09:00 - 18:00
+            {info.businessName}
           </Typography>
+          <Box
+            className={`flex items-center ml-1.5 ${
+              open ? "!text-green-500" : "!text-red-500"
+            }`}
+          >
+            <IconifyIcon
+              icon={!open ? "tabler:clock-stop" : "tabler:clock-pin"}
+              className="!text-[15px]"
+            />
+            <Box className="flex items-center">
+              <span className="!text-[12px] ml-1.5">
+                {open ? "Open now" : "Closed"}
+              </span>
+            </Box>
+            <Typography
+              variant="body2"
+              className="!text-[11px] !px-2 pt-0.5 !text-black"
+            >
+              Mon - Sat, 09:00 - 18:00
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Box>
   );
 };
 
-export const BriefStoreWithFuntions = ({ image, shopName, rating, setStage }) => {
+export const BriefStoreWithFuntions = ({
+  image,
+  shopName,
+  rating,
+  setStage,
+}) => {
   return (
     <Box className="flex items-center justify-between">
       <Box className="flex items-center">
@@ -56,7 +87,7 @@ export const BriefStoreWithFuntions = ({ image, shopName, rating, setStage }) =>
           <Typography
             variant="body2"
             noWrap
-            className="!text-[14px] !font-bold !px-2 !text-black w-32"
+            className="!text-[14px] !font-bold !px-2 !text-black md:w-32"
           >
             {shopName}
           </Typography>
@@ -78,20 +109,26 @@ export const BriefStoreWithFuntions = ({ image, shopName, rating, setStage }) =>
         </Box>
       </Box>
       <Box className="flex items-center">
-        <Box className="!w-10 !h-10 rounded-full flex items-center justify-center cursor-pointer mr-1 border-2 border-blue-900" onClick={() => setStage("direction")}>
+        <Box
+          className="!w-6 !h-6 md:!w-10 md:!h-10 rounded-full mt-3 md:mt-0 flex items-center justify-center cursor-pointer md:mr-1 md:border-2 border-blue-900"
+          onClick={() => setStage("direction")}
+        >
           <IconifyIcon
             icon="tabler:corner-up-left"
             className="!text-blue-900"
           />
         </Box>
-        <Box className="!w-10 !h-10 rounded-full flex items-center justify-center cursor-pointer mx-1 border-2 border-blue-900" onClick={() => setStage("store")}>
+        <Box
+          className="!w-6 !h-6 md:!w-10 md:!h-10 rounded-full mt-3 md:mt-0 flex items-center justify-center cursor-pointer mx-1 md:border-2 border-blue-900"
+          onClick={() => setStage("store")}
+        >
           <IconifyIcon
-            icon="tabler:building-store"
+            icon="tabler:link"
             className="!text-blue-900"
           />
         </Box>
-        <Box className="!w-10 !h-10 rounded-full flex items-center justify-center cursor-pointer ml-1 border-2 border-blue-900">
-          <IconifyIcon icon="tabler:map-pin-2" className="!text-blue-900" />
+        <Box className="!w-6 !h-6 md:!w-10 md:!h-10 rounded-full mt-3 md:mt-0 flex items-center justify-center cursor-pointer md:ml-1 md:border-2 border-blue-900">
+          <IconifyIcon icon="tabler:share" className="!text-blue-900" />
         </Box>
       </Box>
     </Box>
@@ -99,8 +136,18 @@ export const BriefStoreWithFuntions = ({ image, shopName, rating, setStage }) =>
 };
 
 export const StoreDetails1 = () => {
-  const { data } = useSWR("/branch/info?branchId=65e29c4266575a7988cc52b9");
+  const { data, isLoading } = useSWR(
+    "/branch/info?branchId=65e29c4266575a7988cc52b9"
+  );
   const info = data?.data || {};
+
+  if (isLoading)
+    return (
+      <Box className="p-3">
+        <CircleLoader />
+      </Box>
+    );
+
   const SpaceBetween = ({ title, info }) => (
     <Box className="flex justify-between mb-2.5">
       <Typography
@@ -123,7 +170,7 @@ export const StoreDetails1 = () => {
       <Box className="border-b p-2">
         <BriefStoreOnMap
           image="/images/misc/shop/1.png"
-          shopName={info.businessName}
+          branchId="65e29c4266575a7988cc52b9"
         />
       </Box>
       <Box className="p-2">
