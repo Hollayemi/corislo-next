@@ -200,3 +200,12 @@ export const BranchesSales = () => {
     </Box>
   );
 };
+
+export const DashboardCrumb = [
+  {
+    text: <Icon icon="tabler:home-2" className="!text-[20px]" />,
+    link: "/",
+    icon: "home",
+  },
+];
+

@@ -9,7 +9,7 @@ import Maps from "./mapTypes";
 import MapGraph from "./map";
 import useSWR from "swr";
 import { Box, Button, Typography, TextField } from "@mui/material";
-import { CircleLoader } from "@/app/components/cards/loader"
+import { CircleLoader } from "@/app/components/cards/loader";
 
 const MapOverlay = () => {
   const { showMapScreen, popMap } = useUserData();
@@ -47,11 +47,7 @@ const MapOverlay = () => {
     direction: <Direction setStage={setStage} />,
     store: <AboutStore setStage={setStage} />,
     map_type: (
-      <Maps
-        setStage={setStage}
-        setMapType={setMapType}
-        mapType={mapType}
-      />
+      <Maps setStage={setStage} setMapType={setMapType} mapType={mapType} />
     ),
   };
 
@@ -138,7 +134,10 @@ const MapOverlay = () => {
             >
               Close Map
             </Button>
-            <Box className="flex items-center md:hidden absolute top-0 left-0 -ml-1.5 -mt-1.5 justify-center bg-blue-950 rounded-full w-6 h-6 p-px">
+            <Box
+              className="flex items-center md:hidden absolute top-0 left-0 -ml-1.5 -mt-1.5 justify-center bg-blue-950 rounded-full w-6 h-6 p-px"
+              onClick={() => showMapScreen()}
+            >
               <IconifyIcon
                 icon="tabler:x"
                 className="!text-white !text-[16px] !font-bold"
@@ -188,7 +187,7 @@ const MapOverlay = () => {
             </Box>
 
             {stage && (
-              <Box className=" w-[300px] md:w-[360px] h-auto pb-3 shadow-xl bg-white rounded-xl absolute right-20 top-20 md:top-4 px-3">
+              <Box className=" w-[303px] md:w-[360px] h-auto pb-3 shadow-xl bg-white rounded-xl absolute right-20 top-20 md:top-4 px-3">
                 {stages[stage]}
               </Box>
             )}

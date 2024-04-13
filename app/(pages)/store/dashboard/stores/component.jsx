@@ -2,12 +2,20 @@
 import { Fragment, useState } from "react";
 
 // ** MUI Imports
-import { Box, Grid, TextField, Switch, Typography } from "@mui/material";
+import {
+  Box,
+  Grid,
+  TextField,
+  Switch,
+  Typography,
+  Button,
+} from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 
 // ** Icon Imports
 import Icon from "@/app/components/icon";
 
+import { DashboardCrumb } from "../components"
 // ** Third Party Imports
 import { useDropzone } from "react-dropzone";
 
@@ -101,7 +109,7 @@ export const InputBoxWithSideLabel = ({ label, value, className, inputProps, onC
   return (
     <Grid container spacing={2} className={`mb-6 ${className}`}>
       <Grid item xs={12} sm={4} className="!flex items-center">
-        <Typography>{label}</Typography>
+        <Typography variant="body2" className="!text">{label}</Typography>
       </Grid>
       <Grid item xs={12} sm={8}>
         <TextField
@@ -129,13 +137,15 @@ export const SocialMediaConponent = ({ label, className, socialMedia, setSocialM
   return (
     <Grid container spacing={2} className={`mb-6 ${className}`}>
       <Grid item xs={12} sm={4} className="!flex items-center">
-        <Typography>{label}</Typography>
+        <Typography variant="body2">{label}</Typography>
       </Grid>
       <Grid item xs={12} sm={8}>
         <TextField
           onChange={(e) => handleChange(smallLabel, e.target.value)}
           fullWidth
-          value={label && socialMedia[label?.split(" ").join("")?.toLowerCase()]}
+          value={
+            label && socialMedia[label?.split(" ").join("")?.toLowerCase()]
+          }
           size="small"
         />
       </Grid>
@@ -166,33 +176,55 @@ export const OpeningHours = ({
   const checked = Boolean(openHours[smallLabel]?.isset);
   return (
     <Grid container spacing={1} className={`mb-6 ${className}`}>
-      <Grid item xs={4} sm={4} className="!flex items-center">
+      <Grid item xs={6} sm={4} className="!flex items-center">
         <Box className="!flex !items-center -ml-4 md:ml-0">
           <Switch
             edge="end"
             checked={isPresent && openHours[smallLabel]?.isset == true}
-            className="!md:mr-2"
+            className="!mr-2"
             onChange={(e) => handleChange(smallLabel, "isset", !checked)}
           />
-          <Typography>{label}</Typography>
+          <Typography variant="body2">{label}</Typography>
         </Box>
       </Grid>
-      <Grid item xs={4} sm={4}>
+      <Grid item xs={3} sm={4}>
         <TextField
           fullWidth
           defaultValue="08:00"
+          className=""
           size="small"
           onChange={(e) => handleChange(smallLabel, "from", e.target.value)}
         />
       </Grid>
-      <Grid item xs={4} sm={4}>
+      <Grid item xs={3} sm={4}>
         <TextField
           fullWidth
           defaultValue="05:00"
+          className=""
           size="small"
           onChange={(e) => handleChange(smallLabel, "to", e.target.value)}
         />
       </Grid>
     </Grid>
+  );
+};
+
+export const StoreBreadCrumb = [ ...DashboardCrumb, {
+  text: "Store",
+  link: "stores",
+  icon: "shop"
+} ];
+
+export const BreadcrumbRightEle = () => {
+  return (
+    <Box className="flex items-center -mr-6 md:mr-0">
+      <Button
+        variant="contained"
+        className="!mr-4 !bg-blue-900 !shadow-none !text-[12px] !rounded-full"
+        startIcon={<Icon icon="tabler:plus" />}
+      >
+        <span className="hidden md:block">Add New </span> Sub-Store
+      </Button>
+    </Box>
   );
 };

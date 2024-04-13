@@ -26,6 +26,7 @@ import useSWR from "swr";
 import { removeOrAddToArray } from "@/app/utils/arrayFunctions";
 import { createProductHandler } from "@/app/redux/state/slices/shop/products/productSlice";
 import { useDispatch } from "react-redux";
+import { productBreadCrumb } from "../components";
 
 const AddNewProduct = ({ params }) => {
   const theme = useTheme();
@@ -101,7 +102,15 @@ const AddNewProduct = ({ params }) => {
   };
 
   return (
-    <StoreLeftSideBar path={path} subListBar={true} InnerList={prodInnerList}>
+    <StoreLeftSideBar
+      path={path}
+      subListBar={true}
+      InnerList={prodInnerList}
+      crumb={[
+        ...productBreadCrumb,
+        { text: "Add Product", link: "add-new-product" },
+      ]}
+    >
       <Box className="bg-white rounded-md md:px-5 pt-6 pb-8 !text-[13px]">
         <Grid container spacing={4} className="!px-3">
           <Grid item xs={12} md={5}>

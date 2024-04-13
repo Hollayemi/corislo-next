@@ -5,7 +5,7 @@ import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 import ProductList from "@/app/components/view/store/tables/productList";
 import OverViewCard from "./overview";
 import { prodInnerList } from "@/app/data/store/innerList";
-import BreadcrumbEle from "./breadcrumbChild";
+import { BreadcrumbRightEle, productBreadCrumb } from "./components";
 import { productListingRows } from "./rows";
 import { StoreSalesApi } from "@/app/redux/state/slices/shop/overview/sales";
 
@@ -24,7 +24,11 @@ const ProductManagement = ({ params }) => {
       path={path}
       subListBar={false}
       InnerList={prodInnerList}
-      breadCrumbChild={<BreadcrumbEle />}
+      breadCrumbRIghtChildren={<BreadcrumbRightEle />}
+      crumb={[
+        ...productBreadCrumb,
+        { text: "Product listing", link: "product-management" },
+      ]}
     >
       <Box className="relative">
         <Box className="mb-10 bg-white rounded-md px-3 py-6">
@@ -37,9 +41,7 @@ const ProductManagement = ({ params }) => {
               All Products ({data?.data.length})
             </Typography>
           </Box>
-          <Box>
-            {data && <ProductList rows={data?.data} />}
-          </Box>
+          <Box>{data && <ProductList rows={data?.data} />}</Box>
         </Box>
       </Box>
     </StoreLeftSideBar>

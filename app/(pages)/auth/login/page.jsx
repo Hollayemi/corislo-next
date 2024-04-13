@@ -7,17 +7,14 @@ import Link from "next/link";
 
 // ** MUI Components
 import Box from "@mui/material/Box";
-import { styled, useTheme } from "@mui/material/styles";
-import MuiCard from "@mui/material/Card";
-import MuiFormControlLabel from "@mui/material/FormControlLabel";
 
 import { CustomInput } from "@/app/components/cards/auth/components";
 import { Button, Typography } from "@mui/material";
 import Image from "next/image";
-import { loginHandler } from "@/app/redux/state/slices/auth/Login";
+import { loginHandler, oAuth } from "@/app/redux/state/slices/auth/Login";
+import { server } from "@/app/redux/state/slices/api/baseApi";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { server } from "@/app/redux/state/slices/api/baseApi";
 import { useUserData } from "@/app/hooks/useData";
 
 const LoginV1 = () => {
@@ -52,6 +49,10 @@ const LoginV1 = () => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
+  const handleLogin = () => {
+    if(window) window.location.href = `${server}auth/google`; // Redirect to the backend authentication route
+  };
+
   // const handleClickShowPassword = () => {
   //   setValues({ ...values, showPassword: !values.showPassword })
   // }
@@ -78,20 +79,14 @@ const LoginV1 = () => {
         variant="contained"
         className="w-full !h-10 !rounded-full !text-gray-100 !text-[17px] !mt-6"
         onClick={() =>
-          loginHandler(
-            values,
-            router,
-            dispatch,
-            returnUrl,
-            setLoading
-          )
+          loginHandler(values, router, dispatch, returnUrl, setLoading)
         }
       >
         Sign In
       </Button>
       <Button
         variant="outlined"
-        onClick={() => fetch(`${server}auth/google`)}
+        onClick={handleLogin}
         className="w-full !h-10 !rounded-full !text-gray-600 !text-[17px] !mt-6"
       >
         <Image

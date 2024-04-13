@@ -11,18 +11,29 @@ import {
   FileUploader,
   OpeningHours,
   SocialMediaConponent,
+  StoreBreadCrumb,
+  BreadcrumbRightEle,
 } from "./component";
 import Icon from "@/app/components/icon";
 import { storeBottomBar, storeInnerList } from "@/app/data/store/innerList";
 import { useStoreData } from "@/app/hooks/useData";
 import { useDispatch } from "react-redux";
+import useSWR from "swr";
 import { updateStoreProfile } from "@/app/redux/state/slices/shop/settings/editShop";
+import MapGraph from "@/app/components/view/home/Map/map";
 
 const StorePage = ({ params }) => {
+  console.log(params);
   const { storeInfo } = useStoreData();
   const dispatch = useDispatch();
-  const [openHours, setOpenHours] = useState(storeInfo?.profile?.opening_hours || {});
-  const [socialMedia, setSocialMedia] = useState(storeInfo?.profile?.social_media || {});
+  const { data } = useSWR("/branch/all?sidelist=true");
+  const InnerList = data?.data ? data.data : [];
+  const [openHours, setOpenHours] = useState(
+    storeInfo?.profile?.opening_hours || {}
+  );
+  const [socialMedia, setSocialMedia] = useState(
+    storeInfo?.profile?.social_media || {}
+  );
   const [files, setFiles] = useState([]);
   const path = { ...params, sidebar: "stores" };
 
@@ -37,14 +48,17 @@ const StorePage = ({ params }) => {
     setValues({ ...inputValues, [prop]: event.target.value });
   };
 
+  console.log(InnerList, storeInnerList);
   return (
     <StoreLeftSideBar
       path={path}
       subListBar={false}
-      InnerList={storeInnerList}
+      InnerList={{ title: "Store List", content: InnerList }}
       BottomList={storeBottomBar}
+      breadCrumbRIghtChildren={<BreadcrumbRightEle />}
+      crumb={[...StoreBreadCrumb, { text: "All Stores", link: "" }]}
     >
-      <Box className="px-10 !hidden sm:!flex z-50 -mt-7">
+      <Box className="px-10 !hidden sm:!flex z-50 -mt-4">
         <Typography className="pb-1 border-b-2 cursor-pointer !text-[13px] !w-24 text-center border-blue-900">
           Store Profile
         </Typography>
@@ -54,28 +68,21 @@ const StorePage = ({ params }) => {
           </Typography>
         </Link>
       </Box>
-      <Box className="w-full bg-white !rounded-md !px-4 !mt-4 !md:px-5 !pb-8">
+      <Box className="w-full bg-white !rounded-md !px-4 !mt-4 !md:px-5 !pb-8 relative">
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={7} className="md:!pr-16">
             <Box>
               <Box className="flex items-center justify-between">
                 <Typography className="font-bold text-sm">
                   Store Profile
                 </Typography>
-                <Button
-                  variant="contained"
-                  className=" bg-blue-900 md:!hidden"
-                  startIcon={<Icon icon="tabler:plus" />}
-                >
-                  Add Store
-                </Button>
               </Box>
-              <Typography variant="caption">
+              <Typography variant="caption" className="!mt-1">
                 Edit contact data that will not be visible on store’s profile
               </Typography>
             </Box>
 
-            <Box className="mt-4">
+            <Box className="mt-8">
               <Paper
                 elevation={0}
                 className="border border-dashed w relative rounded-md p-3 w-24 h-24 flex items-center justify-center"
@@ -98,10 +105,10 @@ const StorePage = ({ params }) => {
                 JPG, GIF or PNG, Max size of 500kb
               </Typography>
               <Box className="flex item-center mt-4">
-                <Paper className="px-4 py-1.5 rounded-md cursor-pointer mr-3">
+                <Paper className="px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3">
                   Change Photo
                 </Paper>
-                <Paper className="px-4 py-1.5 rounded-md cursor-pointer mr-3">
+                <Paper className="px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3">
                   Delete
                 </Paper>
               </Box>
@@ -118,7 +125,7 @@ const StorePage = ({ params }) => {
             </Box>
 
             <Box className="!mt-8 !border-b !pb-6">
-              <Typography className="font-bold text-sm">
+              <Typography className="!font-bold text-sm">
                 Store Address
               </Typography>
               <Typography variant="caption" className="">
@@ -144,7 +151,7 @@ const StorePage = ({ params }) => {
             </Box>
 
             <Box className="!mt-8 !pb-6">
-              <Typography className="font-bold text-sm">
+              <Typography className="!font-bold text-sm">
                 About the store
               </Typography>
               <Typography variant="caption" className="">
@@ -166,7 +173,7 @@ const StorePage = ({ params }) => {
             </Box>
 
             <Box className="!mt-8 !border-b !pb-6">
-              <Typography className="font-bold text-sm">
+              <Typography className="!font-bold text-sm">
                 Store Gallery
               </Typography>
               <Typography variant="caption" className="">
@@ -178,7 +185,7 @@ const StorePage = ({ params }) => {
             </Box>
 
             <Box className="!mt-8 !border-b !pb-6">
-              <Typography className="font-bold text-sm">
+              <Typography className="!font-bold text-sm">
                 Social Media Integration
               </Typography>
               <Typography variant="caption" className="">
@@ -209,7 +216,7 @@ const StorePage = ({ params }) => {
             </Box>
 
             <Box className="!mt-8 !pb-6">
-              <Typography className="font-bold text-sm">
+              <Typography className="!font-bold text-sm">
                 Opening Hours
               </Typography>
 
@@ -269,19 +276,20 @@ const StorePage = ({ params }) => {
               Save
             </Button>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <Box className="!hidden md:!flex justify-end mb-32">
-              <Button
-                variant="contained"
-                className="mr-4 bg-blue-900"
-                startIcon={<Icon icon="tabler:plus" />}
-              >
-                Add Store
-              </Button>
-            </Box>
-            <Box className="h-[500px] bg-gray-50 ">
-              <h3 className="text-center py-10"> Map here</h3>
-            </Box>
+          <Grid item xs={12} sm={5} className="!relative !pl-5">
+            {/* <Box className="h-[500px] bg-gray-50 !sticky top-0 md:mt-32">
+              <MapGraph
+                markers={[
+                  {
+                    lat: 7.1762595,
+                    lng: 4.7260668,
+                    info: "Coristen",
+                    branchId: "65ac80101cc3db0407fa00c9",
+                  },
+                ]}
+              />
+              <h3 className="text-center py-10 hidden"> Map here</h3>
+            </Box> */}
           </Grid>
         </Grid>
       </Box>

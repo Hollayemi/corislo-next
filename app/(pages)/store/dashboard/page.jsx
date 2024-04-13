@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { Grid, Box } from "@mui/material";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
-import { BranchesSales, TopCards } from "./components";
+import { BranchesSales, TopCards, DashboardCrumb } from "./components";
 import DashboardLineChart from "@/app/components/chart/ChartjsLineChart";
 import DashboardBubbleChart from "@/app/components/chart/ChartjsBubbleChart";
 import "chart.js/auto";
@@ -33,7 +33,17 @@ const DashboardOverview = ({ params }) => {
     }
   };
   return (
-    <StoreLeftSideBar path={params}>
+    <StoreLeftSideBar
+      path={params}
+      crumb={[
+        ...DashboardCrumb,
+        {
+          text: "Overview",
+          link: "",
+          icon: "home",
+        },
+      ]}
+    >
       <Box className="px-2">
         <Box>
           <TopCards />

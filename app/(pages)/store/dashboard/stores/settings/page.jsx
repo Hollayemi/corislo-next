@@ -21,6 +21,8 @@ import themeConfig from "@/app/configs/themeConfig";
 
 import {
   InputBoxWithSideLabel,
+  StoreBreadCrumb,
+  BreadcrumbRightEle,
   FileUploader,
   OpeningHours,
   SocialMediaConponent,
@@ -29,10 +31,16 @@ import Icon from "@/app/components/icon";
 import { storeBottomBar, storeInnerList } from "@/app/data/store/innerList";
 import { useStoreData } from "@/app/hooks/useData";
 import { useDispatch } from "react-redux";
+import useSWR from "swr";
 import { updateStoreProfile } from "@/app/redux/state/slices/shop/settings/editShop";
 
 const StorePage = ({ params }) => {
-  const { storeInfo: { profile } } = useStoreData();
+  const {
+    storeInfo: { profile, data: branchData },
+  } = useStoreData();
+  const { data } = useSWR("/branch/all?sidelist=true");
+  const InnerList = data?.data ? data.data : [];
+
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     pickup: profile?.pickup || false,
@@ -65,10 +73,12 @@ const StorePage = ({ params }) => {
     },
     email_notification: {
       isset: profile?.email_notification?.isset || false,
-      order_confirmation: profile?.email_notification?.order_confirmation || false,
+      order_confirmation:
+        profile?.email_notification?.order_confirmation || false,
       shipping_updates: profile?.email_notification?.shipping_updates || false,
       account_activity: profile?.email_notification?.account_activity || false,
-      customer_inquires: profile?.email_notification?.customer_inquires || false,
+      customer_inquires:
+        profile?.email_notification?.customer_inquires || false,
     },
   });
 
@@ -124,10 +134,19 @@ const StorePage = ({ params }) => {
     <StoreLeftSideBar
       path={path}
       subListBar={false}
-      InnerList={storeInnerList}
+      InnerList={{ title: "Store List", content: InnerList }}
       BottomList={storeBottomBar}
+      breadCrumbRIghtChildren={<BreadcrumbRightEle />}
+      crumb={[
+        ...StoreBreadCrumb,
+        {
+          text: branchData?.branchName,
+          link: `stores/${branchData?.branchName}`,
+        },
+        { text: "Settings", link: "" },
+      ]}
     >
-      <Box className="px-10 !hidden sm:!flex z-50 -mt-7">
+      <Box className="px-10 !hidden sm:!flex z-50 -mt-4">
         <Link href="/store/dashboard/stores">
           <Typography className="pb-1 border-b-2 cursor-pointer !text-[13px] !w-24 text-center border-transparent">
             Store Profile
@@ -141,29 +160,21 @@ const StorePage = ({ params }) => {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={7}>
             <Box>
-              <Box className="flex items-center justify-between">
-                <Typography className="font-bold text-sm">
-                  Delivery Option
-                </Typography>
-                <Button
-                  variant="contained"
-                  className=" bg-blue-900 md:!hidden"
-                  startIcon={<Icon icon="tabler:plus" />}
-                >
-                  Add Store
-                </Button>
-              </Box>
+              <Typography className="!font-bold text-sm">
+                Delivery Option
+              </Typography>
+
               <Typography variant="caption">
                 Choose the options of your delivery
               </Typography>
             </Box>
 
             <Box>
-              <Typography className="font-semibold text-sm !mt-6">
+              <Typography className="!font-semibold text-sm !mt-6">
                 Pickup
               </Typography>
               <Box className="!flex !justify-between !items-center">
-                <Typography variant="caption" className="text-[11px] ">
+                <Typography variant="caption" className="!text-[11px] ">
                   Client has to come pick up the orders by themselves.
                 </Typography>
                 <Switch
@@ -174,9 +185,9 @@ const StorePage = ({ params }) => {
                 />
               </Box>
 
-              <Box className="border-b pb-5">
+              <Box className="!border-b pb-5">
                 <Box className="flex items-center justify-between mt-5">
-                  <Typography className="font-semibold text-sm">
+                  <Typography className="!font-semibold !text-sm">
                     Waybill
                   </Typography>
                   <Switch
@@ -222,9 +233,9 @@ const StorePage = ({ params }) => {
                       className="!mt-2"
                       label={
                         <Box>
-                          <Typography variant="body2" className="">
+                          {/* <Typography variant="body2" className="!text-[11px] !font-semibold">
                             Minimum amount value
-                          </Typography>
+                          </Typography> */}
                           <Typography
                             variant="caption"
                             className=" text-[11px]"
@@ -244,7 +255,7 @@ const StorePage = ({ params }) => {
                     <TextField
                       id="icons-start-adornment"
                       size="small"
-                      defaultValue={0}
+                      defaultValue={formData.waybill.minimum_amount}
                       disabled={disableWaybill}
                       className="shrink-0 !w-28 !p-0"
                       onChange={(e) =>
@@ -295,7 +306,7 @@ const StorePage = ({ params }) => {
             </Box>
 
             <Box className="mt-5 pb-8 border-b">
-              <Typography className="font-semibold text-sm">
+              <Typography className="!font-semibold !text-sm">
                 Payment settings
               </Typography>
               <Typography variant="caption" className="text-[11px] ">
@@ -339,10 +350,10 @@ const StorePage = ({ params }) => {
             <Box className="mt-5 pb-8 border-b">
               <Box className="flex items-center justify-between">
                 <Box>
-                  <Typography className="font-semibold text-sm">
+                  <Typography className="!font-semibold text-sm">
                     Store Policies
                   </Typography>
-                  <Typography variant="caption" className="text-[11px] ">
+                  <Typography variant="caption" className="">
                     input some policies for your store
                   </Typography>
                 </Box>
@@ -361,7 +372,7 @@ const StorePage = ({ params }) => {
               </Box>
               <br />
 
-              <Box className="flex items-center justify-between pl-5">
+              <Box className="flex items-center justify-between pl-2 md:pl-5">
                 <Typography variant="caption" className="">
                   Refund and Returns
                 </Typography>
@@ -371,7 +382,7 @@ const StorePage = ({ params }) => {
                   defaultValue="6 days after delivery"
                   id="demo-simple-select-outlined"
                   size="small"
-                  className="w-28"
+                  className="w-32 md:40"
                   disabled={disableRefund}
                   labelId="demo-simple-select-outlined-label"
                   onChange={(e) =>
@@ -396,8 +407,8 @@ const StorePage = ({ params }) => {
                   </MenuItem>
                 </Select>
               </Box>
-              <Box className="flex items-center justify-between pl-5 !mt-3">
-                <Typography variant="body2" className="">
+              <Box className="flex items-center justify-between pl-2 md:pl-5 !mt-3">
+                <Typography variant="caption" className="">
                   Refund and Returns option
                 </Typography>
 
@@ -416,7 +427,7 @@ const StorePage = ({ params }) => {
                     )
                   }
                   value={formData.refund_policies.refund_option}
-                  className="w-28"
+                  className="w-32 md:40"
                 >
                   <MenuItem value="Drop at the store">
                     Drop at the store
@@ -427,7 +438,7 @@ const StorePage = ({ params }) => {
                 </Select>
               </Box>
 
-              <Box className="flex items-center justify-between pl-5 !mt-3">
+              <Box className="flex items-center justify-between pl-2 md:pl-5 !mt-3">
                 <Typography variant="caption" className="">
                   Repayment method
                 </Typography>
@@ -440,7 +451,7 @@ const StorePage = ({ params }) => {
                   value={formData.refund_policies.repayment_method}
                   id="demo-simple-select-outlined"
                   size="small"
-                  className="w-28"
+                  className="w-32 md:40"
                   onChange={(e) =>
                     updateFormData(
                       e.target.value,
@@ -464,12 +475,12 @@ const StorePage = ({ params }) => {
                 }
                 label={
                   <Box>
-                    <Typography variant="body2" className="">
+                    <Typography variant="body2" className="!font-semibold">
                       Pre - Order option
                     </Typography>
                     <Typography
                       variant="caption"
-                      className=" text-[11px] leading-3"
+                      className="text-[11px] leading-3"
                     >
                       Allows stores to give room to customers to pre-order by
                       messaging directly about the product to be pre-ordered.
@@ -488,10 +499,10 @@ const StorePage = ({ params }) => {
             <Box className="mt-5 pb-8 border-b">
               <Box className="flex items-center justify-between">
                 <Box>
-                  <Typography className="font-semibold text-sm">
+                  <Typography className="!font-semibold text-sm">
                     Notification and Alerts
                   </Typography>
-                  <Typography variant="caption" className="text-[11px] ">
+                  <Typography variant="caption" className="!text-[11px] ">
                     This includes receiving notification for low stock
                   </Typography>
                 </Box>
@@ -522,10 +533,10 @@ const StorePage = ({ params }) => {
                   }
                   label={
                     <Box>
-                      <Typography variant="body2" className="">
+                      <Typography variant="body2" className="!text-[12px]">
                         Low Stock
                       </Typography>
-                      <Typography variant="caption" className=" text-[11px]">
+                      <Typography variant="caption" className="!text-[11px]">
                         The minimum amount of goods left
                       </Typography>
                     </Box>
@@ -637,10 +648,10 @@ const StorePage = ({ params }) => {
                 }
                 label={
                   <Box>
-                    <Typography variant="body2" className="">
+                    <Typography variant="body2" className="!text-[11px] !font-semibold">
                       Order Confirmations
                     </Typography>
-                    <Typography variant="caption" className=" text-[11px]">
+                    <Typography variant="caption" className="!text-[11px]">
                       When an order is placed on any product
                     </Typography>
                   </Box>
@@ -665,10 +676,10 @@ const StorePage = ({ params }) => {
                 }
                 label={
                   <Box>
-                    <Typography variant="body2" className="">
+                    <Typography variant="body2" className="!text-[11px] !font-semibold">
                       Shipping Updates
                     </Typography>
-                    <Typography variant="caption" className=" text-[11px]">
+                    <Typography variant="caption" className="!text-[11px] !leading-3">
                       When there is update or changes to the order status, such
                       as waybilling and more.
                     </Typography>
@@ -694,10 +705,10 @@ const StorePage = ({ params }) => {
                 }
                 label={
                   <Box>
-                    <Typography variant="body2" className="">
+                    <Typography variant="body2" className="!text-[11px] !font-semibold">
                       Account Activity
                     </Typography>
-                    <Typography variant="caption" className=" text-[11px]">
+                    <Typography variant="caption" className="!text-[11px]">
                       When there is account-related activities, such as password
                       changes, login attempts, or account settings modifications
                     </Typography>
@@ -723,10 +734,10 @@ const StorePage = ({ params }) => {
                 }
                 label={
                   <Box>
-                    <Typography variant="body2" className="">
+                    <Typography variant="body2" className="!text-[11px] !font-semibold">
                       Customer Inquiries
                     </Typography>
-                    <Typography variant="caption" className=" text-[11px]">
+                    <Typography variant="caption" className="!text-[11px]">
                       When there is any enquiry from the customer.
                     </Typography>
                   </Box>

@@ -119,3 +119,23 @@ export const loginHandler = (
       setLoading(false);
     });
 };
+
+
+
+// providerApi
+// google
+
+export const oAuth = createAsyncThunk("post/oAuth", async (payload) => {
+  console.log(payload);
+  const { data } = await martApi
+    .get(`/auth/${payload.provider}`)
+    .then((res) => {
+      console.log(res);
+      const { accessToken } = res.data.user;
+      localStorage.setItem("user_token", accessToken);
+      payload.router.push(`/`);
+      return res;
+    })
+    .catch((e) => console.log(e.response));
+  return data;
+});

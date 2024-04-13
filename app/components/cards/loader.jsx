@@ -1,6 +1,6 @@
 import { Circles } from "react-loader-spinner";
 
-export const CircleLoader = ({ width=20, color="gray" }) => {
+export const CircleLoader = ({ width = 20, color = "gray" }) => {
   return (
     <Circles
       height="30"

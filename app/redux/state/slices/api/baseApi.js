@@ -3,7 +3,7 @@ import tokens from "@/app/configs/tokens";
 // import "dotenv"
 
 // baseURL: 'http://localhost:5001/api/v1/',
-// https://corisio.onrender.com/api/v1/
+// https://corislo-backend.onrender.com/api/v1
 
 const requestHeaders = { "Content-Type": "application/json" };
 const authToken = tokens.auth;

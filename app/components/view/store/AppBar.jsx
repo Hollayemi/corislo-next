@@ -210,7 +210,13 @@ export default function StoreDashboardAppBar({
   );
 
   return (
-    <AppBar position="fixed" color="inherit" open={open} elevation={1}>
+    <AppBar
+      position="fixed"
+      color="inherit"
+      className="!duration-300 transition-all"
+      open={open}
+      elevation={1}
+    >
       <Toolbar
         className="flex items-center"
         sx={{ backgroundColor: "custom.bodyLight" }}

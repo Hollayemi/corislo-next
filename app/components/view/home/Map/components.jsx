@@ -36,12 +36,13 @@ export const BriefStoreOnMap = ({ image, open, branchId, storeView }) => {
         <Box>
           <Typography
             variant="body2"
-            className="!text-[14px] !font-bold !px-2 !text-black"
+            noWrap
+            className="!text-[14px] !font-bold !px-2 !text-black !w-40"
           >
             {info.businessName}
           </Typography>
           <Box
-            className={`flex items-center ml-1.5 ${
+            className={`flex items-start mt-0.5 ml-1.5 ${
               open ? "!text-green-500" : "!text-red-500"
             }`}
           >
@@ -56,7 +57,7 @@ export const BriefStoreOnMap = ({ image, open, branchId, storeView }) => {
             </Box>
             <Typography
               variant="body2"
-              className="!text-[11px] !px-2 pt-0.5 !text-black"
+              className="!text-[11px] !px-2 !text-black"
             >
               Mon - Sat, 09:00 - 18:00
             </Typography>
@@ -108,9 +109,9 @@ export const BriefStoreWithFuntions = ({
           </Box>
         </Box>
       </Box>
-      <Box className="flex items-center">
+      <Box className="flex items-center mt-5">
         <Box
-          className="!w-6 !h-6 md:!w-10 md:!h-10 rounded-full mt-3 md:mt-0 flex items-center justify-center cursor-pointer md:mr-1 md:border-2 border-blue-900"
+          className="!w-6 !h-6 md:!w-10 md:!h-10 rounded-full md:mt-0 flex items-center justify-center cursor-pointer md:mr-1 md:border-2 border-blue-900"
           onClick={() => setStage("direction")}
         >
           <IconifyIcon
@@ -119,7 +120,7 @@ export const BriefStoreWithFuntions = ({
           />
         </Box>
         <Box
-          className="!w-6 !h-6 md:!w-10 md:!h-10 rounded-full mt-3 md:mt-0 flex items-center justify-center cursor-pointer mx-1 md:border-2 border-blue-900"
+          className="!w-6 !h-6 md:!w-10 md:!h-10 rounded-full md:mt-0 flex items-center justify-center cursor-pointer mx-1 md:border-2 border-blue-900"
           onClick={() => setStage("store")}
         >
           <IconifyIcon
@@ -127,7 +128,7 @@ export const BriefStoreWithFuntions = ({
             className="!text-blue-900"
           />
         </Box>
-        <Box className="!w-6 !h-6 md:!w-10 md:!h-10 rounded-full mt-3 md:mt-0 flex items-center justify-center cursor-pointer md:ml-1 md:border-2 border-blue-900">
+        <Box className="!w-6 !h-6 md:!w-10 md:!h-10 rounded-full md:mt-0 flex items-center justify-center cursor-pointer md:ml-1 md:border-2 border-blue-900">
           <IconifyIcon icon="tabler:share" className="!text-blue-900" />
         </Box>
       </Box>
@@ -137,7 +138,7 @@ export const BriefStoreWithFuntions = ({
 
 export const StoreDetails1 = () => {
   const { data, isLoading } = useSWR(
-    "/branch/info?branchId=65e29c4266575a7988cc52b9"
+    "/branch/info?branchId=65ac80101cc3db0407fa00c9"
   );
   const info = data?.data || {};
 
@@ -170,7 +171,7 @@ export const StoreDetails1 = () => {
       <Box className="border-b p-2">
         <BriefStoreOnMap
           image="/images/misc/shop/1.png"
-          branchId="65e29c4266575a7988cc52b9"
+          branchId="65ac80101cc3db0407fa00c9"
         />
       </Box>
       <Box className="p-2">

@@ -35,7 +35,7 @@ const UserDataProvider = ({ children, setOverflow }) => {
   const [socket, setSocket] = useState(null);
   const [temp, addTemp] = useState({});
   const [overLay, setOpenOverlay] = useState(null);
-  const [popMap, setMapPopup] = useState(true);
+  const [popMap, setMapPopup] = useState(false);
 
   const { userData } = useSelector((state) => state.reducer.loginReducer);
 

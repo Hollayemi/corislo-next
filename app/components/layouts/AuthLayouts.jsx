@@ -65,13 +65,13 @@ export default function AuthLayout({ children, reverse, image, ...others }) {
             className={`flex flex-col ${others.center ? "justify-center" : "!pt-1 md:!pt-10"} overflow-auto  my-4 md:my-0 px-2 items-center h-full`}
           >
             <Box className="flex flex-col items-center mt-14 md:mt-0 ">
-              <Image
+              {!others.noLogo && <Image
                 src={themeConfig.vertical1}
                 alt="logo"
                 width={500}
                 height={500}
                 className="w-40 md:first-letter:!mt-8"
-              />
+              />}
               <Typography
                 variant="body2"
                 className="!text-xl !font-bold !mt-3"

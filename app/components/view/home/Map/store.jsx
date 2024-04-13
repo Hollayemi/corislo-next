@@ -8,13 +8,13 @@ import { CircleLoader } from "@/app/components/cards/loader";
 
 const AboutStore = ({ setStage }) => {
   const { data, isLoading } = useSWR(
-    "/branch/info?branchId=65e29c4266575a7988cc52b9"
+    "/branch/info?branchId=65ac80101cc3db0407fa00c9"
   );
   const info = data?.data || {};
 
   const Comp = ({ name, icon }) => (
-    <Box className="flex items-center mb-2">
-      <IconifyIcon icon={icon} className="!text-[16px] mr-2.5 !text-blue-700" />
+    <Box className="flex items-center mb-3">
+      <IconifyIcon icon={icon} className="!text-[16px] mr-2.5 !text-blue-900" />
       <Typography
         variant="body2"
         className="!text-[12px] !text-gray-400 parent-hover:!text-black !flex-shrink-0"
@@ -57,7 +57,7 @@ const AboutStore = ({ setStage }) => {
         />
       </ReactSlickSlider>
       <Box
-        className="flex items-center justify-center bg-gray-100 rounded-full w-6 h-6 p-px cursor-pointer absolute m-1 mr-3 top-4 right-6"
+        className="flex items-center justify-center bg-gray-100 rounded-full w-6 h-6 p-px cursor-pointer absolute m-1 mr-4 top-4 right-6"
         onClick={() => setStage("")}
       >
         <IconifyIcon icon="tabler:x" className="!text-gray-600 !text-[15px]" />

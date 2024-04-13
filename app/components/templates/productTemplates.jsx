@@ -227,7 +227,7 @@ export const ProductOnShowcase = ({
                 {store}
               </Typography>
             </Link>
-            <Box className="flex items-center cursor-pointer" onClick={() => showMapScreen()}>
+            <Box className="flex items-center cursor-pointer mr-3" onClick={() => showMapScreen()}>
               <IconifyIcon
                 icon="tabler:map-pin-filled"
                 className="!mr-1 !text-[15px]"

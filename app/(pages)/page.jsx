@@ -128,9 +128,9 @@ const HomePage = ({ searchParams }) => {
         {/*  */}
         {/*  */}
         <Box className="sm:px-5 md:px-14">
-          <Box className="!mt-20 px-2 md:px-10">
+          <Box className="!mt-20 lg:!mt-32 px-2 md:px-10">
             <SectionMiddleTitle black="Shop by" blue="Categories" />
-            <Box className="flex items-center justify-cener overflow-auto pb-5">
+            <Box className="flex items-center justify-center overflow-auto pb-5">
               {categoryData.map((cate, i) => (
                 <Box
                   key={i}

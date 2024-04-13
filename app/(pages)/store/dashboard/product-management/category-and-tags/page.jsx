@@ -12,6 +12,7 @@ import { alpha, styled } from '@mui/material/styles'
 import MuiTreeView from '@mui/lab/TreeView'
 import tokens from "@/app/configs/tokens";
 import useSWR from 'swr';
+import { productBreadCrumb } from "../components"
 import { Add } from '@mui/icons-material';
 import { useStoreData } from '@/app/hooks/useData';
 
@@ -20,26 +21,39 @@ const CategoryAndTags = ({ params }) => {
     const [selectedCate, setSelectedCate] = useState(null)
     const isSelected = Boolean(selectedCate)
     return (
-      <StoreLeftSideBar path={path} subListBar={true} InnerList={prodInnerList}>
-          {!isSelected && <Box className="bg-white rounded-md px-3 py-6 mb-4">
+      <StoreLeftSideBar
+        path={path}
+        subListBar={true}
+        InnerList={prodInnerList}
+        breadCrumbRIghtChildren={<BreadcrumbRightEle />}
+        crumb={[
+          ...productBreadCrumb,
+          {
+            text: "Category And Tags",
+            link: "product-management/category-and-tags",
+          },
+        ]}
+      >
+        {!isSelected && (
+          <Box className="bg-white rounded-md px-3 py-6 mb-4">
             <OverViewCard />
-          </Box>}
+          </Box>
+        )}
         <Box className="bg-white rounded-md px-3 pt-6 pb-8 w-full grow">
-            {
-              isSelected ? 
-              <TreeViewSelected /> : 
-              <BriefCategories
-                  selectedCate={selectedCate}
-                  setSelectedCate={setSelectedCate} 
-              />
-            }
+          {isSelected ? (
+            <TreeViewSelected />
+          ) : (
+            <BriefCategories
+              selectedCate={selectedCate}
+              setSelectedCate={setSelectedCate}
+            />
+          )}
         </Box>
       </StoreLeftSideBar>
-    )
+    );
 }
 
 const BriefCategories = ({ selectedCate, setSelectedCate }) => {
-  const { showOverlay } = useStoreData()
     const { data, error, isLoading } = useSWR("/store/brief-categories");
     const allCategories = !error && !isLoading ? data.data.map((item, i) => {
         return (
@@ -60,15 +74,6 @@ const BriefCategories = ({ selectedCate, setSelectedCate }) => {
       <Box>
         <Box className="flex justify-between items-center">
           <Typography className="!font-bold">Categories</Typography>
-          <Button
-            startIcon={<Add />}
-            variant="contained"
-            className=""
-            onClick={() => showOverlay("newCollection")}
-          >
-            {" "}
-            Add Collection
-          </Button>
         </Box>
         <Typography
           className="!text-xs !mt-3 !mb-5 !leading-5"
@@ -185,3 +190,19 @@ const TreeView = styled(MuiTreeView)(({ theme }) => ({
       </TreeView>
     )
 }
+
+const BreadcrumbRightEle = () => {
+  const { showOverlay } = useStoreData();
+  return (
+    <Box className="flex items-center -mr-6 md:mr-0">
+      <Button
+        variant="contained"
+        className="!mr-4 !bg-blue-900 !shadow-none !text-[12px] !rounded-full"
+        startIcon={<Icon icon="tabler:plus" />}
+        onClick={() => showOverlay("newCollection")}
+      >
+        <span className="hidden md:block">Add New </span> Collection
+      </Button>
+    </Box>
+  );
+};

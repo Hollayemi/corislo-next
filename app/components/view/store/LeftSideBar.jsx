@@ -1,9 +1,10 @@
 "use client";
 import * as React from "react";
-import { styled, useTheme, alpha } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
+import IconifyIcon from "@/app/components/icon";
 import CssBaseline from "@mui/material/CssBaseline";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -21,6 +22,7 @@ import {
   Typography,
   Breadcrumbs,
 } from "@mui/material";
+
 import InnerBar from "./InnerBar";
 import BottomBar from "./BottomBar";
 import { useStoreData, useUserData } from "@/app/hooks/useData";
@@ -117,9 +119,11 @@ const StoreLeftSideBar = React.memo(
     children,
     path,
     InnerList,
+    InnerTitle,
     BottomList,
     hidebreadCrumb,
-    breadCrumbChild,
+    breadCrumbRIghtChildren,
+    crumb,
   }) => {
     const { staffInfo, overLay, showOverlay } = useStoreData();
     const [open, setOpen] = React.useState(false);
@@ -134,21 +138,48 @@ const StoreLeftSideBar = React.memo(
       setOpen(false);
     };
 
-    // const Breadcrumbs = () => {
-
-    //   return (
-    //     <Breadcrumbs separator="›" aria-label="breadcrumb">
-    //       {crumb.map((item, index) => (
-    //         <Link underline="hover" key={index} color="inherit" href="/">
-    //           {item}
-    //         </Link>
-    //       ))}
-    //     </Breadcrumbs>
-    //   )
-    // }
+    const MyBreadcrumbs = () => {
+      const skip = onSideBar && 0;
+      return (
+        <Breadcrumbs
+          slotProps={{ collapsedIcon: "." }}
+          maxItems={3}
+          separator={
+            <IconifyIcon
+              icon="tabler:chevron-right"
+              className="!text-[14px] md:!text-[20px]"
+            />
+          }
+          aria-label="breadcrumb"
+        >
+          {crumb?.map(
+            (item, index) =>
+              skip !== index && (
+                <Link
+                  underline="hover"
+                  key={index}
+                  color="inherit"
+                  href={`/store/dashboard/${item.link}`}
+                >
+                  <Typography
+                    className="!text-[12px] md:!text-[15px] !font-[600]"
+                    variant="body2"
+                  >
+                    {item.text}
+                  </Typography>
+                </Link>
+              )
+          )}
+        </Breadcrumbs>
+      );
+    };
 
     return (
-      <Box sx={{ display: "flex" }} className="!overflow-hidden">
+      <Box
+        sx={{ display: "flex" }}
+        className="!overflow-hidden"
+        bgcolor="custom.bodyGray"
+      >
         <CssBaseline />
         <StoreDashboardAppBar
           open={open}
@@ -302,36 +333,36 @@ const StoreLeftSideBar = React.memo(
             </Box>
           </StyleList>
         </Drawer>
-        <Box className="top-0 left-0 w-full flex-shrink-0 h-full md:pl-4 !pr-3 md:!pr-16">
+        <Box
+          className={`top-0 ${
+            open ? "left-[270px]" : "md:left-16"
+          } w-full transition-all duration-300 absolute flex-shrink-0 h-full md:pl-4 !pr-3 md:!pr-16 `}
+        >
           {/* <Box className=""> */}
 
-          <Box className="flex flex-col w-full sticky top-0 pt-20 md:px-7 px-3">
+          <Box className="flex flex-col w-full pt-20 md:px-7 px-3">
             {onSideBar === "" && (
-              <Typography color="primary" className="mb-5 !font-bold !text-2xl">
-                Welcome back, {staffInfo.fullname || "Staff Name"}{" "}
+              <Typography
+                color="primary"
+                className="!mb-5 !font-bold !text-2xl"
+              >
+                Welcome back, {staffInfo.fullname || "Staff Name"} 👋🏻
               </Typography>
             )}
-            {!hidebreadCrumb && (
-              <Box className="flex items-center justify-between mb-6">
-                <Typography color="primary" className="font-bold">
-                  Breadcrumb
-                </Typography>
-                {/* <Breadcrumbs /> */}
-                {/* {breadCrumbChild} */}
-              </Box>
-            )}
           </Box>
-          <Box className="flex flex-col  relative md:flex-row items-start md:px-1.5">
+          {!hidebreadCrumb && (
+            <Box className="flex items-center sticky top-20 justify-between mb-6 px-2 md:px-7">
+              <MyBreadcrumbs />
+              {breadCrumbRIghtChildren}
+            </Box>
+          )}
+          <Box className="flex flex-col relative md:flex-row items-start md:px-1.5">
             {InnerList && (
               <Box className="w-full hidden md:block sticky top-[68px] h-[85vh] md:w-52 mr-1 bg-white rounded-md">
-                <InnerBar
-                  content={SidebarContent}
-                  path={path}
-                  InnerList={InnerList}
-                />
+                <InnerBar path={path} InnerList={InnerList} />
               </Box>
             )}
-            <Box className="!w-full h-full md:px-3 m-1 rounded-md b-14">
+            <Box className="!w-full h-full md:px-3 m-1 rounded-md mb-14">
               {children}
               <Box
                 className="fixed md:hidden bottom-0 left-0 w-full"

@@ -14,7 +14,7 @@ import Head from "next/head";
 
 const libraries = ["places"]; // Optional for additional features
 
-const MapGraph = ({ mapType, markers }) => {
+const MapGraph = ({ mapType = "default", markers }) => {
   const router = useRouter();
   const [nonce, setNonce] = useState("");
   const [selectedMarker, setSelectedMarker] = useState(null);
