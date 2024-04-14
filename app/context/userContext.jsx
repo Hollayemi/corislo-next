@@ -59,13 +59,13 @@ const UserDataProvider = ({ children, setOverflow }) => {
   const isOffline = () => {
     const getLocalToken =
       typeof window !== "undefined" && localStorage.getItem("user_token");
-    if (userData?.accessToken || getLocalToken) {
-      const decodedToken = jwt_decode(getLocalToken || userData?.accessToken); // Decode the JWT token
+    if (getLocalToken) {
+      const decodedToken = jwt_decode(getLocalToken); // Decode the JWT token
       const currentTime = Date.now() / 1000; // Get the current time in seconds
       // // Check if the token is still valid based on its expiration time
       return decodedToken.exp < currentTime;
     }
-    return !Boolean(getLocalToken);
+    return true;
   };
 
   // useEffect(() => {

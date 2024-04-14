@@ -51,7 +51,7 @@ const UserSlice = createSlice({
     userLogout: () => {
       localStorage.removeItem("user_token");
       localStorage.removeItem("store_token");
-      window && window.location.replace("/")
+      window && window.location.replace("/");
       return initialState;
     },
   },
@@ -120,22 +120,39 @@ export const loginHandler = (
     });
 };
 
-
-
 // providerApi
 // google
 
-export const oAuth = createAsyncThunk("post/oAuth", async (payload) => {
+const oAuth = createAsyncThunk("post/oAuth", async (payload) => {
   console.log(payload);
   const { data } = await martApi
-    .get(`/auth/${payload.provider}`)
+    .get(`/auth/refresh-token?token=${payload.token}`)
     .then((res) => {
       console.log(res);
       const { accessToken } = res.data.user;
       localStorage.setItem("user_token", accessToken);
-      payload.router.push(`/`);
       return res;
     })
     .catch((e) => console.log(e.response));
   return data;
 });
+export const oAuthHandler = (payload, router, dispatch) => {
+  console.log(payload, router, dispatch);
+  dispatch(oAuth(payload))
+    .then(unwrapResult)
+    .then((res) => {
+      console.log(res);
+      toaster({ ...res });
+      if (res.type === "success") {
+        dispatch(getAccount())
+          .then(unwrapResult)
+          .then(() => {});
+        router.push(`/`);
+        console.log("here afer redir");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      toaster({ message: "No Connection", type: "error" });
+    });
+};
