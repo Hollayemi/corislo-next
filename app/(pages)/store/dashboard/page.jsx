@@ -19,7 +19,6 @@ const DashboardOverview = ({ params }) => {
     isLoading: orderLoading,
   } = useSWR(`/branch/order-request`);
 
-  console.log(orderData);
   const rows = orderData?.data || [];
 
   const actionFunctions = (row, action) => {

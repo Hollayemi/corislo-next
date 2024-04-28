@@ -15,13 +15,12 @@ const followStoreApi = createAsyncThunk(
   }
 );
 
-export const followStore = (storeId, dispatch, socket, isIncluded) => {
-  console.log(storeId);
-  dispatch(followStoreApi({ storeId }))
+export const followStore = (payload, dispatch, socket, isIncluded) => {
+  dispatch(followStoreApi(payload))
     .then(unwrapResult)
     .then((res) => {
       socket.emit("createChatRoom", {
-        branchId: storeId,
+        branchId: payload?.branchId,
       });
       toaster({ ...res });
       mutate("/user/following");

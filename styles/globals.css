@@ -8,6 +8,10 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
+.ref{
+    font-family: 'Franklin Gothic Medium !important';
+}
+
 .slick-slide{
     margin: 0 5px;
 }

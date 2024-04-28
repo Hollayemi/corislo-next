@@ -118,6 +118,7 @@ export default function StoreDashboardAppBar({
   const AppBar = styled(MuiAppBar)(({ theme, open }) => ({
     zIndex: theme.zIndex.drawer + 1,
     backgroundColor: "custom.bodyLight",
+    borderBottom: "",
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -213,9 +214,9 @@ export default function StoreDashboardAppBar({
     <AppBar
       position="fixed"
       color="inherit"
-      className="!duration-300 transition-all"
+      className="!duration-300 transition-all border-b"
       open={open}
-      elevation={1}
+      elevation={0}
     >
       <Toolbar
         className="flex items-center"

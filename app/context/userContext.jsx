@@ -27,9 +27,9 @@ const defaultProvider = {
 };
 const DataContext = createContext(defaultProvider);
 
-const UserDataProvider = ({ children, setOverflow }) => {
+const UserDataProvider = ({ children, setOverflow, setUserInfo }) => {
   const router = useRouter();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const pathname = usePathname();
   const [loading, setLoading] = useState(false);
   const [socket, setSocket] = useState(null);
@@ -122,19 +122,21 @@ const UserDataProvider = ({ children, setOverflow }) => {
   }, [socket]);
 
   //  Overlays
-  const showOverlay = (pageName = null) =>  (e) => {
-    console.log(pageName, overLay)
-    if ((overLay && !pageName) || pageName === overLay) {
-      setOverflow(false);
-      setOpenOverlay(null);
-    } else {
-      setOverflow(true);
-      setOpenOverlay(pageName);
-    }
-  };
+  const showOverlay =
+    (pageName = null) =>
+    (e) => {
+      console.log(pageName, overLay);
+      if ((overLay && !pageName) || pageName === overLay) {
+        setOverflow(false);
+        setOpenOverlay(null);
+      } else {
+        setOverflow(true);
+        setOpenOverlay(pageName);
+      }
+    };
 
   const showMapScreen = () => {
-    console.log("hello")
+    console.log("hello");
     if (popMap) {
       setOverflow(false);
       setMapPopup(false);
@@ -160,8 +162,16 @@ const UserDataProvider = ({ children, setOverflow }) => {
   } = useSWR(!isOffline() && "/user/get-account");
 
   useEffect(() => {
-    userInfo && !userInfo?.isVerified && router.push("/auth/otp-verification?redirected=true");
-  }, [])
+    userInfo &&
+      !userInfo?.isVerified &&
+      router.push("/auth/otp-verification?redirected=true");
+  }, []);
+
+  useEffect(() => {
+    if(userInfo?.user){
+      setUserInfo(userInfo.user || {});
+    }
+  }, [userInfo]);
 
   //
   // fetch userInfo

@@ -7,10 +7,12 @@ import {
   formatSegmentation,
   formatDate,
 } from "@/app/utils/format";
+import { DashboardCrumb } from "../../components";
 
 export const customerColumns = [
   {
     flex: 0.4,
+    minWidth: 150,
     headerName: "Order ID",
     field: "orderId",
     renderCell: (params) => (
@@ -21,6 +23,7 @@ export const customerColumns = [
   },
   {
     flex: 0.8,
+    minWidth: 150,
     headerName: "Order Date",
     field: "orderDate",
     renderCell: (params) => (
@@ -31,6 +34,7 @@ export const customerColumns = [
   },
   {
     flex: 1.5,
+    minWidth: 150,
     headerName: "Product Name",
     field: "productName",
     renderCell: (params) => (
@@ -41,6 +45,7 @@ export const customerColumns = [
   },
   {
     flex: 1,
+    minWidth: 150,
     headerName: "Product Category",
     field: "productCategory",
     renderCell: (params) => (
@@ -51,6 +56,7 @@ export const customerColumns = [
   },
   {
     flex: 0.8,
+    minWidth: 150,
     headerName: "Total Amount (₦)",
     field: "totalAmount",
     renderCell: (params) => (
@@ -61,6 +67,7 @@ export const customerColumns = [
   },
   {
     flex: 0.8,
+    minWidth: 150,
     headerName: "Delivery Medium",
     field: "deliveryMedium",
     renderCell: (params) => (
@@ -72,11 +79,12 @@ export const customerColumns = [
 
   {
     flex: 0.5,
+    minWidth: 150,
     field: "S",
     headerName: "status",
     renderCell: (params) => (
       <Typography variant="body2" sx={{ color: "text.primary" }}>
-        {params.row.status}
+        {params.row.status[params.row.status.length - 1].state}
       </Typography>
     ),
   },
@@ -88,6 +96,7 @@ export const customerColumns = [
 export const listingColumns = [
   {
     flex: 1,
+    minWidth: 150,
     headerName: "Customer",
     field: "customer",
     renderCell: (params) => (
@@ -98,6 +107,7 @@ export const listingColumns = [
   },
   {
     flex: 0.9,
+    minWidth: 150,
     headerName: "Customer Email",
     field: "email",
     renderCell: (params) => (
@@ -108,6 +118,7 @@ export const listingColumns = [
   },
   {
     flex: 0.6,
+    minWidth: 150,
     headerName: "Phone Number",
     field: "phone",
     renderCell: (params) => (
@@ -117,19 +128,21 @@ export const listingColumns = [
     ),
   },
   {
-    flex: 1.2,
-    headerName: "Address",
-    field: "address",
+    flex: 0.5,
+    minWidth: 150,
+    headerName: "Amount Spent",
+    field: "totalAmountSpent",
     renderCell: (params) => (
       <Typography variant="body2" sx={{ color: "text.primary" }}>
-        {formatShippingAddress(params.value)}
+        {params.row.totalAmountSpent}
       </Typography>
     ),
   },
   {
     flex: 0.6,
+    minWidth: 150,
     headerName: "Segmentation",
-    field: "totalAmount",
+    field: "Segmentation",
     renderCell: (params) => (
       <Typography variant="body2" sx={{ color: "text.primary" }}>
         {formatSegmentation(
@@ -142,6 +155,7 @@ export const listingColumns = [
   },
   {
     flex: 0.6,
+    minWidth: 150,
     headerName: "First Purchase",
     field: "medium",
     renderCell: (params) => (
@@ -152,6 +166,7 @@ export const listingColumns = [
   },
   {
     flex: 0.6,
+    minWidth: 150,
     headerName: "Last Purchase",
     field: "lastPurchase",
     renderCell: (params) => (
@@ -159,5 +174,15 @@ export const listingColumns = [
         {formatDate(params.row.lastPurchase)}
       </Typography>
     ),
+  },
+];
+
+
+export const customerBreadCrumb = [
+  ...DashboardCrumb,
+  {
+    text: "Customer",
+    link: "customer-management",
+    icon: "user",
   },
 ];

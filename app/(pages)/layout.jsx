@@ -16,6 +16,7 @@ import ReactHotToast from "@/app/styles/react-hot-toast";
 import { UserDataProvider } from "../context/userContext";
 import handleSubscribeToNotification from "../redux/state/slices/api/webpush";
 import { useEffect, useState } from "react";
+import { useUserData } from "@/app/hooks/useData";
 import LineLoading from "./loading";
 
 const metadata = {
@@ -29,9 +30,11 @@ const persistor = persistStore(store);
 
 // ** Pace Loader
 export default function RootLayout({ children }) {
+  const [userInfo, setUserInfo] = useState({})
   const [hideOverflow, setOverflow] = useState(false)
+  
   useEffect(() => {
-    if ("serviceWorker" in navigator) {
+    if ("serviceWorker" in navigator && userInfo?._id) {
       navigator.serviceWorker
         .register("/sw.js")
         .then((registration) => {
@@ -42,20 +45,8 @@ export default function RootLayout({ children }) {
           console.error("Service Worker registration failed:", error);
         });
     }
-  }, []);
+  }, [userInfo]);
 
-
-  // if ("serviceWorker" in navigator) {
-  //   navigator.serviceWorker
-  //     .register("/sw.js")
-  //     .then((registration) => {
-  //       handleSubscribeToNotification();
-  //       console.log("Service Worker registered:");
-  //     })
-  //     .catch((error) => {
-  //       console.error("Service Worker registration failed:", error);
-  //     });
-  // }
 
   return (
     <html lang="en">
@@ -89,10 +80,8 @@ export default function RootLayout({ children }) {
         <meta property="og:image" content="/images/logo/horizontal/1.png" />
         <meta property="og:url" content="https:corislo.vercel.app" />
         <meta property="og:type" content="product" />
-  
       </head>
-   
-     
+
       <body className={`${hideOverflow && "!overflow-hidden"}`}>
         <SWRConfig
           value={{
@@ -108,7 +97,10 @@ export default function RootLayout({ children }) {
         >
           <NextProgress />
           <Provider store={store}>
-            <UserDataProvider setOverflow={setOverflow}>
+            <UserDataProvider
+              setOverflow={setOverflow}
+              setUserInfo={setUserInfo}
+            >
               <LineLoading />
               <PersistGate loading={null} persistor={persistor}>
                 <ThemeComponent>

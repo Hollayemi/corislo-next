@@ -16,7 +16,7 @@ export const navigation = {
   product_management: "/product-management",
   order_management: "/order-management",
   customer_management: "/customer-management",
-  store_analytics: "/store_analytics",
+  store_analytics: "/store-analytics",
   marketing: "/marketing",
   settings: "/settings",
   pricing: "/pricing",

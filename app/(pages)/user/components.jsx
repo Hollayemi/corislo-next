@@ -20,7 +20,7 @@ export const MyTextField = ({
   return (
     <div className={`flex flex-col items-start mb-6 ${PClassName}`}>
       <h5 className="text-[13px] mb-2">{title}</h5>
-      <div className="relative">
+      <div className="relative w-full">
         <TextField
           type={newType}
           className="h-8 w-full px-3 rounded-md bg-gray-50 border-1"

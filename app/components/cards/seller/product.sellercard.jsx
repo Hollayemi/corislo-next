@@ -9,12 +9,12 @@ import { summarizeFollowers } from "@/app/utils/format";
 import { followStore } from "@/app/redux/state/slices/users/following";
 
 export const ProductSellerCard = ({ branchId }) => {
-    console.log(branchId);
+  console.log(branchId);
   const dispatch = useDispatch();
   const router = useRouter();
   const { data, error } = useSWR(`/branch/info?branchId=${branchId}`);
-  console.log(data)
-  const storeInfo = data?.data || {}
+  console.log(data);
+  const storeInfo = data?.data || {};
   const { following, socket } = useUserData();
   const isFollowing = following.includes(branchId);
   return (
@@ -63,7 +63,9 @@ export const ProductSellerCard = ({ branchId }) => {
             variant="outlined"
             className="!rounded-full h-9 w-14 md:w-28 !bg-white !shadow-none !ml-3"
             startIcon={<IconifyIcon icon="tabler:user-plus" />}
-            onClick={() => followStore(branchId, dispatch, socket, isFollowing)}
+            onClick={() =>
+              followStore(storeInfo, dispatch, socket, isFollowing)
+            }
           >
             <span className="hidden md:block">
               {isFollowing ? "Following" : "Follow"}
@@ -112,7 +114,6 @@ const TickCheck = ({ title, result, icon }) => (
     </Box>
   </Box>
 );
-
 
 const StoreNumberStatus = ({ status, value }) => (
   <Box className="flex items-center">

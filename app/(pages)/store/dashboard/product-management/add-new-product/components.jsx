@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   FormControl,
   InputLabel,
+  Typography,
   Select,
   MenuItem,
   Radio,
@@ -20,12 +21,15 @@ import Icon from '@/app/components/icon'
 export const SimpleDropDown = ({ label, items, onChange, sx, render, inputProps }) => {
   return (
     <FormControl fullWidth sx={{ ...sx }}>
-      <InputLabel id="demo-simple-select-outlined-label">{label}</InputLabel>
+      <Typography variant="caption" className="!mb-1">
+        {label}
+      </Typography>
       <Select
         fullWidth
-        label={label}
+        // label={label}
         defaultValue=""
         id="demo-simple-select-outlined"
+        size="small"
         labelId="demo-simple-select-outlined-label"
         onChange={onChange}
         inputProps={{ ...inputProps }}

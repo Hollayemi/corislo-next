@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import PersonalProfile from "./personal";
 import BusinessProfile from "./business";
 import Verification from "./verification";
+import { useSearchParams } from "next/navigation";
 import Pricing from "./pricing";
 import validationRegisterSchema from "../../auth/register/validation";
 import validationStoreSchema from "./storeValidation";
@@ -12,6 +13,8 @@ import validationStoreSchema from "./storeValidation";
 const RegisterStore = () => {
   const [stage, setStage] = useState(1);
   const [readyToNext, showAllError] = useState(false);
+    const searchParams = useSearchParams();
+    const referrer = searchParams.get("ref");
 
   const [errors, setErrors] = useState({
     fullname: "",
@@ -42,6 +45,7 @@ const RegisterStore = () => {
     address: "",
     state: "",
     category: "",
+    referrer,
   });
   const handleStoreChange = (prop) => (event) => {
     setStoreValues({ ...storeValues, [prop]: event.target.value });

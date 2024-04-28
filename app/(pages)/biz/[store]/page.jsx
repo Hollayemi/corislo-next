@@ -167,12 +167,7 @@ const BusinessPage = ({ params, searchParams }) => {
                       />
                     }
                     onClick={() =>
-                      followStore(
-                        branchInfo?.branchId,
-                        dispatch,
-                        socket,
-                        isIncluded
-                      )
+                      followStore(branchInfo, dispatch, socket, isIncluded)
                     }
                   >
                     {isIncluded ? "Following" : "Follow"}

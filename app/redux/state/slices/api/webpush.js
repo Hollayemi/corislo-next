@@ -2,6 +2,8 @@
 import toaster from "@/app/configs/toaster";
 import martApi from "./baseApi";
 import { jsonHeader } from "./setAuthHeaders";
+import { isMobile, deviceType, osName } from "react-device-detect";
+
 
 const PUBLIC_VAPID_KEY2 =
   "BCttWS18Th1RaDR7gVIVtlXOw_P-nE7qJVkXZxEOW2a1yHOS4vKEuEWtRN-A5lX9_lmDjM3nPivWeF3rZoCi8Rk";
@@ -31,10 +33,14 @@ const handleSubscribeToNotification = async () => {
         userVisibleOnly: true,
         applicationServerKey: serverKey,
       });
-      console.log(subscription, "sub");
+      // console.log(subscription, "sub");
       const sendSubscription = async (payload) => {
         const { data } = await martApi
-          .post(`/user/notifications/subscription`, payload, jsonHeader())
+          .post(
+            `/user/notifications/subscription`,
+            { subscription: payload, device: osName },
+            jsonHeader()
+          )
           .then((res) => res)
           .catch((e) => e);
         return data;

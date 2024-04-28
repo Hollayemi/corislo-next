@@ -54,7 +54,7 @@ const AppChat = ({ searchParams }) => {
   const { data: storeChat, isLoading: loadingChat } = useSWR(
     selectedChat &&
       !itIsNewChat &&
-      `/chat/messages?chatId=${selectedChat}`
+      `/user/chat/messages?chatId=${selectedChat}`
   );
   // ** Vars
   const smAbove = useMediaQuery(theme.breakpoints.up("sm"));

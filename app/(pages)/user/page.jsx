@@ -11,7 +11,7 @@ import SecuritySettings from "./securitySettings";
 import HelpAndSupport from "./helpAndSupport";
 
 const UserSettings = () => {
-  const [value, setTabValue] = useState("3");
+  const [value, setTabValue] = useState("1");
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -56,8 +56,9 @@ const UserSettings = () => {
         <TabContext value={value}>
           <TabList
             orientation="horizontal"
+            variant="scrollable"
             onChange={handleChangeTab}
-            className="flex-shrink-0 border-b"
+            className="flex-shrink-0 border-b overflow-x-scroll"
             aria-label="Product Page"
           >
             {tabs.map((each, i) => (

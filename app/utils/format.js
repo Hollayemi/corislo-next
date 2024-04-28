@@ -236,9 +236,10 @@ export const calculateDateDiff = (timeSpan, initialDate, operator = "-") => {
 };
 
 export const formatShippingAddress = (address) => {
+  console.log(address);
   return (
     <Typography variant="h5" className="!text-xs">
-      {`(${address.title}) ${address.address}, ${address.city}, ${address.state}, ${address.postal_code}`}
+      {/* {`${address?.address}, ${address?.city}, ${address?.state}, ${address?.postal_code}`} */}
     </Typography>
   );
 };
@@ -314,4 +315,4 @@ export const mySubstring = (string = "", num = 15, start = 0) => {
   }
 };
 
-export const ngnPrice = (price) => `NGN${price?.toLocaleString()}`;
+export const ngnPrice = (price) => `NGN ${price?.toLocaleString()}`;

@@ -32,6 +32,12 @@ export default function StoreAuthLayout({
     if (stage < level) return "waiting";
     return "sdf";
   };
+  const btnName = {
+    0: "Next",
+    1: "Save and Continue",
+    2: "Save and Continue",
+    3: "Next",
+  };
   console.log("holla---")
   const StageBox = ({ text, level }) => {
     return (

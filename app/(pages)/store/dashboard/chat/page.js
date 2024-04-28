@@ -43,7 +43,7 @@ const AppChat = () => {
   const storeList = (data && data?.data) || {};
   const itIsNewChat = selectedChat.split("-")[0] === "new_chat";
   const { data: storeChat, isLoading: loadingChat } = useSWR(
-    selectedChat && !itIsNewChat && `/chat/messages?chatId=${selectedChat}`
+    selectedChat && !itIsNewChat && `/store/chat/messages?chatId=${selectedChat}`
   );
 
   // ** Vars

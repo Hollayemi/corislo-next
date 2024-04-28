@@ -10,12 +10,13 @@ import tokens from "@/app/configs/tokens";
 export const AllCustomers = () => {
   const router = useRouter();
   const { data, error, isLoading } = useSWR("/branch/customers");
+
   const onRowClick = (row) => {
-    console.log(row)
     router.push(
-      `/store/dashboard/customer-management?customer=${row._id.userId}`
+      `/store/dashboard/customer-management/${row._id.userId}`
     );
   }
+
   return (
     <Box>
       <Typography variant="caption" className="!text-[12px] !mt-3">

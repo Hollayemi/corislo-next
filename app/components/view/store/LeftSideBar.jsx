@@ -162,7 +162,7 @@ const StoreLeftSideBar = React.memo(
                   href={`/store/dashboard/${item.link}`}
                 >
                   <Typography
-                    className="!text-[12px] md:!text-[15px] !font-[600]"
+                    className="!text-[12px] md:!text-[14px] !font-[500] !text-black"
                     variant="body2"
                   >
                     {item.text}
@@ -194,11 +194,11 @@ const StoreLeftSideBar = React.memo(
           open={open}
           PaperProps={{
             sx: { backgroundColor: "custom.bodyLight" },
-            elevation: 8,
+            elevation: 0,
             overflow: "hidden",
           }}
         >
-          <DrawerHeader className="" elevation={6} color="inherit">
+          <DrawerHeader className="" elevation={0} color="inherit">
             <Box className="flex justify-between items-center relative w-full">
               <Image
                 src={themeConfig.vertical1}

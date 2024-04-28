@@ -1,6 +1,7 @@
+"use client"
+import { useState } from "react";
 import Icon from "@/app/components/icon";
 import { useTheme } from "@mui/material/styles";
-import { useState } from "react";
 import CustomAvatar from "@/app/components/avatar";
 import {
   Box,

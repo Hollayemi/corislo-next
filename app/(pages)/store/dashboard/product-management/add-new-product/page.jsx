@@ -43,7 +43,7 @@ const AddNewProduct = ({ params }) => {
   );
   const collections = getData ? getData?.data : [{}];
   const specInfo = specData && specData?.data;
-  const specWithSize = ["cloth_spec", "shoe_spec"]; 
+  const specWithSize = ["cloth_spec", "shoe_spec"];
   const [formData, setFormData] = useState({
     prodName: "",
     prodPrice: "",
@@ -118,16 +118,21 @@ const AddNewProduct = ({ params }) => {
               Description
             </Typography>
             <Box sx={{ pl: 0.2, pl: brk("md") && "0.5", mb: 0.5 }}>
-              <Typography sx={{ mb: 2 }}>Product Name</Typography>
+              <Typography variant="caption" className="!mb-1">
+                Product Name
+              </Typography>
               <TextField
-                sx={{ mb: 0.5 }}
+                className="!mt-1 !mb-3"
                 fullWidth
+                size="small"
                 id="outlined-basic"
                 onChange={handleChange("prodName")}
-                label="Product Name"
+                // label="Product Name"
               />
 
-              <Typography sx={{ my: 2 }}>Product Description</Typography>
+              <Typography variant="caption" className="!mb-1">
+                Product Description
+              </Typography>
               <TextField
                 sx={{ mb: 0.5 }}
                 fullWidth
@@ -135,9 +140,9 @@ const AddNewProduct = ({ params }) => {
                 id="textarea-outlined"
                 onChange={handleChange("prodInfo")}
                 maxRows={7}
-                placeholder="Product Description"
+                // placeholder="Product Description"
                 minRows={6}
-                label="Product Description"
+                // label="Product Description"
               />
             </Box>
 
@@ -186,8 +191,9 @@ const AddNewProduct = ({ params }) => {
                 onChange={handleChange("prodPrice")}
                 type="number"
                 fullWidth
+                size="small"
                 id="outlined-basic"
-                label="Product Price"
+                // label="Product Price"
               />
             </Box>
 
@@ -200,8 +206,9 @@ const AddNewProduct = ({ params }) => {
                 onChange={handleChange("totInStock")}
                 type="number"
                 fullWidth
+                size="small"
                 id="outlined-basic"
-                label="Total in stock"
+                // label="Total in stock"
               />
             </Box>
 
