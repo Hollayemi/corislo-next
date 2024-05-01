@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 4001",
+    "dev": "next dev -p 4001 --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -34,7 +34,7 @@
     "payment": "^2.4.6",
     "postcss": "^8.4.38",
     "react": "18.2.0",
-    "react-apexcharts": "^1.4.1",
+    "react-apexcharts": "^1.4.0",
     "react-chartjs-2": "^5.1.0",
     "react-datepicker": "^6.9.0",
     "react-device-detect": "^2.2.3",
