@@ -56,37 +56,7 @@ const StoreAnalysisPage = ({ params }) => {
         <Box className="h-44 flex -mt-2">
           <Box className="mb-10 w-8/12 h-full pr-2">
             <Box className="w-full h-full flex bg-white rounded-xl">
-              <Box className="w-1/2 h-full border-r !border-gray-100 relative">
-                <Box className="flex items-start p-3">
-                  <Box className="w-1/2">
-                    <Typography
-                      className="!text-[12px] !text-gray-300 !font-bold"
-                      variant="body2"
-                    >
-                      NGN
-                    </Typography>
-                    <Typography
-                      className="!text-[19px] !text-gray-900 !font-extrabold !mt-1"
-                      variant="body2"
-                    >
-                      {reshapePrice(34702000)}
-                    </Typography>
-
-                    <Box className="absolute bottom-2 flex items-center">
-                      <Growth percentage={200} />
-                      <Typography
-                        className="!text-[11px] !text-gray-500 !ml-2"
-                        variant="body2"
-                      >
-                        From last month
-                      </Typography>
-                    </Box>
-                  </Box>
-                  <Box className="w-1/2">
-                    <TotalSaleGrowth interval={interval} />
-                  </Box>
-                </Box>
-              </Box>
+              <TotalSaleGrowth interval={interval} />
               <Box className="w-1/2 flex h-full">
                 <Box className="w-1/2 p-3 relative border-r !border-gray-100 h-full">
                   <Typography
@@ -183,11 +153,8 @@ const StoreAnalysisPage = ({ params }) => {
             />
           </Box>
 
-          <Box className="mt-3 flex flex-wrap w-full flex bg-white rounded-xl">
-            <StoreGrowth />
-            <StoreGrowth />
-            <StoreGrowth />
-            <StoreGrowth />
+          <Box className="mt-3  flex-wrap w-full flex bg-white rounded-xl">
+            <StoreGrowth interval={interval} />
           </Box>
         </Box>
         {/* Categories Sales Growth */}
@@ -224,10 +191,7 @@ const StoreAnalysisPage = ({ params }) => {
           </Box>
 
           <Box className="mt-3 h-auto min-h-[200px] flex-wrap w-full flex bg-white rounded-xl">
-            <CategoriesGrowth />
-            <CategoriesGrowth />
-            <CategoriesGrowth />
-            <CategoriesGrowth />
+            <CategoriesGrowth interval={interval} />
           </Box>
         </Box>
       </Box>

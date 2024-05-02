@@ -23,3 +23,10 @@ export const intervals = {
     12: "Dec",
   },
 };
+
+export const correctInterval = {
+  daily: "day",
+  weekly: "week",
+  monthly: "month",
+  yearly: "year",
+};

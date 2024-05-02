@@ -106,7 +106,7 @@ export const generatedLeadOptions = (theme, series) => {
   };
 };
 
-export const salesOptions = (theme, series) => {
+export const salesOptions = (theme, series, labels) => {
   return {
     chart: {
       parentHeightOffset: 0,
@@ -123,6 +123,8 @@ export const salesOptions = (theme, series) => {
       show: false,
       padding: {
         top: 5,
+        right: 5,
+        left: 5,
         bottom: 25,
       },
     },
@@ -158,7 +160,7 @@ export const salesOptions = (theme, series) => {
       },
     },
     xaxis: {
-      categories: ["Mon", "Tue", "Wed", "Thur"], // Set your x-axis labels here
+      categories: labels || ["Mon", "Tue", "Wed", "Thur"], // Set your x-axis labels here
       labels: { show: true }, // Set show labels to true
       axisTicks: { show: false },
       axisBorder: { show: false },
@@ -167,7 +169,7 @@ export const salesOptions = (theme, series) => {
   };
 };
 
-export const categoryOptions = (theme, series) => {
+export const categoryOptions = (theme, series, labels) => {
   return {
     chart: {
       parentHeightOffset: 0,
@@ -183,12 +185,12 @@ export const categoryOptions = (theme, series) => {
       },
     },
     legend: { show: false },
-    tooltip: { enabled: false },
+    tooltip: { enabled: true },
     dataLabels: { enabled: false },
     colors: [
+      hexToRGBA(theme.palette.primary.main, 0.26),
       hexToRGBA(theme.palette.primary.main, 0.16),
-      hexToRGBA(theme.palette.primary.main, 0.16),
-      hexToRGBA(theme.palette.primary.main, 0.16),
+      hexToRGBA(theme.palette.primary.main, 0.26),
       hexToRGBA(theme.palette.primary.main, 0.16),
       hexToRGBA(theme.palette.primary.main, 1),
       hexToRGBA(theme.palette.primary.main, 0.16),
@@ -212,7 +214,7 @@ export const categoryOptions = (theme, series) => {
       },
     },
     xaxis: {
-      categories: ["M", "T", "W", "T", "F", "S", "S"],
+      categories: labels || [("M", "T", "W", "T", "F", "S", "S")],
       axisTicks: { show: false },
       axisBorder: { show: false },
       tickPlacement: "on",

@@ -10,7 +10,7 @@ import {
   salesOptions,
   categoryOptions,
 } from "./chartOptions";
-import { intervals } from "./interval";
+import { intervals, correctInterval } from "./interval";
 import DatePicker from "react-datepicker";
 import Icon from "@/app/components/icon";
 import { CircleLoader } from "@/app/components/cards/loader";
@@ -73,18 +73,15 @@ export const TotalSaleGrowth = ({ interval = "monthly" }) => {
   );
   let getSeries = [];
   let getLabels = [];
-  console.log(data);
+  let lastGrowth = 0
   data?.calcGrowth?.map((x) => {
-    console.log(x);
     getSeries = [...getSeries, x.branchSale];
-    if(["daily", "monthly"].includes(data?.interval)){
-      const extract = data?.interval === "monthly" ? x._id.month : x._id
+    lastGrowth = x.growth
+    if (["daily", "monthly"].includes(data?.interval)) {
+      const extract = data?.interval === "monthly" ? x._id.month : x._id;
       getLabels = [...getLabels, intervals[data?.interval][extract]];
     }
-    console.log(getLabels)
   });
-
-  console.log(getSeries, getLabels);
 
   const theme = useTheme();
   const series = [{ data: getSeries }];
@@ -98,12 +95,42 @@ export const TotalSaleGrowth = ({ interval = "monthly" }) => {
   }
 
   return (
-    <ReactApexcharts
-      type="line"
-      height={120}
-      series={series}
-      options={revenueOptions(theme, series, getLabels)}
-    />
+    <Box className="w-1/2 h-full border-r !border-gray-100 relative">
+      <Box className="flex items-start p-3">
+        <Box className="w-1/2">
+          <Typography
+            className="!text-[12px] !text-gray-300 !font-bold"
+            variant="body2"
+          >
+            NGN
+          </Typography>
+          <Typography
+            className="!text-[19px] !text-gray-900 !font-extrabold !mt-1"
+            variant="body2"
+          >
+            {reshapePrice(data?.totalSale)}
+          </Typography>
+
+          <Box className="absolute bottom-2 flex items-center">
+            <Growth percentage={lastGrowth.toFixed(2)} />
+            <Typography
+              className="!text-[11px] !text-gray-500 !ml-2"
+              variant="body2"
+            >
+              From last {correctInterval[interval.toLowerCase()]}
+            </Typography>
+          </Box>
+        </Box>
+        <Box className="w-1/2">
+          <ReactApexcharts
+            type="line"
+            height={120}
+            series={series}
+            options={revenueOptions(theme, series, getLabels)}
+          />
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
@@ -175,75 +202,108 @@ export const GeneatedLeadChart = () => {
   );
 };
 
-export const StoreGrowth = () => {
+const Itemize = ({ title, info }) => (
+  <Box className="flex flex-col items-end !mb-3">
+    <Typography variant="body2" className="!text-[12px] !text-gray-400">
+      {title}
+    </Typography>
+    <Typography variant="body2" className="!text-[13px] !font-[600] !mt-1.5">
+      {info}
+    </Typography>
+  </Box>
+);
+
+export const StoreGrowth = ({ interval = "monthly" }) => {
   const theme = useTheme();
   const series = [{ data: [40, 20, 65, 50] }];
+  const { data, isLoading } = useSWR(
+    `/store/branch-sales?interval=${interval.toLowerCase()}`
+  );
 
-  const Itemize = ({ title, info }) => (
-    <Box className="flex flex-col items-end">
-      <Typography variant="body2" className="!text-[12px] !text-gray-400">
-        {title}
-      </Typography>
-      <Typography variant="body2" className="!text-[13px] !font-[600] !mt-1.5">
-        {info}
-      </Typography>
-    </Box>
-  );
-  const {} = useSWR("/store/category-sales");
-  return (
-    <Box className="w-72 p-3 border-r !border-gray-100 h-full flex items-start">
-      <Box className="w-8/12">
-        <Typography variant="body2" className="!text-[12px] !font-[600]">
-          Ondo Branch
-        </Typography>
-        <ReactApexcharts
-          type="area"
-          height={150}
-          series={series}
-          options={salesOptions(theme, series)}
-        />
+  const myBranches = data?.data?.branches?.map((x) => {
+    const series = Object.values(x.sales).map((x) => x.sale || x);
+    let labels = Object.keys(x.sales);
+    if (["daily", "monthly"].includes(data?.interval)) {
+      const extract = data?.interval === "monthly" ? x._id.month : x._id;
+      labels = [...labels, intervals[data?.interval][extract]];
+    }
+    return (
+      <Box className="w-72 p-3 border-r !border-gray-100 h-full flex items-start">
+        <Box className="w-8/12">
+          <Typography variant="body2" className="!text-[12px] !font-[600]">
+            {x.branch}
+          </Typography>
+          <ReactApexcharts
+            type="area"
+            height={150}
+            series={[{ data: series }]}
+            options={salesOptions(theme, series, labels)}
+          />
+        </Box>
+        <Box className="flex flex-col justify-evenly w-4/12 h-full">
+          <Itemize title="Items sold" info="200" />
+          <Itemize title="Revenue" info={reshapePrice(x.TotalBranchSale)} />
+          <Itemize title="Growth" info={<Growth percentage="20" />} />
+        </Box>
       </Box>
-      <Box className="flex flex-col justify-evenly w-4/12 h-full">
-        <Itemize title="Items sold" info="200" />
-        <Itemize title="Revenue" info={reshapePrice(43000)} />
-        <Itemize title="Growth" info={<Growth percentage="20" />} />
+    );
+  });
+
+  if (isLoading) {
+    return (
+      <Box className="w-72 h-60 border-r flex justify-center items-center">
+        <CircleLoader />
       </Box>
-    </Box>
-  );
+    );
+  }
+  return myBranches;
 };
-export const CategoriesGrowth = () => {
+export const CategoriesGrowth = ({ interval = "monthly" }) => {
   const theme = useTheme();
   const series = [{ data: [32, 52, 72, 94, 116, 94, 72] }];
 
-  const Itemize = ({ title, info }) => (
-    <Box className="flex flex-col items-end">
-      <Typography variant="body2" className="!text-[12px] !text-gray-400">
-        {title}
-      </Typography>
-      <Typography variant="body2" className="!text-[13px] !font-[600] !mt-1.5">
-        {info}
-      </Typography>
-    </Box>
+  const { data, isLoading } = useSWR(
+    `/store/category-sales?interval=${interval.toLowerCase()}`
   );
 
-  return (
-    <Box className="w-72 p-3 border-r !border-gray-100 h-full flex items-start">
-      <Box className="w-8/12">
-        <Typography variant="body2" className="!text-[12px] !font-[600]">
-          Ondo Branch
-        </Typography>
-        <ReactApexcharts
-          type="bar"
-          height={150}
-          series={series}
-          options={categoryOptions(theme, series)}
-        />
+  const myCategories = data?.data?.map((x) => {
+    const series = Object.values(x.data).map((x) => x.sale || x);
+    let labels = Object.keys(x.data);
+    console.log(series);
+    if (["daily", "monthly"].includes(data?.interval)) {
+      const extract = data?.interval === "monthly" ? x._id.month : x._id;
+      labels = [...labels, intervals[data?.interval][extract]];
+    }
+    return (
+      <Box className="w-72 p-3 border-r !border-gray-100 h-full flex items-start">
+        <Box className="w-8/12">
+          <Typography variant="body2" className="!text-[12px] !font-[600]">
+            {x._id}
+          </Typography>
+          <ReactApexcharts
+            type="bar"
+            height={150}
+            series={[{ data: series }]}
+            options={categoryOptions(theme, series, labels)}
+          />
+        </Box>
+        <Box className="flex flex-col justify-evenly w-4/12 h-full">
+          <Itemize title="Items sold" info="200" />
+          <Itemize title="Revenue" info={reshapePrice(x.sales)} />
+          <Itemize title="Growth" info={<Growth percentage="20" />} />
+        </Box>
       </Box>
-      <Box className="flex flex-col justify-evenly w-4/12 h-full">
-        <Itemize title="Items sold" info="200" />
-        <Itemize title="Revenue" info={reshapePrice(43000)} />
-        <Itemize title="Growth" info={<Growth percentage="-50" />} />
+    );
+  });
+
+  console.log(data);
+
+  if (isLoading) {
+    return (
+      <Box className="w-72 h-60 border-r flex justify-center items-center">
+        <CircleLoader />
       </Box>
-    </Box>
-  );
+    );
+  }
+  return myCategories;
 };
