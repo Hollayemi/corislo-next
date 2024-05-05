@@ -331,7 +331,7 @@ const HomePage = ({ searchParams }) => {
                     image={`/images/more/${i + 1}.png`}
                     star={prod.star}
                     store={prod.store}
-                    branch={prod.branches}
+                    branch={prod.branch}
                   />
                 ))}
               </Box>

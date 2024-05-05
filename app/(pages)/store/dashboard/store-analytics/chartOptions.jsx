@@ -27,14 +27,21 @@ export const revenueOptions = (theme, series, labels) => {
       },
       padding: {
         top: 5,
-        left: -4,
+        left: 8,
         right: 8,
         bottom: 25,
       },
     },
     xaxis: {
-      categories: [(labels)] || [("Jan", "Feb", "Mar", "April")], 
-      labels: { show: true },
+      categories: labels || ["Jan", "Feb", "Mar", "April"], 
+      labels: {
+        show: true,
+        style: {
+          fontSize: "12px",
+          colors: theme.palette.text.disabled,
+          fontFamily: theme.typography.fontFamily,
+        },
+      },
       axisTicks: { show: false },
       axisBorder: { show: false },
     },
@@ -161,7 +168,14 @@ export const salesOptions = (theme, series, labels) => {
     },
     xaxis: {
       categories: labels || ["Mon", "Tue", "Wed", "Thur"], // Set your x-axis labels here
-      labels: { show: true }, // Set show labels to true
+      labels: {
+        show: true,
+        style: {
+          fontSize: "12px",
+          colors: theme.palette.text.disabled,
+          fontFamily: theme.typography.fontFamily,
+        },
+      },
       axisTicks: { show: false },
       axisBorder: { show: false },
     },
@@ -220,7 +234,7 @@ export const categoryOptions = (theme, series, labels) => {
       tickPlacement: "on",
       labels: {
         style: {
-          fontSize: "14px",
+          fontSize: "12px",
           colors: theme.palette.text.disabled,
           fontFamily: theme.typography.fontFamily,
         },

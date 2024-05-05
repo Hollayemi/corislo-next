@@ -57,7 +57,7 @@ const ProductDisplay = ({ params }) => {
         productId: product?._id,
         branchId: product?.branchId,
         store: product?.store,
-        branch: product?.branches,
+        branch: product?.branch,
       },
       dispatch
     );
@@ -70,7 +70,7 @@ const ProductDisplay = ({ params }) => {
       color: colors,
     },
     store: product?.store,
-    branch: product?.branches,
+    branch: product?.branch,
   };
 
   const colorArray = [

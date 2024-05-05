@@ -326,7 +326,7 @@ export const groupCart = [
           totInStock: 15,
           store: "corisio",
           storeId: "650c6723b6f4e04f516f0828",
-          branches: ["OAemlC"],
+          branch: "OAemlC",
           status: "waiting",
           collectionName: "Women classic wears",
           subCollectionName: "Classic Gucci Tops",

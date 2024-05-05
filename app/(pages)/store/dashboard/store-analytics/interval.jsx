@@ -6,7 +6,7 @@ export const intervals = {
     4: "Thur",
     5: "Fri",
     6: "Sat",
-    0: "Sun",
+    7: "Sun",
   },
   monthly: {
     1: "Jan",

@@ -15,6 +15,7 @@ import DatePicker from "react-datepicker";
 import Icon from "@/app/components/icon";
 import { CircleLoader } from "@/app/components/cards/loader";
 import ReactApexcharts from "@/app/components/chart/react-apexcharts";
+// import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 
 const PickersComponent = forwardRef(({ ...props }, ref) => {
   const { label, readOnly } = props;
@@ -71,48 +72,57 @@ export const TotalSaleGrowth = ({ interval = "monthly" }) => {
   const { data, isLoading } = useSWR(
     `/store/growth?interval=${interval.toLowerCase()}`
   );
-  let getSeries = [];
-  let getLabels = [];
-  let lastGrowth = 0
-  data?.calcGrowth?.map((x) => {
-    getSeries = [...getSeries, x.branchSale];
-    lastGrowth = x.growth
-    if (["daily", "monthly"].includes(data?.interval)) {
-      const extract = data?.interval === "monthly" ? x._id.month : x._id;
-      getLabels = [...getLabels, intervals[data?.interval][extract]];
-    }
-  });
+  let getSeries = data
+    ? Object.values(data?.salesGrowth).map((x) => x.branchSale || x)
+    : [];
+  let labels = data ? Object.keys(data?.salesGrowth).map((x) => x) : [];
+
+  console.log(labels);
+  if (["daily", "monthly"].includes(data?.interval)) {
+    labels = labels.map((x) => intervals[data?.interval][parseInt(x)]);
+    console.log(labels);
+  }
 
   const theme = useTheme();
   const series = [{ data: getSeries }];
 
   if (isLoading) {
     return (
-      <Box className="w-full h-full flex justify-center items-center">
+      <Box className="w-full h-full min-h-[180px] flex justify-center items-center">
         <CircleLoader />
       </Box>
     );
   }
 
   return (
-    <Box className="w-1/2 h-full border-r !border-gray-100 relative">
+    <Box className="w-full md:w-5/12 h-full min-h-[180px] !border-gray-100 relative">
       <Box className="flex items-start p-3">
         <Box className="w-1/2">
+          <Box
+            className="!text-[12px] w-10 h-10 bg-green-200 rounded"
+            variant="body2"
+          ></Box>
           <Typography
-            className="!text-[12px] !text-gray-300 !font-bold"
+            className="!text-[17px] !text-gray-900 !font-bold !mt-2"
             variant="body2"
           >
-            NGN
+            Total Sales
           </Typography>
           <Typography
-            className="!text-[19px] !text-gray-900 !font-extrabold !mt-1"
+            className="!text-[12px] !text-gray-500 !font-bold !mt-1"
             variant="body2"
           >
             {reshapePrice(data?.totalSale)}
           </Typography>
+          <Typography
+            className="!text-[12px] !text-gray-300 !mt-5"
+            variant="body2"
+          >
+            {data?.countItem} items sold
+          </Typography>
 
           <Box className="absolute bottom-2 flex items-center">
-            <Growth percentage={lastGrowth.toFixed(2)} />
+            <Growth percentage={data?.lastGrowth.toFixed(2)} />
             <Typography
               className="!text-[11px] !text-gray-500 !ml-2"
               variant="body2"
@@ -121,14 +131,71 @@ export const TotalSaleGrowth = ({ interval = "monthly" }) => {
             </Typography>
           </Box>
         </Box>
-        <Box className="w-1/2">
+        <Box className="w-8/12">
           <ReactApexcharts
             type="line"
             height={120}
             series={series}
-            options={revenueOptions(theme, series, getLabels)}
+            options={revenueOptions(theme, series, labels)}
           />
         </Box>
+      </Box>
+    </Box>
+  );
+};
+
+export const GrowthCard = ({ title, type, interval = "monthly" }) => {
+  const theme = useTheme();
+  const fetch = {
+    product: `/store/product-count?interval=${interval.toLowerCase()}`,
+    sales: `/store/sales-count?interval=${interval.toLowerCase()}`,
+  };
+
+  const { data, isLoading } = useSWR(fetch[type]);
+  const result = data?.data || {};
+
+  const series = Object.values(result);
+  let labels = Object.keys(result);
+  console.log(labels);
+  if (["daily", "monthly"].includes(interval.toLowerCase())) {
+    labels = labels.map((x) => intervals[interval.toLowerCase()][parseInt(x)]);
+  }
+
+  if (isLoading) {
+    return (
+      <Box className="w-1/2 h-60 min-h-[180px] flex justify-center items-center">
+        <CircleLoader />
+      </Box>
+    );
+  }
+
+  return (
+    <Box className="w-1/2 p-3 relative h-full min-h-[180px] flex flex-col border-l">
+      <Typography
+        className="!text-[14px] !text-gray-800 !font-bold"
+        variant="body2"
+      >
+        {title}
+      </Typography>
+      <Typography className="!text-[11px] !text-gray-400 !mt-1" variant="body2">
+        From last {interval.toLowerCase()}
+      </Typography>
+      <Box className=" !flex-grow">
+        <ReactApexcharts
+          type="area"
+          height={80}
+          series={[{ data: series }]}
+          options={salesOptions(theme, series, labels)}
+        />
+      </Box>
+      <Box className="flex justify-between items-center w-full">
+        <Typography
+          className="!text-[15px] !text-gray-900 !font-bold"
+          variant="body2"
+        >
+          {series.reduce((sum, each) => sum + each, 0)}
+        </Typography>
+        <Growth percentage={20} />
       </Box>
     </Box>
   );
@@ -143,7 +210,7 @@ export const reshapePrice = (price) => {
 export const Growth = ({ percentage }) => {
   return (
     <Box
-      className={`flex items-center w-16 ${
+      className={`flex items-center w-auto ${
         parseInt(percentage) < 0
           ? "!text-red-600 bg-red-200"
           : "!text-green-600 bg-green-200"
@@ -160,7 +227,7 @@ export const Growth = ({ percentage }) => {
         variant="body2"
         className="!text-[12px]"
       >
-        {percentage}%
+        {parseInt(percentage).toFixed(1)}%
       </Typography>
     </Box>
   );
@@ -170,34 +237,37 @@ export const GeneatedLeadChart = () => {
   const theme = useTheme();
   const series = [32, 41, 41, 70];
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "stretch",
-        justifyContent: "space-between",
-      }}
-    >
-      <Box className="flex flex-col justify-between pb-2.5">
-        <div>
-          <Typography variant="h6" className="mb-1">
+    <Box className="w-full">
+      <Typography
+        className="!text-[14px] !text-gray-800 !font-bold"
+        variant="body2"
+      >
+        Sales Conversion Rate
+      </Typography>
+      <Typography className="!text-[11px] !text-gray-400 !mt-1" variant="body2">
+        Monthly Report
+      </Typography>
+      <Box className="flex items-center justify-between w-full">
+        <Box className="flex flex-col justify-between">
+          <Typography variant="body2" className="mb-1">
             Generated Leads
           </Typography>
-          <Typography variant="body2">Monthly Report</Typography>
-        </div>
-        <div className="mt-6">
-          <Typography variant="h5" className="!mb-1.5 !text-[15px]">
-            4,350
-          </Typography>
-          <Growth percentage={15.8} />
-        </div>
+
+          <Box className="mt-6">
+            <Typography variant="h5" className="!mb-1.5 !text-[15px]">
+              4,350
+            </Typography>
+            <Growth percentage={15.8} />
+          </Box>
+        </Box>
+        <ReactApexcharts
+          type="donut"
+          width={150}
+          height={170}
+          series={series}
+          options={generatedLeadOptions(theme, series)}
+        />
       </Box>
-      <ReactApexcharts
-        type="donut"
-        width={150}
-        height={170}
-        series={series}
-        options={generatedLeadOptions(theme, series)}
-      />
     </Box>
   );
 };
@@ -215,20 +285,23 @@ const Itemize = ({ title, info }) => (
 
 export const StoreGrowth = ({ interval = "monthly" }) => {
   const theme = useTheme();
-  const series = [{ data: [40, 20, 65, 50] }];
   const { data, isLoading } = useSWR(
     `/store/branch-sales?interval=${interval.toLowerCase()}`
   );
+  const result = data?.data || {};
 
-  const myBranches = data?.data?.branches?.map((x) => {
+  const myBranches = result.branches?.map((x) => {
     const series = Object.values(x.sales).map((x) => x.sale || x);
     let labels = Object.keys(x.sales);
-    if (["daily", "monthly"].includes(data?.interval)) {
-      const extract = data?.interval === "monthly" ? x._id.month : x._id;
-      labels = [...labels, intervals[data?.interval][extract]];
+    console.log(labels);
+    if (["daily", "monthly"].includes(interval.toLowerCase())) {
+      labels = labels.map(
+        (x) => intervals[interval.toLowerCase()][parseInt(x)]
+      );
     }
+    console.log(labels);
     return (
-      <Box className="w-72 p-3 border-r !border-gray-100 h-full flex items-start">
+      <Box className="w-full sm:w-1/2 md:w-80 p-3 md:border-r !border-gray-100 h-full flex items-start">
         <Box className="w-8/12">
           <Typography variant="body2" className="!text-[12px] !font-[600]">
             {x.branch}
@@ -241,9 +314,9 @@ export const StoreGrowth = ({ interval = "monthly" }) => {
           />
         </Box>
         <Box className="flex flex-col justify-evenly w-4/12 h-full">
-          <Itemize title="Items sold" info="200" />
+          <Itemize title="Items sold" info={x.countItems} />
           <Itemize title="Revenue" info={reshapePrice(x.TotalBranchSale)} />
-          <Itemize title="Growth" info={<Growth percentage="20" />} />
+          <Itemize title="Growth" info={<Growth percentage={x.lastGrowth} />} />
         </Box>
       </Box>
     );
@@ -251,31 +324,31 @@ export const StoreGrowth = ({ interval = "monthly" }) => {
 
   if (isLoading) {
     return (
-      <Box className="w-72 h-60 border-r flex justify-center items-center">
+      <Box className="w-full sm:w-1/2 md:w-80 h-60 md:border-r flex justify-center items-center">
         <CircleLoader />
       </Box>
     );
   }
   return myBranches;
 };
+
 export const CategoriesGrowth = ({ interval = "monthly" }) => {
   const theme = useTheme();
-  const series = [{ data: [32, 52, 72, 94, 116, 94, 72] }];
 
   const { data, isLoading } = useSWR(
     `/store/category-sales?interval=${interval.toLowerCase()}`
   );
-
-  const myCategories = data?.data?.map((x) => {
+  const result = data?.data || {};
+  const myCategories = result.cate?.map((x) => {
     const series = Object.values(x.data).map((x) => x.sale || x);
     let labels = Object.keys(x.data);
-    console.log(series);
-    if (["daily", "monthly"].includes(data?.interval)) {
-      const extract = data?.interval === "monthly" ? x._id.month : x._id;
-      labels = [...labels, intervals[data?.interval][extract]];
+    console.log(labels);
+    if (["daily", "monthly"].includes(result.interval)) {
+      labels = labels.map((x) => intervals[result.interval][parseInt(x)]);
+      console.log(labels);
     }
     return (
-      <Box className="w-72 p-3 border-r !border-gray-100 h-full flex items-start">
+      <Box className="w-full sm:w-1/2 md:w-80 p-3 md:border-r !border-gray-100 h-full flex items-start">
         <Box className="w-8/12">
           <Typography variant="body2" className="!text-[12px] !font-[600]">
             {x._id}
@@ -288,9 +361,9 @@ export const CategoriesGrowth = ({ interval = "monthly" }) => {
           />
         </Box>
         <Box className="flex flex-col justify-evenly w-4/12 h-full">
-          <Itemize title="Items sold" info="200" />
+          <Itemize title="Items sold" info={x.count} />
           <Itemize title="Revenue" info={reshapePrice(x.sales)} />
-          <Itemize title="Growth" info={<Growth percentage="20" />} />
+          <Itemize title="Growth" info={<Growth percentage={x.lastGrowth} />} />
         </Box>
       </Box>
     );
@@ -300,7 +373,7 @@ export const CategoriesGrowth = ({ interval = "monthly" }) => {
 
   if (isLoading) {
     return (
-      <Box className="w-72 h-60 border-r flex justify-center items-center">
+      <Box className="w-full sm:w-1/2 md:w-80 h-60 border-r flex justify-center items-center">
         <CircleLoader />
       </Box>
     );
