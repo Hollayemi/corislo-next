@@ -99,9 +99,11 @@ export const TotalSaleGrowth = ({ interval = "monthly" }) => {
       <Box className="flex items-start p-3">
         <Box className="w-1/2">
           <Box
-            className="!text-[12px] w-10 h-10 bg-green-200 rounded"
+            className="!text-[12px] w-10 h-10 bg-green-200 rounded flex justify-center items-center"
             variant="body2"
-          ></Box>
+          >
+          <Icon icon="tabler:wallet" className="!text-[17px] !text-green-600" />
+          </Box>
           <Typography
             className="!text-[17px] !text-gray-900 !font-bold !mt-2"
             variant="body2"
