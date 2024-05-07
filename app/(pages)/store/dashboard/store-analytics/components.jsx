@@ -102,7 +102,7 @@ export const TotalSaleGrowth = ({ interval = "monthly" }) => {
             className="!text-[12px] w-10 h-10 bg-green-200 rounded flex justify-center items-center"
             variant="body2"
           >
-          <Icon icon="tabler:wallet" className="!text-[17px] !text-green-600" />
+          <Icon icon="tabler:wallet" className="!text-[22px] !text-green-600" />
           </Box>
           <Typography
             className="!text-[17px] !text-gray-900 !font-bold !mt-2"

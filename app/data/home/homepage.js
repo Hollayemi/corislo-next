@@ -119,14 +119,14 @@ export const popularAdsData = [
     store: "Tianzhu Store.",
     image: "/images/misc/popular-ads1.png",
     title: "New Product Arrival",
-    discount: 50,
+    brief: "With various options to your taste",
     of: 300,
   },
   {
     store: "Corisio Store",
     image: "/images/misc/popular-ads2.png",
     title: "Huge Discount On Products",
-    discount: 80,
+    brief: "Get up to 80% discount",
     of: 200,
   },
 ];

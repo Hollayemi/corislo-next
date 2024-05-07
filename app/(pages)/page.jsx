@@ -297,7 +297,7 @@ const HomePage = ({ searchParams }) => {
                       key={i}
                       image={ad.image}
                       title={ad.title}
-                      discount={ad.discount}
+                      brief={ad.brief}
                     />
                   ))}
                 </ReactSlickSlider>

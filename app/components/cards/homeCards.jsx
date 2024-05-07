@@ -1,7 +1,8 @@
 import { Box, Button, Grid, Rating, Typography } from "@mui/material";
 import Image from "next/image";
 import IconifyIcon from "../icon";
-import { Star } from "@mui/icons-material";
+import { useRouter } from "next/navigation"
+import { mySubstring } from "@/app/utils/format";
 
 export const SectionTitle = ({ black, blue }) => {
   return (
@@ -140,7 +141,8 @@ export const FlashSale = () => {
   );
 };
 
-export const PopularAds = ({ store, title, discount, image }) => {
+export const PopularAds = ({ store, title, brief, image, url }) => {
+  const router = useRouter()
   return (
     <Box className="!w-[350px] !h-48 flex !bg-yellow-50 !rounded-xl p-5">
       <Box className="w-1/2 pr-6 relative">
@@ -150,14 +152,18 @@ export const PopularAds = ({ store, title, discount, image }) => {
         <Typography variant="body2" className="!text-md !mt-3 !font-extrabold">
           {title}
         </Typography>
-        <Typography variant="caption" className="!text-red-500 !text-[10px]">
-          Up to {discount}% Discount.
+        <Typography
+          variant="body2"
+          className="!text-red-500 !mt-2 !text-[10px]"
+        >
+          {mySubstring(brief, 50)}
         </Typography>
 
         <Button
           variant="outlined"
           endIcon={<IconifyIcon icon="tabler:chevron-right" />}
           className="!border-none !text-[10px] !absolute bottom-0 left-0"
+          onClick={() => router.push(url)}
         >
           Discover Now
         </Button>

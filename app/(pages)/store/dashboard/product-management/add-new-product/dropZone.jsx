@@ -8,7 +8,7 @@ Button,
 ListItem,
 Typography,
 IconButton} from '@mui/material'
-import { styled, useTheme } from '@mui/material/styles'
+import { styled, useTheme } from "@mui/material/styles";
 
 // ** Icon Imports
 import Icon from '@/app/components/icon'
@@ -27,7 +27,7 @@ const FileUploader = () => {
   const [files, setFiles] = useState([])
 
   // ** Hooks
-  const theme = useTheme()
+  const theme = useTheme();
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: acceptedFiles => {

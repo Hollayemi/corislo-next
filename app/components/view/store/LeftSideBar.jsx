@@ -362,7 +362,10 @@ const StoreLeftSideBar = React.memo(
                 <InnerBar path={path} InnerList={InnerList} />
               </Box>
             )}
-            <Box className="!w-full h-full md:px-3 m-1 rounded-md mb-14" bgcolor="custom.bodyGray">
+            <Box
+              className="!w-full h-full  md:pl-3 md:pr-6 m-1 rounded-md mb-14"
+              bgcolor="custom.bodyGray"
+            >
               {children}
               <Box
                 className="fixed md:hidden bottom-0 left-0 w-full"
