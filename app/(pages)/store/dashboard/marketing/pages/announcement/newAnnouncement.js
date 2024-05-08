@@ -66,8 +66,8 @@ const NewAnnouncement = ({ formData, setFormData, formHandler }) => {
   };
 
   return (
-    <Grid container spacing={5}>
-      <Grid item xs={12} sm={6}>
+    <Grid container spacing={0}>
+      <Grid item xs={12} sm={6} className="md:!px-3">
         <TextField
           fullWidth
           label="Announcement Title"
@@ -121,7 +121,7 @@ const NewAnnouncement = ({ formData, setFormData, formHandler }) => {
           >
             Notify Users
           </FormLabel>
-          <FormGroup aria-label="position" row>
+          <FormGroup aria-label="position" row className="!mb-4">
             <FormControlLabel
               value="email"
               label="Email"
@@ -146,7 +146,7 @@ const NewAnnouncement = ({ formData, setFormData, formHandler }) => {
           </FormGroup>
         </FormControl>
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={6} className="md:!px-3">
         <FormControl fullWidth>
           <InputLabel id="select-deal-status">Campaign Status</InputLabel>
           <Select
@@ -162,14 +162,13 @@ const NewAnnouncement = ({ formData, setFormData, formHandler }) => {
             {/* <MenuItem value="abandoned">Abandoned</MenuItem> */}
           </Select>
         </FormControl>
-        <Box className="relative w-full mt-4">
+        <Box className="relative w-full flex justify-center mt-4">
           <ProfilePictureUploader
             setFiles={handleSetFiles}
             setLocalFiles={setLocalFiles}
             component={
-              <Box className="relative w-full h-40 flex justify-center">
-                <Box className="relative w-full h-40 md:h-64 flex justify-center">
-                  <Box className="flex flex-col items-center border-2 border-dashed justify-center w-60 h-60 rounded-md absolute top-0 left-0 !text-white">
+              <Box className="relative w-60 h-60 flex justify-center">
+                  <Box className="flex flex-col items-center border-2 border-dashed justify-center w-full h-full rounded-md absolute top-0 left-0 !text-white">
                     {localFile && (
                       <img
                         src={URL?.createObjectURL(localFile[0])}
@@ -193,7 +192,7 @@ const NewAnnouncement = ({ formData, setFormData, formHandler }) => {
                     </Typography>
                   </Box>
                 </Box>
-              </Box>
+             
             }
           />
         </Box>

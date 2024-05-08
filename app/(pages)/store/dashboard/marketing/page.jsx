@@ -5,6 +5,7 @@ import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 import { marketingBreadCrumb, CampaignTab } from "./components";
 import DiscountWizard from "./pages/discount";
 import AnnouncementWizard from "./pages/announcement";
+import Banner from "./pages/banner";
 import DatePickerWrapper from "@/app/styles/react-datepicker";
 
 const MarketingPage = ({ params }) => {
@@ -19,6 +20,11 @@ const MarketingPage = ({ params }) => {
     anouncement: (
       <DatePickerWrapper>
         <AnnouncementWizard />
+      </DatePickerWrapper>
+    ),
+    banner: (
+      <DatePickerWrapper>
+        <Banner />
       </DatePickerWrapper>
     ),
   };
@@ -61,7 +67,7 @@ const MarketingPage = ({ params }) => {
             setScreen={setScreen}
           />
         </Box>
-        <Box className="w-full p-6 bg-white rounded-xl">{pages[screen]}</Box>
+        <Box className="w-full md:p-6 bg-white rounded-xl">{pages[screen]}</Box>
       </Box>
     </StoreLeftSideBar>
   );

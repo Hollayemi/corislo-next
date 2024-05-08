@@ -5,10 +5,15 @@ import { useState, forwardRef } from "react";
 import { Box } from "@mui/material";
 import { PopularAds } from "@/app/components/cards/homeCards";
 import { useStoreData } from "@/app/hooks/useData";
+import useSWR from "swr";
 
 const Announcements = ({ formData, setFormData, formHandler }) => {
+  const { data, isLoading } = useSWR("/branch/announcement");
   const { storeInfo } = useStoreData();
-  const data = [
+
+  const ads = data?.data || [];
+
+  const staticData = [
     {
       title: "New Product Arrival",
       brief: "Get up to 80% discount",
@@ -40,7 +45,7 @@ const Announcements = ({ formData, setFormData, formHandler }) => {
 
   return (
     <Box className="flex flex-wrap">
-      {data.map((ad, i) => (
+      {ads.map((ad, i) => (
         <Box className="m-1">
           <PopularAds
             store={storeInfo?.profile?.store}
