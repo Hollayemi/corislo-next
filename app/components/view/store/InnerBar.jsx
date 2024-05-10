@@ -105,7 +105,6 @@ const OnlyContents = ({ each, path }) => {
 };
 
 const InnerBar = ({ path, InnerList }) => {
-  console.log(InnerList)
   return (
     <StyledBox className="overflow-y-scroll">
       <List className="overflow-hidden shrink-0">

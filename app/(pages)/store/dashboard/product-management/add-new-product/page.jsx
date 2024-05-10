@@ -62,6 +62,8 @@ const AddNewProduct = ({ params }) => {
     delivery,
   });
 
+  console.log(collections);
+
   const fromCollection = collections.filter(
     (x) => x.collectionId === formData.collectionId
   )[0];
@@ -92,6 +94,7 @@ const AddNewProduct = ({ params }) => {
     });
     setspecId(null);
   };
+
   const handleProductGroupSelection = (event) => {
     const { _id, spec } = event.target.value;
     setFormData({
