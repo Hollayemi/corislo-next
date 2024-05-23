@@ -19,6 +19,32 @@ const isToday = (date) => {
   );
 };
 
+export const intervals = {
+  daily: {
+    1: "Mon",
+    2: "Tue",
+    3: "Wed",
+    4: "Thur",
+    5: "Fri",
+    6: "Sat",
+    7: "Sun",
+  },
+  monthly: {
+    1: "Jan",
+    2: "Feb",
+    3: "Mar",
+    4: "Apr",
+    5: "May",
+    6: "Jun",
+    7: "Jul",
+    8: "Aug",
+    9: "Sep",
+    10: "Oct",
+    11: "Nov",
+    12: "Dec",
+  },
+};
+
 export const timeSince = (date) => {
   const currentDate = new Date();
   const timeElapsedInSeconds = Math.floor((currentDate - date) / 1000);
@@ -102,6 +128,37 @@ export const formatDateToMonthShort = (
   return new Intl.DateTimeFormat("en-US", formatting).format(new Date(value));
 };
 
+export const generateDateRange = (startDate, endDate, interval) => {
+  let dates = [];
+  let currentDate = new Date(startDate);
+
+  while (currentDate < endDate) {
+    if (interval === "Daily") {
+      dates.push(new Date(currentDate).getDate());
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    if (interval === "Weekly") {
+      dates.push(
+        `${intervals.monthly[new Date(currentDate).getMonth() + 1]} ${new Date(
+          currentDate
+        ).getDate()}`
+      );
+      currentDate.setDate(currentDate.getDate() + 7);
+    }
+
+    if (interval === "Monthly") {
+      dates.push(intervals.monthly[new Date(currentDate).getMonth() + 1]);
+      currentDate.setMonth(currentDate.getMonth() + 1);
+    }
+  }
+  if (interval === "Monthly") {
+    dates.push(intervals.monthly[new Date(currentDate).getMonth() + 1]);
+    currentDate.setMonth(currentDate.getMonth() + 1);
+  }
+  console.log(dates);
+  return dates;
+};
+
 // ? The following functions are taken from https://codesandbox.io/s/ovvwzkzry9?file=/utils.js for formatting credit card details
 // Get only numbers from the input value
 const clearNumber = (value = "") => {
@@ -124,7 +181,6 @@ export const formatCreditCardNumber = (value, Payment) => {
     return value;
   }
   const issuer = Payment.fns.cardType(value);
-  console.log(issuer);
   const clearValue = clearNumber(value);
   let nextValue;
   switch (issuer) {
@@ -176,9 +232,13 @@ export const formatCVC = (value, cardNumber, Payment) => {
   return clearValue.slice(0, maxLength);
 };
 
-export const calculateDateDiff = (timeSpan, initialDate, operator = "-") => {
+export const calculateDateDiff = (
+  timeSpan,
+  initialDate,
+  operator = "-",
+  noFormat
+) => {
   const today = new Date(initialDate);
-  console.log(today);
   const dateSplit = timeSpan.split("_");
   const howMany = dateSplit[0];
   const prediod = dateSplit[1];
@@ -193,7 +253,7 @@ export const calculateDateDiff = (timeSpan, initialDate, operator = "-") => {
     );
     daysAgo.setHours(0, 0, 0, 0); // Set time to midnight for accurate comparison
 
-    return formatDate(daysAgo);
+    return noFormat ? daysAgo : formatDate(daysAgo);
   }
 
   if (prediod === "week" || prediod === "weeks") {
@@ -248,7 +308,6 @@ export const formatSegmentation = (orders, totalAmount, lastSeen) => {
   let categ = "Recent Buyer";
   let color = "orange";
   const timeDifference = Math.abs(new Date(lastSeen) - new Date());
-  console.log(timeDifference);
   const millisecondsPerWeek = 7 * 24 * 60 * 60 * 1000;
   const weeksDifference = Math.floor(timeDifference / millisecondsPerWeek);
 

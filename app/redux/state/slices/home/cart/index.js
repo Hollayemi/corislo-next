@@ -100,6 +100,7 @@ export const saveProduct = (payload, dispatch) => {
       toaster({ ...res });
       if (res.type === "success") {
         mutate("/user/saved-items/group");
+        mutate("/user/save-item/prods");
       }
     })
     .catch((e) => {});

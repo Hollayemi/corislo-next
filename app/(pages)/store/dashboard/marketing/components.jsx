@@ -1,3 +1,4 @@
+"use client";
 import { useRouter } from "next/navigation";
 import { DashboardCrumb } from "../components";
 import Icon from "@/app/components/icon";
@@ -64,7 +65,8 @@ export const CampaignTab = ({ title, caption, screen, setScreen }) => {
   );
 };
 
-export const LineChartStatistic = (props) => {
+export const LineChartStatistic = ({ label, discounts, flashsales }) => {
+  console.log(discounts, flashsales);
   // ** Hook
   const theme = useTheme();
 
@@ -87,26 +89,27 @@ export const LineChartStatistic = (props) => {
     maintainAspectRatio: false,
     scales: {
       x: {
-        ticks: { display: true }, // remove x-axis labels
+        ticks: { display: true, color: "rgba(0, 0, 0, 0.39)" }, // remove x-axis labels
         grid: {
           display: true,
-          color: "rgba(0, 0, 0, 0.2)",
+          color: "rgba(0, 0, 0, 0.09)",
           borderDash: [9, 4],
-          margin: {
-            bottom: 50
-          }
         },
       },
       y: {
         min: 0,
-        max: 400,
         ticks: {
           stepSize: 100,
-          display: true, // remove y-axis labels
+          display: false, // remove y-axis labels
         },
         grid: { display: false }, // remove y-axis grid
+        scaleLabel: {
+          display: true,
+          labelString: "Value",
+        },
       },
     },
+
     plugins: {
       legend: {
         align: "end",
@@ -118,11 +121,147 @@ export const LineChartStatistic = (props) => {
           usePointStyle: true,
         },
       },
+      tooltip: {
+        // callbacks: {
+        //   label: function (tooltipItem) {
+        //     const item = discounts[tooltipItem.dataIndex]?.info[0] || {};
+        //     return `
+        //       Title: ${item.title}
+        //       Code: ${item.code}
+        //       Original Amount: ${item.originalAmount}
+        //       Discount Amount: ${item.discountAmount}
+        //       Discount: ${item.discount}%
+        //       Discounted Price: ${item.discountedPrice ?? "N/A"}
+        //       Payment Date: ${new Date(item.paymentDate).toLocaleString()}`;
+        //   },
+        // },
+
+        enabled: false, // Disable the default tooltip
+        external: function (context) {
+          // Get the tooltip model
+          const tooltipModel = context.tooltip;
+          let tooltipEl = document.getElementById("chartjs-tooltip");
+
+          // Create element on first render
+          if (!tooltipEl) {
+            tooltipEl = document.createElement("div");
+            tooltipEl.id = "chartjs-tooltip";
+            tooltipEl.style.position = "absolute";
+            tooltipEl.style.borderRadius = "5px";
+            tooltipEl.style.pointerEvents = "none";
+            tooltipEl.style.width = "auto";
+            tooltipEl.style.height = "auto";
+            document.body.appendChild(tooltipEl);
+          }
+
+          // Hide if no tooltip
+          if (tooltipModel.opacity === 0) {
+            tooltipEl.style.opacity = 0;
+            return;
+          }
+
+          // Set caret position
+          tooltipEl.classList.remove("above", "below", "no-transform");
+          if (tooltipModel.yAlign) {
+            tooltipEl.classList.add(tooltipModel.yAlign);
+          } else {
+            tooltipEl.classList.add("no-transform");
+          }
+
+          // Set text
+          if (tooltipModel.body) {
+            const titleLines = tooltipModel.title || [];
+            const bodyLines = tooltipModel.dataPoints.map((bodyItem) => {
+              const datasetIndex = bodyItem.datasetIndex;
+              const dataIndex = bodyItem.dataIndex;
+              const datasetLabel = bodyItem.dataset.label;
+              const dataset = context.chart.data.datasets[datasetIndex];
+              const items =
+                datasetIndex === 0
+                  ? discounts[dataIndex]?.info || []
+                  : flashsales[dataIndex]?.info || [];
+
+              const innerHtml = `
+            <div class="tooltipContainter">
+            
+            <div class='tooltipHeader'>
+             <strong>${datasetLabel}</strong>
+             <strong>Discounted Amount</strong>
+            </div>
+
+            ${items.map(
+              (item) =>
+                `
+                <div class='tooltipItems'>
+                  <h5>${item.title} (${item.discount}%)</h5>
+                  <disable>${reshapePrice(item.originalAmount)} ${reshapePrice(
+                  item.originalAmount - item.discountAmount
+                )}</disable>
+                </div> 
+              `
+            )}
+
+            <div class='tooltipItems' style='margin-top:20px;'>
+                  <h5></h5>
+                  <disable>${reshapePrice(
+                    items.reduce(
+                      (sum, item) =>
+                        item.originalAmount - item.discountAmount + sum,
+                      0
+                    )
+                  )}</disable>
+                </div> 
+            </div>
+                </div>`;
+
+              return innerHtml;
+            });
+
+            tooltipEl.innerHTML = `
+            <div>
+              
+              ${bodyLines.join("")}
+            </div>
+          `;
+          }
+
+          // Display, position, and set styles for font
+          const position = context.chart.canvas.getBoundingClientRect();
+          const tooltipWidth = tooltipEl.offsetWidth;
+          const tooltipHeight = tooltipEl.offsetHeight;
+
+          tooltipEl.style.opacity = 1;
+          tooltipEl.style.left = `${
+            position.left +
+            Window.pageXOffset +
+            tooltipModel.caretX -
+            tooltipWidth / 2
+          }px`;
+          tooltipEl.style.top = `${
+            position.top +
+            Window.pageYOffset +
+            tooltipModel.caretY -
+            tooltipHeight / 2
+          }px`;
+        },
+
+        backgroundColor: "rgba(0, 0, 0)",
+        titleFont: { size: 14, weight: "bold" },
+        bodyFont: { size: 12 },
+        footerFont: { size: 10 },
+        borderColor: "rgba(255, 255, 255, 0.3)",
+        borderWidth: 1,
+        displayColors: false,
+      },
     },
   };
 
   const data = {
-    labels: Array(30).fill().map((_, x) => x + 1),
+    labels:
+      label ||
+      Array(30)
+        .fill()
+        .map((_, x) => x + 1),
     datasets: [
       {
         fill: true,
@@ -133,15 +272,15 @@ export const LineChartStatistic = (props) => {
         pointStyle: "circle",
         borderColor: primary,
         backgroundColor: "rgba(128, 128, 128, 0.06)",
-        pointHoverBorderWidth: 8,
+        pointHoverBorderWidth: 0,
         borderWidth: 2,
         pointHoverBorderColor: primary,
         pointBorderColor: "transparent",
         pointHoverBackgroundColor: primary,
-        data: [
+        data: discounts?.map((item) => item?.value || 0) || [
           80, 150, 180, 270, 210, 160, 160, 202, 265, 210, 270, 255, 290, 360,
           80, 150, 180, 270, 210, 160, 160, 202, 265, 210, 270, 255, 290, 360,
-          375,
+          375, 600,
         ],
       },
       {
@@ -158,19 +297,24 @@ export const LineChartStatistic = (props) => {
         pointHoverBorderColor: warning,
         pointBorderColor: "transparent",
         pointHoverBackgroundColor: warning,
-        data: [
-          80, 125, 105, 130, 215, 195, 140, 160, 230, 300, 220, 170, 210, 200,
-          80, 125, 105, 130, 215, 195, 140, 160, 230, 300, 220, 170, 210, 200,
-          280, 54
+        data: flashsales?.map((item) => item.value || 0) || [
+          800, 1250, 1050, 1300, 2150, 1195, 1140, 1160, 2300, 1300, 1220, 2170,
+          1210, 1200, 800, 1250, 1050, 1300, 2150, 1195, 1140, 1160, 2300, 1300,
+          1220, 2170, 1210, 1200, 1220, 2170, 1210, 1200,
         ],
-      }
-      
+      },
     ],
   };
 
   return (
     <Box className="w-full !shadow-none">
-      <Line data={data} width={"100%"} height={300} options={options} className="!border-b-6" />
+      <Line
+        data={data}
+        width={"100%"}
+        height={300}
+        options={options}
+        className="!border-b-6"
+      />
     </Box>
   );
 };

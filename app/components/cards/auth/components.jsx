@@ -1,5 +1,6 @@
+"use client"
 import IconifyIcon from "../../icon";
-
+import { useState } from "react"
 const { Box, Typography } = require("@mui/material");
 
 const inputType = {};
@@ -30,7 +31,9 @@ const SelectInput = ({ onChange, id, values }) => {
         className="outline-none border-none selectDefault w-full h-6 !text-gray-400 !text-[14px] pr-5 !bg-white autofill:!px-4"
       >
         {values?.map((res, i) => (
-          <option value={res.value} key={i} className="h-10">{res.display}</option>
+          <option value={res.value} key={i} className="h-10">
+            {res.display}
+          </option>
         ))}
       </select>
     </Box>
@@ -44,38 +47,51 @@ export const CustomInput = ({
   id,
   error,
   onChange,
-}) => (
-  <Box>
-    <Box className="px-4 relative py-px pb-1.5 flex flex-col w-full bg-white rounded-md border-2 border-white focus-within:border-blue-800 overflow-hidden">
-      <label htmlFor={id} className="!text-[11px]">
-        {title}
-      </label>
-      {inputProps.type !== "select" ? (
-        <TextInput
-          multiline={multiline}
-          id={id}
-          inputProps={inputProps}
-          onChange={onChange}
-        />
-      ) : (
-        <SelectInput onChange={onChange} id={id} values={inputProps.values} />
-      )}
-      {!hideCheck && (
-        <Box
-          className="w-4 h-4 rounded-full flex flex-shrink-0 items-center justify-center absolute right-0 mr-4 bottom-0 mb-2"
-          bgcolor={!error ? "custom.pri" : "red"}
-        >
-          <IconifyIcon
-            icon={!error ? "tabler:check" : "tabler:x"}
-            className="!text-[12px] !text-white"
+}) => {
+  const [newType, changeType] = useState(inputProps.type);
+  return (
+    <Box>
+      <Box className="px-4 relative py-px pb-1.5 flex flex-col w-full bg-white rounded-md border-2 border-white focus-within:border-blue-800 overflow-hidden">
+        <label htmlFor={id} className="!text-[11px]">
+          {title}
+        </label>
+        {inputProps.type !== "select" ? (
+          <TextInput
+            multiline={multiline}
+            type={newType}
+            id={id}
+            inputProps={inputProps}
+            onChange={onChange}
           />
-        </Box>
+        ) : (
+          <SelectInput onChange={onChange} id={id} values={inputProps.values} />
+        )}
+        {!hideCheck && (
+          <Box
+            className="w-4 h-4 rounded-full flex flex-shrink-0 items-center justify-center absolute right-0 mr-4 bottom-0 mb-2"
+            bgcolor={!error ? "custom.pri" : "red"}
+          >
+            <IconifyIcon
+              icon={!error ? "tabler:check" : "tabler:x"}
+              className="!text-[12px] !text-white"
+            />
+          </Box>
+        )}
+        {inputProps.type === "password" && (
+          <IconifyIcon
+            className="!absolute right-0 mr-4 bottom-0 mb-2 !z-50 !text-gray-400 !bg-red-500 !h-12 !w-12 m-8"
+            onClick={() =>
+              changeType(newType === "password" ? "text" : "password")
+            }
+            icon={newType === "password" ? "tabler:eye" : "tabler:eye-off"}
+          />
+        )}
+      </Box>
+      {error && (
+        <Typography className="!text-red-500 !text-[11px] !float-right !px-2 !pt-0.5">
+          {error}
+        </Typography>
       )}
     </Box>
-    {error && (
-      <Typography className="!text-red-500 !text-[11px] !float-right !px-2 !pt-0.5">
-        {error}
-      </Typography>
-    )}
-  </Box>
-);
+  );
+};

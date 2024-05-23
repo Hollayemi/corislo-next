@@ -6,8 +6,7 @@ import HomeFooter from "./footer";
 import SearchPage from "@/app/(pages)/custom/searchPage";
 import { useUserData } from "@/app/hooks/useData";
 import UserOverlay from "./Components/userOverlay";
-import MapOverlay from "./Map"
-
+import MapOverlay from "./Map";
 
 const HomeWrapper = ({
   children,
@@ -19,13 +18,14 @@ const HomeWrapper = ({
   const [search, setSearch] = useState("");
   const [pinSearch, setPinSearch] = useState(false);
   const { overLay, popMap } = useUserData();
+
+
   const page = {
     0: children,
     1: <SearchPage search={search} setSearch={setSearch} />,
   };
   let showing = 0;
   if (search || pinSearch) showing = 1;
-
 
   return (
     <Box className="flex justify-center bg-black">

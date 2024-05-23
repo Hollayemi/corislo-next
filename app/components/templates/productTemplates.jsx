@@ -168,6 +168,7 @@ export const ProductOnCategory = ({
 };
 
 export const ProductOnShowcase = ({
+  others,
   image,
   store,
   branch,
@@ -179,7 +180,16 @@ export const ProductOnShowcase = ({
   const router = useRouter();
   const reshapedProdName = prodName.split(" ").join("+").toLowerCase();
   return (
-    <Box className="w-4/12 min-w-[100px] max-w-[140px] md:max-w-[170px] md:w-44 h-48 md:!h-64 md:mx-2 my-2.5 ">
+    <Box className="w-4/12 min-w-[100px] relative max-w-[140px] md:max-w-[170px] md:w-44 h-48 md:!h-64 md:mx-2 my-2.5 ">
+      {others.discount && <Box className="w-9 h-4 bg-red-600 rounded-full absolute right-2 top-2 shadow flex items-center justify-center">
+      <Typography
+              variant="body2"
+              className="!text-white !text-[11px] cursor-pointer"
+              title={others.discountTitle}
+            >
+        {others.discount}%
+        </Typography>
+        </Box>}
       <Box
         onClick={() => router.push(`/biz/${store}/${reshapedProdName}`)}
         className="!px-0.5"

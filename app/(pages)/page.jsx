@@ -332,6 +332,7 @@ const HomePage = ({ searchParams }) => {
                     star={prod.star}
                     store={prod.store}
                     branch={prod.branch}
+                    others={{...prod}}
                   />
                 ))}
               </Box>

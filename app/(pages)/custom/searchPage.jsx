@@ -5,46 +5,56 @@ import { moreProducts } from "@/app/data/home/homepage";
 import { Box, Button, Typography } from "@mui/material";
 import Image from "next/image";
 import React, { useState } from "react";
+import useSWR from "swr";
 
 const SearchPage = ({ search, setSearch }) => {
-    const [filterBy, editFilter] = useState({ 
-        category: "",
-        price: "",
-        review: "",
-        location: "",
-        size: "",
-        discount: "",
-        shipping_method: "",
-     })
+  const {
+    data: prods,
+    isLoading,
+    error,
+  } = useSWR(`/products?limit=50&search=${search}`);
+  const products = prods ? prods.data : [];
 
-     console.log(filterBy);
+  const [filterBy, editFilter] = useState({
+    category: "",
+    price: "",
+    review: "",
+    location: "",
+    size: "",
+    discount: "",
+    shipping_method: "",
+  });
 
-     const FilterOptions = ({ name, options }) => {
-        const filterName = name.replace(" ", "_").toLowerCase()
-       const handleFilterChange = (option) => {
-         editFilter((prev) => {
-           return { ...prev, [filterName]: option };
-         });
-       };
-       return (
-         <OptionsMenu
-           icon={
-             <Box className="!text-xs !rounded-full !text-black bg-white px-4 m-1 py-1 flex items-center">
-               <Typography variant="caption" className="">{name}</Typography>
-               <IconifyIcon icon="tabler:chevron-down" className="ml-5" />
-               {/* <IconifyIcon icon="tabler:chevron-up" className="ml-5" /> */}
-             </Box>
-           }
-           options={options}
-           setOption={handleFilterChange}
-           iconButtonProps={{
-             size: "small",
-             sx: { color: "text.disabled", cursor: "pointer" },
-             disableRipple: true,
-           }}
-         />
-       );
-     };
+  console.log(filterBy);
+
+  const FilterOptions = ({ name, options }) => {
+    const filterName = name.replace(" ", "_").toLowerCase();
+    const handleFilterChange = (option) => {
+      editFilter((prev) => {
+        return { ...prev, [filterName]: option };
+      });
+    };
+    return (
+      <OptionsMenu
+        icon={
+          <Box className="!text-xs !rounded-full !text-black bg-white px-4 m-1 py-1 flex items-center">
+            <Typography variant="caption" className="">
+              {name}
+            </Typography>
+            <IconifyIcon icon="tabler:chevron-down" className="ml-5" />
+            {/* <IconifyIcon icon="tabler:chevron-up" className="ml-5" /> */}
+          </Box>
+        }
+        options={options}
+        setOption={handleFilterChange}
+        iconButtonProps={{
+          size: "small",
+          sx: { color: "text.disabled", cursor: "pointer" },
+          disableRipple: true,
+        }}
+      />
+    );
+  };
 
   return (
     <Box>
@@ -91,14 +101,17 @@ const SearchPage = ({ search, setSearch }) => {
           name="Shipping Method"
           options={["Men", "women", "children"]}
         />
-        <Typography variant="body2" className="!text-black !text-[12px] !ml-4 !m-2 !h-6">
+        <Typography
+          variant="body2"
+          className="!text-black !text-[12px] !ml-4 !m-2 !h-6"
+        >
           Reset filter
         </Typography>
       </Box>
 
       <Box className="px-2 md:px-8">
         <Box className="!mt-6 flex flex-wrap justify-center">
-          {moreProducts.map((prod, i) => (
+          {products.map((prod, i) => (
             <ProductOnShowcase
               key={i}
               prodName={prod.prodName}
@@ -106,26 +119,8 @@ const SearchPage = ({ search, setSearch }) => {
               image={`/images/more/${i + 1}.png`}
               star={prod.star}
               store={prod.store}
-            />
-          ))}
-          {moreProducts.map((prod, i) => (
-            <ProductOnShowcase
-              key={i}
-              prodName={prod.prodName}
-              prodPrice={prod.prodPrice}
-              image={`/images/more/${i + 1}.png`}
-              star={prod.star}
-              store={prod.store}
-            />
-          ))}
-          {moreProducts.map((prod, i) => (
-            <ProductOnShowcase
-              key={i}
-              prodName={prod.prodName}
-              prodPrice={prod.prodPrice}
-              image={`/images/more/${i + 1}.png`}
-              star={prod.star}
-              store={prod.store}
+              branch={prod.branch}
+              others={{ ...prod }}
             />
           ))}
         </Box>
