@@ -1,5 +1,6 @@
+import OptionsMenu from "@/app/components/option-menu";
 import { formatDate } from "@/app/utils/format";
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, Button } from "@mui/material";
 // {
 //     "_id": "663a1b848c2182f9d585b179",
 //     "title": "Black Friday Sale",
@@ -32,7 +33,7 @@ const statusObj = {
   scheduled: "gray",
   expired: "red",
 };
-export const columns = [
+export const columns = (setStatus) => [
   {
     flex: 0.25,
     minWidth: 150,
@@ -81,7 +82,10 @@ export const columns = [
     headerName: "Status",
     renderCell: (params) => (
       <Box className="flex items-center">
-        <Box className="w-2 h-2 rounded-full mr-2" bgcolor={statusObj[params.row.status?.toLowerCase()]}></Box>
+        <Box
+          className="w-2 h-2 rounded-full mr-2"
+          bgcolor={statusObj[params.row.status?.toLowerCase()]}
+        ></Box>
         <Typography variant="body2" sx={{ color: "text.primary" }}>
           {params.row.status}
         </Typography>
@@ -97,6 +101,31 @@ export const columns = [
       <Typography variant="body2" sx={{ color: "text.primary" }}>
         {formatDate(params.row.startDate)}
       </Typography>
+    ),
+  },
+  {
+    flex: 0.15,
+    minWidth: 130,
+    field: "Action",
+    headerName: "Action",
+    renderCell: (params) => (
+      <OptionsMenu
+        icon={
+          <Button
+            variant="text"
+            className="!text-[13px]  !text-gray-800 !font-bold !bg-white !ml-2"
+            disableRipple
+          >
+            Select
+          </Button>
+        }
+        options={[`Activate`, `Deativate`, `Delete`]}
+        setOption={(status) => setStatus(`${status}-${params.row.id}`)}
+        iconButtonProps={{
+          size: "small",
+          sx: { color: "text.disabled", cursor: "pointer" },
+        }}
+      />
     ),
   },
 ];

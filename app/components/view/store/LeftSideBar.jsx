@@ -21,6 +21,11 @@ import {
   Button,
   Typography,
   Breadcrumbs,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Slide,
 } from "@mui/material";
 
 import InnerBar from "./InnerBar";
@@ -124,10 +129,17 @@ const StoreLeftSideBar = React.memo(
     hidebreadCrumb,
     breadCrumbRIghtChildren,
     crumb,
+    dialogInfo,
+    updateDialogInfo,
   }) => {
     const { staffInfo, overLay, showOverlay } = useStoreData();
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
+
+    // Dialog transition
+    const Transition = React.forwardRef(function Transition(props, ref) {
+      return <Slide direction="up" ref={ref} {...props} />;
+    });
 
     const onSideBar = !path?.sidebar ? "" : `/${path.sidebar}`;
     const handleDrawerOpen = () => {
@@ -340,7 +352,7 @@ const StoreLeftSideBar = React.memo(
         >
           {/* <Box className=""> */}
 
-          <Box className="flex flex-col w-full pt-20 md:px-7 px-3">
+          <Box className="flex flex-col w-full pt-16 md:pt-20 md:px-7 px-3">
             {onSideBar === "" && (
               <Typography
                 color="primary"
@@ -351,7 +363,7 @@ const StoreLeftSideBar = React.memo(
             )}
           </Box>
           {!hidebreadCrumb && (
-            <Box className="flex items-center sticky top-20 justify-between mb-6 px-2 md:px-7">
+            <Box className="flex items-center sticky top-16 md:top-20 justify-between mb-2 px-2 md:px-11">
               <MyBreadcrumbs />
               {breadCrumbRIghtChildren}
             </Box>
@@ -380,6 +392,43 @@ const StoreLeftSideBar = React.memo(
             </Box>
           </Box>
         </Box>
+        {dialogInfo && (
+          <Dialog
+            open={dialogInfo.open}
+            keepMounted
+            onClose={() =>
+              updateDialogInfo((prev) => {
+                return { ...prev, open: false };
+              })
+            }
+            TransitionComponent={Transition}
+            aria-labelledby="alert-dialog-slide-title"
+            aria-describedby="alert-dialog-slide-description"
+          >
+            <DialogTitle id="alert-dialog-slide-title" className="!text-[16px]">
+              {dialogInfo.title}
+            </DialogTitle>
+            <DialogContent>{dialogInfo.alert}</DialogContent>
+            <DialogActions className="dialog-actions-dense">
+              <Button
+                onClick={() =>
+                  updateDialogInfo((prev) => {
+                    return { ...prev, open: false };
+                  })
+                }
+              >
+                Close
+              </Button>
+              <Button
+                variant="contained"
+                className="!shadow-none"
+                onClick={dialogInfo.acceptFunction}
+              >
+                {dialogInfo.acceptFunctionText}
+              </Button>
+            </DialogActions>
+          </Dialog>
+        )}
       </Box>
       // </Box>
     );

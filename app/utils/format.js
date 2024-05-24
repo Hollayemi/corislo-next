@@ -155,7 +155,6 @@ export const generateDateRange = (startDate, endDate, interval) => {
     dates.push(intervals.monthly[new Date(currentDate).getMonth() + 1]);
     currentDate.setMonth(currentDate.getMonth() + 1);
   }
-  console.log(dates);
   return dates;
 };
 

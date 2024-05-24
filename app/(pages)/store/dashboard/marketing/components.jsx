@@ -26,14 +26,12 @@ export const RightBreadCrumbChildren = ({
   const router = useRouter();
   return (
     <Box className="flex items-center">
-      <Button
-        variant="contained"
-        startIcon={<Icon icon="tabler:plus" />}
-        className="!shadow-none !px-6 !h-9 !text-[12px] !rounded-full"
+      <Box
+        className="!shadow-none !h-9 w-9 bg-blue-900 hover:bg-blue-600 cursor-pointer flex items-center justify-center  !text-[12px]  !rounded-full transition-all duration-300"
         onClick={() => router.push("marketing/create")}
       >
-        Create One
-      </Button>
+        <Icon icon="tabler:plus" className="!text-white" />
+      </Box>
       <Box className=""></Box>
     </Box>
   );
@@ -66,7 +64,6 @@ export const CampaignTab = ({ title, caption, screen, setScreen }) => {
 };
 
 export const LineChartStatistic = ({ label, discounts, flashsales }) => {
-  console.log(discounts, flashsales);
   // ** Hook
   const theme = useTheme();
 
@@ -229,19 +226,15 @@ export const LineChartStatistic = ({ label, discounts, flashsales }) => {
           const position = context.chart.canvas.getBoundingClientRect();
           const tooltipWidth = tooltipEl.offsetWidth;
           const tooltipHeight = tooltipEl.offsetHeight;
-
           tooltipEl.style.opacity = 1;
           tooltipEl.style.left = `${
             position.left +
-            Window.pageXOffset +
+            window.pageXOffset +
             tooltipModel.caretX -
             tooltipWidth / 2
           }px`;
           tooltipEl.style.top = `${
-            position.top +
-            Window.pageYOffset +
-            tooltipModel.caretY -
-            tooltipHeight / 2
+            position.top + window.pageYOffset + tooltipModel.caretY + 6
           }px`;
         },
 
@@ -274,8 +267,9 @@ export const LineChartStatistic = ({ label, discounts, flashsales }) => {
         backgroundColor: "rgba(128, 128, 128, 0.06)",
         pointHoverBorderWidth: 0,
         borderWidth: 2,
+        // pointBorderWidth: 0,
         pointHoverBorderColor: primary,
-        pointBorderColor: "transparent",
+        pointBorderColor: primary,
         pointHoverBackgroundColor: primary,
         data: discounts?.map((item) => item?.value || 0) || [
           80, 150, 180, 270, 210, 160, 160, 202, 265, 210, 270, 255, 290, 360,
@@ -293,9 +287,10 @@ export const LineChartStatistic = ({ label, discounts, flashsales }) => {
         borderColor: warning,
         backgroundColor: "rgba(128, 128, 128, 0.06)",
         pointHoverBorderWidth: 8,
+        // pointBorderWidth: 0,
         borderWidth: 2,
         pointHoverBorderColor: warning,
-        pointBorderColor: "transparent",
+        pointBorderColor: warning,
         pointHoverBackgroundColor: warning,
         data: flashsales?.map((item) => item.value || 0) || [
           800, 1250, 1050, 1300, 2150, 1195, 1140, 1160, 2300, 1300, 1220, 2170,
@@ -325,32 +320,35 @@ export const reshapePrice = (price) => {
   }
 };
 
-export const GrowthCard = ({ title, growth, middle, count }) => {
+export const GrowthCard = ({ title, growth, count }) => {
   return (
-    <Box
-      className={`w-1/3 flex flex-col justify-center pl-4 h-28  bg-white hover:bg-gray-100 border-x-2 ${
-        middle ? "border-gray-200 " : "border-white"
-      }  hover:border-l-blue-800 cursor-pointer transition-all duration-500`}
-    >
-      <Box className="flex items-center">
-        <Typography variant="body2" className="!text-[17px] !font-bold">
-          {count}
-        </Typography>
-        <Box className="h-7 rounded-md bg-green-100 w-fit  ml-3 flex items-center justify-center px-2">
-          <Typography
-            variant="caption"
-            className="!text-[13px] !text-green-700"
-          >
-            {growth}%
-          </Typography>
-        </Box>
-      </Box>
-      <Typography
-        variant="caption"
-        className="!text-[14px] !font-[400] !mt-1 !text-gray-500"
+    <Box className="w-1/2 p-1 mt-2 sm:w-1/4 sm:min-w-[180px] ">
+      <Box
+        className={`w-full flex flex-col justify-center p-2 md:pl-4 rounded-sm h-20 bg-gray-100 border-x-2 border-white border-l-blue-800 cursor-pointer transition-all duration-500`}
       >
-        {title}
-      </Typography>
+        <Box className="flex items-center">
+          <Typography
+            variant="body2"
+            className=" !text-[13px] md:!text-[17px] !font-bold"
+          >
+            {count}
+          </Typography>
+          <Box className="h-7 rounded-md bg-green-100 w-fit  ml-3 flex items-center justify-center px-2">
+            <Typography
+              variant="caption"
+              className="!text-[13px] !text-green-700"
+            >
+              {growth}%
+            </Typography>
+          </Box>
+        </Box>
+        <Typography
+          variant="caption"
+          className="!text-[14px] !font-[400] !mt-1 !text-gray-500"
+        >
+          {title}
+        </Typography>
+      </Box>
     </Box>
   );
 };

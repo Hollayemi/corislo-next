@@ -21,6 +21,11 @@ import {
   generateDateRange,
 } from "@/app/utils/format";
 import useSWR from "swr";
+import Image from "next/image";
+import {
+  FileDownloadOffOutlined,
+  FileDownloadOutlined,
+} from "@mui/icons-material";
 
 const CustomInput = forwardRef((props, ref) => {
   const startDate = props.start !== null ? formatDate(props.start) : null;
@@ -44,7 +49,37 @@ const CustomInput = forwardRef((props, ref) => {
 
 const MarketingPage = ({ params }) => {
   const [interval, setInterval] = useState("Daily");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filtered, setFiltered] = useState();
+  const [status, setStatus] = useState("");
+  console.log(status);
+
+  const [dialogInfo, updateDialogInfo] = useState({
+    open: false,
+    title: "Action Confirmation",
+    alert: `Are you sure you want to ${
+      status?.toLowerCase()?.split("-")[0]
+    } the campaign status to?`,
+    acceptFunctionText: "Yes, Continue",
+    acceptFunction: () => {},
+  });
+
+  useEffect(() => {
+    {
+      updateDialogInfo((prev) => {
+        return {
+          ...prev,
+          open: Boolean(status),
+          alert: `Are you sure you want to ${
+            status?.toLowerCase()?.split("-")[0]
+          } the campaign status?`,
+        };
+      });
+    }
+  }, [status]);
+
   const path = { ...params, sidebar: "marketing" };
+
   const { data, isLoading } = useSWR(`/branch/campaign`);
   const all = data?.data || [];
 
@@ -53,6 +88,19 @@ const MarketingPage = ({ params }) => {
     Weekly: "9_weeks",
     Monthly: "5_months",
     Yearly: "4_years",
+  };
+
+  const handleFilter = (input) => {
+    setSearchQuery(input);
+    if (all.length) {
+      let lowerInput = input.toLowerCase();
+      const searchFilterFunction = (campaign) =>
+        campaign.title.toLowerCase().includes(lowerInput) ||
+        campaign.campaignType.toLowerCase().includes(lowerInput) ||
+        campaign.discount.toString().includes(lowerInput);
+      const filteredArray = all.filter(searchFilterFunction);
+      setFiltered(filteredArray);
+    }
   };
 
   const [intervals, setDate] = useState({
@@ -88,10 +136,9 @@ const MarketingPage = ({ params }) => {
 
   const queryString = new URLSearchParams(query).toString();
   const { data: statData, isLoading: statLoading } = useSWR(
-    `/branch/campaign/stats?${queryString}&interval=${interval.toLowerCase()}&store=mamafeeds&branch=eSlOTN`
+    `/branch/campaign/stats?${queryString}&interval=${interval.toLowerCase()}`
   );
   const series = statData?.data || {};
-  console.log(series);
 
   const handleDateChange = (dates) => {
     if (dates) {
@@ -113,11 +160,13 @@ const MarketingPage = ({ params }) => {
         },
       ]}
       breadCrumbRIghtChildren={<RightBreadCrumbChildren />}
+      dialogInfo={dialogInfo}
+      updateDialogInfo={updateDialogInfo}
     >
       <DatePickerWrapper>
-        <Box className="-mt-2 px-2">
-          <Box className="!w-full bg-white p-4 rounded-xl">
-            <Box className="flex items-center -mb-6">
+        <Box className="pl-1 md:px-2">
+          <Box className="!w-full bg-white p-2 md:p-4 rounded-xl">
+            <Box className="flex justify-between md:justify-start items-center md:-mb-6">
               <Box className="!w-60">
                 <DatePicker
                   selectsRange
@@ -170,26 +219,59 @@ const MarketingPage = ({ params }) => {
                 interval
               )}
             />
-            <Box className="flex justify-around items-center w-full mt-8">
-              <GrowthCard title="Total Redemptions" growth="+92" count="645" />
+            <Box className="flex justify-around flex-wrap items-center w-full mt-8">
+              <GrowthCard
+                title="Total Redemptions"
+                growth="+92"
+                count={series.totalRedemption}
+              />
               <GrowthCard
                 title="New Redemptions"
                 growth="+40"
-                count="43"
+                count={series.newRedemptions}
                 middle
               />
               <GrowthCard
                 title="Redemption Amount"
                 growth="+30"
-                count={reshapePrice(2523000)}
+                count={reshapePrice(series?.redemptionAmount)}
+              />
+              <GrowthCard
+                title="Next to expire"
+                growth="discount"
+                count={
+                  series?.nearEndDate &&
+                  formatDate(new Date(Number(1717282799999)))
+                }
               />
             </Box>
-            <Box className="h-fit max-h-[660px] mt-8">
+            <Box className="mt-10 relative">
+              <Image
+                src={`/images/misc/search.png`}
+                alt="image"
+                width={700}
+                height={700}
+                className="w-4 absolute top-6 left-6"
+              />
+              <input
+                className="w-full border-y h-16 py-4 p-14 !text-[18px] outline-none"
+                placeholder="Search by name or discount or code..."
+                value={searchQuery}
+                onChange={(e) => handleFilter(e.target.value)}
+              />
+              <Button
+                endIcon={<FileDownloadOutlined />}
+                className="!w-10 md:!w-40 !absolute !top-4 !right-6"
+              >
+                <span className="hidden md:block">Export-</span>CSV
+              </Button>
+            </Box>
+            <Box className="h-fit max-h-[660px]">
               <DataGrid
-                columns={columns}
-                rows={all}
+                columns={columns(setStatus)}
+                rows={filtered ? filtered : all}
                 checkboxSelection
-                className="!border-none !min-h-[300px]"
+                className="!border-none !h-auto !min-h-[300px]"
               />
             </Box>
           </Box>
