@@ -1,6 +1,6 @@
-"use client"
+"use client";
 import IconifyIcon from "../../icon";
-import { useState } from "react"
+import { useState } from "react";
 const { Box, Typography } = require("@mui/material");
 
 const inputType = {};
@@ -58,9 +58,8 @@ export const CustomInput = ({
         {inputProps.type !== "select" ? (
           <TextInput
             multiline={multiline}
-            type={newType}
             id={id}
-            inputProps={inputProps}
+            inputProps={{ ...inputProps, type: newType }}
             onChange={onChange}
           />
         ) : (
@@ -79,7 +78,7 @@ export const CustomInput = ({
         )}
         {inputProps.type === "password" && (
           <IconifyIcon
-            className="!absolute right-0 mr-4 bottom-0 mb-2 !z-50 !text-gray-400 !bg-red-500 !h-12 !w-12 m-8"
+            className="!absolute right-0 mr-5 bottom-0 mb-2 !z-50 !text-gray-400 !text-[20px]"
             onClick={() =>
               changeType(newType === "password" ? "text" : "password")
             }

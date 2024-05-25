@@ -320,7 +320,7 @@ export const reshapePrice = (price) => {
   }
 };
 
-export const GrowthCard = ({ title, growth, count }) => {
+export const GrowthCard = ({ title, growth, count, toExpire }) => {
   return (
     <Box className="w-1/2 p-1 mt-2 sm:w-1/4 sm:min-w-[180px] ">
       <Box
@@ -333,14 +333,25 @@ export const GrowthCard = ({ title, growth, count }) => {
           >
             {count}
           </Typography>
-          <Box className="h-7 rounded-md bg-green-100 w-fit  ml-3 flex items-center justify-center px-2">
-            <Typography
-              variant="caption"
-              className="!text-[13px] !text-green-700"
-            >
-              {growth}%
-            </Typography>
-          </Box>
+          {!toExpire ? (
+            <Box className="h-7 rounded-md bg-green-100 w-fit  ml-3 flex items-center justify-center px-2">
+              <Typography
+                variant="caption"
+                className="!text-[13px] !text-green-700"
+              >
+                {growth}%
+              </Typography>
+            </Box>
+          ) : (
+            <Box className="h-7 rounded-md bg-red-100 w-fit  ml-3 flex items-center justify-center px-2">
+              <Typography
+                variant="caption"
+                className="!text-[13px] !text-red-700"
+              >
+                {toExpire}
+              </Typography>
+            </Box>
+          )}
         </Box>
         <Typography
           variant="caption"

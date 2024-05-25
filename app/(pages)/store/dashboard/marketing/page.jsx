@@ -19,6 +19,7 @@ import {
   calculateDateDiff,
   formatDate,
   generateDateRange,
+  mySubstring,
 } from "@/app/utils/format";
 import useSWR from "swr";
 import Image from "next/image";
@@ -40,7 +41,7 @@ const CustomInput = forwardRef((props, ref) => {
         value={value}
         size="small"
         placeholder="Enter date range"
-        className="!w-56 outline-none !text-gray-800"
+        className="!w-48 outline-none !text-[12px] md:!text-[13px] !font-bold !text-gray-800"
       />
       <Icon icon="tabler:chevron-down" className="!text-[17px] -ml-4" />
     </Box>
@@ -238,11 +239,8 @@ const MarketingPage = ({ params }) => {
               />
               <GrowthCard
                 title="Next to expire"
-                growth="discount"
-                count={
-                  series?.nearEndDate &&
-                  formatDate(new Date(Number(1717282799999)))
-                }
+                toExpire={mySubstring(series.nearEndDate?.title, 12)}
+                count={formatDate(series?.nearEndDate?.date)}
               />
             </Box>
             <Box className="mt-10 relative">
