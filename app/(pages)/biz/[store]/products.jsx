@@ -47,6 +47,7 @@ const StoreProducts = () => {
             image={`/images/more/${i + 1}.png`}
             star={prod.star}
             store={prod.store}
+            others={{ ...prod }}
           />
         ))}
       </Box>

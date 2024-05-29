@@ -1,3 +1,5 @@
+"use client";
+
 // ** React Imports
 import { Fragment, useState } from "react";
 
@@ -9,13 +11,14 @@ import {
   Switch,
   Typography,
   Button,
+  Checkbox,
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 
 // ** Icon Imports
 import Icon from "@/app/components/icon";
 
-import { DashboardCrumb } from "../components"
+import { DashboardCrumb } from "../components";
 // ** Third Party Imports
 import { useDropzone } from "react-dropzone";
 
@@ -26,7 +29,6 @@ const Img = styled("img")(({ theme }) => ({
 }));
 
 export const FileUploader = ({ files, setFiles }) => {
-  
   // ** Hooks
   const theme = useTheme();
 
@@ -105,11 +107,19 @@ export const FileUploader = ({ files, setFiles }) => {
   );
 };
 
-export const InputBoxWithSideLabel = ({ label, value, className, inputProps, onChange }) => {
+export const InputBoxWithSideLabel = ({
+  label,
+  value,
+  className,
+  inputProps,
+  onChange,
+}) => {
   return (
     <Grid container spacing={2} className={`mb-6 ${className}`}>
       <Grid item xs={12} sm={4} className="!flex items-center">
-        <Typography variant="body2" className="!text">{label}</Typography>
+        <Typography variant="body2" className="!text">
+          {label}
+        </Typography>
       </Grid>
       <Grid item xs={12} sm={8}>
         <TextField
@@ -124,9 +134,13 @@ export const InputBoxWithSideLabel = ({ label, value, className, inputProps, onC
   );
 };
 
-
-export const SocialMediaConponent = ({ label, className, socialMedia, setSocialMedia }) => {
-  const smallLabel = label.toLowerCase().split(' ').join("");
+export const SocialMediaConponent = ({
+  label,
+  className,
+  socialMedia,
+  setSocialMedia,
+}) => {
+  const smallLabel = label.toLowerCase().split(" ").join("");
 
   const handleChange = (label, value) => {
     const updated = { ...socialMedia, [label]: value };
@@ -153,21 +167,19 @@ export const SocialMediaConponent = ({ label, className, socialMedia, setSocialM
   );
 };
 
-
-export const OpeningHours = ({
-  label,
-  className,
-  openHours,
-  setOpenHours,
-}) => {
+export const OpeningHours = ({ label, className, openHours, setOpenHours }) => {
   const smallLabel = label.toLowerCase();
-  const isPresent = openHours.hasOwnProperty(smallLabel);
-  
+  console.log();
+  const isPresent = Object.keys(openHours || {}).includes(smallLabel);
+
   const handleChange = (label, key, value) => {
     let updated;
-    if(isPresent){
-        updated = { ...openHours, [label]: { ...openHours[label], [key]: value } };
-    }else{
+    if (isPresent) {
+      updated = {
+        ...openHours,
+        [label]: { ...openHours[label], [key]: value },
+      };
+    } else {
       updated = { ...openHours, [label]: { [key]: value } };
     }
     setOpenHours(updated);
@@ -178,7 +190,7 @@ export const OpeningHours = ({
     <Grid container spacing={1} className={`mb-6 ${className}`}>
       <Grid item xs={6} sm={4} className="!flex items-center">
         <Box className="!flex !items-center -ml-4 md:ml-0">
-          <Switch
+          <Checkbox
             edge="end"
             checked={isPresent && openHours[smallLabel]?.isset == true}
             className="!mr-2"
@@ -209,11 +221,14 @@ export const OpeningHours = ({
   );
 };
 
-export const StoreBreadCrumb = [ ...DashboardCrumb, {
-  text: "Store",
-  link: "stores",
-  icon: "shop"
-} ];
+export const StoreBreadCrumb = [
+  ...DashboardCrumb,
+  {
+    text: "Store",
+    link: "stores",
+    icon: "shop",
+  },
+];
 
 export const BreadcrumbRightEle = () => {
   return (
@@ -223,8 +238,25 @@ export const BreadcrumbRightEle = () => {
         className="!mr-4 !bg-blue-900 !shadow-none !text-[12px] !rounded-full"
         startIcon={<Icon icon="tabler:plus" />}
       >
-        <span className="hidden md:block">Add New </span> Sub-Store
+        <span className="hidden md:block mr-1">Add New </span> Sub-Store
       </Button>
     </Box>
   );
 };
+
+export const MySwitch = (props) => {
+  return (
+    <Switch
+      {...props}
+      sx={{
+        "& .MuiSwitch-switchBase.Mui-checked": {
+          color: "#2C337C",
+        },
+        "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+          backgroundColor: "#2C337C",
+        },
+      }}
+      style={{ color: "#33303C" }}
+    />
+  );
+}

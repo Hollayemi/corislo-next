@@ -233,14 +233,15 @@ export const formatCVC = (value, cardNumber, Payment) => {
 
 export const calculateDateDiff = (
   timeSpan,
-  initialDate,
+  initialDate = new Date(),
   operator = "-",
   noFormat
 ) => {
   const today = new Date(initialDate);
   const dateSplit = timeSpan.split("_");
-  const howMany = dateSplit[0];
+  const howMany = parseInt(dateSplit[0]);
   const prediod = dateSplit[1];
+
 
   if (prediod === "day" || prediod === "days") {
     const daysAgo = new Date(

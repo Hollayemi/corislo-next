@@ -1,5 +1,6 @@
 "use client";
 import useSWR from "swr";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { Grid, Box } from "@mui/material";
@@ -10,8 +11,10 @@ import DashboardBubbleChart from "@/app/components/chart/ChartjsBubbleChart";
 import "chart.js/auto";
 import OrderTable from "@/app/components/view/store/tables/OrderTable";
 import { ordersColumns } from "./order-management/components/columns";
+import BranchSalesGrowth from "@/app/components/chart/Progress";
 
 const DashboardOverview = ({ params }) => {
+  const [interval, selectedInterval] = useState("7 days");
   const router = useRouter();
   const {
     data: orderData,
@@ -20,7 +23,6 @@ const DashboardOverview = ({ params }) => {
   } = useSWR(`/branch/order-request`);
 
   const rows = orderData?.data || [];
-
   const actionFunctions = (row, action) => {
     if (action === "modify") {
       // selectRow(row);
@@ -28,9 +30,11 @@ const DashboardOverview = ({ params }) => {
     }
 
     if (action === "message") {
-      router.push(`/store/chat?customer=${row.customerUsername}`);
+      router.push(`/store/dashboard/chat?customer=${row.customerUsername}`);
     }
   };
+
+
   return (
     <StoreLeftSideBar
       path={params}
@@ -50,13 +54,16 @@ const DashboardOverview = ({ params }) => {
         <Box className="mt-4 flwx justify-center">
           <Grid container spacing={2}>
             <Grid item xs={12} md={3}>
-              <BranchesSales />
+              <BranchSalesGrowth
+                interval={interval}
+                selectedInterval={selectedInterval}
+              />
             </Grid>
             <Grid item xs={12} md={5}>
-              <DashboardLineChart />
+              <DashboardLineChart interval={interval} />
             </Grid>
             <Grid item xs={12} md={4}>
-              <DashboardBubbleChart />
+              <DashboardBubbleChart interval={interval} />
             </Grid>
           </Grid>
         </Box>

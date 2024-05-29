@@ -1,86 +1,44 @@
-import React, { useState } from 'react'
-import { styled, alpha } from '@mui/material/styles';
-import MuiAppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
+import React, { useState } from "react";
+import { styled, alpha } from "@mui/material/styles";
+import { useRouter } from "next/navigation";
+import MuiAppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import Typography from "@mui/material/Typography";
+import InputBase from "@mui/material/InputBase";
+import Badge from "@mui/material/Badge";
+import MenuItem from "@mui/material/MenuItem";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import MailIcon from "@mui/icons-material/Mail";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import MoreIcon from "@mui/icons-material/MoreVert";
+import Iconify from "@/app/components/icon";
 
-import { useTheme } from '@emotion/react';
-import themeConfig from '@/app/configs/themeConfig'
-import Image from 'next/image';
-import { Avatar } from '@mui/material';
-import { useStoreData } from '@/app/hooks/useData';
+import { useTheme } from "@emotion/react";
+import themeConfig from "@/app/configs/themeConfig";
+import Image from "next/image";
+import { Avatar } from "@mui/material";
+import { useStoreData } from "@/app/hooks/useData";
+import { IconImage } from "../home/header";
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.primary.main, 0.07),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.primary.main, 0.15),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  color: alpha(theme.palette.common.black, 0.4),
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const Icons = styled('div')(({ theme }) => ({
+const Icons = styled("div")(({ theme }) => ({
   padding: theme.spacing(1),
   borderRadius: theme.shape.borderRadius,
   cursor: "pointer",
-  height: '100%',
+  height: "100%",
   backgroundColor: "custom.bodyGray",
-  '&:hover': {
+  "&:hover": {
     backgroundColor: alpha(theme.palette.primary.main, 0.1),
   },
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
   color: alpha(theme.palette.primary.main, 0.6),
-}));
-
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    color: "black",
-    fontWeight: "400",
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '30ch',
-    },
-  },
 }));
 
 export default function StoreDashboardAppBar({
@@ -91,9 +49,10 @@ export default function StoreDashboardAppBar({
   staffInfo,
 }) {
   const theme = useTheme();
-  const { showOverlay } = useStoreData()
-  const [anchorEl, setAnchorEl] = useState();
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState();
+  const route = useRouter();
+  const { showOverlay } = useStoreData();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -133,29 +92,55 @@ export default function StoreDashboardAppBar({
     }),
   }));
 
-  const menuId = "primary-search-account-menu";
+  const menuId = "profile-search-account-menu";
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
         vertical: "top",
-        horizontal: "right",
+        horizontal: "bottom",
       }}
       id={menuId}
-      keepMounted
+      // keepMounted
       transformOrigin={{
         vertical: "top",
         horizontal: "right",
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
+      PaperProps={{
+        elevation: 0,
+        sx: {
+          overflow: "visible",
+          filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+          mt: 1.5,
+          "& .MuiAvatar-root": {
+            width: 32,
+            height: 32,
+            ml: -0.5,
+            mr: 1,
+          },
+          "&::before": {
+            content: '""',
+            display: "block",
+            position: "absolute",
+            top: 0,
+            right: 14,
+            width: 10,
+            height: 10,
+            bgcolor: "background.paper",
+            transform: "translateY(-50%) rotate(45deg)",
+            zIndex: 0,
+          },
+        },
+      }}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
+  const mobileMenuId = "menu-mobile";
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -164,7 +149,7 @@ export default function StoreDashboardAppBar({
         horizontal: "right",
       }}
       id={mobileMenuId}
-      keepMounted
+      // keepMounted
       transformOrigin={{
         vertical: "top",
         horizontal: "right",
@@ -190,29 +175,17 @@ export default function StoreDashboardAppBar({
           color="inherit"
         >
           <Badge badgeContent={17} color="error">
-            <NotificationsIcon  />
+            <NotificationsIcon />
           </Badge>
         </Icons>
         <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <Icons
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </Icons>
-        <p>Profile</p>
       </MenuItem>
     </Menu>
   );
 
   return (
     <AppBar
-      position="fixed"
+      // position="fixed"
       color="inherit"
       className="!duration-300 transition-all border-b"
       open={open}
@@ -266,7 +239,7 @@ export default function StoreDashboardAppBar({
           </Box>
         )}
         <Box sx={{ flexGrow: 1 }} />
-        <Search>
+        {/* <Search>
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
@@ -275,22 +248,46 @@ export default function StoreDashboardAppBar({
             onFocus={() => showOverlay("appSearch")}
             inputProps={{ "aria-label": "search" }}
           />
-        </Search>
-        <Box sx={{ display: { xs: "none", md: "flex" } }}>
+        </Search> */}
+        <Box className="relative mr-4 w-full md:w-auto px-2 md:px-0">
+          <input
+            type="text"
+            placeholder="Search anything"
+            defaultValue={""}
+            className="w-full md:w-[350px] pl-10 text-[13px] !bg-[#F3F5FF] pr-4 h-10 border rounded-xl transition-all outline-none"
+            onFocus={() => showOverlay("appSearch")}
+          />
+          <IconImage image="search" className="w-4 absolute top-1 mt-2 ml-4" />
+        </Box>
+        <Box
+          sx={{ display: { xs: "none", md: "flex" } }}
+          className="items-center"
+        >
           <Icons
             size="large"
             aria-label="show 17 new notifications"
-            color="inherit"
+            // color="inherit"
             onClick={() => showOverlay("notification")}
           >
             <Badge badgeContent={17} color="error">
-              <NotificationsIcon />
+              <Iconify
+                icon="tabler:bell"
+                className="!text-[30px] text-gray-700 hover:text-blue-900"
+              />
             </Badge>
           </Icons>
-          <Box
-            onClick={handleProfileMenuOpen}
-            className="flex items-center cursor-pointer ml-6 w-40"
+          <Icons
+            className="ml-6 mr-2"
+            onClick={() => route.push("/store/dashboard/chat")}
           >
+            <Badge badgeContent={12} color="error">
+              <Iconify
+                icon="tabler:message"
+                className="!text-[30px] text-gray-700 hover:text-blue-900"
+              />
+            </Badge>
+          </Icons>
+          <Box className="flex items-center cursor-pointer ml-6 w-40">
             <Avatar
               alt="Remy Sharp"
               src="/images/avatar/stephen.jpeg"
@@ -299,16 +296,20 @@ export default function StoreDashboardAppBar({
             <Typography
               noWrap
               variant="body2"
-              className="font-bold flex items-center text-ellipsis text-sm ml-6 text-black"
+              className="!font-bold text-ellipsis text-sm !ml-4 !text-black"
             >
               {staffInfo.username}
             </Typography>
-            <Box className="text-black flex items-center ml-2">
+            {/* <Box
+              className="text-black flex items-center ml-2"
+              onClick={handleProfileMenuOpen}
+              aria-controls={menuId}
+            >
               <ArrowDropDownIcon />
-            </Box>
+            </Box> */}
           </Box>
         </Box>
-        <Box sx={{ display: { xs: "flex", md: "none" } }}>
+        <Box className="block md:hidden">
           <Icons
             size="large"
             aria-label="show more"
@@ -321,8 +322,8 @@ export default function StoreDashboardAppBar({
           </Icons>
         </Box>
       </Toolbar>
-      {renderMobileMenu}
-      {renderMenu}
+      {/* {renderMenu}
+      {renderMobileMenu} */}
     </AppBar>
   );
 }

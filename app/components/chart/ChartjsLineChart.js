@@ -1,13 +1,29 @@
+"use client";
 // ** MUI Imports
+import { calculateDateDiff, generateDateRange } from "@/app/utils/format";
 import { Card, Box, CardContent, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 // ** Third Party Imports
 import { Line } from "react-chartjs-2";
+import useSWR from "swr";
 
-const DashboardLineChart = (props) => {
+const DashboardLineChart = ({ interval }) => {
   // ** Hook
   const theme = useTheme();
+  const startDate = calculateDateDiff(
+    interval.split(" ").join("_"),
+    new Date(),
+    "-",
+    true
+  );
 
+  const { data: swrData, isLoading } = useSWR(
+    `/branch/increment-chart?interval=daily&startDate=${startDate}`
+  );
+
+  const dataset = swrData?.data || {}
+
+  const label = generateDateRange(startDate, new Date(), "Daily");
   // ** Props
   // const { white, primary, success, warning, labelColor, borderColor, legendColor } = props
 
@@ -27,19 +43,22 @@ const DashboardLineChart = (props) => {
     maintainAspectRatio: false,
     scales: {
       x: {
-        ticks: { color: labelColor },
+        ticks: {
+          color: labelColor,
+        },
         grid: {
           color: borderColor,
         },
       },
       y: {
         min: 0,
-        max: 400,
         ticks: {
           stepSize: 100,
           color: labelColor,
+          display: false, // remove y-axis labels
         },
         grid: {
+          display: false, // remove y-axis labels
           color: borderColor,
         },
       },
@@ -59,7 +78,7 @@ const DashboardLineChart = (props) => {
   };
 
   const data = {
-    labels: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140],
+    labels: label,
     datasets: [
       {
         fill: false,
@@ -74,10 +93,7 @@ const DashboardLineChart = (props) => {
         pointHoverBorderColor: white,
         pointBorderColor: "transparent",
         pointHoverBackgroundColor: primary,
-        data: [
-          80, 150, 180, 270, 210, 160, 160, 202, 265, 210, 270, 255, 290, 360,
-          375,
-        ],
+        data: Object.values(dataset.cart || {})
       },
       {
         fill: false,
@@ -92,10 +108,7 @@ const DashboardLineChart = (props) => {
         pointHoverBorderColor: white,
         pointBorderColor: "transparent",
         pointHoverBackgroundColor: warning,
-        data: [
-          80, 125, 105, 130, 215, 195, 140, 160, 230, 300, 220, 170, 210, 200,
-          280,
-        ],
+        data: Object.values(dataset.order || {}) 
       },
       {
         fill: false,
@@ -110,9 +123,7 @@ const DashboardLineChart = (props) => {
         pointHoverBorderColor: white,
         pointBorderColor: "transparent",
         pointHoverBackgroundColor: success,
-        data: [
-          80, 99, 82, 90, 115, 115, 74, 75, 130, 155, 125, 90, 140, 130, 180,
-        ],
+        data: Object.values(dataset.view || {})
       },
     ],
   };
@@ -124,7 +135,7 @@ const DashboardLineChart = (props) => {
           Income Statement Chart
         </Typography>
       </Box>
-      
+
       <CardContent>
         <Line data={data} width={"100%"} height={300} options={options} />
       </CardContent>

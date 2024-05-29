@@ -129,7 +129,7 @@ const AppChat = () => {
       path={{ sidebar: "chat" }}
     >
       <Box
-        className="app-chat -mt-3 -mb-3"
+        className="app-chat -mt-3 -mb-12"
         sx={{
           display: "flex",
           borderRadius: 1,

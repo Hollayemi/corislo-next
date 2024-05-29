@@ -23,7 +23,6 @@ import { updateStoreProfile } from "@/app/redux/state/slices/shop/settings/editS
 import MapGraph from "@/app/components/view/home/Map/map";
 
 const StorePage = ({ params }) => {
-  console.log(params);
   const { storeInfo } = useStoreData();
   const dispatch = useDispatch();
   const { data } = useSWR("/branch/all?sidelist=true");
@@ -44,11 +43,11 @@ const StorePage = ({ params }) => {
     about_store: storeInfo?.profile?.about_store || "",
   });
 
+  console.log(openHours);
+
   const handleChange = (prop) => (event) => {
     setValues({ ...inputValues, [prop]: event.target.value });
   };
-
-  console.log(InnerList, storeInnerList);
   return (
     <StoreLeftSideBar
       path={path}

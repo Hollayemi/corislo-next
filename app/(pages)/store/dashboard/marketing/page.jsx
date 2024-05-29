@@ -36,7 +36,7 @@ const CustomInput = forwardRef((props, ref) => {
   return (
     <Box className="flex items-center !w-fit">
       <input
-        inputRef={ref}
+        // inputref={ref}
         {...props}
         value={value}
         size="small"
@@ -53,7 +53,6 @@ const MarketingPage = ({ params }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filtered, setFiltered] = useState();
   const [status, setStatus] = useState("");
-  console.log(status);
 
   const [dialogInfo, updateDialogInfo] = useState({
     open: false,
@@ -239,7 +238,7 @@ const MarketingPage = ({ params }) => {
               />
               <GrowthCard
                 title="Next to expire"
-                toExpire={mySubstring(series.nearEndDate?.title, 12)}
+                toExpire={mySubstring(series.nearEndDate?.title, 20)}
                 count={formatDate(series?.nearEndDate?.date)}
               />
             </Box>

@@ -343,10 +343,10 @@ export const GrowthCard = ({ title, growth, count, toExpire }) => {
               </Typography>
             </Box>
           ) : (
-            <Box className="h-7 rounded-md bg-red-100 w-fit  ml-3 flex items-center justify-center px-2">
+            <Box className=" rounded-md bg-red-100 w-fit  ml-3 flex items-center justify-center p-1 px-2">
               <Typography
-                variant="caption"
-                className="!text-[13px] !text-red-700"
+                variant="body2"
+                className="!text-[13px] !text-center !text-red-700"
               >
                 {toExpire}
               </Typography>

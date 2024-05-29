@@ -28,6 +28,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 // ** Custom Component Imports
 import Sidebar from '@/app/components/sidebar'
 import { StyleList } from './Styled'
+import { Checkbox } from '@mui/material'
 
 const UserProfileLeft = props => {
   const {
@@ -133,131 +134,131 @@ const UserProfileLeft = props => {
               {store.userProfile.role}
             </Typography>
           </Box>
-            <StyleList sx={{ height: "calc(100% - 13.3125rem)" }}>
-              <Box sx={{ p: 3 }}>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    mb: 1.5,
-                    color: "text.disabled",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  About
-                </Typography>
-                <TextField
-                  minRows={4}
-                  multiline
-                  fullWidth
-                  sx={{ mb: 3 }}
-                  defaultValue={store.userProfile.about}
-                />
-                <Typography
-                  variant="body2"
-                  sx={{
-                    mb: 1.5,
-                    color: "text.disabled",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Status
-                </Typography>
-                <RadioGroup
-                  value={userStatus}
-                  sx={{ mb: 3, ml: 0.8 }}
-                  onChange={handleUserStatus}
-                >
-                  <div>
-                    <FormControlLabel
-                      value="online"
-                      label="Online"
-                      control={<Radio color="success" sx={{ p: 0.5 }} />}
+          <StyleList sx={{ height: "calc(100% - 13.3125rem)" }}>
+            <Box sx={{ p: 3 }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  mb: 1.5,
+                  color: "text.disabled",
+                  textTransform: "uppercase",
+                }}
+              >
+                About
+              </Typography>
+              <TextField
+                minRows={4}
+                multiline
+                fullWidth
+                sx={{ mb: 3 }}
+                defaultValue={store.userProfile.about}
+              />
+              <Typography
+                variant="body2"
+                sx={{
+                  mb: 1.5,
+                  color: "text.disabled",
+                  textTransform: "uppercase",
+                }}
+              >
+                Status
+              </Typography>
+              <RadioGroup
+                value={userStatus}
+                sx={{ mb: 3, ml: 0.8 }}
+                onChange={handleUserStatus}
+              >
+                <div>
+                  <FormControlLabel
+                    value="online"
+                    label="Online"
+                    control={<Radio color="success" sx={{ p: 0.5 }} />}
+                  />
+                </div>
+                <div>
+                  <FormControlLabel
+                    value="away"
+                    label="Away"
+                    control={<Radio color="warning" sx={{ p: 0.5 }} />}
+                  />
+                </div>
+                <div>
+                  <FormControlLabel
+                    value="busy"
+                    label="Do not Disturb"
+                    control={<Radio color="error" sx={{ p: 0.5 }} />}
+                  />
+                </div>
+                <div>
+                  <FormControlLabel
+                    value="offline"
+                    label="Offline"
+                    control={<Radio color="secondary" sx={{ p: 0.5 }} />}
+                  />
+                </div>
+              </RadioGroup>
+              <Typography
+                variant="body2"
+                sx={{
+                  mb: 1.5,
+                  color: "text.disabled",
+                  textTransform: "uppercase",
+                }}
+              >
+                Settings
+              </Typography>
+              <List dense sx={{ p: 0, mb: 1.5 }}>
+                <ListItem disablePadding secondaryAction={<Checkbox />}>
+                  <ListItemButton sx={{ px: 1 }}>
+                    <ListItemIcon sx={{ mr: 1, color: "text.primary" }}>
+                      <Icon icon="tabler:message-dots" />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Two-step Verification"
+                      primaryTypographyProps={{ variant: "body1" }}
                     />
-                  </div>
-                  <div>
-                    <FormControlLabel
-                      value="away"
-                      label="Away"
-                      control={<Radio color="warning" sx={{ p: 0.5 }} />}
-                    />
-                  </div>
-                  <div>
-                    <FormControlLabel
-                      value="busy"
-                      label="Do not Disturb"
-                      control={<Radio color="error" sx={{ p: 0.5 }} />}
-                    />
-                  </div>
-                  <div>
-                    <FormControlLabel
-                      value="offline"
-                      label="Offline"
-                      control={<Radio color="secondary" sx={{ p: 0.5 }} />}
-                    />
-                  </div>
-                </RadioGroup>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    mb: 1.5,
-                    color: "text.disabled",
-                    textTransform: "uppercase",
-                  }}
+                  </ListItemButton>
+                </ListItem>
+                <ListItem
+                  disablePadding
+                  secondaryAction={<Checkbox defaultChecked />}
                 >
-                  Settings
-                </Typography>
-                <List dense sx={{ p: 0, mb: 1.5 }}>
-                  <ListItem disablePadding secondaryAction={<Switch />}>
-                    <ListItemButton sx={{ px: 1 }}>
-                      <ListItemIcon sx={{ mr: 1, color: "text.primary" }}>
-                        <Icon icon="tabler:message-dots" />
-                      </ListItemIcon>
-                      <ListItemText
-                        primary="Two-step Verification"
-                        primaryTypographyProps={{ variant: "body1" }}
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                  <ListItem
-                    disablePadding
-                    secondaryAction={<Switch defaultChecked />}
-                  >
-                    <ListItemButton sx={{ px: 1 }}>
-                      <ListItemIcon sx={{ mr: 1, color: "text.primary" }}>
-                        <Icon icon="tabler:bell" />
-                      </ListItemIcon>
-                      <ListItemText
-                        primary="Notification"
-                        primaryTypographyProps={{ variant: "body1" }}
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemButton sx={{ px: 1 }}>
-                      <ListItemIcon sx={{ mr: 1, color: "text.primary" }}>
-                        <Icon icon="tabler:user-plus" />
-                      </ListItemIcon>
-                      <ListItemText
-                        primary="Invite Friends"
-                        primaryTypographyProps={{ variant: "body1" }}
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemButton sx={{ px: 1 }}>
-                      <ListItemIcon sx={{ mr: 1, color: "text.primary" }}>
-                        <Icon icon="tabler:trash" />
-                      </ListItemIcon>
-                      <ListItemText
-                        primary="Delete Account"
-                        primaryTypographyProps={{ variant: "body1" }}
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                </List>
-                <Button variant="contained">Logout</Button>
-              </Box>
-            </StyleList>
+                  <ListItemButton sx={{ px: 1 }}>
+                    <ListItemIcon sx={{ mr: 1, color: "text.primary" }}>
+                      <Icon icon="tabler:bell" />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Notification"
+                      primaryTypographyProps={{ variant: "body1" }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton sx={{ px: 1 }}>
+                    <ListItemIcon sx={{ mr: 1, color: "text.primary" }}>
+                      <Icon icon="tabler:user-plus" />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Invite Friends"
+                      primaryTypographyProps={{ variant: "body1" }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton sx={{ px: 1 }}>
+                    <ListItemIcon sx={{ mr: 1, color: "text.primary" }}>
+                      <Icon icon="tabler:trash" />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Delete Account"
+                      primaryTypographyProps={{ variant: "body1" }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+              <Button variant="contained">Logout</Button>
+            </Box>
+          </StyleList>
         </Fragment>
       ) : null}
     </Sidebar>

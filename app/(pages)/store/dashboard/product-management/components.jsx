@@ -15,7 +15,7 @@ export const BreadcrumbRightEle = () => {
           router.push("/store/dashboard/product-management/add-new-product")
         }
       >
-        <span className="hidden md:block">Add New </span>Product
+        <span className="hidden md:block mr-1">Add New </span>Product
       </Button>
 
       <Button
@@ -23,7 +23,7 @@ export const BreadcrumbRightEle = () => {
         className="!bg-black !shadow-none !text-[12px] !rounded-full"
         startIcon={<Icon icon="tabler:download" />}
       >
-        <span className="hidden md:block">Export as </span> CSV
+        <span className="hidden md:block mr-1">Export as </span> CSV
       </Button>
     </Box>
   );

@@ -11,8 +11,7 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
-  Button,
-  Switch,
+  Button
 } from "@mui/material";
 import Link from "next/link";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
@@ -23,6 +22,7 @@ import {
   InputBoxWithSideLabel,
   StoreBreadCrumb,
   BreadcrumbRightEle,
+  MySwitch,
   FileUploader,
   OpeningHours,
   SocialMediaConponent,
@@ -177,7 +177,7 @@ const StorePage = ({ params }) => {
                 <Typography variant="caption" className="!text-[11px] ">
                   Client has to come pick up the orders by themselves.
                 </Typography>
-                <Switch
+                <MySwitch
                   edge="end"
                   checked={formData.pickup}
                   className="!md:mr-2"
@@ -190,7 +190,7 @@ const StorePage = ({ params }) => {
                   <Typography className="!font-semibold !text-sm">
                     Waybill
                   </Typography>
-                  <Switch
+                  <MySwitch
                     edge="end"
                     checked={formData.waybill.isset}
                     className="!md:mr-2"
@@ -357,7 +357,7 @@ const StorePage = ({ params }) => {
                     input some policies for your store
                   </Typography>
                 </Box>
-                <Switch
+                <MySwitch
                   edge="end"
                   checked={formData.refund_policies.isset}
                   className="!md:mr-2"
@@ -506,7 +506,7 @@ const StorePage = ({ params }) => {
                     This includes receiving notification for low stock
                   </Typography>
                 </Box>
-                <Switch
+                <MySwitch
                   edge="end"
                   checked={formData.notifications.isset}
                   className="!md:mr-2"

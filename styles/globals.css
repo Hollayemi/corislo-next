@@ -115,9 +115,9 @@ textarea::placeholder {
   border-radius: 4px;
 }
 
-.overflowStyle::-webkit-scrollbar-track {
+/* .overflowStyle: {
   background-color: #f0eeee;
-}
+} */
 
 .gm-controls .gm-style-map-type-control {
   display: none !important;
@@ -159,4 +159,7 @@ textarea::placeholder {
   align-items: center;
   justify-content: space-between;
   margin-bottom: -8px;
+}
+.mt10 {
+  margin-top: 10px !important;
 }
