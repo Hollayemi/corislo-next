@@ -150,7 +150,7 @@ const statusColumn = {
   field: "status",
   headerName: "Satus",
   renderCell: (params) => {
-    const status = statusObj.filter((e) => e.title === params.row.status)[0];
+    const status = statusObj.filter((e) => e.title === params.row.status.toLowerCase())[0];
 
     return (
       <CustomChip

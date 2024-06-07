@@ -1,8 +1,6 @@
 "use client";
-import IconifyIcon from "@/app/components/icon";
 import { CartProductView } from "@/app/components/templates/productView";
 import HomeWrapper from "@/app/components/view/home";
-import { moreProducts } from "@/app/data/home/homepage";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
@@ -15,8 +13,11 @@ import {
   ngnPrice,
 } from "@/app/utils/format";
 import { OrderActionBtn, trackMainSteps } from "./components";
+import { useDispatch } from "react-redux";
+import { feedbackHandler } from "@/app/redux/state/slices/home/feedback";
 
 const OrderDetails = ({ params }) => {
+  const dispatch = useDispatch()
   const { data: result } = useSWR(`/user/order/${params.detail}`);
   const orderProducts = result?.data[0] || {};
   const { data: branchInfo } = useSWR(
@@ -24,6 +25,8 @@ const OrderDetails = ({ params }) => {
       `/branch/info?branch=${orderProducts._id.branch}&store=${orderProducts._id.store}`
   );
   const [mouseOn, setMouseOn] = useState(-1);
+  const [review, setReview] = useState("");
+  console.log(mouseOn);
   const orderFrom = branchInfo?.data || {};
   const TitleValue = ({ title, value }) => (
     <Box className="flex items-center">
@@ -34,8 +37,15 @@ const OrderDetails = ({ params }) => {
   );
   const emojis = ["Bad", "Poor", "Average", "Good", "Best"];
   const orderStatus = orderProducts?._id?.status;
-  
-  console.log(orderStatus, trackMainSteps["paid"]);
+
+  const feedbackPayload = {
+    review,
+    rate: mouseOn,
+    store: orderProducts._id?.store,
+    branch: orderProducts._id?.branch,
+    orderId: params.detail,
+  };
+
   return (
     <HomeWrapper>
       <Box className="!px-2 my-5 sm:!px-16 md:!px-24 lg:!px-32 md:!py-7 relative">
@@ -91,6 +101,8 @@ const OrderDetails = ({ params }) => {
 
                   <Box className="md:flex md:items-start mt-4">
                     <textarea
+                      onChange={(e) => setReview(e.target.value)}
+                      value={review}
                       placeholder="Write about your experience in this section"
                       className="w-full md:w-9/12 h-32 rounded bg-gray-100 px-5 py-3 resize-none outline-none border-blue-800 focus:border"
                     ></textarea>
@@ -98,6 +110,7 @@ const OrderDetails = ({ params }) => {
                       <Button
                         variant="contained"
                         className="!rounded-full !text-[14px] !h-10 !w-32 !shadow-none md:!mx-4"
+                        onClick={() => feedbackHandler(feedbackPayload, dispatch)}
                       >
                         Send
                       </Button>
@@ -181,7 +194,9 @@ const OrderDetails = ({ params }) => {
                 <Box>
                   <OrderStages
                     at={
-                      trackMainSteps[orderStatus?.toLowerCase()?.replaceAll(" ", "_")] || 0
+                      trackMainSteps[
+                        orderStatus?.toLowerCase()?.replaceAll(" ", "_")
+                      ] || 0
                     }
                     price={500000}
                     delivery={orderProducts?._id?.deliveryMedium}

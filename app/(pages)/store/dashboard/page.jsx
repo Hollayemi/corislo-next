@@ -3,7 +3,7 @@ import useSWR from "swr";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Typography } from "@mui/material";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 import { BranchesSales, TopCards, DashboardCrumb } from "./components";
 import DashboardLineChart from "@/app/components/chart/ChartjsLineChart";
@@ -12,6 +12,8 @@ import "chart.js/auto";
 import OrderTable from "@/app/components/view/store/tables/OrderTable";
 import { ordersColumns } from "./order-management/components/columns";
 import BranchSalesGrowth from "@/app/components/chart/Progress";
+import { InfoRounded } from "@mui/icons-material";
+import { calculateDateDiff, formatDate } from "@/app/utils/format";
 
 const DashboardOverview = ({ params }) => {
   const [interval, selectedInterval] = useState("7 days");
@@ -34,6 +36,7 @@ const DashboardOverview = ({ params }) => {
     }
   };
 
+  const cardsDateFrom = calculateDateDiff("30_days", new Date());
 
   return (
     <StoreLeftSideBar
@@ -49,6 +52,15 @@ const DashboardOverview = ({ params }) => {
     >
       <Box className="px-2">
         <Box>
+          <Box className="px-3">
+            <InfoRounded className="!text-gray-400 !mr-2 !text-[15px] cursor-pointer" />
+            <Typography
+              variant="caption"
+              className="!text-[11px] !text-gray-400"
+            >
+              Month Rolling Interval e.g {cardsDateFrom} - {formatDate()}
+            </Typography>
+          </Box>
           <TopCards />
         </Box>
         <Box className="mt-4 flwx justify-center">

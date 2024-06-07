@@ -24,7 +24,7 @@ const Chip = props => {
   }
   const propsToPass = { ...props }
   propsToPass.rounded = undefined
-
+  console.log(color, color && Object.assign(colors[color]));
   return (
     <MuiChip
       {...propsToPass}

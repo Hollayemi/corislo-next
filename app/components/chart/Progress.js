@@ -19,7 +19,7 @@ import { calculateDateDiff } from "@/app/utils/format";
 
 const BranchSalesGrowth = ({ interval, selectedInterval }) => {
   const { data, isLoading } = useSWR(
-    `/store/branch-sales?interval=yearly&startDate=${calculateDateDiff(
+    `/store/branch-sales?interval=monthly&startDate=${calculateDateDiff(
       interval.split(" ").join("_"),
       new Date(),
       "-",
@@ -27,8 +27,6 @@ const BranchSalesGrowth = ({ interval, selectedInterval }) => {
     )}`
   );
   const result = data?.data || {};
-
-  console.log(result);
 
   const dayInterval = [
     "3 days",
@@ -81,7 +79,7 @@ const BranchSalesGrowth = ({ interval, selectedInterval }) => {
           {reshapePrice(item.TotalBranchSale)}
         </Typography>
         <Typography variant="body2" className="!text-[14px] !text-gray-500">
-          {`${item.lastGrowth > 100 ? " > 100" : item.lastGrowth}%`}
+          {`${item.lastGrowth > 100 ? " > 100" : item.lastGrowth?.toFixed(1)}%`}
         </Typography>
       </Box>
       <LinearProgress
@@ -89,6 +87,7 @@ const BranchSalesGrowth = ({ interval, selectedInterval }) => {
         value={item.lastGrowth}
         className="!rounded-md"
         color={"info"}
+        aria-controls="lkslk"
         sx={{ height: 8 }}
       />
     </Box>
@@ -104,6 +103,7 @@ const BranchSalesGrowth = ({ interval, selectedInterval }) => {
         <CustomOption
           icon={
             <Button
+              name="sdfd"
               className="!text-[15px]"
               endIcon={<IconifyIcon icon="tabler:chevron-down" />}
             >

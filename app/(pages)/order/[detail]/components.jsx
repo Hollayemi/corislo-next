@@ -96,8 +96,8 @@ export const trackMainSteps = {
   paid: 2,
   processing: 3,
   out_for_delivery: 4,
-  pickable: 5,
-  completed: 6,
+  pickable: 3,
+  completed: 5,
   review: 6,
 };
 

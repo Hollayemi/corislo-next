@@ -68,7 +68,7 @@ const OrderDetails = ({ order }) => {
   };
 
   const handleChange2 = (prop, aux) => {
-    setPayload({ ...payload, [prop]: aux?.toLowerCase().replaceAll(" ", "_") });
+    setPayload({ ...payload, [prop]: aux?.replaceAll(" ", "_") });
   };
 
   const handleMenuItemClick = (action) => (e) => {

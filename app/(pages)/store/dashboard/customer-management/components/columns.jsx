@@ -61,7 +61,7 @@ export const customerColumns = [
     field: "totalAmount",
     renderCell: (params) => (
       <Typography variant="body2" sx={{ color: "text.primary" }}>
-        {params.row.totalAmount}
+        ₦ {parseInt(params.row.totalAmount).toLocaleString()}
       </Typography>
     ),
   },
@@ -134,7 +134,7 @@ export const listingColumns = [
     field: "totalAmountSpent",
     renderCell: (params) => (
       <Typography variant="body2" sx={{ color: "text.primary" }}>
-        {params.row.totalAmountSpent}
+        ₦ {parseInt(params.row.totalAmountSpent).toLocaleString()}
       </Typography>
     ),
   },

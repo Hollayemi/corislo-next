@@ -17,6 +17,7 @@ import DatePicker from "react-datepicker";
 import DatePickerWrapper from "@/app/styles/react-datepicker";
 import {
   calculateDateDiff,
+  dateNumericOption,
   formatDate,
   generateDateRange,
   mySubstring,
@@ -128,11 +129,15 @@ const MarketingPage = ({ params }) => {
       }),
     [interval]
   );
-
+  const daee = new Date();
+  console.log(daee, new Date().toLocaleString(), new Date(daee));
+  
   const query = {
-    startDate: intervals.startDate?.toLocaleString(),
-    endDate: intervals.endDate?.toLocaleString(),
+    startdate: formatDate(intervals.startDate, dateNumericOption),
+    enddate: formatDate(intervals.endDate, dateNumericOption),
   };
+
+  console.log(query);
 
   const queryString = new URLSearchParams(query).toString();
   const { data: statData, isLoading: statLoading } = useSWR(

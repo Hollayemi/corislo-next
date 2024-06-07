@@ -3,6 +3,7 @@ import { Typography, Box } from "@mui/material";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 import { customerBreadCrumb } from "./components/columns";
 import { AllCustomers } from "./components/allCustomers";
+import OverViewCard from "./components/overview";
 
 const CustomerManagement = ({ params }) => {
   const path = { ...params, sidebar: "customer-management" };
@@ -15,14 +16,14 @@ const CustomerManagement = ({ params }) => {
       ]}
     >
       <Box className="w-full">
-        <Box className="bg-white rounded-md px-2 md:px-8 pt-6 w-full">
-          <Box className="flex items-center !pb-5">
-            <Typography className="!text-[16px] md:!text-md !font-bold">
-              Customer List
-            </Typography>
+        <Box className="">
+          <Box className="!pb-5 bg-white rounded-md px-2 md:px-8 pt-6 w-full">
+            <OverViewCard />
           </Box>
 
-          <AllCustomers />
+          <Box className="bg-white rounded-md px-2 md:px-8 pt-1 w-full mt-4">
+            <AllCustomers />
+          </Box>
         </Box>
       </Box>
     </StoreLeftSideBar>

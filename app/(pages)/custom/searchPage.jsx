@@ -1,7 +1,6 @@
 import IconifyIcon from "@/app/components/icon";
 import OptionsMenu from "@/app/components/option-menu";
 import { ProductOnShowcase } from "@/app/components/templates/productTemplates";
-import { moreProducts } from "@/app/data/home/homepage";
 import { Box, Button, Typography } from "@mui/material";
 import Image from "next/image";
 import React, { useState } from "react";

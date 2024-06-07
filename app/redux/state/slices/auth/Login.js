@@ -2,11 +2,7 @@ import { createSlice, createAsyncThunk, unwrapResult } from "@reduxjs/toolkit";
 import toaster from "@/app/configs/toaster";
 import { REQUEST_STATUS } from "../constants";
 import martApi from "../api/baseApi";
-import { editShopAuth } from "../shop/settings/editShop";
-import { clearCart } from "../home/cart/fetchCart";
-import { otpHandler } from "../shop/setOtp";
 import { jsonHeader } from "../api/setAuthHeaders";
-import tokens from "@/app/configs/tokens";
 
 const UserLoginApi = createAsyncThunk("post/UserLogin", async (payload) => {
   const { data } = await martApi

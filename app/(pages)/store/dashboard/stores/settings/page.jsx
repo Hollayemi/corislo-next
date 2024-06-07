@@ -160,21 +160,27 @@ const StorePage = ({ params }) => {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={7}>
             <Box>
-              <Typography className="!font-bold text-sm">
+              <Typography className="!font-bold !text-gray-800 text-sm">
                 Delivery Option
               </Typography>
 
-              <Typography variant="caption">
+              <Typography
+                variant="caption"
+                className="!text-[13px] !text-gray-700"
+              >
                 Choose the options of your delivery
               </Typography>
             </Box>
 
             <Box>
-              <Typography className="!font-semibold text-sm !mt-6">
+              <Typography className="!font-semibold !text-gray-800 text-sm !mt-6">
                 Pickup
               </Typography>
               <Box className="!flex !justify-between !items-center">
-                <Typography variant="caption" className="!text-[11px] ">
+                <Typography
+                  variant="caption"
+                  className="!text-[13px] !text-gray-700"
+                >
                   Client has to come pick up the orders by themselves.
                 </Typography>
                 <MySwitch
@@ -187,7 +193,7 @@ const StorePage = ({ params }) => {
 
               <Box className="!border-b pb-5">
                 <Box className="flex items-center justify-between mt-5">
-                  <Typography className="!font-semibold !text-sm">
+                  <Typography className="!font-semibold !text-gray-800 !text-sm">
                     Waybill
                   </Typography>
                   <MySwitch
@@ -215,7 +221,10 @@ const StorePage = ({ params }) => {
                     }
                     label={
                       <Box>
-                        <Typography variant="caption" className="">
+                        <Typography
+                          variant="caption"
+                          className="!text-[13px] !text-gray-700"
+                        >
                           Waybill Fees will be paid by customer seperately
                         </Typography>
                       </Box>
@@ -233,12 +242,12 @@ const StorePage = ({ params }) => {
                       className="!mt-2"
                       label={
                         <Box>
-                          {/* <Typography variant="body2" className="!text-[11px] !font-semibold">
+                          {/* <Typography variant="body2" className="!text-[13px] !font-semibold !text-gray-800">
                             Minimum amount value
                           </Typography> */}
                           <Typography
                             variant="caption"
-                            className=" text-[11px]"
+                            className="!text-[13px] !text-gray-700"
                           >
                             Minimum amount of goods that must be bought for the
                             waybill option
@@ -288,7 +297,10 @@ const StorePage = ({ params }) => {
                     }
                     label={
                       <Box>
-                        <Typography variant="caption" className="">
+                        <Typography
+                          variant="caption"
+                          className="!text-[13px] !text-gray-700"
+                        >
                           Delivery hours are different from opening hours.
                         </Typography>
                       </Box>
@@ -306,10 +318,13 @@ const StorePage = ({ params }) => {
             </Box>
 
             <Box className="mt-5 pb-8 border-b">
-              <Typography className="!font-semibold !text-sm">
+              <Typography className="!font-semibold !text-gray-800 !text-sm">
                 Payment settings
               </Typography>
-              <Typography variant="caption" className="text-[11px] ">
+              <Typography
+                variant="caption"
+                className="!text-[13px] !text-gray-700"
+              >
                 This is the account with which the payment for the purchase is
                 paid into.
               </Typography>
@@ -350,10 +365,13 @@ const StorePage = ({ params }) => {
             <Box className="mt-5 pb-8 border-b">
               <Box className="flex items-center justify-between">
                 <Box>
-                  <Typography className="!font-semibold text-sm">
+                  <Typography className="!font-semibold !text-gray-800 text-sm">
                     Store Policies
                   </Typography>
-                  <Typography variant="caption" className="">
+                  <Typography
+                    variant="caption"
+                    className="!text-[13px] !text-gray-700"
+                  >
                     input some policies for your store
                   </Typography>
                 </Box>
@@ -373,7 +391,10 @@ const StorePage = ({ params }) => {
               <br />
 
               <Box className="flex items-center justify-between pl-2 md:pl-5">
-                <Typography variant="caption" className="">
+                <Typography
+                  variant="caption"
+                  className="!text-[13px] !text-gray-700"
+                >
                   Refund and Returns
                 </Typography>
 
@@ -408,7 +429,7 @@ const StorePage = ({ params }) => {
                 </Select>
               </Box>
               <Box className="flex items-center justify-between pl-2 md:pl-5 !mt-3">
-                <Typography variant="caption" className="">
+                <Typography variant="caption" className="!text-[13px] !text-gray-700">
                   Refund and Returns option
                 </Typography>
 
@@ -439,7 +460,7 @@ const StorePage = ({ params }) => {
               </Box>
 
               <Box className="flex items-center justify-between pl-2 md:pl-5 !mt-3">
-                <Typography variant="caption" className="">
+                <Typography variant="caption" className="!text-[13px] !text-gray-700">
                   Repayment method
                 </Typography>
 
@@ -475,12 +496,15 @@ const StorePage = ({ params }) => {
                 }
                 label={
                   <Box>
-                    <Typography variant="body2" className="!font-semibold">
+                    <Typography
+                      variant="body2"
+                      className="!font-semibold !text-gray-800"
+                    >
                       Pre - Order option
                     </Typography>
                     <Typography
                       variant="caption"
-                      className="text-[11px] leading-3"
+                      className="text-[13px] !text-gray-700 leading-4"
                     >
                       Allows stores to give room to customers to pre-order by
                       messaging directly about the product to be pre-ordered.
@@ -499,10 +523,13 @@ const StorePage = ({ params }) => {
             <Box className="mt-5 pb-8 border-b">
               <Box className="flex items-center justify-between">
                 <Box>
-                  <Typography className="!font-semibold text-sm">
+                  <Typography className="!font-semibold !text-gray-800 text-sm">
                     Notification and Alerts
                   </Typography>
-                  <Typography variant="caption" className="!text-[11px] ">
+                  <Typography
+                    variant="caption"
+                    className="!text-[13px] !text-gray-700"
+                  >
                     This includes receiving notification for low stock
                   </Typography>
                 </Box>
@@ -533,10 +560,10 @@ const StorePage = ({ params }) => {
                   }
                   label={
                     <Box>
-                      <Typography variant="body2" className="!text-[12px]">
+                      <Typography variant="body2" className="!text-[13px] !text-gray-700">
                         Low Stock
                       </Typography>
-                      <Typography variant="caption" className="!text-[11px]">
+                      <Typography variant="caption" className="!text-[13px] !text-gray-700">
                         The minimum amount of goods left
                       </Typography>
                     </Box>
@@ -573,7 +600,7 @@ const StorePage = ({ params }) => {
                 }
                 label={
                   <Box>
-                    <Typography variant="caption" className="">
+                    <Typography variant="caption" className="!text-[13px] !text-gray-700">
                       Out of stock
                     </Typography>
                   </Box>
@@ -598,7 +625,7 @@ const StorePage = ({ params }) => {
                 }
                 label={
                   <Box>
-                    <Typography variant="caption" className="">
+                    <Typography variant="caption" className="!text-[13px] !text-gray-700">
                       Restock Reminder
                     </Typography>
                   </Box>
@@ -623,7 +650,7 @@ const StorePage = ({ params }) => {
                 }
                 label={
                   <Box>
-                    <Typography variant="caption" className="">
+                    <Typography variant="caption" className="!text-[13px] !text-gray-700">
                       Email Notification
                     </Typography>
                   </Box>
@@ -648,10 +675,13 @@ const StorePage = ({ params }) => {
                 }
                 label={
                   <Box>
-                    <Typography variant="body2" className="!text-[11px] !font-semibold">
+                    <Typography
+                      variant="body2"
+                      className="!text-[13px] !font-semibold !text-gray-800"
+                    >
                       Order Confirmations
                     </Typography>
-                    <Typography variant="caption" className="!text-[11px]">
+                    <Typography variant="caption" className="!text-[13px] !text-gray-700">
                       When an order is placed on any product
                     </Typography>
                   </Box>
@@ -676,10 +706,16 @@ const StorePage = ({ params }) => {
                 }
                 label={
                   <Box>
-                    <Typography variant="body2" className="!text-[11px] !font-semibold">
+                    <Typography
+                      variant="body2"
+                      className="!text-[13px] !font-semibold !text-gray-800"
+                    >
                       Shipping Updates
                     </Typography>
-                    <Typography variant="caption" className="!text-[11px] !leading-3">
+                    <Typography
+                      variant="caption"
+                      className="!text-[13px] !text-gray-700 !leading-3"
+                    >
                       When there is update or changes to the order status, such
                       as waybilling and more.
                     </Typography>
@@ -705,10 +741,13 @@ const StorePage = ({ params }) => {
                 }
                 label={
                   <Box>
-                    <Typography variant="body2" className="!text-[11px] !font-semibold">
+                    <Typography
+                      variant="body2"
+                      className="!text-[13px] !font-semibold !text-gray-800"
+                    >
                       Account Activity
                     </Typography>
-                    <Typography variant="caption" className="!text-[11px]">
+                    <Typography variant="caption" className="!text-[13px] !text-gray-700">
                       When there is account-related activities, such as password
                       changes, login attempts, or account settings modifications
                     </Typography>
@@ -734,10 +773,13 @@ const StorePage = ({ params }) => {
                 }
                 label={
                   <Box>
-                    <Typography variant="body2" className="!text-[11px] !font-semibold">
+                    <Typography
+                      variant="body2"
+                      className="!text-[13px] !font-semibold !text-gray-800"
+                    >
                       Customer Inquiries
                     </Typography>
-                    <Typography variant="caption" className="!text-[11px]">
+                    <Typography variant="caption" className="!text-[13px] !text-gray-700">
                       When there is any enquiry from the customer.
                     </Typography>
                   </Box>
@@ -764,16 +806,7 @@ const StorePage = ({ params }) => {
             </Button>
           </Grid>
           <Grid item xs={12} sm={5}>
-            <Box className="!hidden md:!flex justify-end mb-32">
-              <Button
-                variant="contained"
-                className="mr-4 bg-blue-900"
-                startIcon={<Icon icon="tabler:plus" />}
-              >
-                Add Store
-              </Button>
-            </Box>
-            <Box className="h-[500px] bg-gray-50 ">
+            <Box className="h-[500px] bg-gray-50 md:!mt-44">
               <h3 className="text-center py-10"> Map here</h3>
             </Box>
           </Grid>

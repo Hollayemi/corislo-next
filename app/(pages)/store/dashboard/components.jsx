@@ -1,61 +1,77 @@
-"use client"
+"use client";
 import { useState } from "react";
 import Icon from "@/app/components/icon";
 import { useTheme } from "@mui/material/styles";
 import CustomAvatar from "@/app/components/avatar";
-import {
-  Box,
-  Grid,
-  Typography,
-  LinearProgress,
-  Button,
-} from "@mui/material";
+import { Box, Grid, Typography, LinearProgress, Button } from "@mui/material";
 
 // ** Custom Components Imports
 import CustomChip from "@/app/components/chip";
 import CustomOption from "@/app/components/option-menu/option";
-import { formatCurrency } from "@/app/utils/format";
-
-const data = [
-  {
-    progress: 64,
-    stats: "₦1,245,000",
-    title: "Earnings",
-    avatarIcon: "tabler:currency-dollar",
-    increase: 23,
-  },
-  {
-    progress: 59,
-    title: "Profit",
-    stats: "$256.34",
-    avatarColor: "info",
-    progressColor: "info",
-    avatarIcon: "tabler:chart-pie-2",
-    increase: 43,
-  },
-  {
-    progress: 22,
-    stats: "$74.19",
-    title: "Expense",
-    avatarColor: "error",
-    progressColor: "error",
-    avatarIcon: "tabler:brand-paypal",
-    increase: 63,
-  },
-
-  {
-    progress: 22,
-    stats: "$74.19",
-    title: "Expense",
-    avatarColor: "error",
-    progressColor: "error",
-    avatarIcon: "tabler:brand-paypal",
-    increase: -53,
-  },
-];
+import {
+  calculateDateDiff,
+  dateNumericOption,
+  formatCurrency,
+  formatDate,
+} from "@/app/utils/format";
+import useSWR from "swr";
 
 export const TopCards = () => {
-  const theme = useTheme();
+  const dateFrom = calculateDateDiff("1_month", new Date(), "-", true);
+  const query = {
+    startDate: formatDate(dateFrom, dateNumericOption),
+    endDate: formatDate(new Date(), dateNumericOption),
+    interval: "monthly",
+  };
+
+  console.log(dateFrom, query);
+  const queryString = new URLSearchParams(query).toString();
+  const { data: swrData, isLoading } = useSWR(`/dashboard/cards`);
+  const result = (swrData && swrData.data) || {};
+  console.log(result);
+  const data = [
+    {
+      stats: result.views?.sum?.toLocaleString(),
+      title: "Invetory Turnover",
+      avatarIcon: "tabler:currency-dollar",
+      increase:
+        result.views?.growth > 100 ? "100+" : result.views?.growth || "-",
+    },
+    {
+      progress: 59,
+      title: "Cart & Wishlist",
+      stats: result.cartAndSaved?.sum || 0,
+      avatarColor: "info",
+      progressColor: "info",
+      avatarIcon: "tabler:chart-pie-2",
+      increase:
+        result.cartAndSaved?.growth > 100
+          ? "100+"
+          : result.cartAndSaved?.growth || "-",
+    },
+    {
+      progress: 22,
+      stats: "$74.19",
+      title: "Appearances",
+      avatarColor: "error",
+      progressColor: "error",
+      avatarIcon: "tabler:brand-paypal",
+      increase: 63,
+    },
+
+    {
+      progress: 22,
+      stats: result.followers?.sum || 0,
+      title: "Followers",
+      avatarColor: "error",
+      progressColor: "error",
+      avatarIcon: "tabler:brand-paypal",
+      increase:
+        result.followers?.growth > 100
+          ? "100+"
+          : result.followers?.growth || "-",
+    },
+  ];
   return (
     <Box className="">
       <Grid container spacing={0.5}>
@@ -153,7 +169,9 @@ export const BranchesSales = () => {
           justifyContent: "space-between",
         }}
       >
-        <Typography variant="caption" className="!text-xs">{item.subtitle}</Typography>
+        <Typography variant="caption" className="!text-xs">
+          {item.subtitle}
+        </Typography>
         <Typography variant="body2" sx={{ color: "text.disabled" }}>
           {`${item.progress}%`}
         </Typography>
@@ -179,10 +197,7 @@ export const BranchesSales = () => {
   ];
 
   return (
-    <Box
-      className="!h-full rounded-md pb-6 px-2"
-      bgcolor="custom.bodyLight"
-    >
+    <Box className="!h-full rounded-md pb-6 px-2" bgcolor="custom.bodyLight">
       <Box className="!py-1.5 !flex !items-center !justify-between">
         <Typography variant="caption" className="!text-[13px] !font-medium">
           Sales by Stores
@@ -209,4 +224,3 @@ export const DashboardCrumb = [
     icon: "home",
   },
 ];
-

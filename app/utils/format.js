@@ -104,8 +104,15 @@ export const changeTime = (prevDate) => {
   return realTime;
 };
 
+export const dateNumericOption = {
+  year: "numeric",
+  month: "numeric",
+  day: "numeric",
+ 
+};
+
 export const formatDate = (
-  value,
+  value = new Date(),
   formatting = { month: "short", day: "numeric", year: "numeric" }
 ) => {
   if (!value) return value;
@@ -311,11 +318,11 @@ export const formatSegmentation = (orders, totalAmount, lastSeen) => {
   const millisecondsPerWeek = 7 * 24 * 60 * 60 * 1000;
   const weeksDifference = Math.floor(timeDifference / millisecondsPerWeek);
 
-  if (orders >= 10 && totalAmount.parseInt() > 100000) {
+  if (orders >= 10 && parseInt(totalAmount) > 100000) {
     categ = "High Spender";
     color = "red";
   }
-  if (orders > 15 && totalAmount.parseInt() < 100000) {
+  if (orders > 15 && parseInt(totalAmount) < 100000) {
     categ = "Frequent Buyer";
     color = "green";
   }

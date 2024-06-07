@@ -41,15 +41,12 @@ const TimelineLeft = ({ orderSlug, currentStatus }) => {
   const { data: steps } = useSWR(`/user/order-track?order=${orderSlug}`);
   const allSteps = steps?.data?.status || [];
 
-  console.log(allSteps);
-  console.log(currentStatus);
 
   return (
     <Timeline>
       {allSteps.map((item, i) => {
         const { title, note } =
           orderStatusMessages[item.state.replaceAll(" ", "_").toLowerCase()] || {};
-        console.log(item.status);
         return (
           <TimelineItem key={i}>
             <TimelineSeparator>
@@ -140,7 +137,6 @@ const TimelineLeft = ({ orderSlug, currentStatus }) => {
 export default TimelineLeft;
 
 export const OrderStages = ({ at, orderSlug, delivery }) => {
-  console.log(at);
   const Stage = ({ at = 0 }) => {
     const pickIcon = {
       1: { icon: "tabler:currency-dollar", name: "Paid" },

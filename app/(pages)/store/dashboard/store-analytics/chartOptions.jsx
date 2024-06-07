@@ -126,6 +126,7 @@ export const salesOptions = (theme, series, labels) => {
       width: 3,
       curve: "smooth",
     },
+    
     grid: {
       show: false,
       padding: {

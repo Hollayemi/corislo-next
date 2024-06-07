@@ -248,15 +248,6 @@ export const MySwitch = (props) => {
   return (
     <Switch
       {...props}
-      sx={{
-        "& .MuiSwitch-switchBase.Mui-checked": {
-          color: "#2C337C",
-        },
-        "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-          backgroundColor: "#2C337C",
-        },
-      }}
-      style={{ color: "#33303C" }}
     />
   );
 }

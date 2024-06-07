@@ -72,7 +72,7 @@ const StorePage = ({ params }) => {
           <Grid item xs={12} sm={7} className="md:!pr-16">
             <Box>
               <Box className="flex items-center justify-between">
-                <Typography className="font-bold text-sm">
+                <Typography className="font-bold !text-gray-800 text-sm">
                   Store Profile
                 </Typography>
               </Box>
@@ -124,7 +124,7 @@ const StorePage = ({ params }) => {
             </Box>
 
             <Box className="!mt-8 !border-b !pb-6">
-              <Typography className="!font-bold text-sm">
+              <Typography className="!font-bold !text-gray-800 text-sm">
                 Store Address
               </Typography>
               <Typography variant="caption" className="">
@@ -150,7 +150,7 @@ const StorePage = ({ params }) => {
             </Box>
 
             <Box className="!mt-8 !pb-6">
-              <Typography className="!font-bold text-sm">
+              <Typography className="!font-bold !text-gray-800 text-sm">
                 About the store
               </Typography>
               <Typography variant="caption" className="">
@@ -172,7 +172,7 @@ const StorePage = ({ params }) => {
             </Box>
 
             <Box className="!mt-8 !border-b !pb-6">
-              <Typography className="!font-bold text-sm">
+              <Typography className="!font-bold !text-gray-800 text-sm">
                 Store Gallery
               </Typography>
               <Typography variant="caption" className="">
@@ -184,7 +184,7 @@ const StorePage = ({ params }) => {
             </Box>
 
             <Box className="!mt-8 !border-b !pb-6">
-              <Typography className="!font-bold text-sm">
+              <Typography className="!font-bold !text-gray-800 text-sm">
                 Social Media Integration
               </Typography>
               <Typography variant="caption" className="">
@@ -215,7 +215,7 @@ const StorePage = ({ params }) => {
             </Box>
 
             <Box className="!mt-8 !pb-6">
-              <Typography className="!font-bold text-sm">
+              <Typography className="!font-bold !text-gray-800 text-sm">
                 Opening Hours
               </Typography>
 

@@ -1,25 +1,22 @@
-'use client';
+"use client";
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
-import { Typography, Box, Select, MenuItem } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import Table from "@/app/components/view/store/tables/OrderTable";
 import { listingColumns } from "./columns";
-import { allCustomers } from "./rows";
-import tokens from "@/app/configs/tokens";
+import OverViewCard from "./overview";
 
 export const AllCustomers = () => {
   const router = useRouter();
   const { data, error, isLoading } = useSWR("/branch/customers");
 
   const onRowClick = (row) => {
-    router.push(
-      `/store/dashboard/customer-management/${row._id.userId}`
-    );
-  }
+    router.push(`/store/dashboard/customer-management/${row.customerId}`);
+  };
 
   return (
     <Box>
-      <Typography variant="caption" className="!text-[12px] !mt-3">
+      {/* <Typography variant="caption" className="!text-[12px] !mt-3">
         The Customer List is a powerful tool that offers a holistic overview of
         all registered customers across our brand's stores. Serving as a
         centralized database, it houses vital information about the valued
@@ -31,9 +28,9 @@ export const AllCustomers = () => {
         Customer List at your disposal, you are better equipped to exceed
         expectations and deliver exceptional service tailored to each customer's
         unique preferences and preferences.
-      </Typography>
+      </Typography> */}
+      
 
-      {/* <br /> */}
       {!error && !isLoading && (
         <>
           <Typography variant="h5" className="!font-bold !text-sm py-6">

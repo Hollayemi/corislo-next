@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { Box, Button, Rating, Typography } from "@mui/material";
+import { Box, Button, LinearProgress, Rating, Typography } from "@mui/material";
 import IconifyIcon from "../icon";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
@@ -11,10 +11,34 @@ import { formatCurrency, ngnPrice } from "@/app/utils/format";
 import { Map } from "@mui/icons-material";
 import { useUserData } from "@/app/hooks/useData";
 
-export const PopularProduct = ({ image, prodName, store, price, small }) => {
+export const PopularProduct = ({
+  image,
+  prodName,
+  store,
+  price,
+  small,
+  others,
+}) => {
   const router = useRouter();
   return (
-    <Box className={`${small ? "!w-28 !h-44 m-1 " : "!w-28 !h-44 md:!w-44 md:!h-56 m-0.5 md:m-2 "}`}>
+    <Box
+      className={`${
+        small
+          ? "!w-28 !h-44 m-1 "
+          : "!w-28 !h-44 md:!w-44 md:!h-56 m-0.5 md:m-2 relative"
+      }`}
+    >
+      {others?.discount && (
+        <Box className="w-9 h-4 bg-red-600 rounded-full absolute right-2 top-2 shadow flex items-center justify-center">
+          <Typography
+            variant="body2"
+            className="!text-white !text-[11px] cursor-pointer"
+            title={others?.discountTitle}
+          >
+            {others?.discount}%
+          </Typography>
+        </Box>
+      )}
       <Box onClick={() => router.push(`/biz/${store}/${prodName}`)}>
         <img
           src={image}
@@ -27,7 +51,7 @@ export const PopularProduct = ({ image, prodName, store, price, small }) => {
           <Box>
             <Typography
               variant="body2"
-              className="!text-[10px] md:!text-[12px] !h-7 md:!h-8 overflow-hidden"
+              className="!text-[10px] md:!text-[12px] !h-auto !max-h-8 overflow-hidden"
             >
               {prodName}
             </Typography>
@@ -45,7 +69,16 @@ export const PopularProduct = ({ image, prodName, store, price, small }) => {
     </Box>
   );
 };
-export const HotDeal = ({ image, prodName, small, price, store, unit, of }) => {
+export const HotDeal = ({
+  image,
+  prodName,
+  small,
+  price,
+  store,
+  unit,
+  of,
+  others,
+}) => {
   const percentage = (unit / of) * 100;
   const router = useRouter();
   return (
@@ -53,7 +86,7 @@ export const HotDeal = ({ image, prodName, small, price, store, unit, of }) => {
       className={`${
         small
           ? "!w-28 !h-44 m-1 "
-          : "!w-28 !h-44 md:!w-44 md:!h-60 m-0.5 md:m-2 "
+          : "!w-28 !h-44 md:!w-44 md:!h-60 m-0.5 md:m-2 relative"
       }`}
     >
       <Box onClick={() => router.push(`/biz/${store}/${prodName}`)}>
@@ -79,14 +112,18 @@ export const HotDeal = ({ image, prodName, small, price, store, unit, of }) => {
             variant="body2"
             className="whitespace-nowrap text-ellipsis !font-bold !text-[11px] md:!text-[13px]"
           >
-            {formatCurrency(price || 6400.54)}
+            {formatCurrency(price || 0)}
           </Typography>
         </Box>
         <Box className="w-full !rounded-full h-1.5 bg-gray-300 overflow-hidden">
-          <Box
-            className={`!w-[45%] h-full !rounded-full`}
-            bgcolor="custom.sec"
-          ></Box>
+          <LinearProgress
+            variant="determinate"
+            value={percentage}
+            className="!rounded-md"
+            color={"warning"}
+            aria-controls="lkslk"
+            sx={{ height: 8 }}
+          />
         </Box>
         <h5 className="text-[10px]">
           {unit} of {of} Remaining
@@ -176,20 +213,22 @@ export const ProductOnShowcase = ({
   prodPrice,
   star,
 }) => {
-  const { showMapScreen } = useUserData()
+  const { showMapScreen } = useUserData();
   const router = useRouter();
   const reshapedProdName = prodName.split(" ").join("+").toLowerCase();
   return (
     <Box className="w-4/12 min-w-[100px] relative max-w-[140px] md:max-w-[170px] md:w-44 h-48 md:!h-64 md:mx-2 my-2.5 ">
-      {others?.discount && <Box className="w-9 h-4 bg-red-600 rounded-full absolute right-2 top-2 shadow flex items-center justify-center">
-      <Typography
-              variant="body2"
-              className="!text-white !text-[11px] cursor-pointer"
-              title={others?.discountTitle}
-            >
-        {others?.discount}%
-        </Typography>
-        </Box>}
+      {others?.discount && (
+        <Box className="w-9 h-4 bg-red-600 rounded-full absolute right-2 top-2 shadow flex items-center justify-center">
+          <Typography
+            variant="body2"
+            className="!text-white !text-[11px] cursor-pointer"
+            title={others?.discountTitle}
+          >
+            {others?.discount}%
+          </Typography>
+        </Box>
+      )}
       <Box
         onClick={() => router.push(`/biz/${store}/${reshapedProdName}`)}
         className="!px-0.5"
@@ -237,7 +276,10 @@ export const ProductOnShowcase = ({
                 {store}
               </Typography>
             </Link>
-            <Box className="flex items-center cursor-pointer mr-3" onClick={() => showMapScreen()}>
+            <Box
+              className="flex items-center cursor-pointer mr-3"
+              onClick={() => showMapScreen()}
+            >
               <IconifyIcon
                 icon="tabler:map-pin-filled"
                 className="!mr-1 !text-[15px]"

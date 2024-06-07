@@ -11,14 +11,7 @@ import {
   SectionTitle,
   TopStores,
 } from "@/app/components/cards/homeCards";
-import {
-  categoryData,
-  hotDealData,
-  moreProducts,
-  popularAdsData,
-  popularProducts,
-  topStoresData,
-} from "@/app/data/home/homepage";
+import { categoryData, topStoresData } from "@/app/data/home/homepage";
 import ReactSlickSlider from "@/app/components/wrapper/react-slick";
 import {
   HotDeal,
@@ -35,7 +28,15 @@ import { NumberExplained } from "../components/cards/sellerCards";
 
 const HomePage = ({ searchParams }) => {
   const { data: prods, isLoading, error } = useSWR("/products");
+  const { data: popularProds } = useSWR("/home/popular-products");
+  const { data: ads } = useSWR("/home/ads");
+  const { data: fss } = useSWR("/home/flashsales?deal=hot");
   const products = prods ? prods.data : [];
+  const popularProducts = popularProds ? popularProds.data : [];
+  const popularAds = ads ? ads.data : [];
+  const hotDealData = fss ? fss.data : [];
+
+  console.log(hotDealData);
 
   return (
     <HomeWrapper>
@@ -100,7 +101,10 @@ const HomePage = ({ searchParams }) => {
                 >
                   14K+
                 </Typography>
-                <Typography variant="caption" className="!text-blue-900 !font-medium !text-[14px] !leading-6">
+                <Typography
+                  variant="caption"
+                  className="!text-blue-900 !font-medium !text-[14px] !leading-6"
+                >
                   Worldwide Product Sales Per Year
                 </Typography>
               </Box>
@@ -198,10 +202,11 @@ const HomePage = ({ searchParams }) => {
               {popularProducts.map((prod, i) => (
                 <PopularProduct
                   key={i}
-                  image={prod.image}
-                  store={prod.store}
-                  prodName={prod.prodName}
-                  price={prod.price}
+                  image={`/images/more/${i + 1}.png`}
+                  store={prod.product.store}
+                  prodName={prod.product.prodName}
+                  price={prod.product.prodPrice}
+                  others={prod.product}
                 />
               ))}
             </ReactSlickSlider>
@@ -263,11 +268,12 @@ const HomePage = ({ searchParams }) => {
                 {hotDealData.map((prod, i) => (
                   <HotDeal
                     key={i}
-                    image={prod.image}
-                    prodName={prod.prodName}
-                    price={prod.price}
-                    unit={prod.unit}
-                    of={prod.of}
+                    image={`/images/more/${i + 1}.png`}
+                    prodName={prod.product.prodName}
+                    price={prod.product.prodPrice}
+                    unit={prod.product.totInStock}
+                    of={prod.product.sold + prod.product.totInStock}
+                    others={prod.product}
                   />
                 ))}
               </ReactSlickSlider>
@@ -291,11 +297,11 @@ const HomePage = ({ searchParams }) => {
               <SectionTitle black="Popular" blue="Ads" />
               <Box className="!mt-6">
                 <ReactSlickSlider>
-                  {popularAdsData.map((ad, i) => (
+                  {popularAds.map((ad, i) => (
                     <PopularAds
                       store={ad.store}
                       key={i}
-                      image={ad.image}
+                      image={`/images/misc/popular-ads${i+1}.png`}
                       title={ad.title}
                       brief={ad.brief}
                     />
@@ -332,7 +338,7 @@ const HomePage = ({ searchParams }) => {
                     star={prod.star}
                     store={prod.store}
                     branch={prod.branch}
-                    others={{...prod}}
+                    others={{ ...prod }}
                   />
                 ))}
               </Box>

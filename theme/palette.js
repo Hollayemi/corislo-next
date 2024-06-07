@@ -1,25 +1,26 @@
-const DefaultPalette = (mode='light', skin) => {
+const DefaultPalette = (mode = "light", skin) => {
   // ** Vars
-  const whiteColor = '#FFF'
-  const lightColor = '51, 48, 60'
-  const darkColor = '228, 230, 244'
-  const darkPaperBgColor = '#2F3349'
-  const mainColor = mode === 'light' ? lightColor : darkColor
+  const whiteColor = "#FFF";
+  const lightColor = "51, 48, 60";
+  const darkColor = "228, 230, 244";
+
+  const darkPaperBgColor = "#2F3349";
+  const mainColor = mode === "light" ? lightColor : darkColor;
 
   const defaultBgColor = () => {
-    if (skin === 'bordered' && mode === 'light') {
-      return whiteColor
-    } else if (skin === 'bordered' && mode === 'dark') {
-      return darkPaperBgColor
-    } else if (mode === 'light') {
-      return '#F8F7FA'
-    } else return '#25293C'
-  }
+    if (skin === "bordered" && mode === "light") {
+      return whiteColor;
+    } else if (skin === "bordered" && mode === "dark") {
+      return darkPaperBgColor;
+    } else if (mode === "light") {
+      return "#F8F7FA";
+    } else return "#25293C";
+  };
 
   return {
     custom: {
       dark: darkColor,
-      main: mainColor,
+      main: `rgba(${mainColor}, 0.87)`,
       light: lightColor,
       lightPaperBg: whiteColor,
       lightSec: "#FFFBF1",
@@ -102,6 +103,6 @@ const DefaultPalette = (mode='light', skin) => {
       focus: `rgba(${mainColor}, 0.12)`,
     },
   };
-}
+};
 
-export default DefaultPalette
+export default DefaultPalette;
