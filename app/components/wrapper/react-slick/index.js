@@ -5,17 +5,23 @@ import { Box } from '@mui/material';
 
 
 const settings = {
-    infinite: true,
-    // centerMode: true,
-    variableWidth: true,
-    autoplaySpeed: 5000,
-    // slidesToScroll: 1,
-    slideToShow: 1,
-    autoplay: true,
-    pauseOnHover: true,
+  infinite: true,
+  // centerMode: true,
+  variableWidth: true,
+  autoplaySpeed: 5000,
+  slideToShow: 1,
+  autoplay: true,
+  adaptiveHeight: true,
+  pauseOnHover: true,
+};
+
+const settings2 = {
+  ...settings,
+  variableWidth: false,
 };
 const configs = {
-    1: settings
+    1: settings,
+    2: settings2
 }
 
 

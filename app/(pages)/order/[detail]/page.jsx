@@ -14,7 +14,7 @@ import {
 } from "@/app/utils/format";
 import { OrderActionBtn, trackMainSteps } from "./components";
 import { useDispatch } from "react-redux";
-import { feedbackHandler } from "@/app/redux/state/slices/home/feedback";
+import { shopFeedbackHandler } from "@/app/redux/state/slices/home/feedback";
 
 const OrderDetails = ({ params }) => {
   const dispatch = useDispatch()
@@ -24,6 +24,7 @@ const OrderDetails = ({ params }) => {
     orderProducts._id &&
       `/branch/info?branch=${orderProducts._id.branch}&store=${orderProducts._id.store}`
   );
+  console.log(orderProducts);
   const [mouseOn, setMouseOn] = useState(-1);
   const [review, setReview] = useState("");
   console.log(mouseOn);
@@ -110,7 +111,9 @@ const OrderDetails = ({ params }) => {
                       <Button
                         variant="contained"
                         className="!rounded-full !text-[14px] !h-10 !w-32 !shadow-none md:!mx-4"
-                        onClick={() => feedbackHandler(feedbackPayload, dispatch)}
+                        onClick={() =>
+                          shopFeedbackHandler(feedbackPayload, dispatch)
+                        }
                       >
                         Send
                       </Button>
@@ -140,6 +143,8 @@ const OrderDetails = ({ params }) => {
                           hideQtyFunc
                           hideCheckbox
                           prodName={each.productName}
+                          collection={each.collectionName}
+                          store={each.store}
                           quantity={each.qty}
                           image={`/images/more/${i + 1}.png`}
                           prodPrice={each.totalAmount}

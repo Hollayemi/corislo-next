@@ -1,33 +1,63 @@
-import { Box, Rating, Typography } from '@mui/material'
-import React from 'react'
-import { ReviewTab } from './reviewTab'
-import IconifyIcon from '@/app/components/icon';
+"use client";
+import { Box, Button, Rating, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { ReviewTab } from "./reviewTab";
+import IconifyIcon from "@/app/components/icon";
+import { useUserData } from "@/app/hooks/useData";
+import { shopFeedbackHandler } from "@/app/redux/state/slices/home/feedback";
+import { useDispatch } from "react-redux";
 
-const Review = () => {
+const Review = ({ store, branch }) => {
+  const { isOffline } = useUserData();
+  const dispatch = useDispatch();
+  const [review, setReview] = useState("");
+  const [star, setStar] = useState(0);
+  const feedbackPayload = {
+    review,
+    rate: star,
+    store,
+    branch,
+  };
   return (
     <Box>
       <Box className="!bg-white rounded-xl px-3 py-5 mt-10">
-        <ReviewTab />
+        <ReviewTab store={store} branch={branch} />
       </Box>
-      <Box className="!bg-white rounded-xl px-10 py-8 mt-6">
-        <Typography variant="body2" className="!font-bold !text-xl">
-          Rate this app
-        </Typography>
-        <Typography variant="body2" className="!text-[12px]">
-          Tell others what you think
-        </Typography>
-        <Rating defaultValue={0} className="py-6" name="large" size="large" />
-        <Box className="relative">
-          <input
-            type="text"
-            placeholder="Write your own review"
-            className="border border-gray-100 w-full h-10 !rounded-full pl-4 pr-14"
+      {!isOffline && (
+        <Box className="!bg-white rounded-xl px-3 md:px-10 py-8 mt-6">
+          <Typography variant="body2" className="!font-bold !text-xl">
+            Rate this app
+          </Typography>
+          <Typography variant="body2" className="!text-[12px]">
+            Tell others what you think
+          </Typography>
+          <Rating
+            defaultValue={0}
+            onChange={(e, t) => setStar(t)}
+            className="py-6"
+            name="large"
+            size="large"
           />
-          <IconifyIcon icon="tabler:user-plus" className="absolute top-2 right-4" />
+
+          <textarea
+            type="text"
+            onChange={(e) => setReview(e.target.value)}
+            placeholder="Write your own review"
+            className="border border-gray-100 w-full h-24 !rounded-md p-4"
+          ></textarea>
+          <Box className="flex justify-end">
+            <Button
+              variant="contained"
+              className="!w-full md:!w-32 !shadow-none !rounded-md"
+              onClick={() => shopFeedbackHandler(feedbackPayload, dispatch)}
+            >
+              Send
+            </Button>
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   );
-}
+};
 
-export default Review
+export default Review;

@@ -15,17 +15,23 @@ import CustomOption from "@/app/components/option-menu/option";
 import { detectCardType } from "@/app/utils/format";
 import { CardTemplate } from "../user/billingAndAddress";
 import Link from "next/link";
+import { reshapePrice } from "../store/dashboard/marketing/components";
 
 const Checkout = () => {
   const dispatch = useDispatch();
-  const { cartedProds, userInfo, temp } = useUserData();
-  const { data: carts, error } = useSWR("/user/cart-group");
+  const { cartedProds, userInfo, temp, seletedCartProds } = useUserData();
+  const { data: carts, error } = useSWR(
+    `/user/cart-group?${
+      seletedCartProds.length && `prods=${seletedCartProds.join(".")}`
+    }`
+  );
   const { data: pickups, pickupError } = useSWR("/user/pickup");
   const { data: addrs } = useSWR("/user/addresses");
   const { data: cards } = useSWR("/user/billings");
   const addresses = addrs?.data || [];
   const billings = cards?.data || [];
-  const groupedCart = carts ? carts.data : [];
+  const groupedCart = carts ? carts.data.result : [];
+  const amounts = carts ? carts.data.total : [];
   const pickers = pickups ? pickups.data : [];
   console.log(groupedCart, pickers);
 
@@ -73,7 +79,6 @@ const Checkout = () => {
                         variant="outlined"
                         className="w-20 h-6 !rounded-full !border !border-blue-500 !text-[12px] !text-blue-600"
                       >
-
                         {address ? "Change " : "Select "}
                       </Button>
                     }
@@ -133,28 +138,30 @@ const Checkout = () => {
                       Sub total
                     </Typography>
                     <Typography variant="body2" className="!text-[12px]">
-                      NGN54,200
+                      {reshapePrice(amounts?.originalPrice)}
                     </Typography>
                   </Box>
-                  <Box className="w-full flex justify-between items-center !mt-2">
-                    <Typography variant="body2" className="!text-[12px]">
-                      Discount
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      className="!text-[12px] !text-red-500"
-                    >
-                      -NGN16,260
-                    </Typography>
-                  </Box>
-                  <Box className="w-full flex justify-between items-center !mt-2">
+                  {amounts?.discountedPrice ? (
+                    <Box className="w-full flex justify-between items-center !mt-2">
+                      <Typography variant="body2" className="!text-[12px]">
+                        Discount
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        className="!text-[12px] !text-red-500"
+                      >
+                        {reshapePrice(amounts?.discountAmount)}
+                      </Typography>
+                    </Box>
+                  ) : null}
+                  {/* <Box className="w-full flex justify-between items-center !mt-2">
                     <Typography variant="body2" className="!text-[12px]">
                       Way-Billing
                     </Typography>
                     <Typography variant="body2" className="!text-[12px]">
                       NGN9,500
                     </Typography>
-                  </Box>
+                  </Box> */}
 
                   <Box className="w-full h-0.5 border-dashed border border-black mt-7"></Box>
                   <Box className="w-full flex justify-between items-center !mt-5">
@@ -168,7 +175,9 @@ const Checkout = () => {
                       variant="body2"
                       className="!text-[13px] !font-bold"
                     >
-                      NGN37,940
+                      {reshapePrice(
+                        amounts?.discountedPrice || amounts?.originalPrice
+                      )}
                     </Typography>
                   </Box>
                 </Box>
@@ -180,8 +189,8 @@ const Checkout = () => {
                     Voucher
                   </Typography>
                   <Box className="w-full flex justify-between items-center !mt-5">
-                    <Typography variant="body2" className="!text-[11px] w-3/5">
-                      FREE4ALL%15%NOW
+                    <Typography variant="body2" className="!text-[11px] !font-[500] w-3/5">
+                      FREE4ALLNOW
                     </Typography>
                     <Box className="flex justify-between float-right items-center w-2/5">
                       <Typography variant="body2" className="!text-[11px]">

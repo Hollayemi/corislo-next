@@ -24,6 +24,10 @@ const defaultProvider = {
   popMap: false,
   temp: {},
   addTemp: () => {},
+  seletedCartProds: [],
+  selectCartProd: () => {},
+  shopNow: false,
+  setShopNow: () => {},
 };
 const DataContext = createContext(defaultProvider);
 
@@ -31,7 +35,9 @@ const UserDataProvider = ({ children, setOverflow, setUserInfo }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const pathname = usePathname();
+  const [shopNow, setShopNow] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [seletedCartProds, selectCartProd] = useState([]);
   const [socket, setSocket] = useState(null);
   const [temp, addTemp] = useState({});
   const [overLay, setOpenOverlay] = useState(null);
@@ -168,7 +174,7 @@ const UserDataProvider = ({ children, setOverflow, setUserInfo }) => {
   }, []);
 
   useEffect(() => {
-    if(userInfo?.user){
+    if (userInfo?.user) {
       setUserInfo(userInfo.user || {});
     }
   }, [userInfo]);
@@ -222,9 +228,13 @@ const UserDataProvider = ({ children, setOverflow, setUserInfo }) => {
         setOverflow: setOverflow,
         showOverlay: showOverlay,
         showMapScreen: showMapScreen,
+        seletedCartProds,
+        selectCartProd,
         popMap: popMap,
         overLay: overLay,
         isOffline: isOffline(),
+        shopNow,
+        setShopNow,
         temp,
         addTemp,
       }}

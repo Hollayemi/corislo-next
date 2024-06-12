@@ -27,7 +27,7 @@ import { removeOrAddToArray } from "@/app/utils/arrayFunctions";
 import { createProductHandler } from "@/app/redux/state/slices/shop/products/productSlice";
 import { useDispatch } from "react-redux";
 import { productBreadCrumb } from "../components";
-
+// no allow (),+,
 const AddNewProduct = ({ params }) => {
   const theme = useTheme();
   const brk = theme.breakpoints.down;

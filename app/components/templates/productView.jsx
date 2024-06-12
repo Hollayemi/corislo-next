@@ -20,13 +20,16 @@ import {
   removeOrAddToArray,
 } from "@/app/utils/arrayFunctions";
 import OptionsMenu from "../option-menu";
-import { formatDateToMonthShort } from "@/app/utils/format";
+import { formatDateToMonthShort, mySubstring } from "@/app/utils/format";
 import Link from "next/link";
 import { copyToClipboard } from "@/app/utils/clipboard";
 import { deleteOrder } from "@/app/redux/state/slices/home/order";
 import { useState } from "react";
 import { Delete, ShoppingCartSharp } from "@mui/icons-material";
-import { OrderActionBtn, trackMainSteps } from "@/app/(pages)/order/[detail]/components";
+import {
+  OrderActionBtn,
+  trackMainSteps,
+} from "@/app/(pages)/order/[detail]/components";
 import { OrderStages } from "@/app/(pages)/order/timeline";
 
 const ChangeQty = ({
@@ -43,21 +46,26 @@ const ChangeQty = ({
     <Box
       className={`w-20  ${!isSavedView && " absolute top-2 right-0"} mt-1 mr-2`}
     >
-      {!isSavedView && <Box
-        className="float-right mb-10 md:mb-6"
-        onClick={() => addCartHandler(payload, dispatch)}
-      >
-        <IconifyIcon
-          icon="tabler:trash"
-          className="!text-[18px] !text-red-600"
-        />
-      </Box>}
+      {!isSavedView && (
+        <Box
+          className="float-right mb-10 md:mb-6"
+          onClick={() => addCartHandler(payload, dispatch)}
+        >
+          <IconifyIcon
+            icon="tabler:trash"
+            className="!text-[18px] !text-red-600"
+          />
+        </Box>
+      )}
       <Box className="flex justify-between w-full my-2.5 md:my-0.5">
         <Box
           onClick={() =>
+            quantity > 1 &&
             qtyFunc({ id, operator: "-", saveItem }, dispatch, newQty)
           }
-          className="h-5 w-5 rounded-full cursor-pointer !text-[14px] border border-blue-800 !font-black flex items-center justify-center"
+          className={`h-5 w-5 rounded-full cursor-pointer !text-[14px] border ${
+            quantity > 1 ? "border-blue-800" : "border-gray-300"
+          } !font-black flex items-center justify-center transition-all duration-300`}
         >
           -
         </Box>
@@ -112,6 +120,7 @@ export const CartProductView = ({
   store,
   cartId,
   productId,
+  collection,
   hideCheckbox,
   hideQtyFunc,
   isSavedView,
@@ -186,28 +195,26 @@ export const CartProductView = ({
                 qtyFunc={savedQuantity}
                 isSavedView
               />
-            ) : (
-              <Box className="flex items-center">
+            ) : null}
+            <Box className="flex items-start mt-1">
+              <Box className="flex items-center relative">
                 <Typography
                   variant="body2"
-                  className="!text-[10px] !text-gray-300"
+                  className="!text-[11px] !text-gray-300"
                 >
-                  colors
+                  {mySubstring(collection, 20)}
                 </Typography>
-                <Box className="flex items-center ml-2 relative">
-                  {colorArray.map((col, i) => (
-                    <Box
-                      bgcolor={col}
-                      key={i}
-                      className={`w-3 h-3 rounded-full border border-white`}
-                    ></Box>
-                  ))}
-                </Box>
               </Box>
-            )}
-            <Typography variant="body2" className="!text-[11px] !text-blue-800">
-              {store}
-            </Typography>
+            </Box>
+
+            <Box className="flex items-center">
+              <Typography
+                variant="body2"
+                className="!text-[11px] !text-blue-800"
+              >
+                {store}
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </Box>
@@ -287,6 +294,7 @@ export const GroupCartProducts = ({
             prodName={each.product.prodName}
             image={`/images/more/${i + 1}.png`}
             prodPrice={each.product.prodPrice}
+            collection={each.product.collectionName}
             quantity={each.quantity}
             hideCheckbox
             hideQtyFunc

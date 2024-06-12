@@ -1,9 +1,7 @@
-import { createAsyncThunk, createSlice, unwrapResult } from "@reduxjs/toolkit";
+import { createAsyncThunk, unwrapResult } from "@reduxjs/toolkit";
 import toaster from "@/app/configs/toaster";
 import martApi from "../../api/baseApi";
-import { REQUEST_STATUS } from "../../constants";
 import { jsonHeader } from "../../api/setAuthHeaders";
-import tokens from "@/app/configs/tokens";
 
 const newFeedback = createAsyncThunk("post/newFeedback", async (payload) => {
   const { data } = await martApi
@@ -20,8 +18,32 @@ export const feedbackHandler = (payload, dispatch) => {
     .then((res) => {
       if (res.type === "success") {
         toaster({ ...res });
-        mutate("/user/feedback");
+        mutate("/product/feedback");
       }
     })
     .catch((e) => {});
 };
+
+
+
+const newShopFeedback = createAsyncThunk("post/newFeedback", async (payload) => {
+  const { data } = await martApi
+    .post("/store/feedback", payload, jsonHeader())
+    .then((e) => e)
+    .catch((e) => e.response);
+  return data;
+});
+
+
+export const shopFeedbackHandler = (payload, dispatch) => {
+  dispatch(newShopFeedback(payload))
+    .then(unwrapResult)
+    .then((res) => {
+      if (res.type === "success") {
+        toaster({ ...res });
+        mutate(`/store/feedback/${payload.store}/${payload.branch}}`);
+      }
+    })
+    .catch((e) => {});
+};
+

@@ -19,22 +19,33 @@ import {
   Typography,
 } from "@mui/material";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUserData } from "@/app/hooks/useData";
 import { deleteBulkCart } from "@/app/redux/state/slices/home/cart";
 import { useDispatch } from "react-redux";
 import CustomOption from "@/app/components/option-menu/option";
 import Link from "next/link";
 import useSWR from "swr";
+import { reshapePrice } from "../store/dashboard/marketing/components";
 
 const UserCart = () => {
   const dispatch = useDispatch();
   const { data: addrs } = useSWR("/user/addresses");
   const addresses = addrs?.data || [];
-  const { cartData, cartedProds, userInfo, temp, addTemp } = useUserData();
+  const {
+    cartData,
+    cartedProds,
+    userInfo,
+    temp,
+    addTemp,
+    selectCartProd: cartForCheckout,
+  } = useUserData();
   const [selected, selectCart] = useState([]);
   const router = useRouter();
   const address = temp.address || userInfo?.selectedAddress || null;
+
+  useEffect(() => cartForCheckout(selected), [selected]);
+
   return (
     <HomeWrapper>
       <Box className="!px-2 my-5 sm:!px-16 md:!px-24 lg:!px-32 md:!py-7 relative">
@@ -103,6 +114,7 @@ const UserCart = () => {
                             productId={each.product._id}
                             colors={each.product?.specifications?.colors}
                             prodName={each.product.prodName}
+                            collection={each.product.collectionName}
                             image={`/images/more/${i + 1}.png`}
                             prodPrice={each.product.prodPrice}
                             quantity={each.quantity}
@@ -127,20 +139,22 @@ const UserCart = () => {
                     Sub total
                   </Typography>
                   <Typography variant="body2" className="!text-[12px]">
-                    NGN {cartData?.sum_price?.toLocaleString()}
+                    {reshapePrice(cartData?.originalPrice)}
                   </Typography>
                 </Box>
-                <Box className="w-full flex justify-between items-center !mt-2">
-                  <Typography variant="body2" className="!text-[12px]">
-                    Discount
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    className="!text-[12px] !text-red-500"
-                  >
-                    -NGN 1,260
-                  </Typography>
-                </Box>
+                {cartData.discountedPrice ? (
+                  <Box className="w-full flex justify-between items-center !mt-2">
+                    <Typography variant="body2" className="!text-[12px]">
+                      Discount
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      className="!text-[12px] !text-red-500"
+                    >
+                     - {reshapePrice(cartData?.discountAmount)}
+                    </Typography>
+                  </Box>
+                ) : null}
 
                 <Box className="w-full border-2 border-dashed border-black mt-4"></Box>
                 <Box className="w-full flex justify-between items-center !mt-5">
@@ -154,7 +168,7 @@ const UserCart = () => {
                     variant="body2"
                     className="!text-[13px] !font-bold"
                   >
-                    NGN {cartData?.sum_price?.toLocaleString()}
+                    {reshapePrice(cartData?.discountedPrice)}
                   </Typography>
                 </Box>
               </Box>
@@ -239,40 +253,18 @@ const UserCart = () => {
                 onClick={() => router.push("/checkout")}
                 className="w-full !mt-6 h-12 !rounded-full !border-none !text-[14px] !text-white"
               >
-                Checkout (5)
+                Checkout ({selected.length || cartData?.products?.length})
               </Button>
             </Box>
           </Grid>
         </Grid>
         <Box className="mt-16">
           <SectionTitle black="More items from this seller" />
-          <ReactSlickSlider>
-            {popularProducts.map((prod, i) => (
-              <PopularProduct
-                key={i}
-                small
-                image={prod.image}
-                prodName={prod.prodName}
-                price={prod.price}
-              />
-            ))}
-          </ReactSlickSlider>
+          <PopularProduct small />
         </Box>
         <Box className="mt-8">
           <SectionTitle black="You may also like" />
-          <ReactSlickSlider>
-            {hotDealData.map((prod, i) => (
-              <HotDeal
-                key={i}
-                small
-                image={prod.image}
-                prodName={prod.prodName}
-                price={prod.price}
-                unit={prod.unit}
-                of={prod.of}
-              />
-            ))}
-          </ReactSlickSlider>
+          <HotDeal small />
         </Box>
       </Box>
     </HomeWrapper>

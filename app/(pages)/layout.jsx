@@ -18,6 +18,7 @@ import handleSubscribeToNotification from "../redux/state/slices/api/webpush";
 import { useEffect, useState } from "react";
 import { useUserData } from "@/app/hooks/useData";
 import LineLoading from "./loading";
+import VoiceflowChatComponent from "./ai";
 
 const metadata = {
   title:
@@ -30,9 +31,9 @@ const persistor = persistStore(store);
 
 // ** Pace Loader
 export default function RootLayout({ children }) {
-  const [userInfo, setUserInfo] = useState({})
-  const [hideOverflow, setOverflow] = useState(false)
-  
+  const [userInfo, setUserInfo] = useState({});
+  const [hideOverflow, setOverflow] = useState(false);
+
   useEffect(() => {
     if ("serviceWorker" in navigator && userInfo?._id) {
       navigator.serviceWorker
@@ -46,7 +47,6 @@ export default function RootLayout({ children }) {
         });
     }
   }, [userInfo]);
-
 
   return (
     <html lang="en">
@@ -116,6 +116,7 @@ export default function RootLayout({ children }) {
             </UserDataProvider>
           </Provider>
         </SWRConfig>
+        <VoiceflowChatComponent />
       </body>
     </html>
   );

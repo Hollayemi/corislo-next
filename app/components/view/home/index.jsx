@@ -17,7 +17,7 @@ const HomeWrapper = ({
 }) => {
   const [search, setSearch] = useState("");
   const [pinSearch, setPinSearch] = useState(false);
-  const { overLay, popMap } = useUserData();
+  const { overLay, popMap, shopNow } = useUserData();
 
 
   const page = {
@@ -25,7 +25,7 @@ const HomeWrapper = ({
     1: <SearchPage search={search} setSearch={setSearch} />,
   };
   let showing = 0;
-  if (search || pinSearch) showing = 1;
+  if ((search || pinSearch, shopNow)) showing = 1;
 
   return (
     <Box className="flex justify-center bg-black">

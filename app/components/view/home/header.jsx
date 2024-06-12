@@ -7,23 +7,16 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { styled, alpha } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import Link from "next/link";
 import IconifyIcon from "../../icon";
 import Image from "next/image";
 import themeConfig from "@/app/configs/themeConfig";
 import { useUserData } from "@/app/hooks/useData";
-import MenuIcon from "@mui/icons-material/Menu";
-import Chip from "../../chip";
 import CustomAvatar from "../../avatar";
 import { getInitials } from "@/app/utils/get-initials";
 import { useRouter, usePathname } from "next/navigation";
 import { userLogout } from "@/app/redux/state/slices/auth/Login";
-import {
-  NotificationsActiveOutlined,
-  ShoppingCartCheckout,
-  Search,
-} from "@mui/icons-material";
 
 
  export const IconImage = ({ image, className, onClick }) => (

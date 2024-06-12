@@ -1,45 +1,59 @@
 import React, { Fragment } from "react";
-import ReactSlickSlider from "@/app/components/wrapper/react-slick";
-import { hotDealData, moreProducts } from "@/app/data/home/homepage";
-import CountdownTimer from "@/app/components/cards/countDown";
+import CountdownTimer from "@/app/components/cards/newCountDown";
 import { SectionTitle } from "@/app/components/cards/homeCards";
-import IconifyIcon from "@/app/components/icon";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import {
-  HotDeal,
   ProductOnShowcase,
 } from "@/app/components/templates/productTemplates";
+import useSWR from "swr";
+import MyPagination from "@/app/components/templates/pagination";
 
-const StoreProducts = () => {
+const StoreProducts = ({ store, branch, searchParams }) => {
+  const { data, isLoading } = useSWR(
+    `/store/products-campaign?store=${store}&branch=${branch}&type=discounted&page=${
+      searchParams?.dp || 1
+    }`
+  );
+  const result = data ? data.data : {};
+
+  const { data: myProduct, isLoading: otherLoading } = useSWR(
+    `/store/products-campaign?store=${store}&branch=${branch}&page=${
+      searchParams?.p || 1
+    }`
+  );
+  const myProducts = myProduct ? myProduct.data : {};
+
   return (
-    <Fragment>
+    <Box className="!bg-white rounded-xl px-3 py-5 mt-10">
       {/* 
             f
             f
             */}
       {/* FLash Sale */}
-      <Box
-        className="w-full flex items-center justify-between h-12 rounded-md px-3 md:px-6 mt-14"
-        bgcolor="custom.sec"
-      >
-        <Typography
-          variant="body2"
-          className="!text-s !font-bold"
-          color="white"
+      {result?.flashsales?.length > 0 ? (
+        <Box
+          className="w-full flex items-center justify-between h-12 rounded-md px-3 md:px-6 mt-4"
+          bgcolor="custom.sec"
         >
-          Flash Sales Items
-        </Typography>
+          <Typography
+            variant="body2"
+            className="!text-s !font-bold"
+            color="white"
+          >
+            Flash Sales Items
+          </Typography>
 
-        <CountdownTimer
-          initialDate={new Date()}
-          daysToCount={5}
-          className="!text-md !text-white"
-          styleCaption="!text-[11px] !text-white"
-        />
-      </Box>
+          <CountdownTimer
+            initialDate={new Date()}
+            endDate={result.flashsales[0].endDate}
+            className="!text-md !text-white"
+            styleCaption="!text-[11px] !text-white"
+          />
+        </Box>
+      ) : null}
 
       <Box className="!mt-6 flex flex-wrap justify-center">
-        {moreProducts.map((prod, i) => (
+        {result?.products?.all?.map((prod, i) => (
           <ProductOnShowcase
             key={i}
             prodName={prod.prodName}
@@ -51,28 +65,22 @@ const StoreProducts = () => {
           />
         ))}
       </Box>
-      <Box className="px-2 md:px-10 my-4">
-        {/* <SectionTitle black="Hot" blue="Deal" /> */}
-
-        {/* <ReactSlickSlider>
-                {hotDealData.map((prod, i) => (
-                  <HotDeal
-                    key={i}
-                    image={prod.image}
-                    prodName={prod.prodName}
-                    price={prod.price}
-                    unit={prod.unit}
-                    of={prod.of}
-                  />
-                ))}
-              </ReactSlickSlider> */}
+      <Box className="flex justify-center mt-6">
+        <MyPagination
+          searchParams={searchParams}
+          currentPage={searchParams?.dp || 1}
+          totalNumber={result?.products?.sum || 0}
+          limit={8}
+          query="dp"
+        />
       </Box>
+      <Box className="px-2 md:px-10 my-4"></Box>
       <Box>
         <br />
         <SectionTitle black="Picked" blue="for you" />
         <br />
         <Box className="!mt-6 flex flex-wrap justify-center">
-          {moreProducts.map((prod, i) => (
+          {myProducts?.all?.map((prod, i) => (
             <ProductOnShowcase
               key={i}
               prodName={prod.prodName}
@@ -83,8 +91,18 @@ const StoreProducts = () => {
             />
           ))}
         </Box>
+
+        <Box className="flex justify-center mt-6">
+          <MyPagination
+            searchParams={searchParams}
+            currentPage={searchParams?.dp || 1}
+            totalNumber={myProducts?.sum || 0}
+            limit={8}
+            query="p"
+          />
+        </Box>
       </Box>
-    </Fragment>
+    </Box>
   );
 };
 

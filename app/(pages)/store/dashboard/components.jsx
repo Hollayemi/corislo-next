@@ -92,7 +92,7 @@ export const TopCards = () => {
                     }}
                     bgcolor="secondary"
                   >
-                    <Typography sx={{ fontWeight: 500 }}>
+                    <Typography sx={{ fontWeight: 500 }} className="text-[12px]">
                       {item.title}
                     </Typography>
                     <CustomAvatar

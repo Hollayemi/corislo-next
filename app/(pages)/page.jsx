@@ -25,21 +25,18 @@ import {
 } from "@/app/components/view/home/Components/Footer";
 import useSWR from "swr";
 import { NumberExplained } from "../components/cards/sellerCards";
+import { useUserData } from "../hooks/useData";
 
-const HomePage = ({ searchParams }) => {
-  const { data: prods, isLoading, error } = useSWR("/products");
-  const { data: popularProds } = useSWR("/home/popular-products");
+const HomePage = ({ params }) => {
+  const { data: prods } = useSWR("/products?limit=30");
   const { data: ads } = useSWR("/home/ads");
-  const { data: fss } = useSWR("/home/flashsales?deal=hot");
   const products = prods ? prods.data : [];
-  const popularProducts = popularProds ? popularProds.data : [];
+  console.log(products);
   const popularAds = ads ? ads.data : [];
-  const hotDealData = fss ? fss.data : [];
-
-  console.log(hotDealData);
-
+  const { setShopNow } = useUserData();
+  console.log(params);
   return (
-    <HomeWrapper>
+    <HomeWrapper shopMode={params.sm}>
       <Box className="!mb-20 mt-6 md:mt-16">
         <Grid container spacing={2} className="px-4 md:px-10">
           <Grid item xs={12} md={5}>
@@ -70,7 +67,8 @@ const HomePage = ({ searchParams }) => {
 
               <Button
                 variant="contained"
-                className="!text-[10px] !text-white !bg-[#fcb415] !w-40 !h-10 !rounded-full !mt-8"
+                onClick={() => setShopNow(true)}
+                className="!text-[12px] !text-white !bg-[#fcb415] hover:!bg-[#c99628] transition-all duration-500 !w-40 !h-10 !rounded-full !mt-8 !shadow-none"
               >
                 Shop Now
               </Button>
@@ -159,8 +157,8 @@ const HomePage = ({ searchParams }) => {
             </Box>
           </Box>
           <Box className="!my-12 px-2 md:px-10 ">
-            <ReactSlickSlider>
-              <Box className="w-56 h-28 md:w-[500px] md:h-auto">
+            <ReactSlickSlider config={2}>
+              <Box className="w-56 h-40 md:w-[500px] md:h-[350px]">
                 <Image
                   src="/images/misc/flyer2.png"
                   alt="flyer"
@@ -169,7 +167,7 @@ const HomePage = ({ searchParams }) => {
                   className="!w-full !h-full"
                 />
               </Box>
-              <Box className="w-56 h-28 md:w-[500px] md:h-auto">
+              <Box className="w-56 h-40 md:w-[500px] md:h-[350px]">
                 <Image
                   src="/images/misc/flyer2.png"
                   alt="flyer"
@@ -197,19 +195,7 @@ const HomePage = ({ searchParams }) => {
           {/*  */}
           <Box className="px-2 md:px-10">
             <SectionTitle black="Popular" blue="Products" />
-            <ReactSlickSlider>
-              <br />
-              {popularProducts.map((prod, i) => (
-                <PopularProduct
-                  key={i}
-                  image={`/images/more/${i + 1}.png`}
-                  store={prod.product.store}
-                  prodName={prod.product.prodName}
-                  price={prod.product.prodPrice}
-                  others={prod.product}
-                />
-              ))}
-            </ReactSlickSlider>
+            <PopularProduct />
           </Box>
           {/*  */}
           {/*  */}
@@ -233,7 +219,7 @@ const HomePage = ({ searchParams }) => {
             </Box>
 
             <Box className="bg-yellow-50 mt-8 py-16">
-              <ReactSlickSlider>
+              <ReactSlickSlider config={2}>
                 <FlashSale />
                 <FlashSale />
                 <FlashSale />
@@ -263,20 +249,7 @@ const HomePage = ({ searchParams }) => {
           <Box className="mt-14">
             <Box className="px-2 md:px-10 ">
               <SectionTitle black="Hot" blue="Deal" />
-
-              <ReactSlickSlider>
-                {hotDealData.map((prod, i) => (
-                  <HotDeal
-                    key={i}
-                    image={`/images/more/${i + 1}.png`}
-                    prodName={prod.product.prodName}
-                    price={prod.product.prodPrice}
-                    unit={prod.product.totInStock}
-                    of={prod.product.sold + prod.product.totInStock}
-                    others={prod.product}
-                  />
-                ))}
-              </ReactSlickSlider>
+              <HotDeal />
             </Box>
           </Box>
           {/*  */}
@@ -301,7 +274,7 @@ const HomePage = ({ searchParams }) => {
                     <PopularAds
                       store={ad.store}
                       key={i}
-                      image={`/images/misc/popular-ads${i+1}.png`}
+                      image={`/images/misc/popular-ads${i + 1}.png`}
                       title={ad.title}
                       brief={ad.brief}
                     />
@@ -329,7 +302,7 @@ const HomePage = ({ searchParams }) => {
             <Box className="px-3 md:px-10">
               <SectionTitle black="More" blue="Products" />
               <Box className="!mt-6 flex flex-wrap justify-center">
-                {products.map((prod, i) => (
+                {products?.result?.map((prod, i) => (
                   <ProductOnShowcase
                     key={i}
                     prodName={prod.prodName}
@@ -382,6 +355,7 @@ const HomePage = ({ searchParams }) => {
                   <Button
                     variant="contained"
                     className="!mt-4 !shadow-none !text-[11px] !h-10 !w-28 !rounded-full"
+                    onClick={() => setShopNow(true)}
                   >
                     Shop Now
                   </Button>

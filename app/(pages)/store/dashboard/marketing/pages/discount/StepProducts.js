@@ -17,15 +17,18 @@ import {
 // ** Custom Components Imports
 import CustomChip from "@/app/components/chip";
 import { CircleLoader } from "@/app/components/cards/loader";
+import { useStoreData } from "@/app/hooks/useData";
 
 const StepProducts = ({ campaignData, setCampaignData, formHandler }) => {
-  const { data, isLoading } = useSWR("/products?limit=50");
-  const options = data ? data.data : [];
+  const { storeInfo: { profile } } = useStoreData();
+  const { data, isLoading } = useSWR(
+    `/store/products-campaign?store=${profile.store}&branch=${profile.branch}`
+  );
+  const options = data ? data.data.all : [];
   const [newOptions, setNewOptions] = useState([]);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
 
-  console.log(options, search);
   const filtered = options.filter((x) =>
     x.prodName.toLowerCase().includes(search.toLowerCase())
   );

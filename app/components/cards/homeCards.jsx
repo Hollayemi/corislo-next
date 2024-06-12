@@ -72,7 +72,7 @@ export const SectionMiddleTitle = ({ black, blue }) => {
 export const FlashSale = () => {
   return (
     <Box className="flex justify-center w-full">
-      <Box className="px-2 w-[360px] md:w-4/6 overflow-hidden">
+      <Box className="w-[340px] md:w-4/6 overflow-hidden">
         <Grid container spacing={2}>
           <Grid item xs={12} md={5}>
             <Image
@@ -183,7 +183,7 @@ export const PopularAds = ({ store, title, brief, image, url }) => {
 
 export const TopStores = ({ image, name, rating, followers = 0 }) => {
   return (
-    <Box className="flex flex-col items-center justify-center">
+    <Box className="flex flex-col items-center justify-center px-2">
       <Image
         src={image}
         alt="flyer"

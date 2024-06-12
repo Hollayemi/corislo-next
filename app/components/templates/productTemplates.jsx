@@ -10,22 +10,19 @@ import { useEffect } from "react";
 import { formatCurrency, ngnPrice } from "@/app/utils/format";
 import { Map } from "@mui/icons-material";
 import { useUserData } from "@/app/hooks/useData";
+import ReactSlickSlider from "../wrapper/react-slick";
 
-export const PopularProduct = ({
-  image,
-  prodName,
-  store,
-  price,
-  small,
-  others,
-}) => {
+export const PopularProduct = (props) => {
   const router = useRouter();
-  return (
+  const { data: popularProds } = useSWR("/home/popular-products");
+  const popularProducts = popularProds ? popularProds.data : [];
+
+  const View = ({ image, prodName, store, price, small, others }) => (
     <Box
       className={`${
         small
-          ? "!w-28 !h-44 m-1 "
-          : "!w-28 !h-44 md:!w-44 md:!h-56 m-0.5 md:m-2 relative"
+          ? "!w-28 !h-44 m-2 "
+          : "!w-28 !h-44 md:!w-44 md:!h-56 m-1.5 md:m-3 relative"
       }`}
     >
       {others?.discount && (
@@ -68,67 +65,100 @@ export const PopularProduct = ({
       </Box>
     </Box>
   );
-};
-export const HotDeal = ({
-  image,
-  prodName,
-  small,
-  price,
-  store,
-  unit,
-  of,
-  others,
-}) => {
-  const percentage = (unit / of) * 100;
-  const router = useRouter();
+
   return (
-    <Box
-      className={`${
-        small
-          ? "!w-28 !h-44 m-1 "
-          : "!w-28 !h-44 md:!w-44 md:!h-60 m-0.5 md:m-2 relative"
-      }`}
-    >
-      <Box onClick={() => router.push(`/biz/${store}/${prodName}`)}>
-        <img
-          src={image}
-          alt="product_image"
-          className={`!w-full ${small ? "!h-28" : "!h-28 md:!h-44"} rounded-md`}
-        />
-      </Box>
-      <Box className="pt-1">
-        <Link href={`/biz/${store}/${prodName}`}>
-          <Box>
-            <Typography
-              variant="body2"
-              className="!whitespace-nowrap !text-[12px] !overflow-hidden !text-ellipsis"
-            >
-              {prodName}
-            </Typography>
-          </Box>
-        </Link>
-        <Box className="flex items-center justify-between">
-          <Typography
-            variant="body2"
-            className="whitespace-nowrap text-ellipsis !font-bold !text-[11px] md:!text-[13px]"
-          >
-            {formatCurrency(price || 0)}
-          </Typography>
-        </Box>
-        <Box className="w-full !rounded-full h-1.5 bg-gray-300 overflow-hidden">
-          <LinearProgress
-            variant="determinate"
-            value={percentage}
-            className="!rounded-md"
-            color={"warning"}
-            aria-controls="lkslk"
-            sx={{ height: 8 }}
+    <Box>
+      <ReactSlickSlider>
+        {popularProducts.map((prod, i) => (
+          <View
+            key={i}
+            {...props}
+            image={`/images/more/${i + 1}.png`}
+            store={prod.product.store}
+            prodName={prod.product.prodName}
+            price={prod.product.prodPrice}
+            others={prod.product}
+          />
+        ))}
+      </ReactSlickSlider>
+    </Box>
+  );
+};
+export const HotDeal = (props) => {
+  const { data } = useSWR("/home/flashsales?deal=hot");
+  const hotDealData = data ? data.data : [];
+  const router = useRouter();
+  const View = ({ image, prodName, small, price, store, unit, of, others }) => {
+    const percentage = (unit / of) * 100;
+    return (
+      <Box
+        className={`${
+          small
+            ? "!w-28 !h-44 m-2 "
+            : "!w-28 !h-44 md:!w-44 md:!h-60 m-1.5 md:m-3 relative"
+        }`}
+      >
+        <Box onClick={() => router.push(`/biz/${others?.store}/${prodName}`)}>
+          <img
+            src={image}
+            alt="product_image"
+            className={`!w-full ${
+              small ? "!h-28" : "!h-28 md:!h-44"
+            } rounded-md`}
           />
         </Box>
-        <h5 className="text-[10px]">
-          {unit} of {of} Remaining
-        </h5>
+        <Box className="pt-1">
+          <Link href={`/biz/${others?.store}/${prodName}`}>
+            <Box>
+              <Typography
+                variant="body2"
+                className="!whitespace-nowrap !text-[12px] !overflow-hidden !text-ellipsis"
+              >
+                {prodName}
+              </Typography>
+            </Box>
+          </Link>
+          <Box className="flex items-center justify-between">
+            <Typography
+              variant="body2"
+              className="whitespace-nowrap text-ellipsis !font-bold !text-[11px] md:!text-[13px]"
+            >
+              {formatCurrency(price || 0)}
+            </Typography>
+          </Box>
+          <Box className="w-full !rounded-full h-1.5 bg-gray-300 overflow-hidden">
+            <LinearProgress
+              variant="determinate"
+              value={percentage}
+              className="!rounded-md"
+              color={"warning"}
+              aria-controls="lkslk"
+              sx={{ height: 8 }}
+            />
+          </Box>
+          <h5 className="text-[10px]">
+            {unit} of {of} Remaining
+          </h5>
+        </Box>
       </Box>
+    );
+  };
+  return (
+    <Box>
+      <ReactSlickSlider>
+        {hotDealData.map((prod, i) => (
+          <View
+            key={i}
+            {...props}
+            image={`/images/more/${i + 1}.png`}
+            prodName={prod.product.prodName}
+            price={prod.product.prodPrice}
+            unit={prod.product.totInStock}
+            of={prod.product.sold + prod.product.totInStock}
+            others={prod.product}
+          />
+        ))}
+      </ReactSlickSlider>
     </Box>
   );
 };

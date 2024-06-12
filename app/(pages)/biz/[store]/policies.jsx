@@ -4,11 +4,14 @@ import React from "react";
 const Policies = () => {
   return (
     <Box className="!bg-white rounded-xl px-8 py-8 mt-10 !text-black">
-      <Typography className="!font-bold !text-xl" variant="body2">
+      <Typography className="!font-bold !text-[12px]" variant="body2">
         Our Store Policies
       </Typography>
       <br />
-      <Typography className="!text-sm !leading-9 " variant="body2">
+      <Typography
+        className="!text-[13px] !text-justify !font-light !leading-8 "
+        variant="body2"
+      >
         Introduction Welcome to Clothing Store! <br />
         We're committed to providing you with an exceptional shopping
         experience. Our store policies ensure clarity, transparency, and
@@ -85,9 +88,13 @@ const EachExpression = ({ title, body }) => {
       </Typography>
       <ul className="ml-7 !text-sm dfdgfd">
         {body.map((item, i) => (
-          <li key={i} className="leading-10 mt-2 !font-[200] !text-[15px] !font-light">
+          <Typography
+            variant="body2"
+            key={i}
+            className="!leading-8 !mt-2 !text-justify  !text-[12px] md:!text-[13px] !font-light"
+          >
             {item}
-          </li>
+          </Typography>
         ))}
       </ul>
     </Box>

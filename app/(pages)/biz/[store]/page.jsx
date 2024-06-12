@@ -14,22 +14,24 @@ import Image from "next/image";
 import Link from "next/link";
 import StoreProducts from "./products";
 import Review from "./review";
-import { summarizeFollowers } from "../../../utils/format";
+import { mySubstring, summarizeFollowers } from "../../../utils/format";
 import Policies from "./policies";
-import { TreeItem, TreeView } from "@mui/lab";
 import { followStore } from "@/app/redux/state/slices/users/following";
 import { useDispatch } from "react-redux";
 import { useUserData } from "@/app/hooks/useData";
 import { Fragment, useState } from "react";
 import useSWR from "swr";
+import { useRouter } from "next/navigation";
+import StoreTabs from "./tabs";
 
 const BusinessPage = ({ params, searchParams }) => {
-  const { following, socket } = useUserData();
+  const router = useRouter();
+  const { following, socket, isOffline } = useUserData();
   const getStore = params.store.split("-");
   const { data, error } = useSWR(
     `/branch/info?store=${getStore[0]}&branch=${getStore[1]}`
   );
-  const branchInfo = data ? data?.data : {}
+  const branchInfo = data ? data?.data : {};
   // ** State
   const [open, setOpen] = useState(true);
 
@@ -39,15 +41,21 @@ const BusinessPage = ({ params, searchParams }) => {
   const isIncluded = following.includes(branchInfo?.branchId);
 
   const page = {
-    0: <StoreProducts />,
-    1: <Review />,
+    0: (
+      <StoreProducts
+        store={getStore[0]}
+        branch={getStore[1]}
+        searchParams={searchParams}
+      />
+    ),
+    1: <Review store={getStore[0]} branch={getStore[1]} />,
     2: <Policies />,
   };
   const followers = 12432000;
   const dispatch = useDispatch();
   return (
     <HomeWrapper customersReview={false}>
-      <Box className="">
+      <Box className="relative">
         <Image
           src="/images/misc/biz-header.png"
           alt="header"
@@ -55,141 +63,99 @@ const BusinessPage = ({ params, searchParams }) => {
           height={1400}
           className="w-full"
         />
+
+        <Image
+          src="/images/misc/shop/1.png"
+          alt="flyer"
+          width={400}
+          height={400}
+          className=" w-14 h-14  md:w-36 md:h-36 absolute -bottom-6 left-6 md:-bottom-12 md:left-28 !rounded-full md:-m-8 border border-blue-800 float-right mr-10"
+        />
       </Box>
       <Box className="flex justify-center sticky top-0">
-        <Box className="w-full px-2 md:w-10/12 flex items-start">
-          <Box className="w-80 hidden md:block min-w-80">
-            <Image
-              src="/images/misc/shop/1.png"
-              alt="flyer"
-              width={400}
-              height={400}
-              className="!w-36 h-36 !rounded-full -m-8 border border-blue-800 float-right mr-10"
-            />
-            <Box className="mt-48 px-3">
-              <Box className="bg-white">
-                <List component="nav" aria-label="main mailbox">
-                  <ListItem disablePadding>
-                    <ListItemButton onClick={handleClick}>
-                      <ListItemIcon>
-                        <IconifyIcon icon="tabler:mail" fontSize={20} />
-                      </ListItemIcon>
-                      <ListItemText primary="Inbox" />
-                      <IconifyIcon
-                        icon={
-                          open ? "tabler:chevron-up" : "tabler:chevron-down"
-                        }
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                  <Collapse in={open} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                      <ListItem disablePadding>
-                        <ListItemButton sx={{ pl: 2 }}>
-                          <ListItemIcon sx={{ mr: 4 }}>
-                            <IconifyIcon
-                              icon="tabler:clock-play"
-                              fontSize={20}
-                            />
-                          </ListItemIcon>
-                          <ListItemText primary="Scheduled" />
-                        </ListItemButton>
-                      </ListItem>
-                    </List>
-                  </Collapse>
-                  <ListItem disablePadding>
-                    <ListItemButton>
-                      <ListItemIcon>
-                        <IconifyIcon icon="tabler:copy" fontSize={20} />
-                      </ListItemIcon>
-                      <ListItemText primary="Draft" />
-                    </ListItemButton>
-                  </ListItem>
-                </List>
-                <Divider sx={{ m: "0 !important" }} />
-                <List component="nav" aria-label="secondary mailbox">
-                  <ListItem disablePadding>
-                    <ListItemButton>
-                      <ListItemIcon>
-                        <IconifyIcon icon="tabler:copy" fontSize={20} />
-                      </ListItemIcon>
-                      <ListItemText primary="Snoozed" />
-                    </ListItemButton>
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemButton>
-                      <ListItemIcon>
-                        <IconifyIcon icon="tabler:alert-circle" fontSize={20} />
-                      </ListItemIcon>
-                      <ListItemText primary="Spam" />
-                    </ListItemButton>
-                  </ListItem>
-                </List>
-              </Box>
-            </Box>
-          </Box>
-          <Box className="w-full">
-            <Box className="flex items-start justify-between mt-5 md:px-5 w-full">
-              <Box>
+        <Box className="w-full mt-3 md:mt-0">
+          <Box className="w-full flex justify-end relative">
+            <Box className="flex items-start justify-between mt-5 px-4 md:px-5 w-full md:w-9/12">
+              <Box className="w-6/12">
                 <Typography
                   variant="body2"
-                  className="!text-2xl !font-bold"
+                  noWrap
+                  className=" !text-lg md:!text-2xl !font-bold !-mb-2"
                   color="custom.pri"
                 >
-                  {getStore[0]}
+                  {branchInfo?.businessName}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  className="!font-bold !text[11px]"
+                  color="custom.sec"
+                >
+                  @{getStore[0]} @{getStore[1]}
                 </Typography>
 
-                <Box className="flex items-center my-3">
+                <Box className="flex items-center mt-1">
                   <IconifyIcon
                     icon="tabler:link"
                     className="!mr-2 !text-[14px]"
                   />
+
                   <Link
                     href={`www.corisio.com/biz/${params.store}`}
-                    className="!text-xs"
+                    className="!text-[12px]"
                     color="custom.pri"
                   >
-                    www.corisio.com/biz/{params.store}
+                    {mySubstring(`www.corisio.com/biz/${params.store}`, 25)}
                   </Link>
                 </Box>
                 <Box className="flex items-center">
-                  <Typography noWrap className="!font-bold !text-[11px]">
+                  <Typography noWrap className="!font-bold !text-[13px]">
                     {summarizeFollowers(followers)} Followers
                   </Typography>
-                  <Button
-                    variant="contained"
-                    className="!ml-1 md:!ml-5 w-32 md:w-36 h-10 !rounded-full !text-xs shadow-none"
-                    startIcon={
-                      <IconifyIcon
-                        icon={
-                          isIncluded ? "tabler:user-minus" : "tabler:user-plus"
-                        }
-                      />
-                    }
-                    onClick={() =>
-                      followStore(branchInfo, dispatch, socket, isIncluded)
-                    }
-                  >
-                    {isIncluded ? "Following" : "Follow"}
-                  </Button>
                 </Box>
               </Box>
-              <Link href={`/chat?new=${branchInfo?.branchId}`}>
-                <Button
+              <Box className="flex items-center">
+                <Box
+                  onClick={() =>
+                    router.push(`/chat?new=${branchInfo?.branchId}`)
+                  }
                   variant="outlined"
-                  className="!rounded-full h-10 w-40 !bg-white"
+                  className="!rounded-full h-8 cursor-pointer !w-9 border border-blue-900 !bg-white mr-2 flex items-center justify-center"
+                >
+                  <IconifyIcon
+                    icon="tabler:message-2-plus"
+                    className="!text-blue-800 text-[16px]"
+                  />
+                </Box>
+                <Button
+                  onClick={() =>
+                    followStore(branchInfo, dispatch, socket, isIncluded)
+                  }
+                  variant="outlined"
+                  className="!rounded-full h-8 !w-28 !bg-white"
                   startIcon={
                     <IconifyIcon
-                      icon="tabler:message-2-plus"
-                      className="!text-blue-800"
+                      icon={
+                        isIncluded ? "tabler:user-minus" : "tabler:user-plus"
+                      }
+                      className="!text-blue-800 !text-[16px]"
                     />
                   }
                 >
-                  Message
+                  {isIncluded ? "Following" : "Follow"}
                 </Button>
-              </Link>
+              </Box>
             </Box>
-            <Box className="w-full">{page[searchParams.tab || 0]}</Box>
+          </Box>
+
+          <Box className="h-full mt-2 flex flex-col md:flex-row relative">
+            <Box className="px-1 md:px-4 md:w-3/12 mt-10 sticky top-20">
+              <Box className="bg-white md:py-4 rounded-md">
+                <StoreTabs currTab={searchParams.tab} />
+              </Box>
+            </Box>
+            <Box className="w-full md:w-9/12 relative">
+              <Box className="w-full">{page[searchParams.tab || 0]}</Box>
+            </Box>
           </Box>
         </Box>
       </Box>
