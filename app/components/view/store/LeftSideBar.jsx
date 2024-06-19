@@ -135,6 +135,7 @@ const StoreLeftSideBar = React.memo(
     breadCrumbRIghtChildren,
     crumb,
     dialogInfo,
+    dialogComponent,
     updateDialogInfo,
   }) => {
     const { staffInfo, overLay, showOverlay } = useStoreData();
@@ -401,29 +402,33 @@ const StoreLeftSideBar = React.memo(
             </Box>
           </Box>
         </Box>
-        {dialogInfo && <Dialog
-          open={dialogInfo?.open || false}
-          keepMounted
-          onClose={handleCloseDialog}
-          TransitionComponent={Transition}
-          aria-labelledby="custom-confirmation"
-          aria-describedby="desc"
-        >
-          <DialogTitle id="custom-confirmation" className="!text-[16px]">
-            {dialogInfo.title}
-          </DialogTitle>
-          <DialogContent>{dialogInfo.alert}</DialogContent>
-          <DialogActions className="dialog-actions-dense">
-            <Button onClick={handleCloseDialog}>Close</Button>
-            <Button
-              variant="contained"
-              className="!shadow-none"
-              onClick={dialogInfo.acceptFunction}
-            >
-              {dialogInfo.acceptFunctionText}
-            </Button>
-          </DialogActions>
-        </Dialog>}
+        {dialogInfo && (
+          <Dialog
+            open={dialogInfo?.open || false}
+            keepMounted
+            onClose={handleCloseDialog}
+            TransitionComponent={Transition}
+            aria-labelledby="custom-confirmation"
+            aria-describedby="desc"
+          >
+            <DialogTitle id="custom-confirmation" className="!text-[16px]">
+              {dialogInfo.title}
+            </DialogTitle>
+            <DialogContent>
+              {dialogInfo?.alert || (dialogComponent && dialogComponent)}
+            </DialogContent>
+            <DialogActions className="dialog-actions-dense">
+              <Button onClick={handleCloseDialog}>Close</Button>
+              <Button
+                variant="contained"
+                className="!shadow-none"
+                onClick={dialogInfo.acceptFunction}
+              >
+                {dialogInfo.acceptFunctionText}
+              </Button>
+            </DialogActions>
+          </Dialog>
+        )}
       </React.Fragment>
     );
   }

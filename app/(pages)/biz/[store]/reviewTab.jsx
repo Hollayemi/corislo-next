@@ -1,4 +1,5 @@
 import OptionsMenu from "@/app/components/option-menu";
+import MyPagination from "@/app/components/templates/pagination";
 import { RoundedPicWithName } from "@/app/components/view/home/Components/Footer";
 import { useState } from "react";
 import useSWR from "swr";
@@ -13,11 +14,11 @@ const RatingDisplayLength = ({ rate, percentage, freq }) => {
     }
 
     if (color >= 70) {
-      return "erd";
+      return "teal";
     }
 
     if (color >= 50 && color < 70) {
-      return "slate";
+      return "blue";
     }
 
     if (color > 30 && color < 50) {
@@ -35,7 +36,8 @@ const RatingDisplayLength = ({ rate, percentage, freq }) => {
       </Typography>
       <Box className="flex-grow relative w-60 md:w-44 !mx-2 bg-gray-50">
         <Box
-          className={`bg-${getcolor(percentage)}-500 h-1 !rounded-md`}
+          bgcolor={getcolor(percentage)}
+          className={` h-1 !rounded-md`}
           sx={{ width: `${percentage}%` }}
         ></Box>
       </Box>
@@ -62,6 +64,7 @@ const StarsAndReviews = ({ stars, review, date, user }) => {
           <Rating
             defaultValue={stars}
             className=""
+            readOnly
             name="size-small"
             size="small"
           />
@@ -83,22 +86,15 @@ const calcPercentage = (total, numOfOccurences) => {
   }
 
   const percentage = (numOfOccurences / total) * 100;
+  console.log(total, numOfOccurences, percentage);
   return percentage;
 };
 
-export const ReviewTab = ({ store, branch }) => {
+export const ReviewTab = ({ summary, searchParams }) => {
   const [page, setPage] = useState(10);
   const [option, setOption] = useState("March 2023 - October 2023");
-  const { data, loading, error } = useSWR(`/store/feedback/${store}/${branch}`);
 
-  const { data: review, loading: reviewLoading } = useSWR(
-    `/store/feedback/${store}/${branch}`
-  );
-
-  console.log(data, loading, error);
-  const brief = data && !loading ? data.data[0] : {};
-  const summary = review && !reviewLoading ? review?.data[0] : {};
-  const {reviews, average,sum, ...others } = summary
+  const { review, average, sum, ...others } = summary;
 
   console.log(summary);
   return summary?.reviews?.length ? (
@@ -154,6 +150,8 @@ export const ReviewTab = ({ store, branch }) => {
             <Rating
               defaultValue={average || 0}
               className=""
+              readOnly
+              precision={0.1}
               name="size-small"
               size="small"
             />
@@ -169,10 +167,11 @@ export const ReviewTab = ({ store, branch }) => {
             .map((_, i) => (
               <RatingDisplayLength
                 rate={i + 1}
-                percentage={calcPercentage(sum, brief[i+1])}
-                freq={brief[i + 1]}
+                percentage={calcPercentage(sum, summary[i + 1])}
+                freq={summary[i + 1]}
               />
-            )).reverse()}
+            ))
+            .reverse()}
         </Box>
       </Box>
 
@@ -190,18 +189,15 @@ export const ReviewTab = ({ store, branch }) => {
           }}
         />
       ))}
-      {brief?.totalReviews > page && (
-        <Box className="flex justify-center !mt-10">
-          <Button
-            variant="contained"
-            size="large"
-            className="!rounded-full !h-98 !w-40 !text-xs"
-            onClick={() => setPage((prev) => prev + 10)}
-          >
-            See More
-          </Button>
-        </Box>
-      )}
+      <Box className="flex justify-center mt-6">
+        <MyPagination
+          searchParams={searchParams}
+          currentPage={searchParams?.page || 1}
+          totalNumber={sum || 0}
+          limit={7}
+          query="page"
+        />
+      </Box>
     </Box>
   ) : (
     <Box className="flex items-center justify-center h-80 text-md">

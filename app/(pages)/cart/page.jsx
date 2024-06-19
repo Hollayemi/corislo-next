@@ -7,9 +7,7 @@ import {
 } from "@/app/components/templates/productTemplates";
 import { CartProductView } from "@/app/components/templates/productView";
 import HomeWrapper from "@/app/components/view/home";
-import ReactSlickSlider from "@/app/components/wrapper/react-slick";
 import { useRouter } from "next/navigation";
-import { hotDealData, popularProducts } from "@/app/data/home/homepage";
 import {
   Box,
   Button,
@@ -18,7 +16,6 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useUserData } from "@/app/hooks/useData";
 import { deleteBulkCart } from "@/app/redux/state/slices/home/cart";

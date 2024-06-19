@@ -49,8 +49,33 @@ const updateStoreProfileApi = createAsyncThunk(
 );
 
 export const updateStoreProfile = (dispatch, payload) => {
-  console.log(payload);
   dispatch(updateStoreProfileApi(payload))
+    .then(unwrapResult)
+    .then((res) => {
+      toaster({ ...res });
+      mutate("/store");
+    })
+    .catch((e) => {});
+};
+//
+//
+//
+//
+//
+const addStoreProfileApi = createAsyncThunk(
+  "patch/storeProfile",
+  async (payload) => {
+    const { data } = await martApi
+      .post(`/create/branch`, payload, jsonHeader("store"))
+      .then((res) => res)
+      .catch((e) => e.response);
+    return data;
+  }
+);
+
+export const addSubStore = (dispatch, payload) => {
+  console.log(payload);
+  dispatch(addStoreProfileApi(payload))
     .then(unwrapResult)
     .then((res) => {
       toaster({ ...res });

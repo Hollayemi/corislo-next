@@ -5,7 +5,7 @@ import { Box, Grid } from "@mui/material";
 const BusinessProfile = ({ handleStoreChange, errors, values }) => {
 
   return (
-    <Box className="">
+    <Box className="px-2">
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <CustomInput

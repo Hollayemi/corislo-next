@@ -300,7 +300,7 @@ const TitleWithValueUnder = ({ title, value, link }) => {
   );
 };
 
-const EmojiRating = ({ name, index, mouseOn, setMouseOn }) => {
+export const EmojiRating = ({ name, index, mouseOn, setMouseOn }) => {
   return (
     <Box className="flex flex-col items-center justify-center mx-2">
       <Image

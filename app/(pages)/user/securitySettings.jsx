@@ -31,6 +31,7 @@ import { changePasswordHandler } from "@/app/redux/state/slices/auth/resetPasswo
 import { useUserData } from "@/app/hooks/useData";
 import { formatDate } from "@/app/utils/format";
 import CustomOption from "@/app/components/option-menu/option";
+import CheckPassword from "./checkPassword";
 
 const Index = () => {
   const [display, setDisplay] = useState("all");
@@ -339,26 +340,7 @@ const ChangePassword = ({ setDisplay }) => {
         subtitleClass="!text-[13px] !mt-2"
         className="w-5/6 md:w-10/12 mt-4 mb-3"
       />
-      <TextCheck
-        checked={passData.newPassword.length >= 8}
-        text="Minimum of 8 characters long - the more the better"
-      />
-      <TextCheck
-        checked={/[A-Z]/.test(passData.newPassword)}
-        text="At least one uppercase"
-      />
-      <TextCheck
-        checked={/[a-z]/.test(passData.newPassword)}
-        text="At least one lowercase"
-      />
-      <TextCheck
-        checked={/\d/.test(passData.newPassword)}
-        text="At least one number"
-      />
-      <TextCheck
-        checked={/[\W_]/.test(passData.newPassword)}
-        text="At least one special character e.g (!@#$%^&*)"
-      />
+      <CheckPassword password={passData.newPassword} />
       <Box className="flex items-center mt-4">
         <Button
           className="!w-36 !h-10 !rounded-full !shadow-none"
@@ -398,7 +380,7 @@ const EmailAddress = ({ setDisplay }) => {
     // Handle OTP resend logic here
     // You can initiate the OTP resend process
     // and then reset the countdown timer
-    resendOtp({email: emailData.email, action: "change-email"}, dispatch);
+    resendOtp({ email: emailData.email, action: "change-email" }, dispatch);
     setCountdown(60);
     setResendDisabled(true);
   };

@@ -19,6 +19,7 @@ export const followStore = (payload, dispatch, socket, isIncluded) => {
   dispatch(followStoreApi(payload))
     .then(unwrapResult)
     .then((res) => {
+      !isIncluded &&
       socket.emit("createChatRoom", {
         branchId: payload?.branchId,
       });

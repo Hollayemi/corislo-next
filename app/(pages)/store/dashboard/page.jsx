@@ -80,11 +80,11 @@ const DashboardOverview = ({ params }) => {
           </Grid>
         </Box>
       </Box>
-      {rows.length && (
+      {rows.length ? (
         <Box className="bg-white !px-3 py-4 rounded-md my-6">
           <OrderTable columns={ordersColumns(actionFunctions)} rows={rows} />
         </Box>
-      )}
+      ) : null}
     </StoreLeftSideBar>
   );
 };

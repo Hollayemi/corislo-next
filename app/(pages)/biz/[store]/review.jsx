@@ -6,10 +6,14 @@ import IconifyIcon from "@/app/components/icon";
 import { useUserData } from "@/app/hooks/useData";
 import { shopFeedbackHandler } from "@/app/redux/state/slices/home/feedback";
 import { useDispatch } from "react-redux";
+import useSWR from "swr";
 
-const Review = ({ store, branch }) => {
+const Review = ({ store, branch, searchParams }) => {
   const { isOffline } = useUserData();
   const dispatch = useDispatch();
+  const { data, isLoading } = useSWR(`/store/feedback/${store}/${branch}?page=${searchParams?.page || 1}`);
+  const summary = data && !isLoading ? data?.data[0] : {};
+
   const [review, setReview] = useState("");
   const [star, setStar] = useState(0);
   const feedbackPayload = {
@@ -21,7 +25,12 @@ const Review = ({ store, branch }) => {
   return (
     <Box>
       <Box className="!bg-white rounded-xl px-3 py-5 mt-10">
-        <ReviewTab store={store} branch={branch} />
+        <ReviewTab
+          store={store}
+          branch={branch}
+          summary={summary}
+          searchParams={searchParams}
+        />
       </Box>
       {!isOffline && (
         <Box className="!bg-white rounded-xl px-3 md:px-10 py-8 mt-6">

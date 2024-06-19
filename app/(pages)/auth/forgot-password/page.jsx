@@ -1,19 +1,10 @@
 "use client";
 // ** React Imports
 import { useState } from "react";
-
-// ** Next Import
-import Link from "next/link";
-
-// ** MUI Components
 import Box from "@mui/material/Box";
-import { styled, useTheme } from "@mui/material/styles";
-import MuiCard from "@mui/material/Card";
-import MuiFormControlLabel from "@mui/material/FormControlLabel";
 
 import { CustomInput } from "@/app/components/cards/auth/components";
 import { Button, Typography } from "@mui/material";
-import Image from "next/image";
 
 const ForgotPassword = () => {
   const [openInput, setOpenInput] = useState(false);
@@ -26,7 +17,7 @@ const ForgotPassword = () => {
   }
 
   return (
-    <Box className="w-full max-w-[380px] md:w-[480px] !mt-16 flex flex-col items-center">
+    <Box className="!mt-10 mb-16 w-full max-w-[380px]">
       {!openInput && (
         <Typography variant="caption" className="!text-[13px] !text-center">
           If you've forgotten your Corisio password, don't worry; we've got you

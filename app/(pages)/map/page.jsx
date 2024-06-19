@@ -17,7 +17,7 @@ const MyMapComponent = () => {
   const zoom = 20; // Your desired zoom level
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyAc1nh-S1_hL3n_sLzzR-tLkgOy9PHenHQ", // API key from environment variable
+    googleMapsApiKey: "AIzaSyCeQLtnNDROKSSqq_k3nQ_NTpnsv7srU_Y", // API key from environment variable
     libraries,
   });
 

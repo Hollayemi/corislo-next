@@ -7,7 +7,7 @@ import BusinessProfile from "./business";
 import Verification from "./verification";
 import { useSearchParams } from "next/navigation";
 import Pricing from "./pricing";
-import validationRegisterSchema from "../../auth/register/validation";
+import validationRegisterSchema from "../../../auth/register/validation";
 import validationStoreSchema from "./storeValidation";
 
 const RegisterStore = () => {

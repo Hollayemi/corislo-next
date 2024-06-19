@@ -59,7 +59,7 @@ const MapGraph = ({ mapType = "default", markers }) => {
   };
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyAc1nh-S1_hL3n_sLzzR-tLkgOy9PHenHQ",
+    googleMapsApiKey: "AIzaSyCeQLtnNDROKSSqq_k3nQ_NTpnsv7srU_Y",
     libraries,
   });
 

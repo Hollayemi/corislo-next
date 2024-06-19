@@ -85,3 +85,43 @@ export const storeBottomBar = {
     },
   ],
 };
+
+export const settingsInnerList = {title: "Settings", content: [
+  {
+    name: "Account Settings",
+    path: "",
+    icon: <ListAltIcon />,
+    short: "Products",
+  },
+  {
+    name: "Role and Permission",
+    path: "/role",
+    icon: <CategoryIcon />,
+    short: "Categories",
+  },
+   {
+    name: "Branches",
+    path: "/branches",
+    icon: <AddToPhotosIcon />,
+    short: "Add Product",
+  },
+  {
+    name: "Staffs",
+    path: "/staffs",
+    icon: <AddToPhotosIcon />,
+    short: "Add Product",
+  },
+  {
+    name: "Plans",
+    path: "/plans",
+    icon: <CreateNewFolderIcon />,
+    short: "escape",
+  },
+  {
+    name: "Billing",
+    path: "/billing",
+    icon: <AddToPhotosIcon />,
+    short: "Add Product",
+  },
+ 
+]};

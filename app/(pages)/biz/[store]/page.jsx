@@ -48,7 +48,13 @@ const BusinessPage = ({ params, searchParams }) => {
         searchParams={searchParams}
       />
     ),
-    1: <Review store={getStore[0]} branch={getStore[1]} />,
+    1: (
+      <Review
+        store={getStore[0]}
+        branch={getStore[1]}
+        searchParams={searchParams}
+      />
+    ),
     2: <Policies />,
   };
   const followers = 12432000;

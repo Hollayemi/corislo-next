@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Box, Button, Typography } from "@mui/material";
 import { summarizeFollowers } from "@/app/utils/format";
 import { followStore } from "@/app/redux/state/slices/users/following";
+import Link from "next/link";
 
 export const ProductSellerCard = ({ branchId }) => {
   console.log(branchId);
@@ -28,22 +29,24 @@ export const ProductSellerCard = ({ branchId }) => {
             height={100}
             className="w-14 h-14 border border-blue-700 !rounded-full"
           />
-          <Box className="mt-3 ml-2">
-            <Typography
-              variant="body2"
-              className="!text-[14px] !font-[400] !leading-3"
-              color="custom.pri"
-            >
-              {storeInfo.businessName}
-            </Typography>
-            <Typography
-              variant="caption"
-              className="!text-[11px] !text-gray-400 !leading-3"
-              color="custom.pri"
-            >
-              {storeInfo.state}
-            </Typography>
-          </Box>
+          <Link href={`/biz/${storeInfo.store}-${storeInfo.branch}`}>
+            <Box className="mt-3 ml-2">
+              <Typography
+                variant="body2"
+                className="!text-[14px] !font-[400] !leading-3"
+                color="custom.pri"
+              >
+                {storeInfo.businessName}
+              </Typography>
+              <Typography
+                variant="caption"
+                className="!text-[11px] !text-gray-400 !leading-3"
+                color="custom.pri"
+              >
+                {storeInfo.branchName}
+              </Typography>
+            </Box>
+          </Link>
         </Box>
         <Box className="flex items-center justify-center">
           <Button
@@ -55,14 +58,13 @@ export const ProductSellerCard = ({ branchId }) => {
                 className="!text-blue-800"
               />
             }
-            onClick={() => router.push(`/chat?new=${product?.branchId}`)}
+            onClick={() => router.push(`/chat?new=${branchId}`)}
           >
             <span className="hidden md:block">Message</span>
           </Button>
           <Button
             variant="outlined"
             className="!rounded-full h-9 w-14 md:w-28 !bg-white !shadow-none !ml-3"
-            startIcon={<IconifyIcon icon="tabler:user-plus" />}
             onClick={() =>
               followStore(storeInfo, dispatch, socket, isFollowing)
             }

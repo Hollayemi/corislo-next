@@ -11,7 +11,7 @@ const PersonalProfile = ({
   readyToNext,
 }) => {
   return (
-    <Box className="">
+    <Box className="px-2">
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <CustomInput

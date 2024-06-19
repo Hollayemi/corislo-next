@@ -294,6 +294,7 @@ export const ProductOnShowcase = ({
           <Rating
             defaultValue={star || 0}
             className="!text-[13px]"
+            readOnly
             name="size-small"
             size="small"
           />

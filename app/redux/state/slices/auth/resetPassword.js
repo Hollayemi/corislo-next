@@ -14,13 +14,13 @@ const resetPasswordApi = createAsyncThunk('post/RP', async (payload) => {
     return data;
 });
 
-export const ResetPasswordHandler = (formData, navigate, dispatch) => {
+export const ResetPasswordHandler = (formData, router, dispatch) => {
     dispatch(resetPasswordApi(formData))
         .then(unwrapResult)
         .then((res) => {
             console.log(res);
             if (res.type === 'success') {
-                navigate('/login');
+                router.push('/login');
             }
         })
         .catch((err) => {

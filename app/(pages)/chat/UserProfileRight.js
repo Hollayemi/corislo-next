@@ -104,7 +104,6 @@ export const UserProfileRightComponent = ({
   const { data: result } = useSWR(
     `/user/order?store=${contact.store}&branch=${contact.branch}`
   );
-  console.log(result);
   const MyListItem = ({ info, title, infoComponent }) => (
     <Box className="flex items-center mb-2">
       <Typography

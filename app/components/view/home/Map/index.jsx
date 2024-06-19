@@ -175,7 +175,7 @@ const MapOverlay = () => {
                     ) : (
                       searchResult.map((each, i) => (
                         <SearchResults
-                          name={`${each.businessName} (${each.store})`}
+                          name={`${each.businessName} (${each.more.branchName})`}
                           key={i}
                           click
                         />

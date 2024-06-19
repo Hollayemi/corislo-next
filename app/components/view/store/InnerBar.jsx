@@ -70,7 +70,7 @@ const OnlyContents = ({ each, path }) => {
         sx={{ display: "block", color: "gray" }}
         className="text-xs"
       >
-        {storeInfo?.data?.branchName?.toLowerCase() !==
+        {storeInfo?.profile?.branchName?.toLowerCase() !==
           each.name.toLowerCase() && (
           <ListItemButton
             size="small"

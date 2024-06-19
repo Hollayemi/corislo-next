@@ -158,7 +158,7 @@ const SearchPage = ({ search, setSearch }) => {
             </Typography>
             <FilterOptions
               name="Category"
-              options={products?.category[0] || []}
+              options={products?.category || []}
             />
             <FilterOptions
               name="Price"

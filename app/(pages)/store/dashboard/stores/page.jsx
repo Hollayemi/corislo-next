@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Typography, Box, Grid, Paper, TextField, Button } from "@mui/material";
 import Link from "next/link";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
@@ -23,10 +23,16 @@ import { updateStoreProfile } from "@/app/redux/state/slices/shop/settings/editS
 import MapGraph from "@/app/components/view/home/Map/map";
 
 const StorePage = ({ params }) => {
-  const { storeInfo } = useStoreData();
+  const { storeInfo: originalInfo } = useStoreData()
   const dispatch = useDispatch();
+  const {
+    data: storeInfo,
+    error: storeErr,
+    isLoading: storeIsLoading,
+  } = useSWR(`/store?branch=${params?.sublist || originalInfo?.profile?.branch}`);
   const { data } = useSWR("/branch/all?sidelist=true");
   const InnerList = data?.data ? data.data : [];
+
   const [openHours, setOpenHours] = useState(
     storeInfo?.profile?.opening_hours || {}
   );
@@ -34,14 +40,26 @@ const StorePage = ({ params }) => {
     storeInfo?.profile?.social_media || {}
   );
   const [files, setFiles] = useState([]);
+  const [localFiles, setLocalFiles] = useState([]);
   const path = { ...params, sidebar: "stores" };
 
   const [inputValues, setValues] = useState({
     address: storeInfo?.profile?.address || "",
     city: storeInfo?.profile?.city || "",
-    bus_stop: storeInfo?.profile?.bus_stop || "",
+    landmark: storeInfo?.profile?.landmark || "",
     about_store: storeInfo?.profile?.about_store || "",
   });
+  console.log(storeInfo);
+  useEffect(() => {
+    setValues({
+      address: storeInfo?.profile?.address || "",
+      city: storeInfo?.profile?.city || "",
+      landmark: storeInfo?.profile?.landmark || "",
+      about_store: storeInfo?.profile?.about_store || "",
+    });
+    setSocialMedia(storeInfo?.profile?.social_media || {});
+    setOpenHours(storeInfo?.profile?.opening_hours || {});
+  }, [storeIsLoading]);
 
   console.log(openHours);
 
@@ -69,7 +87,7 @@ const StorePage = ({ params }) => {
       </Box>
       <Box className="w-full bg-white !rounded-md !px-4 !mt-4 !md:px-5 !pb-8 relative">
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={7} className="md:!pr-16">
+          <Grid item sm={12} md={7} className="md:!pr-16">
             <Box>
               <Box className="flex items-center justify-between">
                 <Typography className="font-bold !text-gray-800 text-sm">
@@ -143,8 +161,8 @@ const StorePage = ({ params }) => {
                 label="Address"
               />
               <InputBoxWithSideLabel
-                value={inputValues.bus_stop}
-                onChange={handleChange("bus_stop")}
+                value={inputValues.landmark}
+                onChange={handleChange("landmark")}
                 label="Closest Bus Stop or Landmark"
               />
             </Box>
@@ -180,7 +198,12 @@ const StorePage = ({ params }) => {
               </Typography>
               <br />
               <br />
-              <FileUploader files={files} setFiles={setFiles} />
+              <FileUploader
+                files={files}
+                setFiles={setFiles}
+                localFiles={localFiles}
+                setLocalFiles={setLocalFiles}
+              />
             </Box>
 
             <Box className="!mt-8 !border-b !pb-6">
@@ -275,7 +298,7 @@ const StorePage = ({ params }) => {
               Save
             </Button>
           </Grid>
-          <Grid item xs={12} sm={5} className="!relative !pl-5">
+          <Grid item sm={12} md={5} className="!relative !pl-5">
             {/* <Box className="h-[500px] bg-gray-50 !sticky top-0 md:mt-32">
               <MapGraph
                 markers={[

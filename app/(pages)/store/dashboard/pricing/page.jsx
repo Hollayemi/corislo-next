@@ -1,16 +1,36 @@
-"use client"
-import { Typography } from "@mui/material"
+"use client";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+import { Box } from "@mui/material";
+import { pricingBreadCrumb } from "./pricing.components";
+import { TitleSubtitle } from "@/app/(pages)/user/components";
+import AllPlans, {  } from "@/app/components/cards/plans";
 
-const PricingPage = ({ params }) => {
-  const path={...params, sidebar: "pricing"}
+const Plans = ({ params }) => {
+  const path = {
+    ...params,
+    sidebar: "pricing",
+  };
   return (
-    <StoreLeftSideBar path={path} subListBar={false}>
-      <Typography color="primary" className="pt-4">
-        m;km;k
-      </Typography>
-    </StoreLeftSideBar>
-  )
-}
+    <StoreLeftSideBar
+      path={path}
+      subListBar={false}
+      crumb={[...pricingBreadCrumb, { text: "Pricing", link: "pricing" }]}
+    >
+      <Box className="h-ful w-full bg-white px-2 md:px-5 py-8 rounded-md">
+        <TitleSubtitle
+          title="Pricing"
+          titleClass="!text-[17px]"
+          subtitle="View and upgrade plans for your Corisio Store"
+          subtitleClass="!text-[13px] !mt-2"
+          className=""
+        />
 
-export default PricingPage
+        <Box className="w-full py-6 px-4 border border-slate-50 rounded-xl mt-3">
+          <AllPlans />
+        </Box>
+      </Box>
+    </StoreLeftSideBar>
+  );
+};
+
+export default Plans;

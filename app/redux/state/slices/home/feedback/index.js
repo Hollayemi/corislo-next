@@ -2,6 +2,7 @@ import { createAsyncThunk, unwrapResult } from "@reduxjs/toolkit";
 import toaster from "@/app/configs/toaster";
 import martApi from "../../api/baseApi";
 import { jsonHeader } from "../../api/setAuthHeaders";
+import { mutate } from "swr";
 
 const newFeedback = createAsyncThunk("post/newFeedback", async (payload) => {
   const { data } = await martApi
@@ -16,10 +17,8 @@ export const feedbackHandler = (payload, dispatch) => {
   dispatch(newFeedback(payload))
     .then(unwrapResult)
     .then((res) => {
-      if (res.type === "success") {
-        toaster({ ...res });
-        mutate("/product/feedback");
-      }
+      toaster({ ...res });
+      mutate("/user/pending-reviews");
     })
     .catch((e) => {});
 };
@@ -39,9 +38,9 @@ export const shopFeedbackHandler = (payload, dispatch) => {
   dispatch(newShopFeedback(payload))
     .then(unwrapResult)
     .then((res) => {
+      toaster({ ...res });
       if (res.type === "success") {
-        toaster({ ...res });
-        mutate(`/store/feedback/${payload.store}/${payload.branch}}`);
+        mutate(`/store/feedback/${payload.store}/${payload.branch}`);
       }
     })
     .catch((e) => {});

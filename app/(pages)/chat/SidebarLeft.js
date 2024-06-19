@@ -109,7 +109,7 @@ const SidebarLeft = (props) => {
         const arrToMap =
           query.length && filteredChat.length ? filteredChat : store.chat;
 
-        return arrToMap.map((chatLog, index) => {
+          return arrToMap.map((chatLog, index) => {
           const { lastMessage, id } = chatLog.chat;
           const activeCondition =
             (active && active.id === id) ||

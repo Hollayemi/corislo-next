@@ -201,6 +201,7 @@ export const TopStores = ({ image, name, rating, followers = 0 }) => {
       <Rating
         value={rating}
         className="!text-[15px]"
+        readOnly
         name="size-smalll"
         defaultValue={rating || 4}
       />

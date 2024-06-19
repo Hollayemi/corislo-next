@@ -13,7 +13,7 @@ const config = {
   logout: { title: "User Logout" },
   register: { title: "Create Account" },
   forgot_password: { title: "Forgot your Password?" },
-  reset_password: { title: "Sign In to Account" },
+  reset_password: { title: "Reset Account Password", center: true },
   verify_account: { title: "Email Verification" },
   send_mail: { title: "Verify your Email Address" },
   otp_verification: { title: "Verify your Email Address", center: true },

@@ -15,7 +15,7 @@ import {
   HotDeal,
   PopularProduct,
 } from "@/app/components/templates/productTemplates";
-import { ReviewTab } from "./reviewTab";
+import { Review } from "./review";
 import useSWR from "swr";
 import { removeOrAddToArray } from "@/app/utils/arrayFunctions";
 import { useDispatch } from "react-redux";
@@ -28,22 +28,25 @@ import { addNewViewProduct } from "@/app/redux/state/slices/home/view/view";
 import { ProductSellerCard } from "@/app/components/cards/seller/product.sellercard";
 import { mySubstring } from "@/app/utils/format";
 
-
-const ProductDisplay = ({ params }) => {
+const ProductDisplay = ({ params, searchParams }) => {
   const dispatch = useDispatch();
   const { product: prodNameParam } = params;
   const { cartedProds, savedProds } = useUserData();
   console.log(prodNameParam.split("%2B").join(" "));
-  const { data: prod, error } = useSWR(
-    `/products?prodName=${prodNameParam.split("%2B").join(" ")}`
-  );
-  const product = prod ? prod?.data[0] : {};
+  const {
+    data: prod,
+    isLoading,
+    error,
+  } = useSWR(`/products?prodName=${prodNameParam.split("%2B").join(" ")}`);
+
+  console.log(prod);
+  const product = prod ? prod?.data?.result[0] : {};
   const ImagesArray = [1, 2, 3, 4, 5, 6, 7];
   // ** State
   const [colors, setColors] = useState([]);
   const [size, setSize] = useState("");
   const [more, setMore] = useState({
-    variation: 7
+    variation: 7,
   });
   const [value, setTabValue] = useState("1");
 
@@ -65,7 +68,7 @@ const ProductDisplay = ({ params }) => {
       },
       dispatch
     );
-  }, [product]);
+  }, [isLoading]);
 
   const payload = {
     productId: product?._id,
@@ -87,8 +90,10 @@ const ProductDisplay = ({ params }) => {
     "#000",
   ];
 
-  const otherVariations = Object.keys(product?.specifications?.variations || {})
-   
+  const otherVariations = Object.keys(
+    product?.specifications?.variations || {}
+  );
+
   const [showingImage, showImage] = useState(null);
   return (
     <HomeWrapper>
@@ -125,7 +130,10 @@ const ProductDisplay = ({ params }) => {
             </Box>
           </Grid>
           <Grid item xs={12} md={7}>
-            <Typography variant="body2" className="!font-semibold !text-xl !text-black">
+            <Typography
+              variant="body2"
+              className="!font-semibold !text-xl !text-black"
+            >
               {product.prodName}
             </Typography>
 
@@ -153,31 +161,27 @@ const ProductDisplay = ({ params }) => {
                   </Typography>
                 </Box>
                 <Box>
-                  <Typography variant="caption" className="!text-black">
-                    {product?.star ? (
-                      <Rating
-                        defaultValue={product.star || 0}
-                        className=" mt-2"
-                        name="size-small"
-                        size="small"
-                      />
-                    ) : (
-                      <Rating
-                        defaultValue={0}
-                        className=" mt-2"
-                        name="size-small"
-                        size="small"
-                      />
-                    )}
-                  </Typography>
+                  <Rating
+                    value={product?.star || 0}
+                    className=" mt-2"
+                    readOnly
+                    precision={0.1}
+                    name="size-small"
+                    size="small"
+                  />
                 </Box>
               </Box>
-              <Box className="w-1/2 mt-1 flex items-center cursor-pointer" onClick={() => saveProduct(payload, dispatch)}>
+              <Box
+                className="w-1/2 mt-1 flex items-center cursor-pointer"
+                onClick={() => saveProduct(payload, dispatch)}
+              >
                 <Box className="w-6">
                   <Typography variant="caption" className="!text-gray-400">
                     <IconifyIcon
                       icon="tabler:heart"
-                      className={` ${savedProds.includes(product?._id) && '!text-red-500'} hover:text-red-500 !text-[17px]`}
+                      className={` ${
+                        savedProds.includes(product?._id) && "!text-red-500"
+                      } hover:text-red-500 !text-[17px]`}
                     />
                   </Typography>
                 </Box>
@@ -188,101 +192,144 @@ const ProductDisplay = ({ params }) => {
                 </Box>
               </Box>
               <Box>
-              {product.discount && <Box className="flex items-center mt-3">
-                <Box className="h-5 w-fit px-2 min-w-20 bg-red-500 rounded flex justify-center items-center">
-                  <Typography variant="body2" className="!text-white !text-[11px]">
-                    {mySubstring(product.discountTitle, 20)}
-                  </Typography>
-                </Box>
-                <Typography variant="body2" className="!text-black !text-[12px] !ml-3">
-                    {product.discount}% discount
-                  </Typography>
-              </Box>}
+                {product.discount && (
+                  <Box className="flex items-center mt-3">
+                    <Box className="h-5 w-fit px-2 min-w-20 bg-red-500 rounded flex justify-center items-center">
+                      <Typography
+                        variant="body2"
+                        className="!text-white !text-[11px]"
+                      >
+                        {mySubstring(product.discountTitle, 20)}
+                      </Typography>
+                    </Box>
+                    <Typography
+                      variant="body2"
+                      className="!text-black !text-[12px] !ml-3"
+                    >
+                      {product.discount}% discount
+                    </Typography>
+                  </Box>
+                )}
               </Box>
             </Box>
 
             <Box className="bg-white w-full rounded-xl p-4 mt-4">
-              
-             {product?.specifications?.color?.length && <Box>
-                <Typography variant="caption" className="!font-bold">
-                  Colors Available
-                </Typography>
-                <Box className="flex items-center mb-1.5">
-                  {colorArray.map((col, i) => (
-                    <Box
-                      key={i}
-                      bgcolor={col}
-                      onClick={() => removeOrAddToArray(col, colors, setColors)}
-                      className={`w-4 h-4 rounded-full m-1.5 flex items-center justify-center`}
-                    >
-                      {colors.includes(col) && (
-                        <img
-                          src="/images/misc/check.png"
-                          alt="."
-                          className="w-2.5 h-2.5"
-                        />
-                      )}
-                    </Box>
-                  ))}
+              {product?.specifications?.color?.length && (
+                <Box>
+                  <Typography variant="caption" className="!font-bold">
+                    Colors Available
+                  </Typography>
+                  <Box className="flex items-center mb-1.5">
+                    {colorArray.map((col, i) => (
+                      <Box
+                        key={i}
+                        bgcolor={col}
+                        onClick={() =>
+                          removeOrAddToArray(col, colors, setColors)
+                        }
+                        className={`w-4 h-4 rounded-full m-1.5 flex items-center justify-center`}
+                      >
+                        {colors.includes(col) && (
+                          <img
+                            src="/images/misc/check.png"
+                            alt="."
+                            className="w-2.5 h-2.5"
+                          />
+                        )}
+                      </Box>
+                    ))}
+                  </Box>
                 </Box>
-              </Box>}
+              )}
               {/* sizes */}
-             {product?.specifications?.size?.length && <Box>
-                <Typography variant="caption" className="!font-bold">
-                  Sizes Available
-                </Typography>
-                <Box className="flex items-center flex-wrap mb-5">
-                  {product?.specifications?.size?.map(
-                    (each, i) =>
-                      i < 7 && (
-                        <Chip
-                          onClick={() => setSize(each)}
-                          bgcolor="#000"
-                          sx={{ margin: 0.5, borderRadius: "5px" }}
-                          className={`hover:!text-white ${
-                            size === each && "!bg-blue-900 !text-white"
-                          }`}
-                          label={
-                            <Box className="flex items-center ">
-                              {each}
-                              {/* <IconifyIcon
+              {product?.specifications?.size?.length && (
+                <Box>
+                  <Typography variant="caption" className="!font-bold">
+                    Sizes Available
+                  </Typography>
+                  <Box className="flex items-center flex-wrap mb-5">
+                    {product?.specifications?.size?.map(
+                      (each, i) =>
+                        i < 7 && (
+                          <Chip
+                            onClick={() => setSize(each)}
+                            bgcolor="#000"
+                            sx={{ margin: 0.5, borderRadius: "5px" }}
+                            className={`hover:!text-white ${
+                              size === each && "!bg-blue-900 !text-white"
+                            }`}
+                            label={
+                              <Box className="flex items-center ">
+                                {each}
+                                {/* <IconifyIcon
                                 icon="tabler:x"
                                 fontSize={20}
                                 className="ml-2"
                               /> */}
-                            </Box>
-                          }
-                          key={i}
-                          skin="light"
-                          color="primary"
-                        />
-                      )
-                  )}
+                              </Box>
+                            }
+                            key={i}
+                            skin="light"
+                            color="primary"
+                          />
+                        )
+                    )}
+                  </Box>
                 </Box>
-              </Box>}
+              )}
 
-              {otherVariations.length > 0 && <Box>
-                <Typography variant="body2" className="!font-bold text-center !mb-2">
-                  Other Variations
-                </Typography>
-                <Box className="flex items-center justify-center flex-wrap mb-5">
-                  {otherVariations?.map(
-                    (each, i) =>
-                      i < more.variation && (
-                        <Box key={i} className="flex items-center">
-                          <Typography variant="body2" className="!text-[12px] !mr-2">
-                            {each.replaceAll("_"," ")}:
-                          </Typography>
-                          <Typography variant="body2" className="!text-[12px] !mr-4">
-                          {Object.values(product?.specifications?.variations || {})[i]},
-                          </Typography>
+              {otherVariations.length > 0 && (
+                <Box>
+                  <Typography
+                    variant="body2"
+                    className="!font-bold text-center !mb-2"
+                  >
+                    Other Variations
+                  </Typography>
+                  <Box className="flex items-center justify-center flex-wrap mb-5">
+                    {otherVariations?.map(
+                      (each, i) =>
+                        i < more.variation && (
+                          <Box key={i} className="flex items-center">
+                            <Typography
+                              variant="body2"
+                              className="!text-[12px] !mr-2"
+                            >
+                              {each.replaceAll("_", " ")}:
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              className="!text-[12px] !mr-4"
+                            >
+                              {
+                                Object.values(
+                                  product?.specifications?.variations || {}
+                                )[i]
+                              }
+                              ,
+                            </Typography>
+                          </Box>
+                        )
+                    )}
+                    {otherVariations?.length > 7 && (
+                      <Box
+                        onClick={() =>
+                          setMore((prev) => {
+                            return {
+                              ...prev,
+                              variation: more.variation === 7 ? 1000 : 7,
+                            };
+                          })
+                        }
+                        variant="body2"
+                        className="!text-[12px] !text-blue-600 -ml-2 cursor-pointer"
+                      >
+                        {more.variation === 7 ? "more" : "less"}...
                       </Box>
-                      )
-                  )}
-               {   otherVariations?.length > 7 && 
-               <Box onClick={() => setMore((prev) => {return {...prev, variation: more.variation === 7 ? 1000 : 7}})} variant="body2" className="!text-[12px] !text-blue-600 -ml-2 cursor-pointer">{more.variation===7 ? "more" : "less"}...</Box>}
+                    )}
+                  </Box>
                 </Box>
-              </Box>}
+              )}
 
               <Box className="flex items-center flex-wrap justify-center">
                 <Typography
@@ -371,39 +418,19 @@ const ProductDisplay = ({ params }) => {
               <ProdDescription />
             </TabPanel>
             <TabPanel value="2"></TabPanel>
-            <TabPanel value="3" className="!px-3">
-              <ReviewTab />
+            <TabPanel value="3" className="!px-0">
+              <Review productId={product._id} searchParams={searchParams} />
             </TabPanel>
           </TabContext>
         </Box>
 
         <Box className="mt-16">
           <SectionTitle black="More items from this seller" />
-          <ReactSlickSlider>
-            {popularProducts.map((prod, i) => (
-              <PopularProduct
-                key={i}
-                image={prod.image}
-                prodName={prod.prodName}
-                price={prod.price}
-              />
-            ))}
-          </ReactSlickSlider>
+          <PopularProduct small />
         </Box>
         <Box className="mt-8">
           <SectionTitle black="You may also like" />
-          <ReactSlickSlider>
-            {hotDealData.map((prod, i) => (
-              <HotDeal
-                key={i}
-                image={prod.image}
-                prodName={prod.prodName}
-                price={prod.price}
-                unit={prod.unit}
-                of={prod.of}
-              />
-            ))}
-          </ReactSlickSlider>
+          <HotDeal small />
         </Box>
       </Box>
     </HomeWrapper>
@@ -428,7 +455,7 @@ const TitleValue = ({ title, value }) => (
         noWrap
         className="!text-black !text-[12px] w-full !leading-5 !ml-2 md:!ml-0 !mr-5 md:!mr-0 "
       >
-        {mySubstring(value, 25)} 
+        {mySubstring(value, 25)}
       </Typography>
     </Box>
   </Box>

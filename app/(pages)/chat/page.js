@@ -50,11 +50,12 @@ const AppChat = ({ searchParams }) => {
 
   const { data, isLoading: storeListLoading } = useSWR("/chat/stores");
   const storeList = (data && data?.data) || {};
-  const itIsNewChat = selectedChat?.split("-")[0] === "new_chat";
+  const itIsNewChat = searchParams.new
   const { data: storeChat, isLoading: loadingChat } = useSWR(
-    selectedChat &&
-      !itIsNewChat &&
-      `/user/chat/messages?chatId=${selectedChat}`
+    ( selectedChat ||
+      itIsNewChat )
+   &&
+      `/user/chat/messages?chatId=${selectedChat}&branchId=${searchParams.new}&username=${userInfo.username}`
   );
   // ** Vars
   const smAbove = useMediaQuery(theme.breakpoints.up("sm"));
@@ -69,7 +70,6 @@ const AppChat = ({ searchParams }) => {
 
   useEffect(() => {
     socket?.on("newMessage", (data) => {
-      console.log(data, messageLog);
       setMessageLog((prev) => {
         return { ...prev, log: data };
       });
@@ -80,10 +80,9 @@ const AppChat = ({ searchParams }) => {
     setMessageLog(storeChat?.data || {});
   }, [storeChat]);
 
-  // useEffect(() => {
-  //   selectChat(branchInfo.chatId);
-  //   selectContact(branchInfo);
-  // }, [branchInfo]);
+  useEffect(() => {
+    selectContact(branchInfo);
+  }, [branchData]);
 
   const handleLeftSidebarToggle = () => setLeftSidebarOpen(!leftSidebarOpen);
   const handleUserProfileLeftSidebarToggle = () =>
@@ -110,7 +109,7 @@ const AppChat = ({ searchParams }) => {
   }
   if (!storeListLoading && storeChat && data) {
     storeList.selectedChat = {
-      chat: itIsNewChat && loadingChat ? null : messageLog?.log,
+      chat: !messageLog.log && loadingChat ? null : messageLog?.log,
       loadingChat,
       contact: {
         ...selectedContact,
@@ -120,16 +119,16 @@ const AppChat = ({ searchParams }) => {
       },
     };
   }
-  if (!storeListLoading && !loadingChat && itIsNewChat) {
-    storeList.selectedChat = {
-      chat: null,
-      contact: {
-        ...selectedContact,
-        chatName: selectedContact.chatName,
-        avatar: "/images/misc/shop/2.png",
-      },
-    };
-  }
+  // if (!storeListLoading && !loadingChat && itIsNewChat) {
+  //   storeList.selectedChat = {
+  //     chat: null,
+  //     contact: {
+  //       ...selectedContact,
+  //       chatName: selectedContact.chatName,
+  //       avatar: "/images/misc/shop/2.png",
+  //     },
+  //   };
+  // }
 
   const ScrollWrapper = ({ children }) => {
     if (hidden) {
@@ -147,7 +146,6 @@ const AppChat = ({ searchParams }) => {
     }
   };
 
-  console.log(storeList);
 
   return (
     <HomeWrapper noFooter>
@@ -163,7 +161,7 @@ const AppChat = ({ searchParams }) => {
       >
         <Box
           className={`!flex-shrink-0 ${
-            selectedChat && "hidden md:block"
+            selectedChat || itIsNewChat && "hidden md:block"
           }  !w-full md:!w-fit md:!min-w-fit`}
         >
           <SidebarLeft

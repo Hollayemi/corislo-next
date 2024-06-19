@@ -146,16 +146,16 @@ export default function StoreAuthLayout({
             {/* This for the app */}
             {children}
             {/* This for the app */}
-            <Box className="w-full">
+            <Box className="w-full  !pb-20 md:pb-0 pt-8">
               <Button
                 variant="contained"
-                className="w-full !h-12 !rounded-full !text-gray-100 !text-[17px] !mt-3"
+                className="w-full !h-12 !rounded-full !text-gray-100 !text-[17px] !mt-3 !shadow-none"
                 onClick={nextButton}
               >
                 {stage < 3 ? "Next" : "Retry Verification"}
               </Button>
               <Box className="flex justify-center">
-                <Typography className="!text-[13px] !mt-2">
+                <Typography className="!text-[13px] !mt-4">
                   Already have an account?{" "}
                   <Link
                     href="/store/login"

@@ -21,6 +21,8 @@ import Icon from "@/app/components/icon";
 import { DashboardCrumb } from "../components";
 // ** Third Party Imports
 import { useDropzone } from "react-dropzone";
+import { useRouter } from "next/navigation";
+import { convertFileToBase64 } from "@/app/components/cards/fileUpload";
 
 // Styled component for the upload image inside the dropzone area
 const Img = styled("img")(({ theme }) => ({
@@ -28,13 +30,32 @@ const Img = styled("img")(({ theme }) => ({
   height: 48,
 }));
 
-export const FileUploader = ({ files, setFiles }) => {
+export const FileUploader = ({
+  files,
+  setFiles,
+  localFiles,
+  setLocalFiles,
+}) => {
   // ** Hooks
+  console.log(files);
   const theme = useTheme();
 
   const { getRootProps, getInputProps } = useDropzone({
-    onDrop: (acceptedFiles) => {
-      setFiles(acceptedFiles.map((file) => Object.assign(file)));
+    onDrop: async (acceptedFiles) => {
+      const fileInfo = acceptedFiles.map((file) => Object.assign(file));
+      console.log(fileInfo);
+      setLocalFiles(fileInfo);
+
+      const base64Files = await Promise.all(
+        acceptedFiles.map(async (file, i) => {
+          if (file) {
+            const base64Image = await convertFileToBase64(file);
+            setFiles((item) => {
+              return [...item, { name: fileInfo[i].name, base64: base64Image }];
+            });
+          }
+        })
+      );
     },
   });
 
@@ -42,7 +63,7 @@ export const FileUploader = ({ files, setFiles }) => {
     if (file.type.startsWith("image")) {
       return (
         <img
-          className="w-32 h-32 rounded-md"
+          className="w-auto h-auto max-h-28 max-w-40 rounded-md"
           alt={file.name}
           src={URL.createObjectURL(file)}
         />
@@ -55,21 +76,23 @@ export const FileUploader = ({ files, setFiles }) => {
   };
 
   const handleRemoveFile = (file) => {
-    const uploadedFiles = files;
+    const uploadedFiles = localFiles;
     const filtered = uploadedFiles.filter((i) => i.name !== file.name);
-    setFiles([...filtered]);
-  };
+    setLocalFiles([...filtered]);
 
-  const handleRemoveAllFiles = () => {
-    setFiles([]);
+    const filteredbASE64 = files.filter((i) => i.name !== file.name);
+    setFiles([...filteredbASE64]);
   };
 
   return (
     <Grid container spacing={3}>
-      {files.length
-        ? files.map((file) => (
+      {localFiles.length
+        ? localFiles.map((file) => (
             <Grid item xs={6} md={4} key={file.name}>
-              <div className="relative w-32 h-32 rounded-md" title={file.name}>
+              <div
+                className="relative w-auth h-auto rounded-md"
+                title={file.name}
+              >
                 {renderFilePreview(file)}
                 <div className="absolute bottom-0 right-0 rounded-tl-sm bg-white p-0.5 m-0.5 mr-1">
                   <Typography className="text-[8px]" variant="body2">
@@ -231,12 +254,14 @@ export const StoreBreadCrumb = [
 ];
 
 export const BreadcrumbRightEle = () => {
+  const router = useRouter();
   return (
     <Box className="flex items-center -mr-6 md:mr-0">
       <Button
         variant="contained"
         className="!mr-4 !bg-blue-900 !shadow-none !text-[12px] !rounded-full"
         startIcon={<Icon icon="tabler:plus" />}
+        onClick={() => router.push("/store/dashboard/stores/sub-store")}
       >
         <span className="hidden md:block mr-1">Add New </span> Sub-Store
       </Button>
@@ -245,9 +270,5 @@ export const BreadcrumbRightEle = () => {
 };
 
 export const MySwitch = (props) => {
-  return (
-    <Switch
-      {...props}
-    />
-  );
-}
+  return <Switch {...props} />;
+};

@@ -62,8 +62,6 @@ const AddNewProduct = ({ params }) => {
     delivery,
   });
 
-  console.log(collections);
-
   const fromCollection = collections.filter(
     (x) => x.collectionId === formData.collectionId
   )[0];

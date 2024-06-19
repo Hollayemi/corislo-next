@@ -22,6 +22,7 @@ import UserProfileRight from "./UserProfileRight";
 import SidebarLeft from "./SidebarLeft";
 import { Circles } from "react-loader-spinner";
 import { ChevronLeft } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
 
 // ** Styled Components
 const ChatWrapperStartChat = styled(Box)(({ theme }) => ({
@@ -54,11 +55,17 @@ const ChatContent = (props) => {
     handleUserProfileRightSidebarToggle,
   } = props;
   const containerRef = useRef(null);
+  const router = useRouter()
   const handleStartConversation = () => {
     if (!mdAbove) {
       handleLeftSidebarToggle();
     }
   };
+
+  const backFunc = () => {
+    selectChat("")
+    router.push("?new")
+  }
 
   useEffect(() => {
     // Function to scroll to the bottom of the container
@@ -160,7 +167,7 @@ const ChatContent = (props) => {
             >
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 {mdAbove ? null : (
-                  <IconButton onClick={() => selectChat("")} sx={{ mr: 1 }}>
+                  <IconButton onClick={backFunc} sx={{ mr: 1 }}>
                     {/* <Icon icon="tabler:menu-2" /> */}
                     <ChevronLeft />
                   </IconButton>
@@ -203,7 +210,7 @@ const ChatContent = (props) => {
                       <MuiAvatar
                         sx={{ width: 38, height: 38 }}
                         src={selectedChat.contact.avatar}
-                        alt={selectedChat.contact.chatName}
+                        alt={selectedChat.contact.chatName || selectedChat.contact.businessName}
                       />
                     ) : (
                       <CustomAvatar
@@ -211,13 +218,13 @@ const ChatContent = (props) => {
                         color={selectedChat.contact.avatarColor}
                         sx={{ width: 38, height: 38, fontSize: "1rem" }}
                       >
-                        {getInitials(selectedChat.contact.chatName)}
+                        {getInitials(selectedChat.contact.chatName || selectedChat.contact.businessName)}
                       </CustomAvatar>
                     )}
                   </Badge>
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Typography sx={{ fontWeight: 500 }}>
-                      {selectedChat.contact.chatName}
+                      {selectedChat.contact.chatName || selectedChat.contact.businessName}
                     </Typography>
                     <Typography sx={{ color: "text.disabled" }}>
                       {selectedChat.contact.role}
