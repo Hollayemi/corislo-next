@@ -8,6 +8,9 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useRouter } from "next/navigation";
 import { Box } from "@mui/material";
+import IconifyIcon from "../../icon";
+import { CircleLoader } from "../../cards/loader";
+import { useStoreData } from "@/app/hooks/useData";
 
 const OnlyContents = ({ each, path }) => {
   const onSubList = !path.sublist ? "" : `/${path.sublist}`;
@@ -22,8 +25,12 @@ const OnlyContents = ({ each, path }) => {
 };
 
 export default function BottomBar({ content, path, InnerList }) {
+  const onSubList = !path.sublist ? "" : `/${path.sublist}`;
   const [value, setValue] = React.useState("recents");
   const router = useRouter();
+  const {
+    staffInfo: { permissions },
+  } = useStoreData();
   const handleChange = (event, newValue) => {
     console.log(newValue);
     setValue(newValue);
@@ -31,18 +38,35 @@ export default function BottomBar({ content, path, InnerList }) {
   };
 
   return (
-    <BottomNavigation className="w-full border-t" value={value} onChange={handleChange}>
+    <BottomNavigation
+      className="w-full border-t"
+      value={value}
+      onChange={handleChange}
+    >
       {InnerList?.content?.map((each, index) => {
         const listPath = `/store/dashboard/${path.sidebar}${each.path}`;
-        return (
-          each.short !== "escape" && (
+        return permissions ? (
+          each.short !== "escape" && permissions[each.permission] !== false && (
             <BottomNavigationAction
               key={index}
               label={<h5 className="text-[10px]">{each.short}</h5>}
               value={listPath}
-              icon={each.icon}
+              icon={<IconifyIcon icon={each.icon} />}
+              className={`!px-0 w-auto !min-w-5 ${
+                onSubList === each.path && "!text-blue-800"
+              }`}
             />
           )
+        ) : (
+          <BottomNavigationAction
+            key={index}
+            label=""
+            value={listPath}
+            icon={<CircleLoader />}
+            className={`!px-0 w-auto !min-w-5 ${
+              onSubList === each.path && "!text-blue-800"
+            }`}
+          />
         );
       })}
     </BottomNavigation>

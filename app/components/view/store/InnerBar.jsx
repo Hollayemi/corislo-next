@@ -105,19 +105,31 @@ const OnlyContents = ({ each, path }) => {
 };
 
 const InnerBar = ({ path, InnerList }) => {
+  const {
+    staffInfo: { permissions },
+  } = useStoreData();
   return (
-    <StyledBox className="overflow-y-scroll">
-      <List className="overflow-hidden shrink-0">
-        <Box className="p-3">
-          <Typography variant="h5" className="!text-[12px] text-gray-500 !mb-3">
-            {InnerList.title}
-          </Typography>
-          {InnerList?.content?.map((each, index) => {
-              return <OnlyContents each={each} key={index} path={path} />;
+    permissions && (
+      <StyledBox className="overflow-y-scroll">
+        <List className="overflow-hidden shrink-0">
+          <Box className="p-3">
+            <Typography
+              variant="h5"
+              className="!text-[12px] text-gray-500 !mb-3"
+            >
+              {InnerList.title}
+            </Typography>
+            {InnerList?.content?.map((each, index) => {
+              return (
+                permissions[each.permission] !== false && (
+                  <OnlyContents each={each} key={index} path={path} />
+                )
+              );
             })}
-        </Box>
-      </List>
-    </StyledBox>
+          </Box>
+        </List>
+      </StyledBox>
+    )
   );
 };
 

@@ -23,6 +23,9 @@ import { DashboardCrumb } from "../components";
 import { useDropzone } from "react-dropzone";
 import { useRouter } from "next/navigation";
 import { convertFileToBase64 } from "@/app/components/cards/fileUpload";
+import { updateBranchImages } from "@/app/redux/state/slices/shop/branches";
+import { useDispatch } from "react-redux";
+import { CircleLoader } from "@/app/components/cards/loader";
 
 // Styled component for the upload image inside the dropzone area
 const Img = styled("img")(({ theme }) => ({
@@ -35,10 +38,13 @@ export const FileUploader = ({
   setFiles,
   localFiles,
   setLocalFiles,
+  directUpload,
 }) => {
   // ** Hooks
   console.log(files);
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const [isLoading, setLoading] = useState(false);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: async (acceptedFiles) => {
@@ -50,9 +56,22 @@ export const FileUploader = ({
         acceptedFiles.map(async (file, i) => {
           if (file) {
             const base64Image = await convertFileToBase64(file);
-            setFiles((item) => {
-              return [...item, { name: fileInfo[i].name, base64: base64Image }];
-            });
+            directUpload
+              ? updateBranchImages(
+                  {
+                    image: base64Image,
+                    type: "gallery",
+                    state: "add",
+                  },
+                  dispatch,
+                  setLoading
+                )
+              : setFiles((item) => {
+                  return [
+                    ...item,
+                    { name: fileInfo[i].name, base64: base64Image },
+                  ];
+                });
           }
         })
       );
@@ -85,7 +104,7 @@ export const FileUploader = ({
   };
 
   return (
-    <Grid container spacing={3}>
+    <>
       {localFiles.length
         ? localFiles.map((file) => (
             <Grid item xs={6} md={4} key={file.name}>
@@ -94,19 +113,28 @@ export const FileUploader = ({
                 title={file.name}
               >
                 {renderFilePreview(file)}
-                <div className="absolute bottom-0 right-0 rounded-tl-sm bg-white p-0.5 m-0.5 mr-1">
-                  <Typography className="text-[8px]" variant="body2">
+                <div className="absolute bottom-0 right-0 rounded-t-md bg-white p-0.5 ">
+                  <Typography className="!text-[11px] !pt-.5" variant="body2">
                     {Math.round(file.size / 100) / 10 > 1000
                       ? `${(Math.round(file.size / 100) / 10000).toFixed(1)}mb`
                       : `${(Math.round(file.size / 100) / 10).toFixed(1)}kb`}
                   </Typography>
                 </div>
-                <div
+                {isLoading && <div
                   onClick={() => handleRemoveFile(file)}
-                  className="text-[6px] flex items-center justify-center text-white absolute -mt-2 -mr-2 top-0 right-0 w-4 h-4 rounded-full bg-red-500"
+                  className="text-[6px] flex items-center justify-center text-white absolute -mt-2 -mr-4 top-0 right-0 w-5 h-5 rounded-full bg-red-500"
                 >
-                  <Icon icon="tabler:x" fontSize={16} />
-                </div>
+                  <Icon icon="tabler:trash" fontSize={13} />
+                </div>}
+                {isLoading && (
+                  <>
+                    {" "}
+                    <div className="absolute w-full h-full top-0 left-0 bg-white opacity-40 "></div>
+                    <div className="absolute w-full h-full top-0 left-0 flex items-center justify-center ">
+                      <CircleLoader />
+                    </div>
+                  </>
+                )}
               </div>
             </Grid>
           ))
@@ -126,7 +154,7 @@ export const FileUploader = ({
           </Box>
         </div>
       </Grid>
-    </Grid>
+    </>
   );
 };
 

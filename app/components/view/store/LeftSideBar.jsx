@@ -13,6 +13,7 @@ import ListItemText from "@mui/material/ListItemText";
 import StoreDashboardAppBar from "./AppBar";
 import { SidebarContent } from "@/app/data/store/sidebarContents";
 import Image from "next/image";
+import { useRouter } from "next/navigation"
 import themeConfig from "@/app/configs/themeConfig";
 import Link from "next/link";
 import {
@@ -130,6 +131,7 @@ const StoreLeftSideBar = React.memo(
     path,
     InnerList,
     InnerTitle,
+    permission,
     BottomList,
     hidebreadCrumb,
     breadCrumbRIghtChildren,
@@ -139,8 +141,17 @@ const StoreLeftSideBar = React.memo(
     updateDialogInfo,
   }) => {
     const { staffInfo, overLay, showOverlay } = useStoreData();
+    const router = useRouter()
+    const permissions = staffInfo.permissions
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
+
+    React.useLayoutEffect(() => {
+      if (permissions) {
+        permissions[permission] === false &&
+          router.push("/store/dashboard/401");
+      }
+    }, [permissions]);
 
     const handleCloseDialog = () =>
       updateDialogInfo((prev) => {

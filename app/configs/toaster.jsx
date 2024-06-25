@@ -1,5 +1,5 @@
 import { Snackbar } from "@mui/material";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 const toaster = ({ message, type, promise, error, duration, position }) => {
   console.log(message, type);
@@ -13,8 +13,10 @@ const toaster = ({ message, type, promise, error, duration, position }) => {
       (t) => (
         <div
           className={`toast-custom ${
-            t.visible ? "" : "animate-leave"
-          } ${colors[type]}`}
+            t.visible
+              ? "!z-[99999999999999999999999999999999999]"
+              : "animate-leave"
+          } ${colors[type]} `}
         >
           {message}
         </div>
@@ -22,6 +24,7 @@ const toaster = ({ message, type, promise, error, duration, position }) => {
       {
         position: "top-right", // Ensure the position is set appropriately
         duration: 4000, // Customize the duration as needed
+        
       }
     );
   

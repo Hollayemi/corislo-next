@@ -25,6 +25,5 @@ export const ForgotPasswordHandler = (email, navigate, dispatch) => {
       }
     })
     .catch((err) => {
-      toaster( {message: "No Connection", type: "error"} );
     });
 };

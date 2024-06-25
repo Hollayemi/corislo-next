@@ -1,30 +1,59 @@
-"use client"
+"use client";
 import { Box, Button, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Upload } from "@mui/icons-material";
 import ProfilePictureUploader from "@/app/components/cards/fileUpload";
-import { updateUserPicture } from "@/app/redux/state/slices/users/updateAccount";
 import { useDispatch } from "react-redux";
 import { MyTextField, TitleSubtitle } from "@/app/(pages)/user/components";
 import { useStoreData } from "@/app/hooks/useData";
+import { updateStaff, updateStaffPicture } from "@/app/redux/state/slices/shop/branches/staffs";
+import useSWR from "swr";
 
 const StaffSettings = () => {
-  const { staffInfo, setLoading } = useStoreData();
-  console.log(staffInfo);
-  const dispatch = useDispatch()
+  const { setLoading, showSnackbar } = useStoreData();
+  const { data } = useSWR(`branch/staff`);
+  const myAccount = data?.data || {};
+  const dispatch = useDispatch();
   const [files, setFiles] = useState([]);
   const [localFile, setLocalFiles] = useState("");
-  console.log(localFile);
-  const splitFullname = staffInfo?.fullname?.split(" ") || [];
+
+
+  const [staff, setStaffInfo] = useState({
+    firstname: "",
+    lastname: "",
+    state: "",
+    phone: "",
+  });
+
+  useEffect(() => {
+    if (data) {
+      const splitFullname = myAccount?.fullname?.split(" ") || [];
+      setStaffInfo({
+        firstname: splitFullname[0] || "",
+        lastname: splitFullname[1] || "",
+        state: myAccount?.state || "",
+        phone: myAccount.phone || "",
+      });
+    }
+  }, [data]);
+
+  const handleChange =
+    (prop) =>
+    ({ target }) => {
+      setStaffInfo((prev) => {
+        return { ...prev, [prop]: target.value };
+      });
+    };
+
   const updateBtn = () => {
-    updateUserPicture(
+    updateStaffPicture(
       { picture: files[0], state: "add" },
       dispatch,
       setLoading
     );
   };
   const deletePicBtn = () => {
-    updateUserPicture({ state: "remove" }, dispatch, setLoading);
+    updateStaffPicture({ state: "remove" }, dispatch, setLoading);
   };
   return (
     <Box className="">
@@ -43,7 +72,7 @@ const StaffSettings = () => {
                   src={
                     localFile
                       ? URL?.createObjectURL(localFile[0])
-                      : staffInfo.picture || "/images/avatar/1.png"
+                      : myAccount.picture || "/images/misc/no-profile"
                   }
                   alt="settings.png"
                   width={250}
@@ -58,7 +87,7 @@ const StaffSettings = () => {
             }
           />
 
-          <Typography variant="caption" className="!text-[10px]">
+          <Typography variant="caption" noWrap className="!text-[10px]">
             Drag and drop image
           </Typography>
         </Box>
@@ -70,7 +99,7 @@ const StaffSettings = () => {
             Profile Picture
           </Typography>
           <Typography variant="body2" className="!text-[10px] !text-gray-500">
-            PNG, JPEG under 10mb
+            PNG, JPEG under 2mb
           </Typography>
           <Box className="flex items-center mt-3">
             <Button
@@ -94,31 +123,45 @@ const StaffSettings = () => {
         <Box className="flex items-center justify-between flex-wrap w-full">
           <MyTextField
             title="First Name"
-            value={splitFullname[0] || ""}
+            value={staff.firstname || ""}
             PClassName="w-full md:w-auto"
+            onChange={handleChange("firstname")}
           />
           <MyTextField
             title="Last Name"
-            value={splitFullname[1] || ""}
+            value={staff.lastname || ""}
             PClassName="w-full md:w-auto"
+            onChange={handleChange("lastname")}
           />
           <MyTextField
-            title="Email Address"
-            value={staffInfo?.email}
+            title="Phone number"
+            value={staff?.phone}
             PClassName="w-full md:w-auto"
+            onChange={handleChange("phone")}
           />
         </Box>
         <Box className="flex items-center justify-between flex-wrap">
           <MyTextField
-            title="Phone number"
-            value={staffInfo?.phoneNumber}
+            title="State"
+            value={staff?.state}
             PClassName="w-full md:w-auto"
+            onChange={handleChange("state")}
           />
-          <MyTextField title="City" PClassName="w-full md:w-auto" />
           {/* <SelectCities /> */}
           <Button
             className="!w-full md:!w-60 !h-10 !rounded !shadow-none !text-[14px]"
             variant="contained"
+            onClick={() =>
+              updateStaff(
+                dispatch,
+                {
+                  phone: staff.phone,
+                  state: staff.state,
+                  fullname: `${staff.lastname} ${staff.firstname}`,
+                },
+                showSnackbar
+              )
+            }
           >
             Update Data
           </Button>

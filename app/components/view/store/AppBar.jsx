@@ -289,10 +289,12 @@ export default function StoreDashboardAppBar({
           </Icons>
           <Box className="flex items-center cursor-pointer ml-6 w-40">
             <Avatar
-              alt="Remy Sharp"
-              src="/images/avatar/stephen.jpeg"
+              alt={staffInfo.fullname}
+              title={staffInfo.fullname}
+              src={staffInfo.picture || "/images/misc/no-picture"}
               className="mr-2"
             />
+
             <Typography
               noWrap
               variant="body2"

@@ -27,18 +27,23 @@ import OtpInput from "@/app/(pages)/auth/otp-verification/component";
 import { resendOtp } from "@/app/redux/state/slices/auth/otp";
 import { changeEmailHandler } from "@/app/redux/state/slices/auth/changeEmail";
 import { changePasswordHandler } from "@/app/redux/state/slices/auth/resetPassword";
-import { useUserData } from "@/app/hooks/useData";
+import { useStoreData, useUserData } from "@/app/hooks/useData";
 import { formatDate } from "@/app/utils/format";
 import CustomOption from "@/app/components/option-menu/option";
 import CheckPassword from "@/app/(pages)/user/checkPassword";
+import useSWR from "swr";
+import { changeStaffEmail } from "@/app/redux/state/slices/shop/auth/storeLogin";
+import { changeStorePassword } from "@/app/redux/state/slices/shop/auth/resetPassword";
 
 const Index = () => {
   const [display, setDisplay] = useState("all");
+  const { data } = useSWR(`branch/staff`);
+  const myAccount = data?.data || {};
 
   const pages = {
-    all: <SecuritySettings setDisplay={setDisplay} />,
+    all: <SecuritySettings setDisplay={setDisplay} myAccount={myAccount} />,
     password: <ChangePassword setDisplay={setDisplay} />,
-    email: <EmailAddress setDisplay={setDisplay} />,
+    email: <EmailAddress setDisplay={setDisplay} myAccount={myAccount} />,
     activities: <AccountActivities setDisplay={setDisplay} />,
   };
   return pages[display];
@@ -148,13 +153,13 @@ const AccountActivities = () => {
   );
 };
 
-const SecuritySettings = ({ setDisplay }) => {
-  const { showOverlay, userInfo } = useUserData();
+const SecuritySettings = ({ setDisplay, myAccount }) => {
+  
   return (
     <Box>
       <TitleSubtitle title="Security Settings" />
       {/* Email Address */}
-      <Box className="flex justify-between items-center mt-8">
+      <Box className="flex justify-between items-start mt-8">
         <TitleSubtitle
           title="Email Address"
           subtitle="The email address associated with your account"
@@ -162,22 +167,23 @@ const SecuritySettings = ({ setDisplay }) => {
           subtitleClass="!text-[13px] !mt-2"
           className="w-5/6 md:w-10/12"
         />
-        <Box className="flex items-center">
+        <Box className="flex items-center ">
           <Box className="flex flex-col items-end">
             <Typography
               variant="body2"
-              className="!font-bold !w-24 md:!w-full"
+              className="!font-bold !w-24 md:!w-full "
               noWrap
             >
-              {userInfo.email}
+              {myAccount.email}
             </Typography>
+            {/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */}
             <Typography
               variant="body2"
               className={`${
-                userInfo.isVerified ? "!text-green-500" : "!text-red-500"
+                myAccount.isActive ? "!text-green-500" : "!text-red-500"
               } !text-[12px]`}
             >
-              {userInfo.isVerified ? "Verified" : "Not Verified"}
+              {myAccount.isActive ? "Active" : "Not Active"}
             </Typography>
           </Box>
           <Button
@@ -212,7 +218,7 @@ const SecuritySettings = ({ setDisplay }) => {
               className="!font-bold !w-24 md:!w-full"
               noWrap
             >
-              +234{userInfo.phoneNumber}
+              +234{myAccount.phone}
             </Typography>
             <Typography variant="body2" className="!text-red-600 !text-[12px]">
               Not Verified
@@ -252,21 +258,6 @@ const SecuritySettings = ({ setDisplay }) => {
         >
           Change Password
         </Button>
-      </Box>
-      {/* 2 - Step Verification */}
-      <Box className="flex justify-between items-center mt-8">
-        <TitleSubtitle
-          title="2 - Step Verification"
-          subtitle="Make your account extra secure, Along with your password, you’ll need to enter a code"
-          titleClass="!text-[14px]"
-          subtitleClass="!text-[13px] !mt-2"
-          className="w-5/6 md:w-10/12"
-        />
-        <Switch
-          edge="end"
-          checked={userInfo.two_fa}
-          onClick={showOverlay("TwoFA")}
-        />
       </Box>
       {/* Account Activities */}
       <Box className="flex justify-between items-center mt-8">
@@ -349,7 +340,7 @@ const ChangePassword = ({ setDisplay }) => {
               passData.newPassword
             )
           }
-          onClick={() => changePasswordHandler(passData, dispatch)}
+          onClick={() => changeStorePassword(passData, dispatch)}
         >
           Save Changes
         </Button>
@@ -365,7 +356,7 @@ const ChangePassword = ({ setDisplay }) => {
   );
 };
 
-const EmailAddress = ({ setDisplay }) => {
+const EmailAddress = ({ setDisplay, myAccount }) => {
   const dispatch = useDispatch();
   const [countdown, setCountdown] = useState(60); // Initial countdown value in seconds
   const [resendDisabled, setResendDisabled] = useState(false);
@@ -458,11 +449,13 @@ const EmailAddress = ({ setDisplay }) => {
           variant="contained"
           disabled={otpValues.length !== 6}
           onClick={() =>
-            changeEmailHandler(
+            changeStaffEmail(
               {
+                oldEmail: myAccount.email,
                 newEmailAddress: emailData.email,
                 password: emailData.password,
                 otp: otpValues,
+                isStaff: true,
               },
               dispatch
             )

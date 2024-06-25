@@ -38,6 +38,5 @@ export const registerHandler = (payload, router, dispatch) => {
       }
     })
     .catch((err) => {
-      toaster({ message: "No Connection", type: "error" });
     });
 };

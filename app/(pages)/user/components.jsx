@@ -14,6 +14,7 @@ export const MyTextField = ({
   placeholder,
   value,
   PClassName,
+  others,
   type = "text",
 }) => {
   const [newType, changeType] = useState(type);
@@ -30,6 +31,7 @@ export const MyTextField = ({
           placeholder={placeholder}
           onChange={onChange}
           aria-label="Product title"
+          {...others}
         />
         {type === "password" && (
           <IconifyIcon

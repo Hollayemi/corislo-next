@@ -28,6 +28,5 @@ export const VerifyHandler = (email, token, navigate, dispatch) => {
       toaster({ ...res });
     })
     .catch((err) => {
-      toaster({ message: "No Connection", type: "error" });
     });
 };

@@ -26,6 +26,6 @@ export const changeEmailHandler = (payload, dispatch) => {
       }
     })
     .catch((err) => {
-      toaster({ message: "No Connection", type: "error" });
     });
 };
+

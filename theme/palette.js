@@ -19,9 +19,9 @@ const DefaultPalette = (mode = "light", skin) => {
 
   return {
     custom: {
-      dark: darkColor,
+      dark: `rgb(${darkColor})`,
       main: `rgba(${mainColor}, 0.87)`,
-      light: lightColor,
+      light: `rgb(${lightColor})`,
       lightPaperBg: whiteColor,
       lightSec: "#FFFBF1",
       darkPaperBg: darkPaperBgColor,

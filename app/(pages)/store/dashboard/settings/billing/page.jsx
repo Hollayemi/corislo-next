@@ -56,7 +56,7 @@ const Billing = ({ params }) => {
       dialogInfo={dialogInfo}
       updateDialogInfo={updateDialogInfo}
     >
-      <Box className="h-ful w-full bg-white px-2 md:px-5 py-8 rounded-md">
+      <Box className="h-ful w-full bg-white px-1 md:px-5 py-8 rounded-md">
         <TitleSubtitle
           title="Billing"
           titleClass="!text-[17px]"
@@ -65,7 +65,7 @@ const Billing = ({ params }) => {
           className=""
         />
 
-        <Box className="w-full py-6 px-4 border border-slate-50 rounded-xl mt-3">
+        <Box className="w-full py-6 px-1 md:px-4 border border-slate-50 rounded-xl mt-3">
           <TitleSubtitle
             title="Customer Plan"
             titleClass="!text-[13px] !mb-3"

@@ -114,6 +114,7 @@ const Roles = ({ params }) => {
   return (
     <StoreLeftSideBar
       path={path}
+      permission="view_roles"
       subListBar={false}
       InnerList={settingsInnerList}
       dialogInfo={dialogInfo}
@@ -126,7 +127,7 @@ const Roles = ({ params }) => {
         { text: "Role & Permission", link: "role" },
       ]}
     >
-      <Box className="h-ful w-full bg-white px-5 py-8 rounded-md">
+      <Box className="h-ful w-full bg-white px-2 md:px-5 py-8 rounded-md">
         <Box>
           <Box className="flex items-center justify-between mb-5">
             <TitleSubtitle

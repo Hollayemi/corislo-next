@@ -1,5 +1,4 @@
 "use client";
-import "@/styles/globals.css";
 import ThemeComponent from "@/theme";
 import Head from "next/head";
 import persistStore from "redux-persist/es/persistStore";
@@ -19,6 +18,7 @@ import { useEffect, useState } from "react";
 import { useUserData } from "@/app/hooks/useData";
 import LineLoading from "./loading";
 import VoiceflowChatComponent from "./ai";
+import "@/styles/globals.css";
 
 const metadata = {
   title:
@@ -108,7 +108,15 @@ export default function RootLayout({ children }) {
                   <ReactHotToast>
                     <Toaster
                       position="top-right"
-                      toastOptions={{ className: "react-hot-toast" }}
+                      containerStyle={{
+                        zIndex: 10000, // Ensure the container itself has a high z-index
+                      }}
+                      toastOptions={{
+                        className: "react-hot-toast !z-[10000000000]",
+                        style: {
+                          zIndex: 10000000000, // Set the z-index for the toast container
+                        },
+                      }}
                     />
                   </ReactHotToast>
                 </ThemeComponent>
@@ -116,7 +124,7 @@ export default function RootLayout({ children }) {
             </UserDataProvider>
           </Provider>
         </SWRConfig>
-        <VoiceflowChatComponent />
+        {/* <VoiceflowChatComponent /> */}
       </body>
     </html>
   );

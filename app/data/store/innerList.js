@@ -5,6 +5,7 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 import SettingsIcon from "@mui/icons-material/Settings";
 import StoreIcon from "@mui/icons-material/Store";
+import { CheckBox, HouseOutlined, SupervisedUserCircle, UpcomingOutlined, VerifiedUserSharp } from "@mui/icons-material";
 
 export const prodInnerList = {
   title: "Product",
@@ -74,54 +75,61 @@ export const storeBottomBar = {
     {
       name: "Profile",
       path: "/stores",
-      icon: <StoreIcon />,
+      icon: "tabler:building-store",
       short: "Profile",
     },
     {
       name: "Store Settings",
       path: "/settings",
-      icon: <SettingsIcon />,
+      icon: "tabler:settings",
       short: "Settings",
+      permission: "edit_store"
     },
   ],
 };
 
-export const settingsInnerList = {title: "Settings", content: [
+export const settingsInnerList = {
+   title: "Settings", content: [
   {
     name: "Account Settings",
     path: "",
-    icon: <ListAltIcon />,
-    short: "Products",
+    icon: "tabler:user-circle",
+    short: "Profile",
   },
   {
     name: "Role and Permission",
     path: "/role",
-    icon: <CategoryIcon />,
-    short: "Categories",
+    icon: "tabler:user-check",
+    short: "Permission",
+    permission: "view_roles"
   },
    {
     name: "Branches",
     path: "/branches",
-    icon: <AddToPhotosIcon />,
-    short: "Add Product",
+    icon: "tabler:building-warehouse",
+    short: "Branches",
+    permission: "view_stores"
   },
   {
     name: "Staffs",
     path: "/staffs",
-    icon: <AddToPhotosIcon />,
-    short: "Add Product",
+    icon: "tabler:users-group",
+    short: "Staffs",
+    permission: "view_staff"
   },
   {
     name: "Plans",
     path: "/plans",
-    icon: <CreateNewFolderIcon />,
-    short: "escape",
+    icon: "tabler:checklist",
+    short: "Plans",
+    permission: "view_plan"
   },
   {
     name: "Billing",
     path: "/billing",
-    icon: <AddToPhotosIcon />,
-    short: "Add Product",
+    icon: "tabler:receipt-2",
+    short: "Billing",
+    permission: "view_billing"
   },
  
 ]};

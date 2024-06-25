@@ -40,8 +40,32 @@ export const storeLoginHandler = (payload, router, dispatch) => {
       if (res.type === "success") {
         router.push("/store/dashboard");
       }
+      localStorage.setItem("store_token", accessToken);
     })
     .catch((err) => {
-      toaster({ message: "No Connection", type: "error" });
+    });
+};
+
+
+const changeEmailApi = createAsyncThunk("post/RP", async (payload) => {
+  const { data } = await martApi
+    .post("/staff/change-email", payload, jsonHeader("store"))
+    .then((res) => res)
+    .catch((err) => err.response);
+
+  return data;
+});
+
+export const changeStaffEmail = (payload, dispatch) => {
+  dispatch(changeEmailApi(payload))
+    .then(unwrapResult)
+    .then((res) => {
+      console.log(res);
+      toaster(res);
+      if (res.type === "success") {
+        dispatch(userLogout());
+      }
+    })
+    .catch((err) => {
     });
 };

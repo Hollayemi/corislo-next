@@ -145,12 +145,7 @@ const OptionsMenu = (props) => {
                 key={index}
                 {...option.menuItemProps}
                 {...(option.href && { sx: { p: 0 } })}
-                onClick={(e) => {
-                  handleClose();
-                  option.menuItemProps && option.menuItemProps.onClick
-                    ? option.menuItemProps.onClick(e)
-                    : null;
-                }}
+                onClick={(e) => optionClick(butPush ? butPush[index] : option.rest)}
               >
                 <MenuItemWrapper option={option}>
                   {option.icon ? option.icon : null}

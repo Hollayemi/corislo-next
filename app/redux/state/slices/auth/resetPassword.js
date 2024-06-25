@@ -24,7 +24,6 @@ export const ResetPasswordHandler = (formData, router, dispatch) => {
             }
         })
         .catch((err) => {
-            toaster({ message: "No Connection", type: "error" });
         });
 };
 
@@ -46,6 +45,5 @@ export const changePasswordHandler = (payload, dispatch) => {
             toaster(res)
         })
         .catch((err) => {
-            toaster({ message: "No Connection", type: "error" });
         });
 };

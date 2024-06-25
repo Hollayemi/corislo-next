@@ -5,6 +5,7 @@ import { jsonHeader } from "../../api/setAuthHeaders";
 import { userLogout } from "../../auth/Login";
 import { getShopInfo } from "../shopInfo";
 import tokens from '@/app/configs/tokens';
+import { mutate } from "swr";
 
 const createBranchApi = createAsyncThunk(
   "post/createBranch",
@@ -136,3 +137,36 @@ export const updateBranch = (formData, dispatch) => {
     })
     .catch((e) => {});
 };
+
+
+
+// upload pictures related
+
+const updateBranchImagesApi = createAsyncThunk(
+  "post/updateImage",
+  async (payload) => {
+    const { data } = await martApi
+      .post('/branch/images', payload, jsonHeader("store"))
+      .then((res) => res)
+      .catch((e) => e.response);
+    return data;
+  }
+);
+
+export const updateBranchImages = (payload, dispatch, setLoading) => {
+  setLoading(true)
+  dispatch(updateBranchImagesApi(payload))
+    .then(unwrapResult)
+    .then((res) => {
+      setLoading(false)
+      toaster({ ...res });
+      mutate("/store")
+    })
+    .catch((e) => {
+      setLoading(false)
+    });
+};
+
+//
+
+

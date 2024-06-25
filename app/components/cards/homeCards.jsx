@@ -3,6 +3,8 @@ import Image from "next/image";
 import IconifyIcon from "../icon";
 import { useRouter } from "next/navigation"
 import { mySubstring } from "@/app/utils/format";
+import { hexToRGBA } from "@/app/utils/hex-to-rgba";
+import { rgbaToHex } from "@/app/utils/rgba-to-hex";
 
 export const SectionTitle = ({ black, blue }) => {
   return (
@@ -224,6 +226,47 @@ export const SecurityTypeCard = ({ image, title, caption }) => {
       <Typography variant="caption" className="text-center !mt-2">
         {caption}
       </Typography>
+    </Box>
+  );
+};
+
+export const OrderBoxes = ({ image, title, value, color }) => {
+  let bgColor = rgbaToHex(hexToRGBA(color, 0.1));
+  let IconBgColor = rgbaToHex(hexToRGBA(color, 0.4));
+  return (
+    <Box className="w-1/2 md:w-1/4 p-0.5 md:p-2">
+      <Box
+        className="flex items-center p-2 md:p-4 w-full rounded-md"
+        bgcolor={bgColor}
+      >
+        <Box
+          className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center"
+          bgcolor={IconBgColor}
+        >
+          <Image
+            src={image}
+            alt="image"
+            width={150}
+            height={150}
+            className="w-7 h-7 md:w-9 md:h-9"
+          />
+        </Box>
+        <Box className="ml-3">
+          <Typography
+            variant="caption"
+            className="!text-[10px] md:!text-[12px]"
+          >
+            {title}
+          </Typography>
+          <Typography
+            variant="body2"
+            color={color}
+            className="!font-black !text-[20px]"
+          >
+            {value}
+          </Typography>
+        </Box>
+      </Box>
     </Box>
   );
 };

@@ -25,6 +25,28 @@ export const passwordResetHandler = (payload, router, dispatch) => {
       }
     })
     .catch((err) => {
-      toaster({ message: "No Connection", type: "error" });
+    });
+};
+
+
+const changePasswordApi = createAsyncThunk("post/UserLogin", async (payload) => {
+  const { data } = await martApi
+    .post("/branch/staff/change-password", payload, jsonHeader("store"))
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => err.response);
+
+  return data;
+});
+
+
+export const changeStorePassword = (payload, dispatch) => {
+  dispatch(changePasswordApi(payload))
+    .then(unwrapResult)
+    .then((res) => {
+      toaster({ ...res });
+    })
+    .catch((err) => {
     });
 };

@@ -21,15 +21,19 @@ import { useDispatch } from "react-redux";
 import useSWR from "swr";
 import { updateStoreProfile } from "@/app/redux/state/slices/shop/settings/editShop";
 import MapGraph from "@/app/components/view/home/Map/map";
+import ProfilePictureUploader from "@/app/components/cards/fileUpload";
+import { updateBranchImages } from "@/app/redux/state/slices/shop/branches";
 
 const StorePage = ({ params }) => {
-  const { storeInfo: originalInfo } = useStoreData()
+  const { storeInfo: originalInfo } = useStoreData();
   const dispatch = useDispatch();
   const {
     data: storeInfo,
     error: storeErr,
     isLoading: storeIsLoading,
-  } = useSWR(`/store?branch=${params?.sublist || originalInfo?.profile?.branch}`);
+  } = useSWR(
+    `/store?branch=${params?.sublist || originalInfo?.profile?.branch}`
+  );
   const { data } = useSWR("/branch/all?sidelist=true");
   const InnerList = data?.data ? data.data : [];
 
@@ -41,6 +45,9 @@ const StorePage = ({ params }) => {
   );
   const [files, setFiles] = useState([]);
   const [localFiles, setLocalFiles] = useState([]);
+
+  const [profile, setProfile] = useState([]);
+  const [localProfile, setLocalProfile] = useState("");
   const path = { ...params, sidebar: "stores" };
 
   const [inputValues, setValues] = useState({
@@ -99,32 +106,55 @@ const StorePage = ({ params }) => {
               </Typography>
             </Box>
 
-            <Box className="mt-8">
-              <Paper
-                elevation={0}
-                className="border border-dashed w relative rounded-md p-3 w-24 h-24 flex items-center justify-center"
-              >
-                <Image
-                  src={themeConfig.profile}
-                  alt="Profile"
-                  height="70"
-                  width="70"
-                  className="!rounded-full"
-                />
-                <Box
-                  className="absolute !bottom-2 !right-4 !rounded-full p-0.5 cursor-pointer text-xs"
-                  bgcolor="custom.bodyLight"
-                >
-                  <Icon icon="tabler:camera" className="text-[15px]" />
-                </Box>
-              </Paper>
+            <Box className="mt-8 relative">
+              <ProfilePictureUploader
+                setFiles={setProfile}
+                setLocalFiles={setLocalProfile}
+                component={
+                  <Paper
+                    elevation={0}
+                    className="border border-dashed w relative rounded-md p-1 w-28 h-28 flex items-center justify-center"
+                  >
+                    <img
+                      src={
+                        localProfile
+                          ? URL?.createObjectURL(localProfile[0])
+                          : storeInfo?.profile?.profile_image ||
+                            "/images/misc/no-profile"
+                      }
+                      alt="Profile"
+                      height="70"
+                      width="70"
+                      className="!rounded-full border w-20 h-20 flex-shrink-0"
+                    />
+                    <Box
+                      className="absolute !bottom-2 !right-4 mr-2 mb-2 !rounded-full p-0.5 cursor-pointer text-xs"
+                      bgcolor="custom.bodyLight"
+                    >
+                      <Icon icon="tabler:camera" className="text-[15px]" />
+                    </Box>
+                  </Paper>
+                }
+              />
               <Typography className="!text-[12px] !text-gray-400 !mt-2">
                 JPG, GIF or PNG, Max size of 500kb
               </Typography>
               <Box className="flex item-center mt-4">
-                <Paper className="px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3">
+                <Box
+                  onClick={() =>
+                    updateBranchImages(
+                      {
+                        image: profile[0],
+                        type: "profile_image",
+                        state: "add",
+                      },
+                      dispatch
+                    )
+                  }
+                  className="px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3"
+                >
                   Change Photo
-                </Paper>
+                </Box>
                 <Paper className="px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3">
                   Delete
                 </Paper>
@@ -198,12 +228,26 @@ const StorePage = ({ params }) => {
               </Typography>
               <br />
               <br />
-              <FileUploader
-                files={files}
-                setFiles={setFiles}
-                localFiles={localFiles}
-                setLocalFiles={setLocalFiles}
-              />
+
+              <Grid container spacing={3}>
+                {storeInfo?.profile?.gallery?.map((gal, i) => (
+                  <Grid item xs={6} md={4}>
+                    <img
+                      key={i}
+                      className="w-auto h-auto max-h-28 max-w-40 rounded-md"
+                      alt={`image ${i}`}
+                      src={gal}
+                    />
+                  </Grid>
+                ))}
+                <FileUploader
+                  files={files}
+                  setFiles={setFiles}
+                  localFiles={localFiles}
+                  setLocalFiles={setLocalFiles}
+                  directUpload
+                />
+              </Grid>
             </Box>
 
             <Box className="!mt-8 !border-b !pb-6">

@@ -111,7 +111,6 @@ export const loginHandler = (
     })
     .catch((err) => {
       console.log(err);
-      toaster({ message: "No Connection", type: "error" });
       setLoading(false);
     });
 };
@@ -149,6 +148,5 @@ export const oAuthHandler = (payload, router, dispatch) => {
     })
     .catch((err) => {
       console.log(err);
-      toaster({ message: "No Connection", type: "error" });
     });
 };
