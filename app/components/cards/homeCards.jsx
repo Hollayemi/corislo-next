@@ -12,7 +12,7 @@ export const SectionTitle = ({ black, blue }) => {
       <Box className="flex items-center">
         <Typography
           variant="body2"
-          className="!font-bold !text-[17px] !text-black -mr-1.5"
+          className="!font-bold !text-[17px] !text-black -mr-1.5 list"
         >
           {black}
         </Typography>

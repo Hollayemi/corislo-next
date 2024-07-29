@@ -20,11 +20,11 @@ const Chip = props => {
     success: { ...bgColors.successLight },
     error: { ...bgColors.errorLight },
     warning: { ...bgColors.warningLight },
-    info: { ...bgColors.infoLight }
+    info: { ...bgColors.infoLight },
+    hidden: { ...bgColors.infoLight }
   }
   const propsToPass = { ...props }
   propsToPass.rounded = undefined
-  console.log(color, color && Object.assign(colors[color]));
   return (
     <MuiChip
       {...propsToPass}

@@ -3,6 +3,7 @@
 import { SectionTitle } from "@/app/components/cards/homeCards";
 import { CheckPoint, CoreValues } from "@/app/components/cards/sellerCards";
 import HomeWrapper from "@/app/components/view/home";
+import { TestimonialsComponent, WhoIsWaiting } from "@/app/components/view/home/Components/Footer";
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 
@@ -160,7 +161,7 @@ const About = () => {
                 <CheckPoint
                   title="Limitless Opportunities:"
                   info="Corisio opens the doors to a world of opportunities. Join our thriving community of businesses to expand your network, collaborate with like-minded entrepreneurs, and discover new markets."
-               />
+                />
                 <CheckPoint
                   title="Efficiency Redefined:"
                   info="Say goodbye to time-consuming processes. Corisio offers streamlined solutions for both buyers and sellers, making every transaction efficient and hassle-free."
@@ -189,6 +190,17 @@ const About = () => {
               />
             </Box>
           </Box>
+        </Box>
+      </Box>
+      <br />
+      <br />
+      <Box className="px-2 md:px-16 mt-4">
+        <SectionTitle black="What our" blue="Customers has to say" />
+        <br />
+        <br />
+        <TestimonialsComponent />
+        <Box className="flex justify-center">
+          <WhoIsWaiting />
         </Box>
       </Box>
     </HomeWrapper>

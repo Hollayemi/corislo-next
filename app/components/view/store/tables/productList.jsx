@@ -1,31 +1,39 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 // ** MUI Imports
 import { Box, Grid, Typography, Button, Menu, MenuItem } from "@mui/material";
-import { DataGrid } from '@mui/x-data-grid'
+import { DataGrid } from "@mui/x-data-grid";
 import MoreIcon from "@mui/icons-material/MoreVert";
 
 // ** Custom Components
-import CustomChip from '@/app/components/chip'
-import CustomAvatar from '@/app/components/avatar'
-import QuickSearchToolbar from '@/app/components/quickTool/QuickSearchToolbar'
+import CustomChip from "@/app/components/chip";
+import CustomAvatar from "@/app/components/avatar";
+import QuickSearchToolbar from "@/app/components/quickTool/QuickSearchToolbar";
 
 // ** Utils Import
-import { getInitials } from '@/app/utils/get-initials'
-import { formatDate } from "@/app/utils/format"
+import { getInitials } from "@/app/utils/get-initials";
+import { formatDate } from "@/app/utils/format";
 
-// ** Data Import
-import { rows } from '@/app/data/store/productData'
+import { reshapePrice } from "@/app/(pages)/store/dashboard/marketing/components";
+import { productStatusUpdate } from "@/app/redux/state/slices/shop/products/updateProduct";
+import { useDispatch } from "react-redux";
 
 // ** renders client column
 
-
-const renderClient = params => {
-  const { row } = params
-  const stateNum = Math.floor(Math.random() * 6)
-  const states = ['success', 'error', 'warning', 'info', 'primary', 'secondary']
-  const color = states[stateNum]
+const renderClient = (params) => {
+  const { row } = params;
+  const stateNum = Math.floor(Math.random() * 6);
+  const states = [
+    "success",
+    "error",
+    "warning",
+    "info",
+    "primary",
+    "secondary",
+  ];
+  const color = states[stateNum];
   if (row?.image?.image) {
     return (
       <CustomAvatar
@@ -44,21 +52,22 @@ const renderClient = params => {
       </CustomAvatar>
     );
   }
-}
+};
 
 const statusObj = {
   waiting: { title: "waiting", color: "warning" },
+  available: { title: "available", color: "success" },
   approved: { title: "approved", color: "success" },
   rejected: { title: "rejected", color: "error" },
   resigned: { title: "resigned", color: "warning" },
-  applied: { title: "applied", color: "info" },
+  hidden: { title: "hidden", color: "info" },
 };
 
-const escapeRegExp = value => {
-  return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
-}
+const escapeRegExp = (value) => {
+  return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
-const columns = [
+const columns = (clickFunc) => [
   {
     flex: 0.275,
     minWidth: 190,
@@ -97,11 +106,11 @@ const columns = [
   {
     flex: 0.2,
     minWidth: 120,
-    headerName: "Category",
-    field: "category",
+    headerName: "Collection",
+    field: "collection",
     renderCell: (params) => (
       <Typography variant="body2" sx={{ color: "text.primary" }}>
-        {params.row.category}
+        {params.row.collectionName}
       </Typography>
     ),
   },
@@ -111,8 +120,12 @@ const columns = [
     headerName: "Price",
     field: "price",
     renderCell: (params) => (
-      <Typography variant="body2" sx={{ color: "text.primary" }}>
-        {params.row.price}
+      <Typography
+        variant="body2"
+        className="!ml-3"
+        sx={{ color: "text.primary" }}
+      >
+        {reshapePrice(params.row.price)}
       </Typography>
     ),
   },
@@ -129,7 +142,7 @@ const columns = [
   },
   {
     flex: 0.2,
-    minWidth: 140,
+    minWidth: 120,
     field: "status",
     headerName: "Status",
     renderCell: (params) => {
@@ -149,7 +162,9 @@ const columns = [
   },
   {
     flex: 0.5,
+    minWidth: 120,
     field: "actions",
+    fixed: "right",
     headerName: "Actions",
     renderCell: (params) => {
       const [anchorEl, setAnchorEl] = useState(null);
@@ -165,8 +180,10 @@ const columns = [
 
       const handleMenuItemClick = (action) => () => {
         setAnchorEl(null);
+        clickFunc(params.row, action);
       };
-
+      const currStatus = params.row.status;
+      const st = ["hidden", "available"];
       return (
         <div>
           <Button
@@ -182,24 +199,32 @@ const columns = [
             onClose={handleMenuClose}
           >
             <MenuItem
-              className="!text-orange-500"
-              onClick={handleMenuItemClick("refund")}
+              className="!text-green-500"
+              onClick={handleMenuItemClick("view")}
             >
-              Refund Order
+              View
             </MenuItem>
-            {params.row.status !== "cancelled" && (
+            <MenuItem
+              className="!text-green-500"
+              onClick={handleMenuItemClick("edit")}
+            >
+              Edit
+            </MenuItem>
+            {st.includes(currStatus) && (
               <MenuItem
-                className="!text-red-500"
-                onClick={handleMenuItemClick("cancel")}
+                className="!text-blue-500"
+                onClick={handleMenuItemClick(
+                  currStatus === "hidden" ? "show" : "hide"
+                )}
               >
-                Cancel Order
+                {currStatus === "hidden" ? "Show to" : "Hide from"} public
               </MenuItem>
             )}
-            <MenuItem onClick={handleMenuItemClick("modify")}>
-              Modify Order
-            </MenuItem>
-            <MenuItem onClick={handleMenuItemClick("message")}>
-              Message
+            <MenuItem
+              className="!text-red-600"
+              onClick={handleMenuItemClick("delete-permanently")}
+            >
+              Delete Parmanently
             </MenuItem>
           </Menu>
         </div>
@@ -208,63 +233,104 @@ const columns = [
   },
 ];
 
-const ProductList = ({ rows }) => {
+const ProductList = ({ rows, updateDialogInfo }) => {
   // ** States
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const menuOptions = (row, action) => {
+    console.log(row, action);
+    if (action === "edit") {
+      router.push(
+        `/store/dashboard/product-management/add-new-product?edit=${row.prodId}`
+      );
+    }
+    if (action === "hide") {
+      productStatusUpdate({ id: row.prodId, status: "hidden" }, dispatch);
+    }
+    if (action === "show") {
+      productStatusUpdate({ id: row.prodId, status: "available" }, dispatch);
+    }
+    if (action === "delete-permanently") {
+      updateDialogInfo((prev) => {
+        return {
+          ...prev,
+          open: true,
+          title: "Action Confirmation",
+          alert: (
+            <Typography>
+              Are you sure you want to delete <b>{row.productName} </b>
+              permanently
+            </Typography>
+          ),
+          acceptFunctionText: "Yes, Delete",
+          acceptFunction: () =>
+            productStatusUpdate({ id: row.prodId, deleteProd: true }, dispatch),
+        };
+      });
+    }
+  };
+
   const myRows = rows.map((e, i) => {
     return { ...e, id: i };
   });
   const [data] = useState(myRows);
-  const [pageSize, setPageSize] = useState(7)
-  const [searchText, setSearchText] = useState('')
-  const [filteredData, setFilteredData] = useState([])
+  const [pageSize, setPageSize] = useState(7);
+  const [searchText, setSearchText] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
 
-  const handleSearch = searchValue => {
-    setSearchText(searchValue)
-    const searchRegex = new RegExp(escapeRegExp(searchValue), 'i')
+  const handleSearch = (searchValue) => {
+    setSearchText(searchValue);
+    const searchRegex = new RegExp(escapeRegExp(searchValue), "i");
 
-    const filteredRows = data.filter(row => {
-      return Object.keys(row).some(field => {
+    const filteredRows = data.filter((row) => {
+      return Object.keys(row).some((field) => {
         // @ts-ignore
-        return searchRegex.test(row[field].toString())
-      })
-    })
+        return searchRegex.test(row[field].toString());
+      });
+    });
     if (searchValue.length) {
-      setFilteredData(filteredRows)
+      setFilteredData(filteredRows);
     } else {
-      setFilteredData([])
+      setFilteredData([]);
     }
-  }
+  };
   return (
     // <Grid container>
     //   <Grid
     //     item
     //     xs={12}
     //     // className="!w-[385px] !max-w-[385px] md:!w-full md:!max-w-full overflow-scroll md:overflow-auto border md:border-none shadow md:shadow-none"
-      // >
-        <DataGrid
-          autoHeight
-          columns={columns}
-          pageSize={pageSize}
-          rowsPerPageOptions={[7, 10, 25, 50]}
-          components={{ Toolbar: QuickSearchToolbar }}
-          rows={filteredData.length ? filteredData : data}
-          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          componentsProps={{
-            baseButton: {
-              variant: "outlined",
-            },
-            toolbar: {
-              value: searchText,
-              clearSearch: () => handleSearch(""),
-              onChange: (event) => handleSearch(event.target.value),
-            },
-          }}
-          sx={{ border: "none" }}
-          // className="w-[1220px] md:w-full"
-        />
+    // >
+    <DataGrid
+      autoHeight
+      columns={columns(menuOptions)}
+      rowsPerPageOptions={[7, 10, 25, 50]}
+      initialState={{
+        pagination: {
+          paginationModel: {
+            pageSize: pageSize,
+          },
+        },
+      }}
+      components={{ Toolbar: QuickSearchToolbar }}
+      rows={filteredData.length ? filteredData : data}
+      onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+      componentsProps={{
+        baseButton: {
+          variant: "outlined",
+        },
+        toolbar: {
+          value: searchText,
+          clearSearch: () => handleSearch(""),
+          onChange: (event) => handleSearch(event.target.value),
+        },
+      }}
+      sx={{ border: "none" }}
+      // className="w-[1220px] md:w-full"
+    />
     //   </Grid>
     // </Grid>
   );
-}
+};
 
-export default ProductList
+export default ProductList;

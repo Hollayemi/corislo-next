@@ -7,6 +7,7 @@ import SearchPage from "@/app/(pages)/custom/searchPage";
 import { useUserData } from "@/app/hooks/useData";
 import UserOverlay from "./Components/userOverlay";
 import MapOverlay from "./Map";
+import UserSideBar from "./Components/sidebar";
 
 const HomeWrapper = ({
   children,
@@ -17,7 +18,7 @@ const HomeWrapper = ({
 }) => {
   const [search, setSearch] = useState("");
   const [pinSearch, setPinSearch] = useState(false);
-  const { overLay, popMap, shopNow } = useUserData();
+  const { overLay, popMap, shopNow, showOverlay } = useUserData();
 
 
   const page = {
@@ -47,6 +48,7 @@ const HomeWrapper = ({
           <Box className={className}>{page[showing]}</Box>
           {popMap && <MapOverlay />}
           {overLay && <UserOverlay />}
+          <UserSideBar />
           {/* {openNotif && (
             <Box className="w-full h-screen fixed z-50 top-0 left-0 overflow-hidden">
               <Box className="flex w-full px-1 justify-end">

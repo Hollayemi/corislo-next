@@ -2,9 +2,13 @@ import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 import IconifyIcon from "../icon";
 
-const Plans = ({ opportunities, from, price, name, prof }) => {
+const Plans = ({ opportunities, from, hideChoosePlan, price, name, prof }) => {
   return (
-    <Box className={`w-full sm:w-1/2 lg:w-1/3 md:px-3 ${!prof && "md:mt-10"} md:py-10`}>
+    <Box
+      className={`w-full sm:w-1/2 lg:w-1/3 md:px-3 ${
+        !prof && "md:mt-10"
+      } md:py-10`}
+    >
       <Box
         className={`relative w-full !rounded-xl  border py-8 md:m-2 my-4 ${
           prof ? "md:shadow-2xl" : "md:shadow-xl"
@@ -24,12 +28,14 @@ const Plans = ({ opportunities, from, price, name, prof }) => {
             ${price || 0}
           </Typography>
 
-          <Button
-            variant="outlined"
-            className="!rounded-full w-48 h-11 !text-[14px] !text-blue-600 !bg-white !shadow-none"
-          >
-            Choose Plan
-          </Button>
+          {!hideChoosePlan && (
+            <Button
+              variant="outlined"
+              className="!rounded-full w-48 h-11 !text-[14px] !text-blue-600 !bg-white !shadow-none"
+            >
+              Choose Plan
+            </Button>
+          )}
         </Box>
         <Box className="mt-10 px-8">
           <Typography
@@ -104,19 +110,32 @@ export const opp3 = [
   "Detailed analytics, custom reports",
   "Exclusive promotions and marketing opportunities",
 ];
-const AllPlans = () => {
+const AllPlans = ({ hideChoosePlan }) => {
   return (
     <Box className="flex flex-col md:flex-row items-start overflow-auto">
-      <Plans opportunities={opp1} from={3} price={0} name="Basic Plain" />
+      <Plans
+        opportunities={opp1}
+        from={3}
+        hideChoosePlan
+        price={0}
+        name="Basic Plain"
+      />
 
       <Plans
         opportunities={opp3}
         from={8}
+        hideChoosePlan
         price={15}
         name="Professional Plan"
         prof
       />
-      <Plans opportunities={opp2} from={5} price={5} name="Premium Plan" />
+      <Plans
+        opportunities={opp2}
+        from={5}
+        hideChoosePlan
+        price={5}
+        name="Premium Plan"
+      />
     </Box>
   );
 };

@@ -19,7 +19,7 @@ const { default: Image } = require("next/image");
 const Notification = () => {
   const { notifications, showOverlay } = useUserData();
   return (
-    <Box className="mt-20 relative md:absolute right-2 px-2">
+    <Box className="mt-20 relative md:absolute px-2">
       <Box className="w-full md:w-[420px] h-[600px] md:h-[500px]  bg-white rounded-xl md:mr-10 flex flex-col">
         <Box className="flex justify-between items-center px-4 h-14 border-b !w-full flex-shrink-0">
           <Typography variant="body2" className="!font-bold">

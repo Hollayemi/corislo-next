@@ -37,12 +37,8 @@ const StorePage = ({ params }) => {
   const { data } = useSWR("/branch/all?sidelist=true");
   const InnerList = data?.data ? data.data : [];
 
-  const [openHours, setOpenHours] = useState(
-    storeInfo?.profile?.opening_hours || {}
-  );
-  const [socialMedia, setSocialMedia] = useState(
-    storeInfo?.profile?.social_media || {}
-  );
+  const [openHours, setOpenHours] = useState({});
+  const [socialMedia, setSocialMedia] = useState({});
   const [files, setFiles] = useState([]);
   const [localFiles, setLocalFiles] = useState([]);
 
@@ -51,12 +47,11 @@ const StorePage = ({ params }) => {
   const path = { ...params, sidebar: "stores" };
 
   const [inputValues, setValues] = useState({
-    address: storeInfo?.profile?.address || "",
-    city: storeInfo?.profile?.city || "",
-    landmark: storeInfo?.profile?.landmark || "",
-    about_store: storeInfo?.profile?.about_store || "",
+    address: "",
+    city: "",
+    landmark: "",
+    about_store: "",
   });
-  console.log(storeInfo);
   useEffect(() => {
     setValues({
       address: storeInfo?.profile?.address || "",
@@ -68,7 +63,6 @@ const StorePage = ({ params }) => {
     setOpenHours(storeInfo?.profile?.opening_hours || {});
   }, [storeIsLoading]);
 
-  console.log(openHours);
 
   const handleChange = (prop) => (event) => {
     setValues({ ...inputValues, [prop]: event.target.value });
@@ -82,7 +76,7 @@ const StorePage = ({ params }) => {
       breadCrumbRIghtChildren={<BreadcrumbRightEle />}
       crumb={[...StoreBreadCrumb, { text: "All Stores", link: "" }]}
     >
-      <Box className="px-10 !hidden sm:!flex z-50 -mt-4">
+      <Box className="px-10 !hidden sm:!flex z-50 -mt-6">
         <Typography className="pb-1 border-b-2 cursor-pointer !text-[13px] !w-24 text-center border-blue-900">
           Store Profile
         </Typography>
@@ -125,10 +119,10 @@ const StorePage = ({ params }) => {
                       alt="Profile"
                       height="70"
                       width="70"
-                      className="!rounded-full border w-20 h-20 flex-shrink-0"
+                      className="!rounded-full border w-24 h-24 flex-shrink-0"
                     />
                     <Box
-                      className="absolute !bottom-2 !right-4 mr-2 mb-2 !rounded-full p-0.5 cursor-pointer text-xs"
+                      className="absolute !bottom-2 !right-4 !rounded-full p-0.5 cursor-pointer text-xs"
                       bgcolor="custom.bodyLight"
                     >
                       <Icon icon="tabler:camera" className="text-[15px]" />
@@ -229,15 +223,19 @@ const StorePage = ({ params }) => {
               <br />
               <br />
 
-              <Grid container spacing={3}>
+              <Grid container spacing={2}>
                 {storeInfo?.profile?.gallery?.map((gal, i) => (
                   <Grid item xs={6} md={4}>
-                    <img
-                      key={i}
-                      className="w-auto h-auto max-h-28 max-w-40 rounded-md"
-                      alt={`image ${i}`}
-                      src={gal}
-                    />
+                    <Box className="p-1 md:p-1.5 border rounded-md bg-gray-50">
+                      <Box className="w-full h-full flex items-center rounded-md  justify-center overflow-hidden ">
+                        <img
+                          key={i}
+                          className="w-auto h-auto max-h-28 max-w-40 rounded-md"
+                          alt={`image ${i}`}
+                          src={gal}
+                        />
+                      </Box>
+                    </Box>
                   </Grid>
                 ))}
                 <FileUploader

@@ -2,30 +2,26 @@ import { createAsyncThunk, unwrapResult } from "@reduxjs/toolkit";
 import toaster from "@/app/configs/toaster";
 import martApi from "../api/baseApi";
 import { jsonHeader } from "../api/setAuthHeaders";
-import tokens from "@/app/configs/tokens";
+import { mutate } from "swr";
 
 const addPickupAgent = createAsyncThunk(
   "post/addPickupAgent",
   async (payload) => {
-    const userToken = tokens.auth;
     const { data } = await martApi
-      .post("/user/pickup", payload.body, jsonHeader(userToken))
+      .post("/user/pickup", payload, jsonHeader())
       .then((res) => res)
       .catch((e) => e.response);
     return data;
   }
 );
 
-export const addPickupPerson = (formData, auth, dispatch, setData) => {
-  const payload = {
-    body: formData,
-    auth,
-  };
-  dispatch(addPickupAgent(payload))
+export const addPickupPerson = (formData, dispatch) => {
+
+  dispatch(addPickupAgent(formData))
     .then(unwrapResult)
     .then((res) => {
       toaster({ ...res });
-      res.type === "success" && window.location.reload();
+      mutate("/user/pickers")
     })
     .catch((e) => {});
 };
@@ -35,7 +31,7 @@ export const addPickupPerson = (formData, auth, dispatch, setData) => {
 const myPickupsApi = createAsyncThunk("post/deletePickup", async (payload) => {
   const userToken = tokens.auth;
   const { data } = await martApi
-    .get("/user/pickup", jsonHeader(userToken))
+    .get("/user/pickup", jsonHeader())
     .then((res) => res)
     .catch((e) => e);
   return data;

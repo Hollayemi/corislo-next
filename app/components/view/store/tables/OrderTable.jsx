@@ -3,22 +3,10 @@
 import { useState } from 'react'
 
 // ** MUI Imports
-import { Box, Grid, Typography } from "@mui/material";
-import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
 import { DataGrid } from '@mui/x-data-grid'
 
 // ** Custom Components
-import CustomChip from '@/app/components/chip'
-import CustomAvatar from '@/app/components/avatar'
 import QuickSearchToolbar from '@/app/components/quickTool/QuickSearchToolbar'
-
-// ** Utils Import
-import { getInitials } from '@/app/utils/get-initials'
-
-// ** Data Import
-import { rows } from '@/app/data/store/productData'
-
 
 const escapeRegExp = value => {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')

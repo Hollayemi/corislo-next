@@ -9,25 +9,29 @@ import BillingAndAddress from "./billingAndAddress";
 import NotificationPref from "./notificationPref";
 import SecuritySettings from "./securitySettings";
 import HelpAndSupport from "./helpAndSupport";
+import Pickers from "./pickers";
 
-const UserSettings = () => {
-  const [value, setTabValue] = useState("1");
+const UserSettings = ({ searchParams }) => {
+  console.log(2);
+  const [value, setTabValue] = useState(searchParams?.to || "1");
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
   };
   const tabs = [
     "Account Settings",
     "Billing and Address",
+    "Pickers",
     "Notification Preferences",
     "Security Settings",
     "Help and Support",
   ];
   const tabContents = {
-      "0": AccountingSettings,
-      "1": BillingAndAddress,
-      "2": NotificationPref,
-      "3": SecuritySettings,
-      "4": HelpAndSupport,
+    0: AccountingSettings,
+    1: BillingAndAddress,
+    2: Pickers,
+    3: NotificationPref,
+    4: SecuritySettings,
+    5: HelpAndSupport,
   };
   return (
     <HomeWrapper noFooter className="md:flex md:justify-center">

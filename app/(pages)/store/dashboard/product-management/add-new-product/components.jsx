@@ -10,15 +10,22 @@ import {
   FormControlLabel,
   Grid,
   TextField,
-  Box
+  Box,
 } from "@mui/material";
 import CustomChip from "@/app/components/chip";
 import { productSizes } from "@/app/data/store/productData";
 import InputAdornment from "@mui/material/InputAdornment";
 // ** Icon Imports
-import Icon from '@/app/components/icon'
+import Icon from "@/app/components/icon";
 
-export const SimpleDropDown = ({ label, onChange, sx, render, inputProps }) => {
+export const SimpleDropDown = ({
+  label,
+  onChange,
+  sx,
+  render,
+  inputProps,
+  defaultValue,
+}) => {
   return (
     <FormControl fullWidth sx={{ ...sx }}>
       <Typography variant="caption" className="!mb-1">
@@ -28,19 +35,18 @@ export const SimpleDropDown = ({ label, onChange, sx, render, inputProps }) => {
         fullWidth
         // label={label}
         placeholder="hol"
-        defaultValue=""
+        value={defaultValue || ""}
         id="demo-simple-select-outlined"
         size="small"
         labelId="demo-simple-select-outlined-label"
         onChange={onChange}
-        { ...inputProps }
+        {...inputProps}
       >
         {render}
       </Select>
     </FormControl>
   );
 };
-
 
 export const SizeComponent = ({ selectedSizes, setSelectedSizes }) => {
   // ** State
@@ -51,7 +57,9 @@ export const SizeComponent = ({ selectedSizes, setSelectedSizes }) => {
     setOurSizes(productSizes);
     setSizeType(event.target.value);
   };
-  const filteredSizes = ourSizes.filter((obj) => obj.size.split('-')[0] === sizeType);
+  const filteredSizes = ourSizes.filter(
+    (obj) => obj.size.split("-")[0] === sizeType
+  );
 
   const selectSize = (id) => {
     const removed = filteredSizes.splice(id, 1);
@@ -71,25 +79,27 @@ export const SizeComponent = ({ selectedSizes, setSelectedSizes }) => {
     <Box>
       <Grid container spacing={6}>
         <Grid item xs={12} sm={12}>
-          {selectedSizes.length && <Box className="p-1 border border-gray-500">
-            {selectedSizes.map((each, i) => {
-              return (
-                <CustomChip
-                  onClick={() => unSelectSize(i)}
-                  sx={{ margin: 0.5, borderRadius: "5px" }}
-                  label={
-                    <Box className="flex items-center">
-                      {each.size}
-                      <Icon icon="tabler:x" fontSize={20} className="ml-2" />
-                    </Box>
-                  }
-                  key={i}
-                  skin="light"
-                  color="primary"
-                />
-              );
-            })}
-          </Box>}
+          {selectedSizes.length && (
+            <Box className="p-1 border border-gray-500">
+              {selectedSizes.map((each, i) => {
+                return (
+                  <CustomChip
+                    onClick={() => unSelectSize(i)}
+                    sx={{ margin: 0.5, borderRadius: "5px" }}
+                    label={
+                      <Box className="flex items-center">
+                        {each.size}
+                        <Icon icon="tabler:x" fontSize={20} className="ml-2" />
+                      </Box>
+                    }
+                    key={i}
+                    skin="light"
+                    color="primary"
+                  />
+                );
+              })}
+            </Box>
+          )}
           <RadioGroup
             row
             aria-label="controlled"
@@ -124,19 +134,17 @@ export const SizeComponent = ({ selectedSizes, setSelectedSizes }) => {
   );
 };
 
-
 export const QuantityComponent = ({ setSelectedSizes, selectedSizes }) => {
   const handleQualityChange = (size, qty) => {
-        const updated = selectedSizes.map(each => {
-            if(each.size === size){
-                return { ...each, quantity: qty }
-            }else{
-                return each
-            }
-        })
-        setSelectedSizes(() => [...updated]);
-
-  }
+    const updated = selectedSizes.map((each) => {
+      if (each.size === size) {
+        return { ...each, quantity: qty };
+      } else {
+        return each;
+      }
+    });
+    setSelectedSizes(() => [...updated]);
+  };
   return (
     <Grid container spacing={1}>
       {selectedSizes.map((size, i) => {
@@ -158,11 +166,10 @@ export const QuantityComponent = ({ setSelectedSizes, selectedSizes }) => {
             />
           </Grid>
         );
-})}
+      })}
     </Grid>
   );
 };
-
 
 export const ColorComponent = ({ setSelectedSizes, selectedSizes }) => {
   const handleQualityChange = (size, color) => {
@@ -202,13 +209,12 @@ export const ColorComponent = ({ setSelectedSizes, selectedSizes }) => {
             </div>
             <Box className="flex flex-wrap">
               {size.colors.map((color, key) => (
-                  <Box
-                    bgcolor={color}
-                    key={key}
-                    className="h-6 w-6 shrink-0 shadow m-0.5 rounded-full"
-                  ></Box>
-                ))
-              }
+                <Box
+                  bgcolor={color}
+                  key={key}
+                  className="h-6 w-6 shrink-0 shadow m-0.5 rounded-full"
+                ></Box>
+              ))}
             </Box>
             <datalist id="colorOptions">
               <option value="Red" />

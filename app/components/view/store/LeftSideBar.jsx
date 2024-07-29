@@ -11,9 +11,9 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import StoreDashboardAppBar from "./AppBar";
-import { SidebarContent } from "@/app/data/store/sidebarContents";
+import { ServicesSidebarContent, SidebarContent } from "@/app/data/store/sidebarContents";
 import Image from "next/image";
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
 import themeConfig from "@/app/configs/themeConfig";
 import Link from "next/link";
 import {
@@ -139,10 +139,18 @@ const StoreLeftSideBar = React.memo(
     dialogInfo,
     dialogComponent,
     updateDialogInfo,
+    popup,
   }) => {
-    const { staffInfo, overLay, showOverlay } = useStoreData();
-    const router = useRouter()
-    const permissions = staffInfo.permissions
+    const {
+      staffInfo,
+      storeInfo: { business },
+      overLay,
+      showOverlay,
+    } = useStoreData();
+    const goodsDashboard = business?.businessType?.startsWith("goods");
+    const sidebarList = goodsDashboard ? SidebarContent : ServicesSidebarContent
+    const router = useRouter();
+    const permissions = staffInfo.permissions;
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
 
@@ -243,7 +251,7 @@ const StoreLeftSideBar = React.memo(
                 className="overflow-hidden shrink-0"
                 sx={{ bgcolor: "custom.bodyLight" }}
               >
-                {SidebarContent.map((each, index) => (
+                {sidebarList.map((each, index) => (
                   <Link href={`/store/dashboard${each.path}`} key={index}>
                     <ListItem
                       key={index}
@@ -403,7 +411,6 @@ const StoreLeftSideBar = React.memo(
                     sx={{ zIndex: 1190 }}
                   >
                     <BottomBar
-                      content={SidebarContent}
                       path={path}
                       InnerList={BottomList || InnerList}
                     />
@@ -440,6 +447,7 @@ const StoreLeftSideBar = React.memo(
             </DialogActions>
           </Dialog>
         )}
+        {popup}
       </React.Fragment>
     );
   }

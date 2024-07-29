@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { prodInnerList } from "@/app/data/store/innerList";
+import { useSearchParams } from "next/navigation";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 import {
   Box,
@@ -27,30 +28,38 @@ import { removeOrAddToArray } from "@/app/utils/arrayFunctions";
 import { createProductHandler } from "@/app/redux/state/slices/shop/products/productSlice";
 import { useDispatch } from "react-redux";
 import { productBreadCrumb } from "../components";
+import { editProductHandler } from "@/app/redux/state/slices/shop/products/updateProduct";
+import IconifyIcon from "@/app/components/icon";
 // no allow (),+,
 const AddNewProduct = ({ params }) => {
   const theme = useTheme();
+  const searchParams = useSearchParams();
+  const editID = searchParams.get("edit");
   const brk = theme.breakpoints.down;
   const [selectedSizes, setSelectedSizes] = useState([]);
-  const [specifications, setSpecifications] = useState([]);
   const [newSpec, setNewSpec] = useState("");
   const [specValue, setSpecValue] = useState("");
   const [specId, setspecId] = useState(null);
+  const [files, setFiles] = useState([]);
+  const [localFiles, setLocalFiles] = useState([]);
   const [delivery, selectDelivery] = useState(["pickup"]);
   const { data: getData, error } = useSWR("/store/collections/thread");
+  const { data: toEdit } = useSWR(editID && `/products?productId=${editID}`);
   const { data: specData } = useSWR(
     specId && `/corisio/get-spec?specId=${specId}`
   );
+  let specInfo = specData && specData?.data;
   const collections = getData ? getData?.data : [{}];
-  const specInfo = specData && specData?.data;
+  const prodToEdit = toEdit ? toEdit.data?.result : [];
   const specWithSize = ["cloth_spec", "shoe_spec"];
+  const reduxFuntion = editID ? editProductHandler : createProductHandler;
   const [formData, setFormData] = useState({
     prodName: "",
     prodPrice: "",
     prodKey: "",
     prodInfo: "",
     specifications: {},
-    images: "",
+    images: [],
     totInStock: "",
     collectionId: "",
     subCollection: "",
@@ -61,10 +70,41 @@ const AddNewProduct = ({ params }) => {
     productGroup: "",
     delivery,
   });
-
-  const fromCollection = collections.filter(
+  console.log(files);
+  let fromCollection = collections.filter(
     (x) => x.collectionId === formData.collectionId
   )[0];
+
+  useEffect(() => {
+    if (toEdit) {
+      const toEditData = prodToEdit[0] || {};
+      setFormData(() => {
+        return {
+          prodName: toEditData.prodName,
+          prodPrice: toEditData.prodPrice,
+          video: toEditData.video,
+          prodKey: toEditData.prodKey,
+          prodInfo: toEditData.prodInfo,
+          images: toEditData.images,
+          totInStock: toEditData.totInStock,
+          collectionId: toEditData.collectionId,
+          subCollection: toEditData.subCollection,
+          subCollectionName: toEditData.subCollectionName,
+          collectionName: toEditData.collectionName,
+          subcategory: toEditData.subcategory,
+          productGroup: toEditData.productGroup,
+          delivery: toEditData.delivery,
+          specifications: toEditData.specifications?.variations || {},
+          category: toEditData.categoryId,
+          _id: toEditData._id,
+        };
+      });
+      selectDelivery(toEditData.delivery);
+      fromCollection = collections.filter(
+        (x) => x.collectionId === toEditData.collectionId
+      )[0];
+    }
+  }, [toEdit]);
 
   const dispatch = useDispatch();
 
@@ -102,6 +142,7 @@ const AddNewProduct = ({ params }) => {
     setspecId(spec);
   };
 
+  console.log(formData);
   return (
     <StoreLeftSideBar
       path={path}
@@ -109,7 +150,10 @@ const AddNewProduct = ({ params }) => {
       InnerList={prodInnerList}
       crumb={[
         ...productBreadCrumb,
-        { text: "Add Product", link: "add-new-product" },
+        {
+          text: editID ? "Edit Product" : "Add Product",
+          link: "add-new-product",
+        },
       ]}
     >
       <Box className="bg-white rounded-md md:px-5 pt-6 pb-8 !text-[13px]">
@@ -126,6 +170,7 @@ const AddNewProduct = ({ params }) => {
                 className="!mt-1 !mb-3"
                 fullWidth
                 size="small"
+                value={formData.prodName}
                 id="outlined-basic"
                 onChange={handleChange("prodName")}
                 // label="Product Name"
@@ -141,6 +186,7 @@ const AddNewProduct = ({ params }) => {
                 id="textarea-outlined"
                 onChange={handleChange("prodInfo")}
                 maxRows={7}
+                value={formData.prodInfo}
                 // placeholder="Product Description"
                 minRows={6}
                 // label="Product Description"
@@ -157,6 +203,7 @@ const AddNewProduct = ({ params }) => {
                     {res.collectionName}
                   </MenuItem>
                 ))}
+                defaultValue={fromCollection?.collectionId}
                 onChange={handleChange("collectionId")}
                 label="Product Category"
                 sx={{ mb: 2 }}
@@ -167,6 +214,11 @@ const AddNewProduct = ({ params }) => {
                     {res.subCollectionName}
                   </MenuItem>
                 ))}
+                defaultValue={
+                  fromCollection?.sub_collections?.filter(
+                    (x) => x.subCollectionName == formData.subCollectionName
+                  )[0]
+                }
                 onChange={handleSubCateSelection}
                 label="Product Sub-Category"
                 sx={{ mb: 2 }}
@@ -177,6 +229,11 @@ const AddNewProduct = ({ params }) => {
                     {res.label}
                   </MenuItem>
                 ))}
+                defaultValue={
+                  fromCollection?.group?.filter(
+                    (x) => x.spec == formData.subCollection
+                  )[0]
+                }
                 onChange={handleProductGroupSelection}
                 label="Product Class"
                 sx={{ mb: 2 }}
@@ -191,6 +248,7 @@ const AddNewProduct = ({ params }) => {
                 sx={{ mb: 0.5 }}
                 onChange={handleChange("prodPrice")}
                 type="number"
+                value={formData.prodPrice}
                 fullWidth
                 size="small"
                 id="outlined-basic"
@@ -207,6 +265,7 @@ const AddNewProduct = ({ params }) => {
                 onChange={handleChange("totInStock")}
                 type="number"
                 fullWidth
+                value={formData.totInStock}
                 size="small"
                 id="outlined-basic"
                 // label="Total in stock"
@@ -221,7 +280,7 @@ const AddNewProduct = ({ params }) => {
                 value="Physical Pick-Up"
                 control={
                   <Checkbox
-                    checked={delivery.includes("pickup")}
+                    checked={delivery?.includes("pickup")}
                     onChange={() => deliveryHandler("pickup")}
                     disabled={false}
                     name="pickup-checked"
@@ -235,7 +294,7 @@ const AddNewProduct = ({ params }) => {
                 value="waybilling"
                 control={
                   <Checkbox
-                    checked={delivery.includes("waybilling")}
+                    checked={delivery?.includes("waybilling")}
                     onChange={() => deliveryHandler("waybilling")}
                     disabled={false}
                     name="waybilling-checked"
@@ -249,7 +308,7 @@ const AddNewProduct = ({ params }) => {
                 value="Courier Service"
                 control={
                   <Checkbox
-                    checked={delivery.includes("courier")}
+                    checked={delivery?.includes("courier")}
                     onChange={() => deliveryHandler("courier")}
                     disabled={true}
                     name="courier-checked"
@@ -268,10 +327,49 @@ const AddNewProduct = ({ params }) => {
 */}
           <Grid item xs={12} md={7}>
             <Typography sx={{ fontWeight: "bold", mb: 1.5 }}>
-              Product Image
+              Product Media
             </Typography>
             <Box className="pl-2 md:pl-4 mb-5">
-              <FileUploader />
+              <Box className="flex flex-col md:flex-row items-start mb-5 p-3 bg-gray-50 border rounded">
+                {formData.video && (
+                  <video className=" w-full md:w-52 md:h-40 relative" controls>
+                    <source
+                      // src="https://www.w3schools.com/html/mov_bbb.mp4"
+                      src={formData.video}
+                      type="video/mp4"
+                    />
+                    <div
+                      onClick={() => {}}
+                      className="text-[6px] flex items-center z-50 justify-center text-white absolute -mt-2 -mr-2 top-0 right-0 w-4 h-4 rounded-full bg-red-500"
+                    >
+                      <IconifyIcon icon="tabler:trash" fontSize={16} />
+                    </div>
+                  </video>
+                )}
+                <Box className="flex items-center flex-wrap">
+                  {formData.images.map((each, i) => (
+                    <Box className="relative w-16 h-16 m-3" key={i}>
+                      <img
+                        className="w-full h-full rounded-md"
+                        alt={each.name}
+                        src={each.image}
+                      />
+                      <div
+                        onClick={() => {}}
+                        className="text-[6px] flex items-center justify-center text-white absolute -mt-2 -mr-2 top-0 right-0 w-4 h-4 rounded-full bg-red-500"
+                      >
+                        <IconifyIcon icon="tabler:trash" fontSize={12} />
+                      </div>
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+              <FileUploader
+                files={files}
+                setFiles={setFiles}
+                localFiles={localFiles}
+                setLocalFiles={setLocalFiles}
+              />
               <Box className="flex items-center justify-between">
                 <Typography variant="caption" className="!mt-2">
                   Supported formats: JPG, PNG, MP3
@@ -282,7 +380,7 @@ const AddNewProduct = ({ params }) => {
               </Box>
             </Box>
 
-            {specWithSize.includes(specInfo?.label) && (
+            {specWithSize?.includes(specInfo?.label) && (
               <>
                 <Typography className="font-black mb-5">Select Size</Typography>
                 <Box className="pl-2 md:pl-4 mb-4">
@@ -403,13 +501,13 @@ const AddNewProduct = ({ params }) => {
 
 */}
         </Grid>
-        <Box className="flex items-center justify-center">
+        <Box className="flex items-center justify-center mt-6">
           <Button
             variant="contained"
             sx={{ mx: 0.4, px: brk("md") && 4, py: 0.5 }}
-            className="bg-blue-900 text-xs mx-1 md:px-6 py-2"
+            className="bg-blue-900 text-xs md:px-6 !py-2 !w-full md:!w-48"
             onClick={() =>
-              createProductHandler(
+              reduxFuntion(
                 {
                   ...formData,
                   delivery,
@@ -417,27 +515,33 @@ const AddNewProduct = ({ params }) => {
                     sizes: selectedSizes,
                     variations: formData.specifications,
                   },
+                  newImages: files,
                 },
                 dispatch
               )
             }
           >
-            Add Product
+            {editID ? "Update " : "Add "} Product
           </Button>
-          <Button
-            variant="contained"
-            sx={{ mx: 0.4, px: brk("md") && 4, py: 0.5 }}
-            className="bg-blue-900 mx-1 md:px-6"
-          >
-            Save
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ mx: 0.4, px: brk("md") && 4, py: 0.5 }}
-            className="bg-blue-900 mx-1 md:px-6"
-          >
-            Discard
-          </Button>
+          {!editID && (
+            <>
+              {" "}
+              <Button
+                variant="contained"
+                sx={{ mx: 0.4, px: brk("md") && 4, py: 0.5 }}
+                className="bg-blue-900 mx-1 md:px-6"
+              >
+                Save
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ mx: 0.4, px: brk("md") && 4, py: 0.5 }}
+                className="bg-blue-900 mx-1 md:px-6"
+              >
+                Discard
+              </Button>
+            </>
+          )}
         </Box>
       </Box>
     </StoreLeftSideBar>

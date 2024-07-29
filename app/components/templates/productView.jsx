@@ -1,3 +1,4 @@
+"use client"
 import {
   Box,
   Checkbox,
@@ -31,6 +32,7 @@ import {
   trackMainSteps,
 } from "@/app/(pages)/order/[detail]/components";
 import { OrderStages } from "@/app/(pages)/order/timeline";
+import CustomOption from "../option-menu/option";
 
 const ChangeQty = ({
   payload,
@@ -258,32 +260,60 @@ export const GroupCartProducts = ({
             {`${deliveryType} fee: ${branchPrice}` || "Pickup"}
           </Typography>
         ) : (
-          <OptionsMenu
+          <CustomOption
+            addBtn={
+              <Link href="/user?to=2" className="!w-full">
+                <Typography
+                  variant="body2"
+                  className="!text-[15px] !text-blue-800 mt-5"
+                >
+                  <span className="mr-3 !text-[17px]">+</span> Add Picker
+                </Typography>
+              </Link>
+            }
             icon={
               <Button
                 variant="outlined"
-                className="!text-xs !rounded-full !text-blue-600"
-                endIcon={
-                  <IconifyIcon
-                    icon="tabler:chevron-down"
-                    className="!ml-3 !text-[14px]"
-                  />
-                }
+                className="w-32 h-7 !rounded-full !border !border-blue-500 !text-[12px] !text-blue-600"
               >
-                {picker || "You"}
+                {mySubstring(picker?.name, 15) || "Myself"}
               </Button>
             }
-            options={pickers?.map((x) => x?.fullname)}
-            setOption={(x) =>
+            // template={<TitleSubtitle />}
+            options={pickers.map((e) => `${e?.name}, (${e?.relationship})`)}
+            butPush={pickers.map((e) => e)}
+            clickFunction={(x) =>
               updatePayload((prev) => {
                 return { ...prev, picker: { ...prev.picker, [store]: x } };
               })
             }
-            iconButtonProps={{
-              size: "small",
-              sx: { color: "text.disabled", cursor: "pointer" },
-            }}
           />
+          // <OptionsMenu
+          //   icon={
+          //     <Button
+          //       variant="outlined"
+          //       className="!text-xs !rounded-full !text-blue-600"
+          //       endIcon={
+          //         <IconifyIcon
+          //           icon="tabler:chevron-down"
+          //           className="!ml-3 !text-[14px]"
+          //         />
+          //       }
+          //     >
+          //       {picker || "You"}
+          //     </Button>
+          //   }
+          //   options={pickers?.map((x) => x?.name)}
+          //   setOption={(x) =>
+          //     updatePayload((prev) => {
+          //       return { ...prev, picker: { ...prev.picker, [store]: x } };
+          //     })
+          //   }
+          //   iconButtonProps={{
+          //     size: "small",
+          //     sx: { color: "text.disabled", cursor: "pointer" },
+          //   }}
+          // />
         )}
       </Box>
 
@@ -614,7 +644,7 @@ export const OrderProductView = ({
               NGN{totalAmount}
             </Typography>
           </Box>
-          <Box className="flex items-center flex-nowrap !mt-3 md:!mt-6">
+          <Box className="flex items-center flex-nowrap !mt-3 md:!mt-6 !ml-20">
             <Button
               variant="outlined"
               className="w-32 h-9 md:h-10 !mr-4 !rounded-full !text-[14px] !shadow-none"

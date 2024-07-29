@@ -115,13 +115,17 @@ const SupportPage = () => {
       </Box>
 
       <Box className="flex flex-col md:flex-row justify-center mt-10">
-        <Box className=" px-3 md:w-4/5 flex flex-col md:flex-row items-start">
-          <Box className="!my-3 w-full md:w-80 border-r !pr-3">
+        <Box className=" px-3 md:w-10/12 flex flex-col md:flex-row items-start">
+          <Box className=" w-full md:w-60 !pr-3">
             {faqData.map((item, i) => {
               return (
-                <Accordion key={i} className="!bg-transparent !shadow-none ">
+                <Accordion
+                  defaultExpanded
+                  key={i}
+                  className="!bg-transparent !shadow-none"
+                >
                   <AccordionSummary
-                    className="!border-none !outline-none !h-8"
+                    className="!border-none !outline-none !h-8 !p-0 !min-h-10"
                     expandIcon={
                       <IconifyIcon
                         fontSize="1.25rem"
@@ -129,14 +133,14 @@ const SupportPage = () => {
                       />
                     }
                   >
-                    <Typography sx={{ fontWeight: "500" }}>
+                    <Typography className="!text-[13px]">
                       {item.title}
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails className="!min-h-14 !pb-0">
                     {item.subtitles.map((each) => (
                       <Box onClick={() => setShowing(each.discussion)}>
-                        <Typography sx={{ color: "text.secondary" }}>
+                        <Typography className="!text-[12px] h-6 cursor-pointer">
                           {each.topic}
                         </Typography>
                       </Box>

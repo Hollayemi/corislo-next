@@ -7,24 +7,20 @@ export const WhoIsWaiting = () => {
   return (
     <Box className="w-full md:w-4/6 h-[200px] md:h-[300px] relative !rounded-xl overflow-hidden shadow">
       <Image
-        src="/images/misc/who-is-waiting.png"
+        src="/images/misc/connectusers.png"
         alt="image-here"
         width={700}
         height={700}
         className="!w-full h-full absolute top-0 left-0"
       />
-      <Box
-        className="absolute top-0 left-0 w-full h-full opacity-90"
-        bgcolor="custom.bodyLight"
-      ></Box>
       <Box className="relative h-full z-30 mt-2">
         <Box className="!font-bold flex flex-col items-center justify-center h-full ">
-          <Typography variant="body2" className="!text-2xl !text-black">
+          <Typography variant="body2" className="!text-xl !text-black">
             Millions of stores are waiting to
           </Typography>
           <Typography
             variant="body2"
-            className="!text-2xl !mt-1"
+            className="!text-xl !mt-1"
             color="secondary"
           >
             serve you.
@@ -37,35 +33,7 @@ export const WhoIsWaiting = () => {
           </Button>
         </Box>
       </Box>
-      <Image
-        src="/images/avatar/1.png"
-        alt="image-here"
-        width={100}
-        height={200}
-        className="!w-8 h-8 md:!w-12 md:h-12 absolute !rounded-full top-2 md:top-2 left-1/2 md:left-1/2"
-      />
-      <Image
-        src="/images/avatar/2.png"
-        alt="image-here"
-        width={100}
-        height={200}
-        className="!w-8 h-8 md:!w-12 md:h-12 absolute !rounded-full top-16 md:top-10 right-10 md:right-10"
-      />
-      <Image
-        src="/images/avatar/3.png"
-        alt="image-here"
-        width={100}
-        height={200}
-        className="!w-8 h-8 md:!w-12 md:h-12 absolute !rounded-full bottom-10 md:bottom-10 left-10 md:left-10"
-      />
-      <Image
-        src="/images/avatar/4.png"
-        alt="image-here"
-        width={100}
-        height={200}
-        className="!w-8 h-8 md:!w-12 md:h-12 absolute !rounded-full bottom-4 md:bottom-4 right-16 md:right-16"
-      />
-    </Box>
+       </Box>
   );
 };
 

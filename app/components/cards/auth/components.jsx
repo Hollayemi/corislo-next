@@ -31,7 +31,7 @@ const SelectInput = ({ onChange, id, values }) => {
         className="outline-none border-none selectDefault w-full h-6 !text-gray-400 !text-[14px] pr-5 !bg-white autofill:!px-4"
       >
         {values?.map((res, i) => (
-          <option value={res.value} key={i} className="h-10">
+          <option value={res.value} key={i} className="h-10 py-8">
             {res.display}
           </option>
         ))}

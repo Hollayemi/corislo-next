@@ -153,7 +153,7 @@ const updateBranchImagesApi = createAsyncThunk(
   }
 );
 
-export const updateBranchImages = (payload, dispatch, setLoading) => {
+export const updateBranchImages = (payload, dispatch, setLoading = () => {}) => {
   setLoading(true)
   dispatch(updateBranchImagesApi(payload))
     .then(unwrapResult)

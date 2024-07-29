@@ -25,15 +25,15 @@ const Checkout = () => {
       seletedCartProds.length && `prods=${seletedCartProds.join(".")}`
     }`
   );
-  const { data: pickups, pickupError } = useSWR("/user/pickup");
   const { data: addrs } = useSWR("/user/addresses");
   const { data: cards } = useSWR("/user/billings");
+  const { data: agents } = useSWR("/user/pickers");
+  const pickers = agents?.data || [];
   const addresses = addrs?.data || [];
   const billings = cards?.data || [];
   const groupedCart = carts ? carts.data.result : [];
   const amounts = carts ? carts.data.total : [];
-  const pickers = pickups ? pickups.data : [];
-  console.log(groupedCart, pickers);
+  console.log(groupedCart, pickers, userInfo);
 
   const [payload, updatePayload] = useState({
     products: cartedProds,
@@ -189,7 +189,10 @@ const Checkout = () => {
                     Voucher
                   </Typography>
                   <Box className="w-full flex justify-between items-center !mt-5">
-                    <Typography variant="body2" className="!text-[11px] !font-[500] w-3/5">
+                    <Typography
+                      variant="body2"
+                      className="!text-[11px] !font-[500] w-3/5"
+                    >
                       FREE4ALLNOW
                     </Typography>
                     <Box className="flex justify-between float-right items-center w-2/5">

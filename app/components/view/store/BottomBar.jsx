@@ -24,7 +24,7 @@ const OnlyContents = ({ each, path }) => {
   );
 };
 
-export default function BottomBar({ content, path, InnerList }) {
+export default function BottomBar({ path, InnerList }) {
   const onSubList = !path.sublist ? "" : `/${path.sublist}`;
   const [value, setValue] = React.useState("recents");
   const router = useRouter();

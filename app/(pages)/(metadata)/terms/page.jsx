@@ -7,9 +7,9 @@ import { TabList, TabPanel, TabContext } from "@mui/lab";
 import { TermsOfService } from "./tabs";
 
 
-const TermsAndConditions = () => {
+const TermsAndConditions = ({ searchParams }) => {
   // ** State
-  const [value, setValue] = useState("1");
+  const [value, setValue] = useState(searchParams.tab || "2");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -17,8 +17,8 @@ const TermsAndConditions = () => {
 
   return (
     <HomeWrapper>
-      <Box className="w-full flex items-center pl-10 md:pl-20 md:-mt-16 !mb-10 h-28 md:h-[350px] bg-gradient-to-br from-pink-100 via-pink-200  to-violet-100">
-        <Typography variant="body1" className="!font-black !text-2xl">Legal</Typography>
+      <Box className="w-full flex items-center pl-10 md:pl-20 md:-mt-16 !mb-10 h-14 md:h-[200px] bg-gradient-to-br from-pink-100 via-pink-200  to-violet-100">
+        <Typography variant="body1" className="!font-black !text-3xl !mt-4">Legal</Typography>
       </Box>
 
       <TabContext value={value}>

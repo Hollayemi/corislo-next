@@ -41,7 +41,6 @@ export const FileUploader = ({
   directUpload,
 }) => {
   // ** Hooks
-  console.log(files);
   const theme = useTheme();
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(false);
@@ -49,7 +48,6 @@ export const FileUploader = ({
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: async (acceptedFiles) => {
       const fileInfo = acceptedFiles.map((file) => Object.assign(file));
-      console.log(fileInfo);
       setLocalFiles(fileInfo);
 
       const base64Files = await Promise.all(
@@ -220,7 +218,6 @@ export const SocialMediaConponent = ({
 
 export const OpeningHours = ({ label, className, openHours, setOpenHours }) => {
   const smallLabel = label.toLowerCase();
-  console.log();
   const isPresent = Object.keys(openHours || {}).includes(smallLabel);
 
   const handleChange = (label, key, value) => {

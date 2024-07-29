@@ -3,11 +3,11 @@ import Image from "next/image";
 
 export const NumberExplained = ({ parent, info, small }) => {
   return (
-    <Box className={`flex ${small && "flex-col"} items-center w-32`}>
-      <Typography variant="body2" className={`${small ? "!text-2xl" : "!text-4xl"} !font-black !mr-1"`}>
+    <Box className={`flex ml-3 ${small && "flex-col ml-0"} items-center w-32`}>
+      <Typography variant="body2" className={`${small ? "!text-2xl" : "!text-4xl"} !font-black !mr-2"`}>
         {parent}
       </Typography>
-      <Box className="">
+      <Box className={`ml-2`}>
         <Typography variant="body2" className="!w-fit !text-[12px] ">
           {info}
         </Typography>
@@ -15,6 +15,7 @@ export const NumberExplained = ({ parent, info, small }) => {
     </Box>
   );
 };
+
 export const SellerDashboardImage = () => {
   return (
     <Box className="relative w-full md:!w-4/5 flex justify-center">
@@ -45,22 +46,22 @@ export const SellerDashboardImage = () => {
 
 export const WhySell = ({ image, title, info }) => {
   return (
-    <Box className="!rounded-xl w-full md:w-80 h-44 flex-shrink-0 bg-white  drop-shadow-md p-4 md:m-2">
+    <Box className="!rounded-xl w-full h-[200px] flex-shrink-0 bg-white drop-shadow-md p-4 lg:m-1">
       <Image
         src={`/images/misc/${image}.png`}
         alt="image"
         width={400}
         height={400}
-        className="w-8 h-8"
+        className="w-9 h-9"
       />
 
       <Typography
         variant="body2"
-        className="!text-[13px] !mt-2 !mb-1  !font-bold "
+        className="!text-[14px] !mt-2 !mb-1  !font-bold "
       >
         {title}
       </Typography>
-      <Typography variant="caption" className="!text-[11px]">
+      <Typography variant="caption" className="!text-[12px]">
         {info}
       </Typography>
     </Box>
@@ -69,33 +70,35 @@ export const WhySell = ({ image, title, info }) => {
 
 export const HowItWorksCard = ({ step, title, text, className }) => {
   return (
-    <Box
-      className={`!w-11/12 md:w-72 md:h-28 p-3 md:p-4 !rounded-xl shadow m-2 md:m-3 !bg-white relative z-30 ${className}`}
-    >
-      <Box className="flex items-center">
+    <Box className="p-1">
+      <Box
+        className={`w-full md:w-72 md:h-36 p-3 md:p-4 !rounded-xl shadow  md:m-3 !bg-white relative z-30 ${className}`}
+      >
+        <Box className="flex items-center">
+          <Typography
+            variant="body2"
+            noWrap
+            className="!font-bold !text-[12px] md:!text-[14px] w-14"
+            color="secondary"
+          >
+            Step {step}:
+          </Typography>
+          <Typography
+            variant="body2"
+            className="!font-bold !text-[12px] md:!text-[14px] !ml-1.5"
+            color="primary"
+          >
+            {title}
+          </Typography>
+        </Box>
         <Typography
-          variant="body2"
-          noWrap
-          className="!font-bold !text-[13px] w-14"
-          color="secondary"
-        >
-          Step {step}:
-        </Typography>
-        <Typography
-          variant="body2"
-          className="!font-bold !text-[13px] !ml-1.5"
+          variant="caption"
+          className="!text-[11px] md:!text-[12px] !text-justify !mt-1.5"
           color="primary"
         >
-          {title}
+          {text}
         </Typography>
       </Box>
-      <Typography
-        variant="caption"
-        className="!text-[11px] !mt-1.5"
-        color="primary"
-      >
-        {text}
-      </Typography>
     </Box>
   );
 };

@@ -8,6 +8,7 @@ import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
+import { WorkspacesSharp } from "@mui/icons-material";
 
 
 export const navigation = {
@@ -78,3 +79,29 @@ export const SidebarContent = [
   },
 ];
 
+export const ServicesSidebarContent = [
+  {
+    name: "Dashboard",
+    path: navigation.dashboard,
+    icon: <ViewQuiltIcon />,
+    key: "ele_1",
+  },
+  {
+    name: "Workshop",
+    path: navigation.store,
+    icon: <WorkspacesSharp />,
+    key: "ele_2",
+  },
+  {
+    name: "Settings",
+    path: navigation.settings,
+    icon: <SettingsApplicationsIcon />,
+    key: "ele_8",
+  },
+  {
+    name: "Pricing",
+    path: navigation.pricing,
+    icon: <CreditCardIcon />,
+    key: "ele_8",
+  },
+];

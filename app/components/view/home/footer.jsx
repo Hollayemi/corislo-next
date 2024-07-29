@@ -2,19 +2,31 @@ import { Box, Grid, Typography } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { styled, alpha } from "@mui/material/styles";
-import { Testimonials, TestimonialsComponent, WhoIsWaiting } from "./Components/Footer";
+import {
+  Testimonials,
+  TestimonialsComponent,
+  WhoIsWaiting,
+} from "./Components/Footer";
 import { SectionTitle } from "../../cards/homeCards";
 
 const HomeFooter = () => {
   const pages = {
-    company: ["About Us", "Careers", "Blog"],
-    helpfulLinks: [
-      "How it Works",
-      "Terms of Service",
-      "Privacy Policy",
-      "Seller Requirements",
-    ],
-    contact: ["Customer Support", "Seller Support", "Report an Issue"],
+    company: {
+      about: { name: "About Us", link: "about" },
+      careers: { name: "Careers", link: "careers" },
+      blog: { name: "Blog", link: "blog" },
+    },
+    helpfulLinks: {
+      how: { name: "How it Works", link: "how-it-works" },
+      terms: { name: "Terms of Service", link: "terms?tab=1" },
+      policy: { name: "Privacy Policy", link: "terms?tab=0" },
+      seller: { name: "Seller Requirements", link: "seller" },
+    },
+    contact: {
+      support: { name: "Customer Support", link: "support" },
+      seller: { name: "Seller Support", link: "seller" },
+      report: { name: "Report an Issue", link: "report" },
+    },
   };
 
   const SetLinks = ({ pages }) => {
@@ -23,15 +35,16 @@ const HomeFooter = () => {
       textDecoration: "none",
       color: theme.palette.primary.main,
     }));
-    return pages.map((page) => (
+    const keys = Object.keys(pages);
+    return Object.values(pages).map((page, i) => (
       <LinkStyled
         key={page}
-        href={`/${page.toLocaleLowerCase()}`}
+        href={`/${page.link}`}
         sx={{ display: "block" }}
         color="white"
         className="px-0 my-4 w-fit !text-xs border-b-2 border-black hover:border-blue-600 !text-gray-200"
       >
-        {page.replace("-", " ")}
+        {page.name}
       </LinkStyled>
     ));
   };

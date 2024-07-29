@@ -37,7 +37,7 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
         </Grid>
         <Grid item xs={12} md={6}>
           <CustomInput
-            title="Bussname Type"
+            title="Bussname Rendering Type"
             onChange={handleStoreChange("businessType")}
             error={values.businessType && errors.businessType}
             hideCheck={!values.businessType}
@@ -47,12 +47,16 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
               type: "select",
               values: [
                 {
-                  value: "private company",
-                  display: "Limited Liability Company",
+                  value: "goods",
+                  display: "Goods only",
                 },
                 {
-                  value: "Cooperate Company",
-                  display: "Cooperate Company",
+                  value: "goods/services",
+                  display: "Goods & Services",
+                },
+                {
+                  value: "services",
+                  display: "Services only",
                 },
               ],
               placeholder: "Enter your business type",

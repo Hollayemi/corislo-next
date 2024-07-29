@@ -34,19 +34,19 @@ export default function RootLayout({ children }) {
   const [userInfo, setUserInfo] = useState({});
   const [hideOverflow, setOverflow] = useState(false);
 
-  useEffect(() => {
-    if ("serviceWorker" in navigator && userInfo?._id) {
-      navigator.serviceWorker
-        .register("/sw.js")
-        .then((registration) => {
-          handleSubscribeToNotification();
-          // console.log("Service Worker registered: ", registration);
-        })
-        .catch((error) => {
-          console.error("Service Worker registration failed:", error);
-        });
-    }
-  }, [userInfo]);
+  // useEffect(() => {
+  //   if ("serviceWorker" in navigator && userInfo?._id) {
+  //     navigator.serviceWorker
+  //       .register("/sw.js")
+  //       .then((registration) => {
+  //         handleSubscribeToNotification();
+  //         // console.log("Service Worker registered: ", registration);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Service Worker registration failed:", error);
+  //       });
+  //   }
+  // }, [userInfo]);
 
   return (
     <html lang="en">

@@ -26,7 +26,7 @@ export const createProductHandler = (formData, dispatch) => {
       console.log(res);
       toaster({ ...res });
       if (res.type === "success") {
-        mutate("store/products");
+        mutate("/store/products");
       }
     })
     .catch((e) => {
