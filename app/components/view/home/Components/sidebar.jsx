@@ -23,16 +23,17 @@ const UserSideBar = () => {
 
   const pages = {
     isOffline: [
-      { name: "Home", link: "/", icon: "tabler:home" },
-      { name: "About", link: "/about", icon: "tabler:dots-circle-horizontal" },
-      { name: "Seller", link: "/seller", icon: "tabler:building-store" },
-      { name: "Support", link: "/support", icon: "tabler:heart-handshake" },
+      { name: "Home", link: "", icon: "tabler:home" },
+      { name: "About", link: "about", icon: "tabler:dots-circle-horizontal" },
+      { name: "Seller", link: "seller", icon: "tabler:building-store" },
+      { name: "Support", link: "support", icon: "tabler:heart-handshake" },
     ],
 
     isOnline: [
       { name: "Home", link: "", icon: "tabler:home" },
       { name: "Order", link: "order", icon: "tabler:shopping-bag" },
       { name: "Inbox", link: "chat", icon: "tabler:message" },
+      { name: "Agent", link: "referral", icon: "tabler:moneybag" },
       { name: "Saved Items", link: "saved-items", icon: "tabler:heart" },
       { name: "Account", link: "user", icon: "tabler:user-square-rounded" },
     ],

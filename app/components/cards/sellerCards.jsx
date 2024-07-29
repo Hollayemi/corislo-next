@@ -106,7 +106,7 @@ export const HowItWorksCard = ({ step, title, text, className }) => {
 export const CoreValues = ({ top, bottom, text, className }) => {
   return (
     <Box
-      className={`w-72 h-68 p-4 !rounded-xl shadow m-3 !bg-white relative z-30 ${className}`}
+      className={`w-full md:w-72 h-68 p-4 !rounded-xl shadow m-3 !bg-white relative z-30 ${className}`}
     >
       <Typography
         variant="body2"

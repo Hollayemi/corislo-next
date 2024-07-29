@@ -58,9 +58,9 @@ function Header({ search, setSearch, setPinSearch }) {
 
     isOnline: [
       { name: "Home", link: "" },
-      { name: "Earn", link: "referral" },
       { name: "Order", link: "order" },
       { name: "Inbox", link: "chat" },
+      { name: "Earn", link: "referral" },
       { name: "Account", link: "user" },
       { name: "Saved Items", link: "saved-items" },
     ],
