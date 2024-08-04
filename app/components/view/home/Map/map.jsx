@@ -90,7 +90,7 @@ const MapGraph = ({ mapType = "default", markers }) => {
   if (!isLoaded) return <div>Loading map...</div>;
 
   return (
-    <div className="h-screen w-full">
+    <div className="h-full w-full">
       <Head>
         <meta
           httpEquiv="Content-Security-Policy"

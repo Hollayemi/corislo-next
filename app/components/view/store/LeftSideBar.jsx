@@ -11,7 +11,10 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import StoreDashboardAppBar from "./AppBar";
-import { ServicesSidebarContent, SidebarContent } from "@/app/data/store/sidebarContents";
+import {
+  ServicesSidebarContent,
+  SidebarContent,
+} from "@/app/data/store/sidebarContents";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import themeConfig from "@/app/configs/themeConfig";
@@ -130,7 +133,8 @@ const StoreLeftSideBar = React.memo(
     children,
     path,
     InnerList,
-    InnerTitle,
+    rightOpen,
+    setRightOpen,
     permission,
     BottomList,
     hidebreadCrumb,
@@ -145,10 +149,11 @@ const StoreLeftSideBar = React.memo(
       staffInfo,
       storeInfo: { business },
       overLay,
-      showOverlay,
     } = useStoreData();
     const goodsDashboard = business?.businessType?.startsWith("goods");
-    const sidebarList = goodsDashboard ? SidebarContent : ServicesSidebarContent
+    const sidebarList = goodsDashboard
+      ? SidebarContent
+      : ServicesSidebarContent;
     const router = useRouter();
     const permissions = staffInfo.permissions;
     const [open, setOpen] = React.useState(false);
@@ -168,12 +173,16 @@ const StoreLeftSideBar = React.memo(
 
     const onSideBar = !path?.sidebar ? "" : `/${path.sidebar}`;
     const handleDrawerOpen = () => {
+      if (rightOpen) {
+        setRightOpen(false);
+      }
       setOpen(true);
     };
 
     const handleDrawerClose = () => {
       setOpen(false);
     };
+
 
     const MyBreadcrumbs = () => {
       const skip = onSideBar && 0;
@@ -373,12 +382,17 @@ const StoreLeftSideBar = React.memo(
           </Drawer>
           <Box
             className={`top-0 ${
-              open ? "left-[270px]" : "md:left-16"
-            } w-full transition-all duration-300 absolute flex-shrink-0 h-full md:pl-4 !pr-3 md:!pr-16 `}
+              open
+                ? "left-[270px]"
+                : rightOpen
+                ? " -left-[330px] "
+                : " md:left-16 "
+            } w-full transition-all duration-300 absolute flex-shrink-0 h-full md:pl-4 !pr-3 md:!pr-16 z-30`}
+            bgcolor="custom.bodyGray"
           >
             {/* <Box className=""> */}
 
-            <Box className="flex flex-col w-full pt-16 md:pt-20 md:px-7 px-3">
+            <Box className="flex flex-col w-full pt-16 md:pt-20 md:px-7 px-3 ">
               {onSideBar === "" && (
                 <Typography
                   color="primary"
@@ -396,12 +410,12 @@ const StoreLeftSideBar = React.memo(
             )}
             <Box className="flex flex-col relative md:flex-row items-start md:px-1.5">
               {InnerList && (
-                <Box className="w-full hidden md:block sticky top-[68px] h-[85vh] md:w-52 mr-1 bg-white rounded-md">
+                <Box className="w-full hidden md:block sticky top-[68px] h-[85vh] md:w-52  bg-white rounded-md">
                   <InnerBar path={path} InnerList={InnerList} />
                 </Box>
               )}
               <Box
-                className="!w-full h-full  md:pl-3 md:pr-6 m-1 rounded-md mb-14"
+                className="!w-full h-full pl-2 md:pl-3 md:pr-6 rounded-md pb-14"
                 bgcolor="custom.bodyGray"
               >
                 {children}
@@ -417,6 +431,25 @@ const StoreLeftSideBar = React.memo(
                   </Box>
                 )}
               </Box>
+            </Box>
+          </Box>
+
+          <Box
+            className={`transition-all duration-300 ${
+              rightOpen ? "right-0" : "-right-[440px]"
+            } h-full w-[330px] fixed top-0 right-0 z-20 py-6 mt-7 `}
+          >
+            <Box className="bg-white w-full h-full pt-5 shadow relative">
+              <Box
+                onClick={() => setRightOpen(false)}
+                className="flex items-center justify-center z-50 rounded-full h-7 w-7 shadow-lg animate-bounce cursor-pointer  bg-white absolute -left-3 -mt-4 top-1/2"
+              >
+                <IconifyIcon
+                  icon="tabler:chevron-right"
+                  className="text-[24px]"
+                />
+              </Box>
+              {rightOpen}
             </Box>
           </Box>
         </Box>

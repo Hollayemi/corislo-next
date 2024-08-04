@@ -9,24 +9,30 @@ export const ordersColumns = (handleActionClick) => {
   return [
     {
       flex: 0.6,
-
       minWidth: 120,
-      headerName: "Order ID",
+      headerName: <h5 className="text-[13px]">Order ID</h5>,
       field: "_id",
       renderCell: (params) => (
-        <Typography variant="body2" sx={{ color: "text.primary" }}>
+        <Typography
+          variant="body2"
+          sx={{ color: "text.primary" }}
+          className="!text-[13px]"
+        >
           {params.row._id}
         </Typography>
       ),
     },
     {
       flex: 1.5,
-
       minWidth: 120,
-      headerName: "Customer",
+      headerName: <h5 className="text-[13px]">Customer</h5>,
       field: "customer",
       renderCell: (params) => (
-        <Typography variant="body2" sx={{ color: "text.primary" }}>
+        <Typography
+          variant="body2"
+          sx={{ color: "text.primary" }}
+          className="!text-[13px]"
+        >
           {params.row.customerName}
         </Typography>
       ),
@@ -35,46 +41,61 @@ export const ordersColumns = (handleActionClick) => {
       flex: 1,
 
       minWidth: 120,
-      headerName: "Order Date",
+      headerName: <h5 className="text-[13px]">Order Date</h5>,
       field: "dateAdded",
       renderCell: (params) => (
-        <Typography variant="body2" sx={{ color: "text.primary" }}>
+        <Typography
+          variant="body2"
+          sx={{ color: "text.primary" }}
+          className="!text-[13px]"
+        >
           {formatDate(params.row.dateAdded)}
         </Typography>
       ),
     },
-    {
-      flex: 1,
+    // {
+    //   flex: 1,
 
-      minWidth: 120,
-      headerName: "Est. Delivery Date",
-      field: "deliveryDate",
-      renderCell: (params) => (
-        <Typography variant="body2" sx={{ color: "text.primary" }}>
-          {formatDate(params.row.deliveryDate)}
-        </Typography>
-      ),
-    },
+    //   minWidth: 120,
+    //   headerName: <h5 className="text-[13px]">Est. Delivery Date</h5>,
+    //   field: "deliveryDate",
+    //   renderCell: (params) => (
+    //     <Typography
+    //       variant="body2"
+    //       sx={{ color: "text.primary" }}
+    //       className="!text-[13px]"
+    //     >
+    //       {formatDate(params.row.deliveryDate)}
+    //     </Typography>
+    //   ),
+    // },
     {
       flex: 0.8,
 
       minWidth: 120,
-      headerName: "Total Order Price",
+      headerName: <h5 className="text-[13px]">Total Order Price</h5>,
       field: "toatalPrice",
       renderCell: (params) => (
-        <Typography variant="body2" sx={{ color: "text.primary" }}>
+        <Typography
+          variant="body2"
+          sx={{ color: "text.primary" }}
+          className="!text-[13px]"
+        >
           {params.row.totalPrice}
         </Typography>
       ),
     },
     {
       flex: 0.8,
-
       minWidth: 120,
-      headerName: "Delivery Medium",
+      headerName: <h5 className="text-[13px]">Delivery Method</h5>,
       field: "deliveryMedium",
       renderCell: (params) => (
-        <Typography variant="body2" sx={{ color: "text.primary" }}>
+        <Typography
+          variant="body2"
+          sx={{ color: "text.primary" }}
+          className="!text-[13px]"
+        >
           {params.row.deliveryMedium}
         </Typography>
       ),
@@ -84,7 +105,7 @@ export const ordersColumns = (handleActionClick) => {
       flex: 0.5,
       minWidth: 120,
       field: "actions",
-      headerName: "Actions",
+      headerName: <h5 className="text-[13px]">Actions</h5>,
       renderCell: (params) => {
         const [anchorEl, setAnchorEl] = React.useState(null);
         const open = Boolean(anchorEl);
@@ -148,9 +169,11 @@ const statusColumn = {
   flex: 1,
   minWidth: 120,
   field: "status",
-  headerName: "Satus",
+  headerName: <h5 className="text-[13px]">Satus</h5>,
   renderCell: (params) => {
-    const status = statusObj.filter((e) => e.title === params.row.status.toLowerCase())[0];
+    const status = statusObj.filter(
+      (e) => e.title === params.row.status.toLowerCase()
+    )[0];
 
     return (
       <CustomChip

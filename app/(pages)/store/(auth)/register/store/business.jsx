@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { CustomInput } from "@/app/components/cards/auth/components";
-import { Box, Grid } from "@mui/material";
-const BusinessProfile = ({ handleStoreChange, errors, values }) => {
+import { Box, Button, Grid, Typography } from "@mui/material";
+const BusinessProfile = ({ handleStoreChange, errors, values, setStage }) => {
 
   return (
     <Box className="px-2">
@@ -35,7 +35,7 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        {/* <Grid item xs={12} md={6}>
           <CustomInput
             title="Bussname Rendering Type"
             onChange={handleStoreChange("businessType")}
@@ -76,7 +76,7 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
               placeholder: "Enter your registration number",
             }}
           />
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} md={6}>
           <CustomInput
             title="Business email address"
@@ -149,6 +149,15 @@ const BusinessProfile = ({ handleStoreChange, errors, values }) => {
           />
         </Grid>
       </Grid>
+      <Box className="w-full  !pb-20 md:pb-0 pt-8">
+        <Button
+          variant="contained"
+          className="w-full !h-12 !rounded-full !text-gray-100 !text-[17px] !mt-3 !shadow-none"
+          onClick={() => setStage(2)}
+        >
+          Next
+        </Button>
+      </Box>
     </Box>
   );
 };

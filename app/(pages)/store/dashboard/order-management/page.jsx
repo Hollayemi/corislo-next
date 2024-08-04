@@ -6,15 +6,14 @@ import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 import OrderTable from "./components/orderTable";
 import OrderDetails from "./components/orderDetails";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation";
 import tokens from "@/app/configs/tokens";
 
 const OrderManagement = ({ params }) => {
-
-
+  const [rightOpen, setRightOpen] = useState(false);
   const { data, error, isLoading } = useSWR("/branch/order-request");
   console.log(data, error, isLoading);
-  const router = useRouter()
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const orderId = searchParams.get("order");
@@ -22,9 +21,14 @@ const OrderManagement = ({ params }) => {
   const path = { ...params, sidebar: "order-management" };
 
   return (
-    <StoreLeftSideBar path={path} subListBar={false}>
-      <Box className="px-3 md:px-6 py-8 rounded-md" bgcolor="custom.bodyLight">
-        <Box className="flex items-center !pb-5">
+    <StoreLeftSideBar
+      path={path}
+      subListBar={false}
+      rightOpen={rightOpen}
+      setRightOpen={setRightOpen}
+    >
+      <Box className="-mt-4 md:px-3 py-3 rounded-md">
+        <Box className="flex items-center">
           {orderId && (
             <Box
               className="flex items-center text-xs mr-5 cursor-pointer"
@@ -33,13 +37,13 @@ const OrderManagement = ({ params }) => {
               <ChevronLeftIcon className="text-xs mr-2" /> Back
             </Box>
           )}
-
-          <Typography variant="h5" className="!font-bold text-sm">
-            Order Details
-          </Typography>
         </Box>
         {!orderId ? (
-          !error && !isLoading && <OrderTable selectRow={data} />
+          <OrderTable
+            selectRow={data}
+            isLoading={isLoading}
+            setRightOpen={setRightOpen}
+          />
         ) : (
           <OrderDetails order={orderId} />
         )}

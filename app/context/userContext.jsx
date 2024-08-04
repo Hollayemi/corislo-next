@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import jwt_decode from "jwt-decode";
 import useSWR from "swr";
 import io from "socket.io-client";
+import useGeolocation from "../hooks/useGeolocation";
 
 const { createContext, useEffect, useState } = require("react");
 
@@ -27,14 +28,15 @@ const defaultProvider = {
   seletedCartProds: [],
   selectCartProd: () => {},
   shopNow: false,
+  coordinates: {},
   setShopNow: () => {},
 };
 const DataContext = createContext(defaultProvider);
 
 const UserDataProvider = ({ children, setOverflow, setUserInfo }) => {
   const router = useRouter();
-  const dispatch = useDispatch();
   const pathname = usePathname();
+  const { coordinates, error } = useGeolocation(10000);
   const [shopNow, setShopNow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [seletedCartProds, selectCartProd] = useState([]);
@@ -73,6 +75,7 @@ const UserDataProvider = ({ children, setOverflow, setUserInfo }) => {
     }
     return true;
   };
+
 
   // useEffect(() => {
   //   if (getPath[1]) {
@@ -175,9 +178,9 @@ const UserDataProvider = ({ children, setOverflow, setUserInfo }) => {
 
   useEffect(() => {
     if (userInfo?.user) {
-      setUserInfo(userInfo.user || {});
+      setUserInfo(coordinates || {});
     }
-  }, [userInfo]);
+  }, [coordinates]);
 
   //
   // fetch userInfo
@@ -222,6 +225,7 @@ const UserDataProvider = ({ children, setOverflow, setUserInfo }) => {
         userInfo: (!userErr && !userIsLoading && userInfo?.user) || {},
         notifications: (!notifErr && !notifIsLoading && notif?.data) || [],
         selectedAddress: {},
+        coordinates,
         socket,
         loading,
         setLoading: setLoading,

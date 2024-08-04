@@ -40,7 +40,7 @@ const PendingReviews = () => {
 
 export default PendingReviews;
 
-const OrderProductPrev = ({
+export const OrderProductPrev = ({
   _id,
   image,
   quantity,

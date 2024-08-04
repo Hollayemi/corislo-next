@@ -116,7 +116,7 @@ const AllPlans = ({ hideChoosePlan }) => {
       <Plans
         opportunities={opp1}
         from={3}
-        hideChoosePlan
+        hideChoosePlan={hideChoosePlan}
         price={0}
         name="Basic Plain"
       />
@@ -124,7 +124,7 @@ const AllPlans = ({ hideChoosePlan }) => {
       <Plans
         opportunities={opp3}
         from={8}
-        hideChoosePlan
+        hideChoosePlan={hideChoosePlan}
         price={15}
         name="Professional Plan"
         prof
@@ -132,7 +132,7 @@ const AllPlans = ({ hideChoosePlan }) => {
       <Plans
         opportunities={opp2}
         from={5}
-        hideChoosePlan
+        hideChoosePlan={hideChoosePlan}
         price={5}
         name="Premium Plan"
       />

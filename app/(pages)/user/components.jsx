@@ -15,11 +15,12 @@ export const MyTextField = ({
   value,
   PClassName,
   others,
+  minRows,
   type = "text",
 }) => {
   const [newType, changeType] = useState(type);
   return (
-    <div className={`flex flex-col items-start mb-6 ${PClassName}`}>
+    <div className={`flex flex-col items-start mb-5 ${PClassName}`}>
       <h5 className="text-[13px] mb-2">{title}</h5>
       <div className="relative w-full">
         <TextField

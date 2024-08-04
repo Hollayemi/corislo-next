@@ -1,6 +1,6 @@
 "use client";
 import { Box } from "@mui/material";
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import Header from "./header";
 import HomeFooter from "./footer";
 import SearchPage from "@/app/(pages)/custom/searchPage";
@@ -15,11 +15,12 @@ const HomeWrapper = ({
   customersReview,
   noFooter,
   className,
+  popup,
+  updateDialogInfo,
 }) => {
   const [search, setSearch] = useState("");
   const [pinSearch, setPinSearch] = useState(false);
   const { overLay, popMap, shopNow, showOverlay } = useUserData();
-
 
   const page = {
     0: children,
@@ -65,6 +66,7 @@ const HomeWrapper = ({
           </>
         )}
       </Box>
+      {popup}
     </Box>
   );
 };

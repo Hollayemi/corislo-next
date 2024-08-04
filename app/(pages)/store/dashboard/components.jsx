@@ -31,7 +31,7 @@ export const TopCards = () => {
   console.log(result);
   const data = [
     {
-      stats: result.views?.sum?.toLocaleString(),
+      stats: result.views?.sum?.toLocaleString() || 0,
       title: "Invetory Turnover",
       avatarIcon: "tabler:currency-dollar",
       increase:
@@ -80,7 +80,7 @@ export const TopCards = () => {
             <Box className="md:p-1">
               <Box
                 bgcolor="custom.bodyLight"
-                className="px-2 py-3 md:!p-3 !rounded-md"
+                className="px-2 py-3 md:!p-3 !rounded-md h-32"
               >
                 <Box className="border-l-4 border-slate-600 pl-3">
                   <Box

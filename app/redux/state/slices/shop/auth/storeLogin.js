@@ -38,7 +38,7 @@ export const storeLoginHandler = (payload, router, dispatch) => {
     .then((res) => {
       toaster({ ...res });
       if (res.type === "success") {
-        router.push("/store/dashboard");
+        router.push(res.to);
       }
       localStorage.setItem("store_token", accessToken);
     })

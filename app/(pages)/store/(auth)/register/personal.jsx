@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { CustomInput } from "@/app/components/cards/auth/components";
-import { Box, Grid } from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 const PersonalProfile = ({
   handleUserChange,
   errors,
@@ -9,13 +9,14 @@ const PersonalProfile = ({
   confPas,
   setConfPass,
   readyToNext,
+  setStage,
 }) => {
   return (
     <Box className="px-2">
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <CustomInput
-            title="Full Name"
+            title="Full Name i.e Staff Name"
             id="fullname"
             error={
               readyToNext ? errors.fullname : values.fullname && errors.fullname
@@ -26,7 +27,7 @@ const PersonalProfile = ({
             inputProps={{
               value: values.fullname || "",
               type: "text",
-              placeholder: "Enter your full name",
+              placeholder: "Enter your staff name",
             }}
           />
         </Grid>
@@ -58,7 +59,7 @@ const PersonalProfile = ({
             inputProps={{
               value: values.email || "",
               type: "email",
-              placeholder: "Enter your email address",
+              placeholder: "Enter staff email address",
             }}
           />
         </Grid>
@@ -89,6 +90,7 @@ const PersonalProfile = ({
             hideCheck={!values.state}
             onChange={handleUserChange("state")}
             inputProps={{
+              value: values.state,
               type: "text",
               placeholder: "Enter your state",
             }}
@@ -127,6 +129,15 @@ const PersonalProfile = ({
           />
         </Grid>
       </Grid>
+      <Box className="w-full  !b-10 mb-10 md:mb-0 pt-8">
+        <Button
+          variant="contained"
+          className="w-full !h-12 !rounded-full !text-gray-100 !text-[17px] !mt-3 !shadow-none"
+          onClick={() => setStage("type")}
+        >
+          Next
+        </Button>
+      </Box>
     </Box>
   );
 };

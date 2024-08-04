@@ -18,6 +18,7 @@ const settings = {
 const settings2 = {
   ...settings,
   variableWidth: false,
+  dots: true,
 };
 const configs = {
     1: settings,

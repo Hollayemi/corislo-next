@@ -3,18 +3,23 @@
 import StoreAuthLayout from "@/app/components/layouts/StoreAuthLayout";
 import React, { useEffect, useState } from "react";
 import PersonalProfile from "./personal";
-import BusinessProfile from "./business";
-import Verification from "./verification";
+import StoreProfile from "./store/business";
+import Verification from "./store/verification";
 import { useSearchParams } from "next/navigation";
-import Pricing from "./pricing";
+import Pricing from "./store/pricing";
 import validationRegisterSchema from "../../../auth/register/validation";
 import validationStoreSchema from "./storeValidation";
+import BusinessType from "./businessType";
+import Sevices from "./services/first";
+import useGeolocation from "@/app/hooks/useGeolocation";
 
 const RegisterStore = () => {
-  const [stage, setStage] = useState(1);
+  const { coordinates } = useGeolocation();
+  console.log(coordinates);
+  const [stage, setStage] = useState(0);
   const [readyToNext, showAllError] = useState(false);
-    const searchParams = useSearchParams();
-    const referrer = searchParams.get("ref");
+  const searchParams = useSearchParams();
+  const referrer = searchParams.get("ref");
 
   const [errors, setErrors] = useState({
     fullname: "",
@@ -25,7 +30,6 @@ const RegisterStore = () => {
     phoneNumber: "",
     businessEmail: "",
     businessName: "",
-    businessRegNum: "",
     businessType: "",
     about_store: "",
     city: "",
@@ -38,17 +42,25 @@ const RegisterStore = () => {
   const [storeValues, setStoreValues] = useState({
     businessEmail: "",
     businessName: "",
-    businessRegNum: "",
     businessType: "",
     about_store: "",
     city: "",
     address: "",
     state: "",
     category: "",
+    coordinates: {
+      type: "Point",
+      coordinates: [coordinates.latitude || 0, coordinates.longitude || 0],
+    },
     referrer,
   });
+
+  const BusinessProfile =
+    storeValues.businessType === "services" ? Sevices : StoreProfile;
+
   const handleStoreChange = (prop) => (event) => {
-    setStoreValues({ ...storeValues, [prop]: event.target.value });
+    console.log(event);
+    setStoreValues({ ...storeValues, [prop]: event?.target?.value });
   };
   const [userValues, setUserValues] = useState({
     fullname: "",
@@ -100,26 +112,41 @@ const RegisterStore = () => {
       <PersonalProfile
         errors={errors}
         handleUserChange={handleUserChange}
+        setStage={setStage}
         values={userValues}
         confPas={confPass}
         setConfPass={setConfPass}
         readyToNext={readyToNext}
       />
     ),
+    type: (
+      <BusinessType
+        setStage={setStage}
+        values={storeValues}
+        setStoreValues={setStoreValues}
+      />
+    ),
     1: (
       <BusinessProfile
         errors={errors}
+        setStage={setStage}
         handleStoreChange={handleStoreChange}
         values={storeValues}
       />
     ),
-    2: <Verification />,
-    3: <Pricing />,
+    2: <Verification setStage={setStage} />,
+    3: (
+      <Pricing
+        setStage={setStage}
+        userValues={userValues}
+        storeValues={storeValues}
+      />
+    ),
   };
-  console.log(readyToNext)
+  console.log(readyToNext);
   return (
     <StoreAuthLayout
-      title="Create Seller Account"
+      title="Create Business Account"
       stage={stage}
       setStage={setStage}
       showAllError={showAllError}

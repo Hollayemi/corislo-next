@@ -153,14 +153,20 @@ const updateBranchImagesApi = createAsyncThunk(
   }
 );
 
-export const updateBranchImages = (payload, dispatch, setLoading = () => {}) => {
+export const updateBranchImages = (payload, dispatch, setLoading = () => {}, setUploadedFiles, setLocalFiles) => {
   setLoading(true)
   dispatch(updateBranchImagesApi(payload))
     .then(unwrapResult)
     .then((res) => {
       setLoading(false)
       toaster({ ...res });
+      if(res.type === "success"){
+      setUploadedFiles((prev) => [...prev, {name:payload.name, link:res.url}])
       mutate("/store")
+      }else{
+
+      setLocalFiles([])
+      }
     })
     .catch((e) => {
       setLoading(false)
@@ -169,4 +175,50 @@ export const updateBranchImages = (payload, dispatch, setLoading = () => {}) => 
 
 //
 
+const deleteCloudPictureApi = (createAsyncThunk(
+  "post/deleteImage",
+  async (payload) => {
+    const { data } = await martApi
+      .post('/branch/file/delete', payload, jsonHeader("store"))
+      .then((res) => res)
+      .catch((e) => e.response);
+    return data;
+  }
+))
 
+export const deletePicture = (url, dispatch, callback = () => {}) => {
+  dispatch(deleteCloudPictureApi({url}))
+    .then(unwrapResult)
+    .then((res) => {
+      toaster({ ...res });
+      if (res.type === "success") {
+        callback()
+      }
+    })
+    .catch((e) => {});
+};
+
+
+
+const addImgLinkApi = (createAsyncThunk(
+  "post/deleteImage",
+  async (payload) => {
+    const { data } = await martApi
+      .post('/branch/images/link', payload, jsonHeader("store"))
+      .then((res) => res)
+      .catch((e) => e.response);
+    return data;
+  }
+))
+
+export const addImageLink = (payload, dispatch, callback = () => {}) => {
+  dispatch(addImgLinkApi(payload))
+    .then(unwrapResult)
+    .then((res) => {
+      toaster({ ...res });
+      if (res.type === "success") {
+        callback()
+      }
+    })
+    .catch((e) => {});
+};

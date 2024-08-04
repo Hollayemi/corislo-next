@@ -13,10 +13,11 @@ export const convertFileToBase64 = (file) => {
 };
 
 const ProfilePictureUploader = ({
-  setFiles,
+  setFiles = () => {},
   fileNum = 1,
   setLocalFiles,
   component,
+  directUpload,
 }) => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: async (acceptedFiles) => {
@@ -26,6 +27,8 @@ const ProfilePictureUploader = ({
         acceptedFiles.map(async (file) => {
           if (file) {
             const base64Image = await convertFileToBase64(file);
+            directUpload && directUpload(base64Image, file);
+
             return base64Image;
           }
         })
@@ -35,7 +38,6 @@ const ProfilePictureUploader = ({
     },
     maxFiles: fileNum,
   });
-
 
   return (
     <div {...getRootProps({ className: "dropzone cursor-pointer" })}>

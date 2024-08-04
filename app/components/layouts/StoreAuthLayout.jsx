@@ -32,13 +32,6 @@ export default function StoreAuthLayout({
     if (stage < level) return "waiting";
     return "sdf";
   };
-  const btnName = {
-    0: "Next",
-    1: "Save and Continue",
-    2: "Save and Continue",
-    3: "Next",
-  };
-  console.log("holla---")
   const StageBox = ({ text, level }) => {
     return (
       <Box
@@ -48,20 +41,6 @@ export default function StoreAuthLayout({
         <CheckList2 text={text} active={getStatus(level)} />
       </Box>
     );
-  };
-
-  const nextButton = () => {
-    showAllError(true);
-    if (stage === 1) {
-      createStoreHandler(
-        { user: userValues, store: storeValues },
-        dispatch,
-        router,
-        setStage
-      );
-    } else {
-      setStage(stage === 3 ? 0 : stage + 1);
-    }
   };
 
   return (
@@ -113,13 +92,13 @@ export default function StoreAuthLayout({
         </Box>
 
         <Box
-          className="w-full h-full px-2 overflow-y-scroll flex justify-center"
+          className="w-full h-full px-2 overflow-y-auto flex justify-center"
           bgcolor="custom.bodyGray"
         >
           <Box
             className={`flex flex-col mt-6 md:mt-14 items-center w-full ${
               stage !== 3 && "md:w-4/5 md:px-4"
-            } h-full`}
+            } h-ful`}
           >
             <Box className="flex flex-col items-center mt-14 md:mt-0 ">
               <Image
@@ -146,7 +125,7 @@ export default function StoreAuthLayout({
             {/* This for the app */}
             {children}
             {/* This for the app */}
-            <Box className="w-full  !pb-20 md:pb-0 pt-8">
+            {/* <Box className="w-full  !pb-20 md:pb-0 pt-8">
               <Button
                 variant="contained"
                 className="w-full !h-12 !rounded-full !text-gray-100 !text-[17px] !mt-3 !shadow-none"
@@ -166,7 +145,7 @@ export default function StoreAuthLayout({
                   </Link>
                 </Typography>
               </Box>
-            </Box>
+            </Box> */}
           </Box>
         </Box>
       </Box>

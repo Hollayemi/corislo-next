@@ -19,6 +19,7 @@ import { useUserData } from "@/app/hooks/useData";
 import LineLoading from "./loading";
 import VoiceflowChatComponent from "./ai";
 import "@/styles/globals.css";
+import useGeolocation from "../hooks/useGeolocation";
 
 const metadata = {
   title:
@@ -89,6 +90,10 @@ export default function RootLayout({ children }) {
             revalidateOnFocus: true,
 
             fetcher: async (resource, init) => {
+              // const currentSearchParams = new URLSearchParams(resource);
+              // currentSearchParams.set("lat", coordinates.latitude);
+              // currentSearchParams.set("long", coordinates.longitude);
+              // console.log(currentSearchParams.toString());
               const getToken = jsonHeader("user");
               const res = await martApi.get(resource, getToken);
               return res.data;

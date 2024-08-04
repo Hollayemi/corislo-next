@@ -33,6 +33,7 @@ export const SimpleDropDown = ({
       </Typography>
       <Select
         fullWidth
+        
         // label={label}
         placeholder="hol"
         value={defaultValue || ""}

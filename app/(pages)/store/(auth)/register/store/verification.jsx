@@ -1,12 +1,12 @@
 "use client";
 
 import IconifyIcon from "@/app/components/icon";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import Image from "next/image";
 import React, { useState } from "react";
-import DocumentUploader from "./dropZone";
+import DocumentUploader from "../dropZone";
 
-const Verification = () => {
+const Verification = ({ setStage }) => {
   const [files, setFiles] = useState([]);
   const [status, setStatus] = useState("");
   const text =
@@ -31,7 +31,7 @@ const Verification = () => {
             Upload proof of your Business <br /> Registration
           </Typography>
           {text.split("----").map((each, i) => (
-            <CheckList text={each} />
+            <CheckList key={i} text={each} />
           ))}
           <DocumentUploader setFiles={setFiles} files={files} />
         </Box>
@@ -46,6 +46,15 @@ const Verification = () => {
           <UploadStatus status={status} />
         </>
       )}
+      <Box className="w-full  !pb-20 md:pb-0 pt-8">
+        <Button
+          variant="contained"
+          className="w-full !h-12 !rounded-full !text-gray-100 !text-[17px] !mt-3 !shadow-none"
+          onClick={() => setStage(3)}
+        >
+          Next
+        </Button>
+      </Box>
     </Box>
   );
 };

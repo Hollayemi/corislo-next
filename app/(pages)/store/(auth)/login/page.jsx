@@ -33,7 +33,7 @@ const StoreLogin = () => {
     <AuthLayout title="Sign in to your store" center>
       <Box className="!mt-16 w-full max-w-[380px]">
         <CustomInput
-          title="Business / Personnel Email Address"
+          title="Store / Business Email Address"
           onChange={handleChange("store")}
           hideCheck={true}
           id="email"

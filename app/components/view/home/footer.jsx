@@ -38,7 +38,7 @@ const HomeFooter = () => {
     const keys = Object.keys(pages);
     return Object.values(pages).map((page, i) => (
       <LinkStyled
-        key={page}
+        key={i}
         href={`/${page.link}`}
         sx={{ display: "block" }}
         color="white"

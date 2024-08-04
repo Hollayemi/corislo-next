@@ -14,7 +14,7 @@ import { allOrderColumns, ordersColumns } from "./columns";
 import Icon from "@/app/components/icon";
 // import { rows } from "../row";
 
-export const OrderListComponents = ({ value, setValue, rows }) => {
+export const OrderListComponents = ({ value, setValue, rows, isLoading }) => {
   // ** Hook
   const router = useRouter();
   // ** State
@@ -29,7 +29,8 @@ export const OrderListComponents = ({ value, setValue, rows }) => {
     if (!by || by === "all") {
       return rows || [];
     } else {
-      return rows ? rows.filter((e) => e.status === by) : [];
+      console.log(rows);
+      return rows ? rows.filter((e) => e.status.toLowerCase() === by) : [];
     }
   };
 
@@ -48,25 +49,39 @@ export const OrderListComponents = ({ value, setValue, rows }) => {
       `/store/dashboard/order-management?order=${row._id}&tableId=${id}`
     );
   };
+  const tabs = ["All", "New", "Unpaid", "Pickable", "Completed", "Cancelled"];
 
   return (
     <TabContext value={value} className="w-full md:w-5/6">
       <TabList
         onChange={handleChange}
-        orientation={isSmallScreen ? "vertical" : "horizontal"}
+        orientation="horizontal"
         variant="scrollable"
         scrollButtons="auto"
         aria-label="simple tabs example"
       >
-        <Tab value="all" label="All Orders (3,049)" />
-        <Tab value="new" label="New Orders (10)" />
-        <Tab value="processing" label="Processing Orders (23)" />
-        <Tab value="Processed" label="Processed Orders (2,869)" />
-        <Tab value="Cancelled" label="Cancelled Orders (97)" />
+        {tabs.map((each, i) => (
+          <Tab
+            value={each.toLowerCase()}
+            key={i}
+            disableRipple
+            label={
+              <Typography
+                variant="body2"
+                className="!text-xs md:!w-full !font-bold !text-center"
+              >
+                {each}
+              </Typography>
+            }
+            className="!text-[11px] !w-18 !px-0"
+          />
+        ))}
       </TabList>
+
       <TabPanel value="all" className="!px-px">
-        <Box className={`w-full !pb-5 !rounded-md`} bgcolor="custom.bodyLight">
+        <Box className={`w-full !pb-1 !rounded-md`} bgcolor="custom.bodyLight">
           <OrderTable
+            loading={isLoading}
             columns={allOrderColumns(actionFunctions)}
             rows={sortBy()}
             // onRowClick={onRowClick}
@@ -74,28 +89,49 @@ export const OrderListComponents = ({ value, setValue, rows }) => {
         </Box>
       </TabPanel>
       <TabPanel value="new" className="!px-px">
-        <OrderTable
-          columns={ordersColumns(actionFunctions)}
-          rows={sortBy("pending")}
-        />
+        <Box className={`w-full !pb-1 !rounded-md`} bgcolor="custom.bodyLight">
+          <OrderTable
+            loading={isLoading}
+            columns={ordersColumns(actionFunctions)}
+            rows={sortBy("paid")}
+          />
+        </Box>
       </TabPanel>
-      <TabPanel value="processing">
-        <OrderTable
-          columns={ordersColumns(actionFunctions)}
-          rows={sortBy("processing")}
-        />
+      <TabPanel value="unpaid" className="!px-px">
+        <Box className={`w-full !pb-1 !rounded-md`} bgcolor="custom.bodyLight">
+          <OrderTable
+            loading={isLoading}
+            columns={ordersColumns(actionFunctions)}
+            rows={sortBy("unpaid")}
+          />
+        </Box>
       </TabPanel>
-      <TabPanel value="Processed">
-        <OrderTable
-          columns={ordersColumns(actionFunctions)}
-          rows={sortBy("processed")}
-        />
+      <TabPanel value="pickable" className="!px-px">
+        <Box className={`w-full !pb-1 !rounded-md`} bgcolor="custom.bodyLight">
+          <OrderTable
+            loading={isLoading}
+            columns={ordersColumns(actionFunctions)}
+            rows={sortBy("ongoing")}
+          />
+        </Box>
       </TabPanel>
-      <TabPanel value="Cancelled">
-        <OrderTable
-          columns={ordersColumns(actionFunctions)}
-          rows={sortBy("cancelled")}
-        />
+      <TabPanel value="cancelled" className="!px-px">
+        <Box className={`w-full !pb-1 !rounded-md`} bgcolor="custom.bodyLight">
+          <OrderTable
+            loading={isLoading}
+            columns={ordersColumns(actionFunctions)}
+            rows={sortBy("cancelled")}
+          />
+        </Box>
+      </TabPanel>
+      <TabPanel value="completed" className="!px-px">
+        <Box className={`w-full !pb-1 !rounded-md`} bgcolor="custom.bodyLight">
+          <OrderTable
+            loading={isLoading}
+            columns={ordersColumns(actionFunctions)}
+            rows={sortBy("completed")}
+          />
+        </Box>
       </TabPanel>
     </TabContext>
   );

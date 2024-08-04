@@ -26,15 +26,15 @@ import {
 import useSWR from "swr";
 import { NumberExplained } from "../components/cards/sellerCards";
 import { useUserData } from "../hooks/useData";
+import { ServicesSlider } from "./services/page";
 
 const HomePage = ({ params }) => {
   const { data: prods } = useSWR("/products?limit=30");
   const { data: ads } = useSWR("/home/ads");
+  console.log(prods);
   const products = prods ? prods.data : [];
-  console.log(products);
   const popularAds = ads ? ads.data : [];
   const { setShopNow } = useUserData();
-  console.log(params);
   return (
     <HomeWrapper shopMode={params.sm}>
       <Box className="!mb-20 mt-6 md:mt-16">
@@ -156,7 +156,7 @@ const HomePage = ({ params }) => {
               ))}
             </Box>
           </Box>
-          <Box className="!my-12 px-2 md:px-10 ">
+          <Box className="!my-12 px-2 md:px-10 hidden">
             <ReactSlickSlider config={2}>
               <Box className="w-56 h-40 md:w-[500px] md:h-[350px]">
                 <Image
@@ -177,6 +177,11 @@ const HomePage = ({ params }) => {
                 />
               </Box>
             </ReactSlickSlider>
+          </Box>
+          <Box className="!my-12 px-2 md:px-10">
+            <SectionTitle black="Professional" blue="Services" />
+
+            <ServicesSlider />
           </Box>
           {/*  */}
           {/*  */}
