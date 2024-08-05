@@ -319,7 +319,7 @@ export const ProductOnShowcase = ({
                 variant="body2"
                 className="whitespace-nowrap text-ellipsis !text-[10px]"
               >
-                24cm
+                {others?.distance?.toFixed(1)}m
               </Typography>
             </Box>
           </Box>

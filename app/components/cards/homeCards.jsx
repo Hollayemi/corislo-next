@@ -6,27 +6,30 @@ import { mySubstring } from "@/app/utils/format";
 import { hexToRGBA } from "@/app/utils/hex-to-rgba";
 import { rgbaToHex } from "@/app/utils/rgba-to-hex";
 
-export const SectionTitle = ({ black, blue }) => {
+export const SectionTitle = ({ black, blue, right }) => {
   return (
-    <Box className="w-fit mb-2 relative z-30 ">
-      <Box className="flex items-center">
-        <Typography
-          variant="body2"
-          className="!font-bold !text-[17px] !text-black -mr-1.5 list"
-        >
-          {black}
-        </Typography>
-        <Typography
-          variant="body2"
-          className="!font-bold !text-[17px] !ml-1.5"
-          color="primary"
-        >
-          {blue}
-        </Typography>
+    <Box className="flex items-center justify-between">
+      <Box className="w-fit mb-2 relative z-30 ">
+        <Box className="flex items-center">
+          <Typography
+            variant="body2"
+            className="!font-bold !text-[17px] !text-black -mr-1.5 list"
+          >
+            {black}
+          </Typography>
+          <Typography
+            variant="body2"
+            className="!font-bold !text-[17px] !ml-1.5"
+            color="primary"
+          >
+            {blue}
+          </Typography>
+        </Box>
+        <Box className="!w-inherit">
+          <Box className="w-4/5 h-1" bgcolor="custom.sec"></Box>
+        </Box>
       </Box>
-      <Box className="!w-inherit">
-        <Box className="w-4/5 h-1" bgcolor="custom.sec"></Box>
-      </Box>
+      {right}
     </Box>
   );
 };

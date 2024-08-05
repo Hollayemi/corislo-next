@@ -105,7 +105,7 @@ export const UserProfileRightComponent = ({
     `/user/order?store=${contact.store}&branch=${contact.branch}`
   );
   const MyListItem = ({ info, title, infoComponent }) => (
-    <Box className="flex items-center mb-2">
+    <Box className="flex items-start mb-2">
       <Typography
         variant="body2"
         className="!text-[12px] !text-gray-400 parent-hover:!text-black !flex-shrink-0 !w-32"
@@ -115,9 +115,9 @@ export const UserProfileRightComponent = ({
       {!infoComponent && (
         <Typography
           variant="body2"
-          className="!text-[12px] !text-gray-600 parent-hover:!text-black !flex-shrink-0"
+          className="!text-[12px] !text-gray-600 parent-hover:!text-black !flex-shrink-0 w-40 !text-right !pr-3"
         >
-          {info}
+          {info || "Nill"}
         </Typography>
       )}
 

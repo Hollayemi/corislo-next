@@ -52,8 +52,6 @@ const MapGraph = ({ mapType = "default", markers }) => {
       stylers: [{ visibility: "on" }],
     },
   ];
-
-  console.log(mapType, mapTypes["default"]);
   const handleMarkerClick = (marker) => {
     setSelectedMarker(marker === selectedMarker ? null : marker); // Toggle selected marker
   };

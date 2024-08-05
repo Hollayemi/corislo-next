@@ -33,7 +33,8 @@ const Checkout = () => {
   const billings = cards?.data || [];
   const groupedCart = carts ? carts.data.result : [];
   const amounts = carts ? carts.data.total : [];
-  console.log(groupedCart, pickers, userInfo);
+
+  console.log(groupedCart);
 
   const [payload, updatePayload] = useState({
     products: cartedProds,

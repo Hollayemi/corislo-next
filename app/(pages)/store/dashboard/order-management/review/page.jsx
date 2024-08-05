@@ -1,5 +1,7 @@
 "use client";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   Avatar,
   Box,
@@ -16,12 +18,29 @@ import {
 } from "@/app/utils/format";
 import { OrderProductPrev } from "@/app/(pages)/order/pending-reviews/page";
 import useSWR from "swr";
-import { IconValue, OrderSummary, ProductPrev } from "./components";
+import {
+  CustomizeStatus,
+  IconValue,
+  OrderSummary,
+  ProductPrev,
+  renderMenu,
+  renderSubMenu,
+} from "./components";
 import { DetailsDesign } from "../components";
 import IconifyIcon from "@/app/components/icon";
+import { useRouter } from "next/navigation";
+import { storeUpdateOrder } from "@/app/redux/state/slices/shop/order";
+import ModalHook from "@/app/hooks/modalHook";
+import Link from "next/link";
 
 const OrderReview = ({ params, searchParams }) => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [subAnchorEl, setSubAnchorEl] = useState(null);
   const order = searchParams.order;
+  const [payload, setPayload] = useState({ orderId: order });
+  const { dialogInfo, updateDialogInfo } = ModalHook(payload);
   const path = { ...params, sidebar: "order-management" };
 
   const {
@@ -30,8 +49,6 @@ const OrderReview = ({ params, searchParams }) => {
     isLoading: orderLoading,
   } = useSWR(`/branch/order-request?order=${order}`);
 
-  console.log(orderInfo);
-
   const {
     data: prodInfo,
     error: prodErr,
@@ -39,50 +56,132 @@ const OrderReview = ({ params, searchParams }) => {
   } = useSWR(`/branch/order-product/${order}`);
 
   const row = (!orderLoading && !orderErr && orderInfo?.data[0]) || null;
-  const products = (!prodLoading && !prodErr && prodInfo?.data) || [];
-  console.log(row, products);
+  const products = (!prodLoading && !prodErr && prodInfo?.data)[0] || {};
+  const picker = (products?.picker && products.picker[0]) || {};
+  const open = Boolean(anchorEl);
+  const openSub = Boolean(subAnchorEl);
+  const handleButtonClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSubAnchorEl(null);
+  };
+
+  const handleChange = (prop) => (event) => {
+    setPayload({ ...payload, [prop]: event?.target?.value });
+  };
+
+  const handleChange2 = (prop, aux) => {
+    setPayload({
+      ...payload,
+      [prop]: aux?.replaceAll(" ", "_"),
+    });
+  };
+
+  const handleMenuItemClick = (action) => (e) => {
+    handleChange2("status", action);
+    // Handle action here
+    if (action === "") {
+      setSubAnchorEl(true);
+    } else {
+      setAnchorEl(null);
+      setSubAnchorEl(null);
+    }
+  };
+  const saveData = () => {
+    updateDialogInfo((prev) => {
+      return {
+        ...prev,
+        open: true,
+        alert: `Are you sure to change order status to ${payload.status}. The buyer will be notified instantly.`,
+        acceptFunction: () => storeUpdateOrder(dispatch, payload),
+      };
+    });
+  };
   return (
-    <StoreLeftSideBar path={path} subListBar={false}>
-      <Box>
-        <Box className="flex items-center">
-          <Typography className="!font-black !mr-4">ORD-234234235</Typography>
-          <CustomChip
-            rounded
-            size="small"
-            skin="light"
-            color={"warning"}
-            label={"Pending"}
-            sx={{ "& .MuiChip-label": { textTransform: "capitalize" } }}
-            className="flex-shrink-0 !rounded-sm"
-          />
+    <StoreLeftSideBar
+      path={path}
+      subListBar={false}
+      dialogInfo={dialogInfo}
+      updateDialogInfo={updateDialogInfo}
+    >
+      <Box className="py-2">
+        <Box className="flex justify-between">
+          <Box className="flex items-center">
+            <IconifyIcon
+              icon="tabler:chevron-left"
+              className="text-[30px] mr-2 cursor-pointer"
+              onClick={() => router.push("/store/dashboard/order-management")}
+            />
+            <Box className="">
+              <Box className="flex items-center">
+                <Typography
+                  noWrap
+                  className="!font-black !mr-4 w-40 max-w-40"
+                  title={row?.orderId}
+                >
+                  {row?.orderId}
+                </Typography>
+                <CustomizeStatus text={row?.status || "..."} />
+                <CustomizeStatus text={"Pending"} />
+              </Box>
+              <Typography variant="caption" className="!text-[12px] !mb-6 italic">
+                {formatDateToMonthShort(
+                  new Date(row?.dateAdded || null),
+                  true,
+                  {
+                    month: "long",
+                    year: "numeric",
+                  }
+                )}{" "}
+                from {row?.status?.toLowerCase()} orders
+              </Typography>
+            </Box>
+          </Box>
+
+          <Box className="hidden items-center md:flex">
+            <Button
+              onClick={handleButtonClick}
+              variant="contained"
+              className="!flex !items-center !shadow-none !justify-between px-4 !text-white"
+            >
+              {payload.status || "Status"}
+              {open ? (
+                <IconifyIcon icon="tabler:chevron-up" className="text-[18px]" />
+              ) : (
+                <IconifyIcon
+                  icon="tabler:chevron-down"
+                  className="text-[15px]"
+                />
+              )}
+            </Button>
+            <Button
+              variant="contained"
+              className="!shadow-none !ml-3"
+              onClick={() => saveData()}
+              disabled={!(payload.status || payload.comment)}
+              startIcon={<IconifyIcon icon="tabler:device-floppy" />}
+            >
+              Save
+            </Button>
+          </Box>
+
+          {/* </div> */}
         </Box>
-        <Typography variant="caption" className="!text-[12px]">
-          {formatDateToMonthShort(new Date(), true, {
-            month: "long",
-            year: "numeric",
-          })}{" "}
-          from pending orders
-        </Typography>
 
         <Box className="flex flex-col-reverse md:flex-row items-start mt-2">
-          <Box className=" w-full md:w-7/12 pr-1">
+          <Box className=" w-full md:w-7/12 md:pr-1">
             <Box className="w-full">
-              <Box className="w-full px-3 py-4 rounded-xl bg-white shadow-sm hover:shadow-md transition-all">
-                <Typography className=" !text-[18px] !mb-2 !mr-4">
+              <Box className="w-full px-3 py-4 rounded-xl bg-white shadow-sm hover:shadow-md transition-all mt-4 md:mt-0">
+                <Typography className=" !text-[15px] !mb-2 !mr-4">
                   Order Items
                 </Typography>
-                <CustomChip
-                  rounded
-                  size="small"
-                  skin="light"
-                  color={"error"}
-                  label={"Pending"}
-                  sx={{ "& .MuiChip-label": { textTransform: "capitalize" } }}
-                  className="flex-shrink-0 !rounded-sm"
-                />
+                <CustomizeStatus text={"Pending"} />
                 <br />
                 <br />
-                {products[0]?.products?.map((each, i) => (
+                {products?.products?.map((each, i) => (
                   <ProductPrev
                     quantity={each.qty}
                     prodPrice={each.price}
@@ -94,7 +193,7 @@ const OrderReview = ({ params, searchParams }) => {
             </Box>
 
             <Box className="w-full px-3 py-4 mt-2 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
-              <Typography className=" !text-[18px] !mb-2 !mr-4">
+              <Typography className=" !text-[15px] !mb-2 !mr-4">
                 Order Summary
               </Typography>
               <CustomChip
@@ -110,8 +209,8 @@ const OrderReview = ({ params, searchParams }) => {
               <br />
               <OrderSummary
                 title="Subtotal"
-                info={`${products[0]?.products?.length} items`}
-                price={products[0]?.allSubTotal}
+                info={`${products?.products?.length} items`}
+                price={products?.allSubTotal}
               />
               <OrderSummary
                 title="Discount"
@@ -120,113 +219,172 @@ const OrderReview = ({ params, searchParams }) => {
               />
               <OrderSummary title="Shipping" info="No shipment" price={0} />
               <Divider>...</Divider>
-              <OrderSummary
-                title="Total"
-                bold
-                price={products[0]?.allSubTotal}
-              />
+              <OrderSummary title="Total" bold price={products?.allSubTotal} />
             </Box>
             <Box className="w-full px-3 py-4 mt-2 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
-              <Typography className=" !text-[18px] !mb-2 !mr-4">
+              <Typography className=" !text-[15px] !mb-2 !mr-4">
                 Timeline
               </Typography>
               <CustomChip
                 rounded
-                avatar={
-                  <Avatar
-                    alt="Oluwasusi Stephen"
-                    src="/static/images/avatar/1.jpg"
-                  />
-                }
+                avatar={<Avatar alt={row?.customerName} src={row?.picture} />}
                 size="large"
                 skin="light"
                 color={"success"}
-                label={"Oluwasusi Stephen"}
+                label={row?.customerName}
                 sx={{ "& .MuiChip-label": { textTransform: "capitalize" } }}
                 className="flex-shrink-0"
               />
               <br />
+              <h5 className="!text-[10px] mt-4 mb-1 text-right text-gray-400">
+                Minimum of 20 characters
+              </h5>
               <TextField
-                sx={{ mt: 4 }}
+                className=""
                 fullWidth
                 multiline
+                label="Leave a comment...."
                 id="textarea-outlined"
-                onChange={() => {}}
+                defaultValue={row?.comment?.comment || ""}
+                onChange={handleChange("comment")}
                 maxRows={6}
-                placeholder="Leave a comment..."
+                placeholder="Timeline comment..."
                 minRows={5}
               />
-              <Box className="flex justify-end mt-4">
-                <Button variant="contained" className="!shadow-none  w-28">
-                  Next
-                </Button>
+
+              <Box className="flex justify-center mt-4">
+                <Box className="flex items-center">
+                  <Button
+                    onClick={handleButtonClick}
+                    variant="contained"
+                    className="!flex !items-center !shadow-none !justify-between px-4 !text-white w-40"
+                  >
+                    {payload.status || "Status"}
+                    {open ? (
+                      <IconifyIcon
+                        icon="tabler:chevron-up"
+                        className="text-[15px]"
+                      />
+                    ) : (
+                      <IconifyIcon
+                        icon="tabler:chevron-down"
+                        className="text-[15px]"
+                      />
+                    )}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    className="!shadow-none !ml-3 w-40"
+                    onClick={() => saveData()}
+                    disabled={!(payload.status || payload?.comment?.length)}
+                    startIcon={<IconifyIcon icon="tabler:device-floppy" />}
+                  >
+                    Save
+                  </Button>
+                </Box>
               </Box>
             </Box>
           </Box>
-          <Box className="w-full md:w-5/12 pl-1">
+          <Box className="w-full md:w-5/12 md:pl-1">
             <Box className="w-full px-3 py-4 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
-              <Typography className=" !text-[18px] !mb-2 !mr-4">
+              <Typography className=" !text-[15px] !mb-2 !mr-4">
                 Customer
               </Typography>
               <Box className="mt-2">
-                <IconValue icon="tabler:user" value="Oluwasusi Stephen" />
+                {row?.picture && (
+                  <img
+                    src={row?.picture}
+                    className="w-6 h-6 rounded-full"
+                    alt="picture"
+                  />
+                )}
+                <IconValue icon="tabler:user" value={row?.customerName} />
                 <IconValue
                   icon="tabler:shopping-bag"
-                  value={`${products[0]?.products?.length} items`}
+                  value={`${products?.products?.length} items`}
                 />
               </Box>
             </Box>
 
             <Box className="w-full mt-2 px-3 py-4 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
-              <Typography className=" !text-[18px] !mb-2 !mr-4">
+              <Typography className=" !text-[15px] !mb-2 !mr-4">
                 Contact Information
               </Typography>
               <Box className="mt-2">
-                <IconValue
-                  icon="tabler:mail"
-                  value="stephanyemmitty@gmail.com"
-                />
-                <IconValue icon="tabler:phone-2" value="09087936299" />
+                <IconValue icon="tabler:mail" value={row?.email} />
+                <IconValue icon="tabler:phone" value={row?.phone} />
               </Box>
             </Box>
 
-            <Box className="w-full px-3 mt-2 py-4 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
-              <Box className="flex items-center justify-between">
-                <Typography className=" !text-[18px] !mb-2 !mr-4">
-                  Picker
-                </Typography>
-                <Box className="flex items-center ">
-                  <IconifyIcon
-                    icon="tabler:phone"
-                    className="mr-2 !text-green-600 !text-[18px] cursor-pointer"
-                  />
-                  <IconifyIcon
-                    icon="tabler:mail"
-                    className="!text-blue-600 !text-[18px] cursor-pointer"
-                  />
+            {row?.deliveryMedium === "pickup" && (
+              <Box className="w-full px-3 mt-2 py-4 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
+                <Box className="flex items-center justify-between">
+                  <Typography className=" !text-[15px] !mb-2 !mr-4">
+                    Picker
+                  </Typography>
+                  <Box className="flex items-center ">
+                    <Link href={`tel:${picker?.phone || row.phone}`}>
+                      <IconifyIcon
+                        icon="tabler:phone"
+                        className="mr-2 !text-green-600 !text-[15px] cursor-pointer"
+                      />
+                    </Link>
+                    <Link href={`mail:${picker.email || row.email}`}>
+                      <IconifyIcon
+                        icon="tabler:mail"
+                        className="!text-blue-600 !text-[15px] cursor-pointer"
+                      />
+                    </Link>
+                  </Box>
                 </Box>
+                {picker.name ? (
+                  <Box className="mt-2">
+                    <IconValue icon="tabler:user" value={picker.name} />
+                    <IconValue icon="tabler:hash" value={picker.slug} />
+                    <IconValue
+                      icon="tabler:friends"
+                      value={picker.relationship}
+                    />
+                  </Box>
+                ) : (
+                  <IconValue value="Self-Pickup (Buyer is the picker)" />
+                )}
               </Box>
-              <Box className="mt-2">
-                <IconValue icon="tabler:user" value="Tolulope Gbenga" />
-                <IconValue icon="tabler:hash" value="PIK-23516734673" />
-                <IconValue icon="tabler:friends" value="Family" />
-              </Box>
-            </Box>
+            )}
 
             <Box className="w-full mt-2 px-3 py-4 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
-              <Typography className=" !text-[18px] !mb-2 !mr-4">
+              <Typography className=" !text-[15px] !mb-2 !mr-4">
                 Way-billing Address
               </Typography>
               <Box className="mt-2">
-                <IconValue icon="tabler:user" value="Tolulope Gbenga" />
-                <IconValue value="78, Upper Sekpomaz" />
-                <IconValue value="GRA,Oredo, Benin City" />
-                <IconValue value="Edo State, Nigeria" />
-                <IconValue icon="tabler:map" value="View Map" />
+                <IconValue icon="tabler:user" value={row?.customerName} />
+                <IconValue value={`${row?.address?.address},`} />
+                <IconValue value={`${row?.address?.city},`} />
+                <IconValue value={`${row?.address?.state}, Nigeria.`} />
+                <IconValue
+                  icon="tabler:map"
+                  value="View Map"
+                  className="cursor-pointer !text-blue-500 hover:!text-blue-700 mt-6"
+                />
               </Box>
             </Box>
           </Box>
         </Box>
+        {open &&
+          renderMenu({
+            handleMenuItemClick,
+            anchorEl,
+            open,
+            handleMenuClose,
+          })}
+        {openSub &&
+          renderSubMenu({
+            anchorEl,
+            openSub,
+            row,
+            handleMenuClose,
+            handleMenuItemClick,
+          })}
       </Box>
     </StoreLeftSideBar>
   );

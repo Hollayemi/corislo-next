@@ -1,6 +1,8 @@
 import IconifyIcon from "@/app/components/icon";
 import { formatCurrency } from "@/app/utils/format";
-import { Box, Typography } from "@mui/material";
+import { Box, Menu, MenuItem, Typography } from "@mui/material";
+import { statusObj } from "../components";
+import CustomChip from "@/app/components/chip";
 
 export const ProductPrev = ({
   _id,
@@ -13,9 +15,9 @@ export const ProductPrev = ({
   others,
 }) => {
   return (
-    <Box className="h-28 border- ">
+    <Box className="h-28">
       <Box className="flex items-start pb-4 py-3 w-full relative">
-        <Box className={`flex items-center w-full pr-6`}>
+        <Box className={`flex items-center justify-between w-full `}>
           <Box className="flex items-start w-full">
             <img
               src={image || "/images/more/2.png"}
@@ -24,7 +26,7 @@ export const ProductPrev = ({
               height={150}
               className="w-20 h-20 flex-shrink-0 !rounded-xl"
             />
-            <Box className={`px-3 w-1/2 md:w-10/12 min-w-40 relative`}>
+            <Box className={`px-3 w-3/5 md:w-10/12 min-w-40 relative`}>
               <Typography
                 variant="body2"
                 noWrap
@@ -38,46 +40,76 @@ export const ProductPrev = ({
               >
                 NGN {prodPrice?.toFixed(2)?.toLocaleString()}
               </Typography>
-              <Box className="flex items-center mt-3">
-                <Typography
-                  variant="body2"
-                  className="!text-gray-500 !text-[12px]"
-                >
-                  quantity: {quantity}
-                </Typography>
+              <Box className="mt-3 !text-left">
+                {others?.discount ? (
+                  <Typography
+                    variant="body2"
+                    className="!text-red-500 !text-left !text-[12px]"
+                  >
+                    {others.discount}% discount
+                  </Typography>
+                ) : (
+                  <Typography
+                    variant="body2"
+                    className="text-left !text-[12px]"
+                  >
+                    No discount Applied
+                  </Typography>
+                )}
               </Box>
+            </Box>
+            <Box className="w-2/5 flex flex-col justify-end items-end mt-3 pr-1">
+              <Typography
+                variant="body2"
+                className="!text-gray-500 !text-[12px] w-32  text-center"
+              >
+                Qty: {quantity}
+              </Typography>
+              <Typography
+                variant="body2"
+                className="!text-gray-500 !text-[12px] w-32"
+              >
+                {quantity} x {formatCurrency(prodPrice)}
+              </Typography>
             </Box>
           </Box>
         </Box>
-        {others?.discount ? (
-          <Typography
-            variant="body2"
-            className="!text-red-500 !ml-2 !text-[12px]"
-          >
-            {others.discount}% discount
-          </Typography>
-        ) : (
-          <Typography
-            variant="body2"
-            className="text-center !ml-2 !text-[12px]"
-          >
-            No discount Applied
-          </Typography>
-        )}
       </Box>
     </Box>
   );
 };
 
+export const CustomizeStatus = ({ text }) => {
+  const status = statusObj.filter(
+    (e) => e.title === text.replaceAll(" ", "_").toLowerCase()
+  )[0];
+  return (
+    <CustomChip
+      rounded
+      size="small"
+      skin="light"
+      color={status?.color}
+      label={status?.title?.replaceAll("_", " ")}
+      sx={{ "& .MuiChip-label": { textTransform: "capitalize" } }}
+      className="flex-shrink-0 !rounded-sm mx-1.5"
+    />
+  );
+};
 
 export const OrderSummary = ({ title, info, price, bold }) => {
   return (
     <Box className="flex items-center justify-between">
-      <Typography className={`${bold && "!font-bold !mt-2"} !text-[14px] !mb-2`}>{title}</Typography>
+      <Typography
+        className={`${bold && "!font-bold !mt-2"} !text-[14px] !mb-2`}
+      >
+        {title}
+      </Typography>
 
       <Box className="flex items-center justify-between w-1/2">
         <Typography className=" !text-[14px] !mb-2 ">{info}</Typography>
-        <Typography className={`${bold && "!font-bold !mt-2"} !text-[14px] !mb-2`}>
+        <Typography
+          className={`${bold && "!font-bold !mt-2"} !text-[14px] !mb-2`}
+        >
           {formatCurrency(price)}
         </Typography>
       </Box>
@@ -85,13 +117,73 @@ export const OrderSummary = ({ title, info, price, bold }) => {
   );
 };
 
-export const IconValue = ({ icon, value }) => {
-    return (
-      <Box className="flex items-center !text-gray-400 mb-2">
-        <IconifyIcon icon={icon} className="!text-inherit !mr-3" />
-        <Typography className={`!text-[14px] !text-inherit`}>
-          {value}
-        </Typography>
-      </Box>
-    );
-}
+export const IconValue = ({ icon, value, className }) => {
+  return (
+    <Box className={`flex items-center text-gray-500 mb-2 ${className}`}>
+      <IconifyIcon icon={icon} className="!text-inherit !mr-3" />
+      <Typography className={`!text-[12px] !text-inherit`}>{value}</Typography>
+    </Box>
+  );
+};
+
+
+  export const renderMenu = ({ handleMenuItemClick, anchorEl, open, handleMenuClose }) => (
+    <Menu
+      anchorEl={anchorEl}
+      open={open}
+      className="left-0"
+      onClose={handleMenuClose}
+    >
+      <MenuItem
+        onClick={handleMenuItemClick("")}
+        className="flex items-center  justify-between w-full"
+      >
+        Update Order Status{" "}
+        <IconifyIcon icon="tabler:chevron-right" className="text-[15px] ml-5 md:ml-8" />
+      </MenuItem>
+      <MenuItem
+        onClick={handleMenuItemClick("Refunded")}
+        className="text-orange-500"
+      >
+        Refund
+      </MenuItem>
+      <MenuItem
+        onClick={handleMenuItemClick("Cancelled")}
+        className="text-red-500"
+      >
+        Cancel Order
+      </MenuItem>
+    </Menu>
+  );
+
+  export const renderSubMenu = ({
+    anchorEl,
+    openSub,
+    handleMenuClose,
+    handleMenuItemClick,
+    row,
+  }) => (
+    <Menu
+      anchorEl={anchorEl}
+      open={openSub}
+      onClose={handleMenuClose}
+      className={` w-full !-mr-80 py-4 px-4`}
+    >
+      <MenuItem
+        onClick={handleMenuItemClick("Processing")}
+        className="flex items-center justify-between w-full"
+      >
+        Processing
+      </MenuItem>
+      {row?.deliveryMedium !== "pickup" ? (
+        <MenuItem onClick={handleMenuItemClick("Out for delivery")}>
+          Out for Delivery
+        </MenuItem>
+      ) : (
+        <MenuItem onClick={handleMenuItemClick("Pickable")}>Pickable</MenuItem>
+      )}
+      <MenuItem onClick={handleMenuItemClick("Pending")}>On Hold</MenuItem>
+      <MenuItem onClick={handleMenuItemClick("Completed")}>Received</MenuItem>
+    </Menu>
+  );
+  

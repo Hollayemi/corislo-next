@@ -6,7 +6,6 @@ import { CircleLoader } from "@/app/components/cards/loader";
 
 export const BriefStoreOnMap = ({ image, open, branchId, storeView }) => {
   const { data, isLoading } = useSWR(`/branch/info?branchId=${branchId}`);
-  console.log(branchId);
   const info = data?.data || {};
   if (isLoading)
     return (
@@ -70,8 +69,7 @@ export const BriefStoreOnMap = ({ image, open, branchId, storeView }) => {
 
 export const BriefStoreWithFuntions = ({
   image,
-  shopName,
-  rating,
+  info,
   setStage,
 }) => {
   return (
@@ -90,21 +88,24 @@ export const BriefStoreWithFuntions = ({
             noWrap
             className="!text-[14px] !font-bold !px-2 !text-black md:w-32"
           >
-            {shopName}
+            {info.businessName}
           </Typography>
           <Box className="flex items-center ml-1.5">
-            <Rating
-              size="small"
-              value={3 / 5}
-              readOnly
-              max={1}
-              precision={0.1}
-            />
+            {info?.feedback?.averageRating && (
+              <Rating
+                size="small"
+                value={info.feedback.averageRating || 0}
+                readOnly
+                max={5}
+                precision={0.1}
+                className="!text-[12px]"
+              />
+            )}
             <Typography
               variant="body2"
               className="!text-[13px] !font-bold !px-2 pt-0.5 !text-black"
             >
-              4/5
+              {parseInt(info.feedback.averageRating).toFixed(1)}/5
             </Typography>
           </Box>
         </Box>
@@ -123,10 +124,7 @@ export const BriefStoreWithFuntions = ({
           className="!w-6 !h-6 md:!w-10 md:!h-10 rounded-full md:mt-0 flex items-center justify-center cursor-pointer mx-1 md:border-2 border-blue-900"
           onClick={() => setStage("store")}
         >
-          <IconifyIcon
-            icon="tabler:link"
-            className="!text-blue-900"
-          />
+          <IconifyIcon icon="tabler:link" className="!text-blue-900" />
         </Box>
         <Box className="!w-6 !h-6 md:!w-10 md:!h-10 rounded-full md:mt-0 flex items-center justify-center cursor-pointer md:ml-1 md:border-2 border-blue-900">
           <IconifyIcon icon="tabler:share" className="!text-blue-900" />
@@ -138,7 +136,7 @@ export const BriefStoreWithFuntions = ({
 
 export const StoreDetails1 = () => {
   const { data, isLoading } = useSWR(
-    "/branch/info?branchId=65ac80101cc3db0407fa00c9"
+    "/branch/info?branchId=655f40b1ada0620d29ca6260"
   );
   const info = data?.data || {};
 
@@ -171,16 +169,12 @@ export const StoreDetails1 = () => {
       <Box className="border-b p-2">
         <BriefStoreOnMap
           image="/images/misc/shop/1.png"
-          branchId="65ac80101cc3db0407fa00c9"
+          branchId="655f40b1ada0620d29ca6260"
         />
       </Box>
       <Box className="p-2">
         <SpaceBetween title="Phone Number:" info="+234 (801) 234 5678" />
-        <SpaceBetween
-          title="Address:"
-          info="2 Nike Art Gallery Rd, Lekki Phase I, 
-Lekki 106104, Lagos"
-        />
+        <SpaceBetween title="Address:" info={info.address} />
         <SpaceBetween title="Email Address:" info="shoplocal@sample.xyz" />
       </Box>
     </Box>

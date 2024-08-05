@@ -8,9 +8,10 @@ import { CircleLoader } from "@/app/components/cards/loader";
 
 const AboutStore = ({ setStage }) => {
   const { data, isLoading } = useSWR(
-    "/branch/info?branchId=65ac80101cc3db0407fa00c9"
+    "/branch/info?branchId=655f40b1ada0620d29ca6260"
   );
   const info = data?.data || {};
+  console.log(info);
 
   const Comp = ({ name, icon }) => (
     <Box className="flex items-center mb-3">
@@ -39,21 +40,21 @@ const AboutStore = ({ setStage }) => {
           alt="gallery"
           width={800}
           height={800}
-          className="!w-64 !min-w-64 md:!w-80 md:!min-w-80 h-40 md:h-44 rounded-md"
+          className="!w-64 mx-2 !min-w-64 md:!w-80 md:!min-w-80 h-40 md:h-44 rounded-md"
         />
         <Image
           src="/images/more/store-gallery2.png"
           alt="gallery"
           width={800}
           height={800}
-          className="!w-64 !min-w-64 md:!w-80 md:!min-w-80 h-40 md:h-44 rounded-md"
+          className="!w-64 mx-2 !min-w-64 md:!w-80 md:!min-w-80 h-40 md:h-44 rounded-md"
         />
         <Image
           src="/images/more/store-gallery3.png"
           alt="gallery"
           width={800}
           height={800}
-          className="!w-64 !min-w-64 md:!w-80 md:!min-w-80 h-40 md:h-44 rounded-md"
+          className="!w-64 mx-2 !min-w-64 md:!w-80 md:!min-w-80 h-40 md:h-44 rounded-md"
         />
       </ReactSlickSlider>
       <Box
@@ -66,7 +67,7 @@ const AboutStore = ({ setStage }) => {
         <BriefStoreWithFuntions
           setStage={setStage}
           image="/images/misc/shop/1.png"
-          shopName={info.businessName}
+          info={info}
         />
       </Box>
       <Box className="py-2 border-b px-2">
@@ -80,9 +81,7 @@ const AboutStore = ({ setStage }) => {
           variant="body2"
           className="!text-[12px] !font-normal !text-gray-400"
         >
-          Curated collections for the modern woman on the go. We offer
-          effortless everyday pieces and statement styles for all occasions.
-          Shop our latest arrivals and discover your new wardrobe essentials. ️
+          {info.about_store}
         </Typography>
       </Box>
 

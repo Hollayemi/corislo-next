@@ -241,8 +241,9 @@ export const GroupCartProducts = ({
   payload,
   pickers,
 }) => {
+  console.log(branch);
   const getCommonDeliveryMethods = getCommonValuesInArrays(
-    ...branch.map((x) => x.product.delivery || ["pickup"])
+    ...branch.map((x) => x?.product?.delivery || ["pickup"])
   );
   const deliveryType = payload.delivery[store];
   const picker = payload.picker[store];

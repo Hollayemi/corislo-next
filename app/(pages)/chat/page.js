@@ -1,6 +1,7 @@
 "use client";
 // ** React Imports
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 // ** MUI Imports
 import Box from "@mui/material/Box";
@@ -26,10 +27,11 @@ import UserProfileRight, {
   UserProfileRightComponent,
 } from "./UserProfileRight";
 
-const AppChat = ({ searchParams }) => {
-  
+const AppChat = () => {
+  const searchParams = useSearchParams();
+  const itIsNewChat = searchParams.get("new");
   const { data: branchData, isLoading: branchLoading } = useSWR(
-    searchParams.new && `/branch/info?branchId=${searchParams.new}`
+    itIsNewChat && `/branch/info?branchId=${itIsNewChat}`
   );
   const branchInfo = branchData?.data || {};
   
@@ -50,12 +52,12 @@ const AppChat = ({ searchParams }) => {
 
   const { data, isLoading: storeListLoading } = useSWR("/chat/stores");
   const storeList = (data && data?.data) || {};
-  const itIsNewChat = searchParams.new
+  
   const { data: storeChat, isLoading: loadingChat } = useSWR(
     ( selectedChat ||
       itIsNewChat )
    &&
-      `/user/chat/messages?chatId=${selectedChat}&branchId=${searchParams.new}&username=${userInfo.username}`
+      `/user/chat/messages?chatId=${selectedChat}&branchId=${itIsNewChat}&username=${userInfo.username}`
   );
   // ** Vars
   const smAbove = useMediaQuery(theme.breakpoints.up("sm"));

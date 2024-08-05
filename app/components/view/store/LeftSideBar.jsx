@@ -437,7 +437,7 @@ const StoreLeftSideBar = React.memo(
           <Box
             className={`transition-all duration-300 ${
               rightOpen ? "right-0" : "-right-[440px]"
-            } h-full w-[330px] fixed top-0 right-0 z-20 py-6 mt-7 `}
+            } h-full w-[330px] fixed top-0  z-20 py-6 mt-7 `}
           >
             <Box className="bg-white w-full h-full pt-5 shadow relative">
               <Box

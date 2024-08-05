@@ -27,11 +27,11 @@ import useSWR from "swr";
 import { NumberExplained } from "../components/cards/sellerCards";
 import { useUserData } from "../hooks/useData";
 import { ServicesSlider } from "./services/page";
+import Link from "next/link";
 
 const HomePage = ({ params }) => {
   const { data: prods } = useSWR("/products?limit=30");
   const { data: ads } = useSWR("/home/ads");
-  console.log(prods);
   const products = prods ? prods.data : [];
   const popularAds = ads ? ads.data : [];
   const { setShopNow } = useUserData();
@@ -132,7 +132,7 @@ const HomePage = ({ params }) => {
         <Box className="sm:px-5 md:px-14">
           <Box className="!mt-20 lg:!mt-32 px-2 md:px-10">
             <SectionMiddleTitle black="Shop by" blue="Categories" />
-            <Box className="flex items-center justify-center overflow-auto pb-5">
+            <Box className="flex items-center md:justify-center overflow-auto pb-5">
               {categoryData.map((cate, i) => (
                 <Box
                   key={i}
@@ -179,7 +179,18 @@ const HomePage = ({ params }) => {
             </ReactSlickSlider>
           </Box>
           <Box className="!my-12 px-2 md:px-10">
-            <SectionTitle black="Professional" blue="Services" />
+            <SectionTitle
+              black="Professional"
+              blue="Services"
+              right={
+                <Link
+                  href="/services"
+                  className="!text-[14px] underline underline-offset-4 mb-3"
+                >
+                  See More
+                </Link>
+              }
+            />
 
             <ServicesSlider />
           </Box>
