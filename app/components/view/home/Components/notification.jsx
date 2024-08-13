@@ -15,12 +15,11 @@ import Link from "next/link";
 const { Box, Typography, Rating } = require("@mui/material");
 const { default: Image } = require("next/image");
 
-
 const Notification = () => {
   const { notifications, showOverlay } = useUserData();
   return (
-    <Box className="mt-20 relative md:absolute px-2">
-      <Box className="w-full md:w-[420px] h-[600px] md:h-[500px]  bg-white rounded-xl md:mr-10 flex flex-col">
+    <Box className="mt-20 relative md:absolute px-2 md:right-2">
+      <Box className="w-full md:w-[420px] h-[600px] md:h-[500px] relative bg-white rounded-xl md:mr-10 flex flex-col">
         <Box className="flex justify-between items-center px-4 h-14 border-b !w-full flex-shrink-0">
           <Typography variant="body2" className="!font-bold">
             Notification
@@ -29,12 +28,12 @@ const Notification = () => {
             <CancelOutlined />
           </Box>
         </Box>
-        <Box className="flex-grow-1 h-auto md:h-[400px] max-h-[450px] w-full !overflow-auto overflowStyle">
+        <Box className="grow-1 h-auto md:h-[400px] max-h-[450px] w-full !overflow-auto overflowStyle">
           {notifications.map((data, i) => (
             <OrderNotif key={i} data={data} />
           ))}
         </Box>
-        <Box className="h-14 flex items-center justify-center !text-[12px] w-full text-center ">
+        <Box className="h-14 flex items-center justify-center absolute bottom-0 !text-[12px] w-full text-center ">
           See all notifications
         </Box>
       </Box>
@@ -42,29 +41,30 @@ const Notification = () => {
   );
 };
 
-export default Notification
+export default Notification;
 
 const OrderNotif = ({ data }) => {
-  const [open, setOpen] = useState(-1);
+  const [open, setOpen] = useState(0);
   return (
     <Box className="w-full border-b">
       <Box className="px-4 w-full flex justify between items-center mt-2">
         <Typography variant="caption" className="!text-[11px] !font-bold">
-          {data.date}
+          {data._id}
         </Typography>
-        <IconifyIcon icon="tabler:chevron-down" className="!text-[14px]" />
       </Box>
       {data.info.map((each, i) => (
         <Box key={i} className="flex items-start p-3 w-full">
-          <Box className="w-11 h-11 flex-shrink-0">
-            <Image
-              src={`/images/misc/shop/${i + 1}.png`}
-              alt="display_image"
-              width={100}
-              height={100}
-              className="rounded-full h-full w-full"
-            />
-          </Box>
+          {data.image && (
+            <Box className="w-11 h-11 flex-shrink-0">
+              <Image
+                src={`/images/misc/shop/${i + 1}.png`}
+                alt="display_image"
+                width={100}
+                height={100}
+                className="rounded-full h-full w-full"
+              />
+            </Box>
+          )}
           <Box className="pl-3 relative w-full min-w-48">
             <Box className="w-9/12 min-w-48">
               <Typography variant="body2" className="!font-bold !text-black">
@@ -74,21 +74,25 @@ const OrderNotif = ({ data }) => {
                 {mySubstring(each.note, 100)}
               </Typography>
             </Box>
-            {open === i && (
-              <Box className="border rounded-md p-2 !mt-3 w-full !overflow-hidden">
-                {each?.orderId && <NotifOrderDisplay orderId={each.orderId} />}
-                {each?.productId && (
-                  <NotifProductDisplay productId={each.productId} />
-                )}
-              </Box>
-            )}
+
+            <Box
+              className={`rounded-md ${
+                open === i ? "h-20 p-2 border" : "h-0"
+              } transition-all duration-300 !mt-3 w-full !overflow-hidden`}
+            >
+              {each?.orderId && <NotifOrderDisplay orderId={each.orderId} />}
+              {each?.productId && (
+                <NotifProductDisplay productId={each.productId} />
+              )}
+            </Box>
+
             <Box className="absolute top-0 right-0 pr-2 flex flex-col items-end">
               <Typography variant="caption" className="!text-[10px]">
                 {formatDateToMonthShort(each.date)}
               </Typography>
-              <Box className="w-full flex justify-between mt-2 -ml-3">
+              <Box className="w-full flex justify-end mt-2 -ml-3">
                 <Box
-                  onClick={() => setOpen(i)}
+                  onClick={() => setOpen((prev) => prev === i ? 100 : i)}
                   className="flex justify-center items-center w-4 h-4 cursor-pointer rounded-full border border-black"
                 >
                   <IconifyIcon
@@ -97,10 +101,10 @@ const OrderNotif = ({ data }) => {
                     }`}
                   />
                 </Box>
-                <Box
+                {/* <Box
                   className="w-2 h-2 rounded-full bg-orange-400"
                   bgcolor="warning"
-                ></Box>
+                ></Box> */}
               </Box>
             </Box>
           </Box>
@@ -113,7 +117,6 @@ const OrderNotif = ({ data }) => {
 const NotifProductDisplay = ({ productId }) => {
   const { data: prod, error } = useSWR(`/products?productId=${productId}`);
   const product = prod ? prod?.data[0] : {};
-  console.log(product);
   return (
     <Box className="flex items-center relative ">
       <Box className="w-12 h-12 flex-shrink-0">
@@ -191,10 +194,8 @@ const NotifProductDisplay = ({ productId }) => {
   );
 };
 export const NotifOrderDisplay = ({ orderId }) => {
-  console.log(orderId);
   const { data: result } = useSWR(`/user/order/${orderId}`);
   const orderProducts = result?.data[0] || {};
-  console.log(orderProducts);
   return (
     <Box className="flex items-start relative !overfow-hidden ">
       <Box className="w-12 h-12 flex-shrink-0">

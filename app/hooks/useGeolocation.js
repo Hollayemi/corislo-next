@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-const useGeolocation = (interval = 10000) => {
+const useGeolocation = (interval = 120000) => {
   const [coordinates, setCoordinates] = useState({ latitude: null, longitude: null });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,8 +13,6 @@ const useGeolocation = (interval = 10000) => {
       setLoading(false);
       return;
     }
-
-
 
     const updateCoordinates = () => {
       navigator.geolocation.getCurrentPosition(
@@ -31,7 +29,7 @@ const useGeolocation = (interval = 10000) => {
         },
         {
           enableHighAccuracy: true,
-          timeout: 5000,
+          timeout: 120000,
           maximumAge: 0,
         }
       );

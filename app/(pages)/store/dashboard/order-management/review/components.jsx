@@ -79,14 +79,14 @@ export const ProductPrev = ({
   );
 };
 
-export const CustomizeStatus = ({ text }) => {
+export const CustomizeStatus = ({ text, size }) => {
   const status = statusObj.filter(
     (e) => e.title === text.replaceAll(" ", "_").toLowerCase()
   )[0];
   return (
     <CustomChip
       rounded
-      size="small"
+      size={size||"small"}
       skin="light"
       color={status?.color}
       label={status?.title?.replaceAll("_", " ")}

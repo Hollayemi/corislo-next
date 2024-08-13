@@ -33,7 +33,7 @@ const defaultProvider = {
 };
 const DataContext = createContext(defaultProvider);
 
-const UserDataProvider = ({ children, setOverflow, setUserInfo }) => {
+const UserDataProvider = ({ children, setOverflow, setConnection }) => {
   const router = useRouter();
   const pathname = usePathname();
   const { coordinates, error } = useGeolocation(10000);
@@ -75,7 +75,6 @@ const UserDataProvider = ({ children, setOverflow, setUserInfo }) => {
     }
     return true;
   };
-
 
   // useEffect(() => {
   //   if (getPath[1]) {
@@ -171,16 +170,8 @@ const UserDataProvider = ({ children, setOverflow, setUserInfo }) => {
   } = useSWR(!isOffline() && "/user/get-account");
 
   useEffect(() => {
-    userInfo &&
-      !userInfo?.isVerified &&
-      router.push("/auth/otp-verification?redirected=true");
-  }, []);
-
-  useEffect(() => {
-    if (userInfo?.user) {
-      setUserInfo(coordinates || {});
-    }
-  }, [coordinates]);
+    setConnection(userInfo?.user?.push_subscription);
+  }, [userInfo]);
 
   //
   // fetch userInfo

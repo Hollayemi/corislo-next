@@ -1,13 +1,12 @@
 "use client";
 import { useState } from "react";
 import useSWR from "swr";
-import { Typography, Box, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 import OrderTable from "./components/orderTable";
 import OrderDetails from "./components/orderDetails";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useRouter, useSearchParams } from "next/navigation";
-import tokens from "@/app/configs/tokens";
 
 const OrderManagement = ({ params }) => {
   const [rightOpen, setRightOpen] = useState(false);

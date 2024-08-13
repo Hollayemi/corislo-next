@@ -28,17 +28,18 @@ import {
 } from "./components";
 import { DetailsDesign } from "../components";
 import IconifyIcon from "@/app/components/icon";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { storeUpdateOrder } from "@/app/redux/state/slices/shop/order";
 import ModalHook from "@/app/hooks/modalHook";
 import Link from "next/link";
 
-const OrderReview = ({ params, searchParams }) => {
+const OrderReview = ({ params }) => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const searchParams = useSearchParams();
+  const order = searchParams.get("order");
   const [anchorEl, setAnchorEl] = useState(null);
   const [subAnchorEl, setSubAnchorEl] = useState(null);
-  const order = searchParams.order;
   const [payload, setPayload] = useState({ orderId: order });
   const { dialogInfo, updateDialogInfo } = ModalHook(payload);
   const path = { ...params, sidebar: "order-management" };
@@ -294,7 +295,7 @@ const OrderReview = ({ params, searchParams }) => {
                 {row?.picture && (
                   <img
                     src={row?.picture}
-                    className="w-6 h-6 rounded-full"
+                    className="w-12 h-12 rounded-full mb-2"
                     alt="picture"
                   />
                 )}

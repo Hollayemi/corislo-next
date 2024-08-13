@@ -132,6 +132,7 @@ const PersonalProfile = ({
       <Box className="w-full  !b-10 mb-10 md:mb-0 pt-8">
         <Button
           variant="contained"
+          disabled={confPas !== values.password || !values.password}
           className="w-full !h-12 !rounded-full !text-gray-100 !text-[17px] !mt-3 !shadow-none"
           onClick={() => setStage("type")}
         >

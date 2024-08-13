@@ -10,8 +10,9 @@ import Pricing from "./store/pricing";
 import validationRegisterSchema from "../../../auth/register/validation";
 import validationStoreSchema from "./storeValidation";
 import BusinessType from "./businessType";
-import Sevices from "./services/first";
+import Sevices from "./services/upload";
 import useGeolocation from "@/app/hooks/useGeolocation";
+import OtpVerification from "@/app/(pages)/auth/otp-verification/page";
 
 const RegisterStore = () => {
   const { coordinates } = useGeolocation();
@@ -132,9 +133,17 @@ const RegisterStore = () => {
         setStage={setStage}
         handleStoreChange={handleStoreChange}
         values={storeValues}
+        userValues={userValues}
       />
     ),
-    2: <Verification setStage={setStage} />,
+    2: (
+      <OtpVerification
+        setStage={setStage}
+        email={storeValues.businessEmail}
+        account="business"
+        callback={(done) => setStage(done ? 3 : 2)}
+      />
+    ),
     3: (
       <Pricing
         setStage={setStage}

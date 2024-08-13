@@ -11,10 +11,9 @@ import { verifyOtp, resendOtp } from "@/app/redux/state/slices/auth/otp";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 
-const OtpVerification = ({ searchParams }) => {
-  const router = useRouter();
+const OtpVerification = ({ searchParams, email, account, callback }) => {
+  console.log(searchParams, email, account);
   const dispatch = useDispatch();
-  const { userInfo } = useUserData();
 
   // usestate hooks
   const [openInput, setOpenInput] = useState(false);
@@ -23,13 +22,7 @@ const OtpVerification = ({ searchParams }) => {
   const [inputValues, setInputValues] = useState(["", "", "", "", "", ""]);
   console.log(searchParams);
   const otpValues = inputValues.join("");
-  useEffect(() => {
-    searchParams.redirected &&
-      resendOtp(
-        { email: userInfo.email, action: "email-verification" },
-        dispatch
-      );
-  }, []);
+
   useEffect(() => {
     let intervalId;
 
@@ -46,7 +39,7 @@ const OtpVerification = ({ searchParams }) => {
   }, [countdown]);
 
   const buttonFunc = () => {
-    verifyOtp({ email: userInfo.email, otp: otpValues }, router, dispatch);
+    verifyOtp({ email, otp: otpValues }, dispatch, callback);
     if (!openInput) {
       setOpenInput(true);
     }
@@ -54,9 +47,10 @@ const OtpVerification = ({ searchParams }) => {
 
   const handleResend = () => {
     resendOtp(
-      { email: userInfo.email, action: "email-verification" },
+      { email, action: { to: "email-verification", account } },
       dispatch
     );
+    setInputValues(["", "", "", "", "", ""]);
     setCountdown(60);
     setResendDisabled(true);
   };

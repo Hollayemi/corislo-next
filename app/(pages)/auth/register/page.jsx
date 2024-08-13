@@ -16,9 +16,9 @@ import { registerHandler } from "@/app/redux/state/slices/auth/Signup";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 
-const RegisterAccount = () => {
+const RegisterAccount = ({ fromSuper }) => {
   // hooks
-  const router = useRouter()
+  const router = useRouter();
   const dispatch = useDispatch();
   const [values, setValues] = useState({
     fullname: "",
@@ -29,7 +29,7 @@ const RegisterAccount = () => {
     phoneNumber: "",
   });
 
-  const [confPass, setConfPass] = useState("")
+  const [confPass, setConfPass] = useState("");
 
   const [errors, setErrors] = useState({
     fullname: "",
@@ -59,11 +59,12 @@ const RegisterAccount = () => {
       });
   }, [values]);
 
-
   return (
-    <Box className="w-[360px] md:w-[550px] !my-10">
+    <Box
+      className={` ${fromSuper ? "f-full" : "w-[360px] md:w-[550px]"} !my-10"`}
+    >
       <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={fromSuper ? 12 : 6}>
           <CustomInput
             title="Full Name"
             id="fullname"
@@ -78,7 +79,7 @@ const RegisterAccount = () => {
             }}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={fromSuper ? 12 : 6}>
           <CustomInput
             title="Username"
             error={values.username && errors.username}
@@ -108,7 +109,7 @@ const RegisterAccount = () => {
             }}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={fromSuper ? 12 : 6}>
           <CustomInput
             title="Phone Number"
             onChange={handleChange("phoneNumber")}
@@ -123,7 +124,7 @@ const RegisterAccount = () => {
             }}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={fromSuper ? 12 : 6}>
           <CustomInput
             title="State"
             id="state"
@@ -137,7 +138,7 @@ const RegisterAccount = () => {
             }}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={fromSuper ? 12 : 6}>
           <CustomInput
             title="Password"
             onChange={handleChange("password")}
@@ -157,7 +158,7 @@ const RegisterAccount = () => {
             <li className="mb-2">Must have a unique symbol</li>
           </ul> */}
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={fromSuper ? 12 : 6}>
           <CustomInput
             title="Confirm Password"
             id="confPass"
@@ -190,32 +191,35 @@ const RegisterAccount = () => {
       >
         Sign Up
       </Button>
-      <Button
-        variant="outlined"
-        className="w-full !h-10 !rounded-full !text-gray-600 !text-[17px] !mt-5"
-      >
-        <Image
-          src="/images/logos/logos/google.png"
-          alt="google"
-          width={50}
-          height={50}
-          className="mr-5 w-5"
-        />
-        Continue with Google
-      </Button>
-
-      <Box className="flex justify-center">
-        <Typography className="!text-[13px] !mt-2 !mb-10">
-          Already have an account?{" "}
-          <Link
-            href="/auth/login"
-            color="custom.pri"
-            className="!font-semibold"
+      {!fromSuper && (
+        <>
+          <Button
+            variant="outlined"
+            className="w-full !h-10 !rounded-full !text-gray-600 !text-[17px] !mt-5"
           >
-            Login
-          </Link>
-        </Typography>
-      </Box>
+            <Image
+              src="/images/logos/logos/google.png"
+              alt="google"
+              width={50}
+              height={50}
+              className="mr-5 w-5"
+            />
+            Continue with Google
+          </Button>
+          <Box className="flex justify-center">
+            <Typography className="!text-[13px] !mt-2 !mb-10">
+              Already have an account?{" "}
+              <Link
+                href="/auth/login"
+                color="custom.pri"
+                className="!font-semibold"
+              >
+                Login
+              </Link>
+            </Typography>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };

@@ -160,15 +160,15 @@ const ChatLog = (props) => {
                 ml: isSender ? 1.5 : undefined,
                 mr: !isSender ? 1.5 : undefined,
               }}
-              {...(data.contact.avatar && !isSender
+              {...(data.contact.picture && !isSender
                 ? {
-                    src: data.contact.avatar,
+                    src: data.contact.picture,
                     alt: data.contact.chatName,
                   }
                 : {})}
               {...(isSender
                 ? {
-                    src: userProfile.avatar,
+                    src: userProfile.picture,
                     alt: userProfile.fullName,
                   }
                 : {})}

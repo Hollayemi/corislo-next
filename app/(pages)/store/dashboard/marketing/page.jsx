@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, forwardRef } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 import OptionsMenu from "@/app/components/option-menu";
 import {
@@ -10,7 +10,7 @@ import {
   GrowthCard,
   reshapePrice,
 } from "./components";
-import { columns, rows } from "./data";
+import { columns } from "./data";
 import { DataGrid } from "@mui/x-data-grid";
 import Icon from "@/app/components/icon";
 import DatePicker from "react-datepicker";
@@ -25,7 +25,6 @@ import {
 import useSWR from "swr";
 import Image from "next/image";
 import {
-  FileDownloadOffOutlined,
   FileDownloadOutlined,
 } from "@mui/icons-material";
 

@@ -61,9 +61,7 @@ const AppChat = () => {
 
   useEffect(() => {
     socket?.on("newMessage", (data) => {
-      console.log(data, messageLog);
       
-
       setMessageLog((prev) => { return { ...prev, log:data } });
     });
   }, [socket, messageLog]);
@@ -72,8 +70,6 @@ const AppChat = () => {
     setMessageLog(storeChat?.data || {});
   }, [storeChat]);
 
-  console.log(messageLog);
-
   const handleLeftSidebarToggle = () => setLeftSidebarOpen(!leftSidebarOpen);
   const handleUserProfileLeftSidebarToggle = () =>
     setUserProfileLeftOpen(!userProfileLeftOpen);
@@ -81,7 +77,7 @@ const AppChat = () => {
     setUserProfileRightOpen(!userProfileRightOpen);
   storeList.userProfile = {
     id: storeInfo?.profile?.branchId,
-    avatar: "/images/misc/shop/1.png",
+    picture: storeInfo?.profile?.profile_image,
     role: "store",
   };
 
@@ -101,7 +97,7 @@ const AppChat = () => {
       chat: null,
       contact: {
         ...selectedContact,
-        avatar: "/images/misc/shop/2.png",
+        picture: "/images/misc/shop/2.png",
       },
     };
   }

@@ -9,6 +9,7 @@ const themeConfig = {
   templateName: "CORISIO" /* App Name */,
   vertical1: "/images/logo/horizontal/1.png",
   main: "/images/logo/icon/main.png",
+  blackLogo: "/images/logo/horizontal/black.png",
   main1_sm: "/images/logo/icon/main1-sm.jpg",
   logo_hor_bw: "/images/logo/horizontal/hor-logo-4.png",
   profile: "/images/avatar/2.png",

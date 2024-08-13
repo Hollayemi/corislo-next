@@ -23,7 +23,7 @@ export const otpVerificationApi = createAsyncThunk(
   }
 );
 
-export const verifyOtp = (payload, router, dispatch) => {
+export const verifyOtp = (payload, dispatch, callBack) => {
   dispatch(otpVerificationApi(payload))
     .then(unwrapResult)
     .then((res) => {
@@ -31,7 +31,7 @@ export const verifyOtp = (payload, router, dispatch) => {
       toaster({ ...res });
       console.log("here");
       if (res.type === "success") {
-        router.push(res.to || "/");
+        callBack()
       }
     })
     .catch((err) => {
@@ -51,12 +51,15 @@ const resendOtpApi = createAsyncThunk("post/resendOtp", async (payload) => {
   return data;
 });
 
-export const resendOtp = (payload, dispatch) => {
+export const resendOtp = (payload, dispatch, callBack) => {
   dispatch(resendOtpApi(payload))
     .then(unwrapResult)
     .then((res) => {
       alert(res?.otp);
       toaster({ ...res });
+      if(res.type === "success"){
+        callBack()
+      }
     })
     .catch((err) => {
     });

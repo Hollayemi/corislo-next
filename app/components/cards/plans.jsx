@@ -5,7 +5,7 @@ import IconifyIcon from "../icon";
 const Plans = ({ opportunities, from, hideChoosePlan, price, name, prof }) => {
   return (
     <Box
-      className={`w-full sm:w-1/2 lg:w-1/3 md:px-3 ${
+      className={`w-full sm:w-1/2 lg:w-1/3 md:px-2 ${
         !prof && "md:mt-10"
       } md:py-10`}
     >
@@ -37,7 +37,7 @@ const Plans = ({ opportunities, from, hideChoosePlan, price, name, prof }) => {
             </Button>
           )}
         </Box>
-        <Box className="mt-10 px-8">
+        <Box className="mt-10 px-8 md:px-3">
           <Typography
             variant="body2"
             className="!text-md !text-gray-600 !font-bold"

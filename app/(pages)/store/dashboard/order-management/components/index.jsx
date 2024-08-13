@@ -144,6 +144,8 @@ export const statusObj = [
   { title: "out_for_delivery", color: "primary" },
   { title: "pickable", color: "primary" },
   { title: "completed", color: "success" },
+  { title: "active", color: "success" },
+  { title: "inactive", color: "error" },
   { title: "pending", color: "info" },
   { title: "refunded", color: "secondary" },
   { title: "cancelled", color: "error" },

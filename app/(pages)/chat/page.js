@@ -43,7 +43,6 @@ const AppChat = () => {
   const [selectedChat, selectChat] = useState("");
   const [selectedContact, selectContact] = useState(branchInfo || {});
   const [messageLog, setMessageLog] = useState({});
-
   // ** Hooks
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -92,9 +91,10 @@ const AppChat = () => {
   const handleUserProfileRightSidebarToggle = () =>
     setUserProfileRightOpen(!userProfileRightOpen);
 
+  
   storeList.userProfile = {
     id: userInfo._id,
-    avatar: "/images/misc/shop/1.png",
+    picture: userInfo.picture,
     role: "customer",
     username: userInfo.username,
   };
@@ -105,7 +105,7 @@ const AppChat = () => {
       contact: {
         ...branchInfo,
         branchId: branchInfo?.branchId,
-        avatar: "/images/misc/shop/2.png",
+      
       },
     };
   }
@@ -163,7 +163,7 @@ const AppChat = () => {
       >
         <Box
           className={`!flex-shrink-0 ${
-            selectedChat || itIsNewChat && "hidden md:block"
+            (selectedChat || itIsNewChat) ? "hidden md:block" : ""
           }  !w-full md:!w-fit md:!min-w-fit`}
         >
           <SidebarLeft

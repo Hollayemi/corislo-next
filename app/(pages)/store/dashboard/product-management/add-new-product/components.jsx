@@ -1,10 +1,8 @@
 import { useState } from "react";
 import {
   FormControl,
-  InputLabel,
   Typography,
   Select,
-  MenuItem,
   Radio,
   RadioGroup,
   FormControlLabel,

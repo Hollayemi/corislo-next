@@ -40,7 +40,7 @@ export const storeLoginHandler = (payload, router, dispatch) => {
       if (res.type === "success") {
         router.push(res.to);
       }
-      localStorage.setItem("store_token", accessToken);
+      // localStorage.setItem("store_token", accessToken);
     })
     .catch((err) => {
     });

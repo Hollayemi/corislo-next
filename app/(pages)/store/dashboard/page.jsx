@@ -28,7 +28,7 @@ const DashboardOverview = ({ params }) => {
   const actionFunctions = (row, action) => {
     if (action === "modify") {
       // selectRow(row);
-      router.push(`/store/dashboard/order-management?order=${row._id}`);
+      router.push(`/store/dashboard/order-management/review?order=${row._id}`);
     }
 
     if (action === "message") {

@@ -320,36 +320,36 @@ export const formatSegmentation = (orders, totalAmount, lastSeen) => {
   const millisecondsPerWeek = 7 * 24 * 60 * 60 * 1000;
   const weeksDifference = Math.floor(timeDifference / millisecondsPerWeek);
 
-  if (orders >= 10 && parseInt(totalAmount) > 100000) {
-    categ = "High Spender";
-    color = "red";
-  }
   if (orders > 15 && parseInt(totalAmount) < 100000) {
     categ = "Frequent Buyer";
     color = "green";
   }
-  if (weeksDifference > 4) {
+  if (weeksDifference > 8) {
     categ = "Inactive Buyer";
     color = "gray";
+  }
+  if (orders >= 10 && parseInt(totalAmount) > 100000) {
+    categ = "High Spender";
+    color = "red";
   }
   if (orders === 1) {
     categ = "First time buyer Buyer";
     color = "error";
   }
   return (
-    <Typography>
-      <Box
-        className={`!text-xs !whitespace-break-spaces flex items-center `}
-        color={color}
-      >
+    <Box
+    className={`!text-xs !whitespace-break-spaces flex items-center `}
+    color={color}
+    >
         <Box
           bgcolor={color}
           className="w-4 h-4 shrink-0 rounded-full mr-2"
-        ></Box>
+          ></Box>
+          <Typography className="!text-xs">
 
         {categ}
-      </Box>
     </Typography>
+      </Box>
   );
 };
 
@@ -396,3 +396,15 @@ export const formatBytes = (bytes, decimals = 2) => {
 
   return `${parseFloat((bytes / k ** i).toFixed(dm))} ${sizes[i]}`;
 };
+
+export const formatDistance = (distance) => {
+  if (distance < 1000) {
+    return `${distance.toFixed(2)} m`;
+  } else if (distance < 1_000_000) { // less than 1 million meters
+    const km = (distance / 1000).toFixed(2);
+    return `${km} km`;
+  } else { // 1 million meters or more
+    const Mm = (distance / 1_000_000).toFixed(2);
+    return `${Mm} Mm`;
+  }
+}

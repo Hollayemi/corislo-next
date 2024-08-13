@@ -125,7 +125,7 @@ const OptionsMenu = (props) => {
           </MenuItem>
         )}
         {options.map((option, index) => {
-          if (typeof option === "string") {
+          if (typeof option === "string" || typeof option === "number") {
             return (
               <MenuItem
                 key={index}

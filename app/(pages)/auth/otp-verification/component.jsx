@@ -39,6 +39,7 @@ const OtpInput = ({ inputValues, setInputValues }) => {
             maxLength={1}
             value={inputValues[index]}
             onChange={(e) => handleInput(e, index)}
+            // onKeyUp={() => {}}
           />
           {index === 2 && <h6 className="w-6"></h6>}
         </div>

@@ -36,7 +36,7 @@ const urlsToCache = ["/", "index.html"];
 
 self.addEventListener("push", (e) => {
 
-  let jikj
+  let jikjdd
   const data = e.data.json();
   self.registration.showNotification(data.title, {
     ...data,

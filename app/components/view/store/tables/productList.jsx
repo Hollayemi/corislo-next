@@ -183,7 +183,7 @@ const columns = (clickFunc) => [
         clickFunc(params.row, action);
       };
       const currStatus = params.row.status;
-      const st = ["hidden", "available"];
+      const st = ["hidden", "approved"];
       return (
         <div>
           <Button
@@ -248,7 +248,7 @@ const ProductList = ({ rows, updateDialogInfo }) => {
       productStatusUpdate({ id: row.prodId, status: "hidden" }, dispatch);
     }
     if (action === "show") {
-      productStatusUpdate({ id: row.prodId, status: "available" }, dispatch);
+      productStatusUpdate({ id: row.prodId, status: "approved" }, dispatch);
     }
     if (action === "delete-permanently") {
       updateDialogInfo((prev) => {

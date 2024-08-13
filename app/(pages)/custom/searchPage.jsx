@@ -9,13 +9,23 @@ import React, { useState } from "react";
 import useSWR from "swr";
 import { reshapePrice } from "../store/dashboard/marketing/components";
 import { CircleLoader } from "@/app/components/cards/loader";
+import useSWRWithCoordinates from "@/app/hooks/fetchWithCoordinates";
+import { MagnifyingGlass } from "react-loader-spinner";
+import MyPagination from "@/app/components/templates/pagination";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const SearchPage = ({ search, setSearch }) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const {
     data: prods,
     isLoading,
-    error,
-  } = useSWR(`/products?limit=50&search=${search}`);
+    status: prodsStatus,
+    isset,
+  } = useSWRWithCoordinates(
+    `/products?limit=30&search=${search}&p=${searchParams.get("p") || 1}`
+  );
   const products = prods ? prods.data : null;
 
   const [filterBy, editFilter] = useState({
@@ -28,10 +38,21 @@ const SearchPage = ({ search, setSearch }) => {
     shipping_method: "",
   });
 
-  console.log(filterBy);
+  const applyFilter = () => {
+    const values = Object.values(filterBy);
+    const keys = Object.keys(filterBy);
+    const currentSearchParams = new URLSearchParams(searchParams);
+    values.map((x, i) => {
+      console.log(x);
+      if (x && x !== "Any") {
+        currentSearchParams.set(keys[i], x);
+      }
+    });
+
+    router.push(`?${currentSearchParams.toString()}`);
+  };
 
   const generatePriceRange = (lowest = 0, highest = 0) => {
-    console.log(lowest, highest);
     let step;
     switch (true) {
       case highest <= 1000:
@@ -82,7 +103,10 @@ const SearchPage = ({ search, setSearch }) => {
         icon={
           <Box className="!text-xs !rounded-full !text-black bg-white px-4 m-1 py-1 flex items-center">
             <Typography variant="caption" className="">
-              {mySubstring(filterBy[filterName] || name, 15)}
+              {mySubstring(
+                filterBy[filterName].toString() || name.toString(),
+                15
+              )}
             </Typography>
             <IconifyIcon icon="tabler:chevron-down" className="ml-5" />
             {/* <IconifyIcon icon="tabler:chevron-up" className="ml-5" /> */}
@@ -93,7 +117,6 @@ const SearchPage = ({ search, setSearch }) => {
         iconButtonProps={{
           size: "small",
           sx: { color: "text.disabled", cursor: "pointer" },
-          disableRipple: true,
         }}
       />
     );
@@ -144,48 +167,26 @@ const SearchPage = ({ search, setSearch }) => {
         </Box>
       </Box>
       {isLoading ? (
-        <Box className="w-full h-40 flex items-center justify-center">
-          <CircleLoader width={40} />
+        <Box className="flex flex-col items-center justify-center my-12 mt-20">
+          {isset ? (
+            <CircleLoader />
+          ) : (
+            <MagnifyingGlass
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="magnifying-glass-loading"
+              wrapperStyle={{}}
+              wrapperClass="magnifying-glass-wrapper"
+              glassColor="#c0efff"
+              color="#e15b64"
+            />
+          )}
+          <Typography className="!mt-3">{prodsStatus}</Typography>
         </Box>
       ) : (
         <>
           <Box className="relative mt-10 w-full flex flex-wrap justify-center items-center px-3">
-            <Typography
-              variant="body2"
-              className="!text-black !text-[12px] !mr-4"
-            >
-              Filter:
-            </Typography>
-            <FilterOptions
-              name="Category"
-              options={products?.category || []}
-            />
-            <FilterOptions
-              name="Price"
-              options={generatePriceRange(
-                products?.minPrice,
-                products?.maxPrice
-              )}
-            />
-            <FilterOptions
-              name="Review"
-              options={["Men", "women", "children"]}
-            />
-            <FilterOptions
-              name="Location"
-              options={["Men", "women", "children"]}
-            />
-            <FilterOptions name="Size" options={["Men", "women", "children"]} />
-            {products?.discount[0].length ? (
-              <FilterOptions
-                name="Discount"
-                options={["Men", "women", "children"]}
-              />
-            ) : null}
-            <FilterOptions
-              name="Shipping Method"
-              options={["Pickup", "Waybilling", "children"]}
-            />
             <Box
               onClick={() =>
                 editFilter({
@@ -201,11 +202,64 @@ const SearchPage = ({ search, setSearch }) => {
             >
               <Typography
                 variant="body2"
-                className="!text-black !text-[12px] !ml-4 !m-2 !h-6"
+                className="!text-black !text-[12px] !mr-4"
               >
-                Reset filter
+                Reset Filter:
               </Typography>
             </Box>
+            <FilterOptions
+              name="Category"
+              options={products?.category || [" "]}
+            />
+            <FilterOptions
+              name="Price"
+              options={[
+                "Any",
+                ...generatePriceRange(
+                  Math.min(...products?.price),
+                  Math.max(...products?.price)
+                ),
+              ]}
+            />
+            <FilterOptions
+              name="Review"
+              options={[
+                "Any",
+                "1 star",
+                "2 star",
+                "3 star",
+                "4 star",
+                "5 star",
+              ]}
+            />
+            <FilterOptions
+              name="Location"
+              options={[
+                "Nearby",
+                "Within your street",
+                "Within your city",
+                "Within your state",
+                "Nationwide",
+              ]}
+            />
+            <FilterOptions name="Size" options={["Any"]} />
+            {products?.discount.length ? (
+              <FilterOptions
+                name="Discount"
+                options={products?.discount || [""]}
+              />
+            ) : null}
+            <FilterOptions
+              name="Shipping Method"
+              options={["Pickup", "Waybilling"]}
+            />
+
+            <Button
+              onClick={() => applyFilter()}
+              className="!text-white bg-green-500 !text-[12px] !ml-2 !shadow-none"
+            >
+              Apply
+            </Button>
           </Box>
 
           <Box className="px-2 md:px-8">
@@ -223,6 +277,15 @@ const SearchPage = ({ search, setSearch }) => {
                     others={{ ...prod }}
                   />
                 ))}
+            </Box>
+            <Box className="flex justify-center mt-6 md:mt-12">
+              <MyPagination
+                currentPage={searchParams.get("p") || 1}
+                searchParams={searchParams}
+                limit={20}
+                query="p"
+                totalNumber={products?.totalNumber}
+              />
             </Box>
           </Box>
         </>

@@ -291,7 +291,7 @@ export default function StoreDashboardAppBar({
             <Avatar
               alt={staffInfo.fullname}
               title={staffInfo.fullname}
-              src={staffInfo.picture || "/images/misc/no-picture"}
+              src={staffInfo.picture || "/images/misc/no-profile"}
               className="mr-2"
             />
 

@@ -21,7 +21,7 @@ export const createStoreHandler = (payload, dispatch, router, setStage) => {
     .then((res) => {
       toaster({ ...res });
       console.log(res)
-      setStage(res.stage > 0 ? res.stage : 3)
+      setStage(res.stage > -1 ? res.stage : 2)
       if (res.type === "success") {
         router.push(res.navigateTo);
       }

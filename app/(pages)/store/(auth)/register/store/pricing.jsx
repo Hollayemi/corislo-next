@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 const Pricing = ({ setStage, userValues, storeValues }) => {
   const dispatch = useDispatch();
-  const router = useRouter()
+  const router = useRouter();
   return (
     <Box>
       <Typography

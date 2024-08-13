@@ -84,7 +84,7 @@ export const StaffCard = ({ image, name, role, joinDate, status, id }) => {
 
           <Box className="mt-3">
             <FlexContent tag="Status" info={status} />
-            <FlexContent tag="Join Date" info={formatDate(joinDate)} />
+            <FlexContent tag="Joined Date" info={formatDate(joinDate)} />
           </Box>
           <Box className="flex items-center justify-evenly w-full mt-4">
             <IconBtn icon="tabler:phone" />

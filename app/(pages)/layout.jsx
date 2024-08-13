@@ -1,6 +1,5 @@
 "use client";
 import ThemeComponent from "@/theme";
-import Head from "next/head";
 import persistStore from "redux-persist/es/persistStore";
 import NextProgress from "nextjs-progressbar";
 import { store } from "@/app/redux/state/store";
@@ -15,11 +14,11 @@ import ReactHotToast from "@/app/styles/react-hot-toast";
 import { UserDataProvider } from "../context/userContext";
 import handleSubscribeToNotification from "../redux/state/slices/api/webpush";
 import { useEffect, useState } from "react";
-import { useUserData } from "@/app/hooks/useData";
 import LineLoading from "./loading";
-import VoiceflowChatComponent from "./ai";
 import "@/styles/globals.css";
-import useGeolocation from "../hooks/useGeolocation";
+import { isMobile, deviceType, osName } from "react-device-detect";
+
+import UAParser from "ua-parser-js";
 
 const metadata = {
   title:
@@ -32,22 +31,24 @@ const persistor = persistStore(store);
 
 // ** Pace Loader
 export default function RootLayout({ children }) {
-  const [userInfo, setUserInfo] = useState({});
+  const [connection, setConnection] = useState([]);
   const [hideOverflow, setOverflow] = useState(false);
 
-  // useEffect(() => {
-  //   if ("serviceWorker" in navigator && userInfo?._id) {
-  //     navigator.serviceWorker
-  //       .register("/sw.js")
-  //       .then((registration) => {
-  //         handleSubscribeToNotification();
-  //         // console.log("Service Worker registered: ", registration);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Service Worker registration failed:", error);
-  //       });
-  //   }
-  // }, [userInfo]);
+  useEffect(() => {
+    console.log(connection);
+    if ("serviceWorker" in navigator && connection) {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then((registration) => {
+          if (!connection.includes(osName))
+            handleSubscribeToNotification(connection);
+          // console.log("Service Worker registered: ", registration);
+        })
+        .catch((error) => {
+          console.error("Service Worker registration failed:", error);
+        });
+    }
+  }, [connection]);
 
   return (
     <html lang="en">
@@ -90,12 +91,20 @@ export default function RootLayout({ children }) {
             revalidateOnFocus: true,
 
             fetcher: async (resource, init) => {
-              // const currentSearchParams = new URLSearchParams(resource);
-              // currentSearchParams.set("lat", coordinates.latitude);
-              // currentSearchParams.set("long", coordinates.longitude);
-              // console.log(currentSearchParams.toString());
+              let url = resource;
+
+              if (resource[0] !== "/") {
+                const currentSearchParams = new URLSearchParams(resource[0]);
+                currentSearchParams.set("lat", resource[1]);
+                currentSearchParams.set("lng", resource[2]);
+                url = currentSearchParams
+                  .toString()
+                  .replaceAll("%2F", "/")
+                  .replaceAll("%3F", "?");
+              }
+
               const getToken = jsonHeader("user");
-              const res = await martApi.get(resource, getToken);
+              const res = await martApi.get(url, getToken);
               return res.data;
             },
           }}
@@ -104,7 +113,7 @@ export default function RootLayout({ children }) {
           <Provider store={store}>
             <UserDataProvider
               setOverflow={setOverflow}
-              setUserInfo={setUserInfo}
+              setConnection={setConnection}
             >
               <LineLoading />
               <PersistGate loading={null} persistor={persistor}>

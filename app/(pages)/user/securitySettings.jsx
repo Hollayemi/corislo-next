@@ -32,15 +32,28 @@ import { useUserData } from "@/app/hooks/useData";
 import { formatDate } from "@/app/utils/format";
 import CustomOption from "@/app/components/option-menu/option";
 import CheckPassword from "./checkPassword";
+import OtpVerification from "../auth/otp-verification/page";
+import { mutate } from "swr";
 
 const Index = () => {
   const [display, setDisplay] = useState("all");
+  const { userInfo } = useUserData();
 
   const pages = {
     all: <SecuritySettings setDisplay={setDisplay} />,
     password: <ChangePassword setDisplay={setDisplay} />,
     email: <EmailAddress setDisplay={setDisplay} />,
     activities: <AccountActivities setDisplay={setDisplay} />,
+    verify: (
+      <OtpVerification
+        email={userInfo.email}
+        account="user"
+        callback={() => {
+          mutate("/user/get-account");
+          setDisplay("all");
+        }}
+      />
+    ),
   };
   return pages[display];
 };
@@ -151,6 +164,7 @@ const AccountActivities = () => {
 
 const SecuritySettings = ({ setDisplay }) => {
   const { showOverlay, userInfo } = useUserData();
+  const dispatch = useDispatch();
   return (
     <Box>
       <TitleSubtitle title="Security Settings" />
@@ -186,14 +200,27 @@ const SecuritySettings = ({ setDisplay }) => {
             size="small"
             startIcon={
               <IconifyIcon
-                icon="tabler:edit-circle"
+                icon={
+                  userInfo.isVerified ? "tabler:edit-circle" : "tabler:check"
+                }
                 className="!text-gray-500"
               />
             }
             className="!rounded-full !border-gray-400 !text-gray-500 !ml-2 md:!ml-5"
-            onClick={() => setDisplay("email")}
+            onClick={() =>
+              userInfo.isVerified
+                ? setDisplay("email")
+                : resendOtp(
+                    {
+                      email: userInfo.email,
+                      action: { to: "email-verification", account: "user" },
+                    },
+                    dispatch,
+                    () => setDisplay("verify")
+                  )
+            }
           >
-            Edit
+            {userInfo.isVerified ? "Edit" : "Verify"}
           </Button>
         </Box>
       </Box>
@@ -380,7 +407,13 @@ const EmailAddress = ({ setDisplay }) => {
     // Handle OTP resend logic here
     // You can initiate the OTP resend process
     // and then reset the countdown timer
-    resendOtp({ email: emailData.email, action: "change-email" }, dispatch);
+    resendOtp(
+      {
+        email: emailData.email,
+        action: { to: "change-email", account: "user" },
+      },
+      dispatch
+    );
     setCountdown(60);
     setResendDisabled(true);
   };

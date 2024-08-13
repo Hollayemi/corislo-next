@@ -17,13 +17,15 @@ const OrderTable = ({
   rows,
   onRowClick = () => {},
   loading = false,
+  size,
+  tableProps = {},
 }) => {
   const myRows = rows.map((e, i) => {
     return { ...e, id: i };
   });
   // ** States
   const [data] = useState(myRows);
-  const [pageSize, setPageSize] = useState(7);
+  const [pageSize, setPageSize] = useState(size || 7);
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
 
@@ -44,12 +46,6 @@ const OrderTable = ({
     }
   };
   return (
-    // <Grid container>
-    //   <Grid
-    //     item
-    //     xs={12}
-    //     className="!w-[385px] !max-w-[385px] md:!w-full md:!max-w-full overflow-scroll md:overflow-auto border md:border-none shadow md:shadow-none"
-    //   >
     <DataGrid
       loading={loading}
       autoHeight
@@ -59,11 +55,11 @@ const OrderTable = ({
       initialState={{
         pagination: {
           paginationModel: {
-            pageSize: 5,
+            pageSize,
           },
         },
       }}
-      onRowClick={(e) => onRowClick(e.row, e.id)}
+      onRowClick={(e) => onRowClick(e.row)}
       rows={filteredData.length ? filteredData : data}
       onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
       componentsProps={{
@@ -76,12 +72,11 @@ const OrderTable = ({
           onChange: (event) => handleSearch(event.target.value),
         },
       }}
-      // minWidth={300}
-      // className="w-[1220px]  md:w-full"
       sx={{ border: "none" }}
+      {...tableProps
+        
+      }
     />
-    //   </Grid>
-    // </Grid>
   );
 };
 

@@ -8,7 +8,7 @@ import { isMobile, deviceType, osName } from "react-device-detect";
 const PUBLIC_VAPID_KEY2 =
   "BCttWS18Th1RaDR7gVIVtlXOw_P-nE7qJVkXZxEOW2a1yHOS4vKEuEWtRN-A5lX9_lmDjM3nPivWeF3rZoCi8Rk";
 
-const handleSubscribeToNotification = async () => {
+const handleSubscribeToNotification = async (connections) => {
   function urlBase64ToUint8Array(base64String) {
     const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
     const base64 = (base64String + padding)
@@ -33,7 +33,9 @@ const handleSubscribeToNotification = async () => {
         userVisibleOnly: true,
         applicationServerKey: serverKey,
       });
-      // console.log(subscription, "sub");
+
+  
+      if(!connections[osName]){
       const sendSubscription = async (payload) => {
         const { data } = await martApi
           .post(
@@ -46,6 +48,7 @@ const handleSubscribeToNotification = async () => {
         return data;
       };
       sendSubscription(subscription);
+    }
     } else {
       console.error("Notification permission denied.");
     }

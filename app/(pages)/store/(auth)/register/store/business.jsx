@@ -2,8 +2,14 @@
 import React, { useState } from "react";
 import { CustomInput } from "@/app/components/cards/auth/components";
 import { Box, Button, Grid, Typography } from "@mui/material";
-const BusinessProfile = ({ handleStoreChange, errors, values, setStage }) => {
+import { createStoreHandler } from "@/app/redux/state/slices/shop/addShop";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 
+
+const BusinessProfile = ({ handleStoreChange, errors, values, userValues, setStage }) => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   return (
     <Box className="px-2">
       <Grid container spacing={2}>
@@ -153,7 +159,14 @@ const BusinessProfile = ({ handleStoreChange, errors, values, setStage }) => {
         <Button
           variant="contained"
           className="w-full !h-12 !rounded-full !text-gray-100 !text-[17px] !mt-3 !shadow-none"
-          onClick={() => setStage(2)}
+          onClick={() =>
+            createStoreHandler(
+              { user: userValues, store: values },
+              dispatch,
+              router,
+              setStage
+            )
+          }
         >
           Next
         </Button>

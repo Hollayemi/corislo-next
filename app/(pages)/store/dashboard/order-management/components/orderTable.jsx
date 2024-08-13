@@ -25,7 +25,7 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
   return (
     <Box className="w-full">
       <Box
-        className="w-full h-48 md:px-10 flex items-center justify-between rounded-2xl p-5"
+        className="w-full h-48 md:px-10 flex items-center justify-between rounded-2xl p-5 py-7"
         bgcolor="custom.pri"
       >
         <Box className="w-7/12">

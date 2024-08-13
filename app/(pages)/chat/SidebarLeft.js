@@ -170,7 +170,7 @@ const SidebarLeft = (props) => {
 
                           borderRadius: "50%",
                           color: `${statusObj[chatLog.status]}.main`,
-                          backgroundColor: `${statusObj[chatLog.status]}.main`,
+                          backgroundColor: `green`,
                           boxShadow: (theme) =>
                             `0 0 0 2px ${
                               !activeCondition
@@ -181,9 +181,9 @@ const SidebarLeft = (props) => {
                       />
                     }
                   >
-                    {chatLog.avatar ? (
+                    {chatLog.picture ? (
                       <MuiAvatar
-                        src={chatLog.avatar}
+                        src={chatLog.picture}
                         alt={chatLog.chatName}
                         sx={{
                           width: 38,

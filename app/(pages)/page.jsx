@@ -28,9 +28,17 @@ import { NumberExplained } from "../components/cards/sellerCards";
 import { useUserData } from "../hooks/useData";
 import { ServicesSlider } from "./services/page";
 import Link from "next/link";
+import useSWRWithCoordinates from "../hooks/fetchWithCoordinates";
+import { CircleLoader } from "../components/cards/loader";
 
 const HomePage = ({ params }) => {
-  const { data: prods } = useSWR("/products?limit=30");
+  const {
+    data: prods,
+    isLoading: prodsLoading,
+    status: prodsStatus,
+    lat,
+    lng,
+  } = useSWRWithCoordinates("/products?limit=30");
   const { data: ads } = useSWR("/home/ads");
   const products = prods ? prods.data : [];
   const popularAds = ads ? ads.data : [];
@@ -316,20 +324,31 @@ const HomePage = ({ params }) => {
           {/*  */}
           <Box className="mt-14">
             <Box className="px-3 md:px-10">
-              <SectionTitle black="More" blue="Products" />
+              <SectionTitle
+                black="More"
+                blue="Products"
+                right={`${lat},  ${lng}`}
+              />
               <Box className="!mt-6 flex flex-wrap justify-center">
-                {products?.result?.map((prod, i) => (
-                  <ProductOnShowcase
-                    key={i}
-                    prodName={prod.prodName}
-                    prodPrice={prod.prodPrice}
-                    image={`/images/more/${i + 1}.png`}
-                    star={prod.star}
-                    store={prod.store}
-                    branch={prod.branch}
-                    others={{ ...prod }}
-                  />
-                ))}
+                {!prodsLoading ? (
+                  products?.result?.map((prod, i) => (
+                    <ProductOnShowcase
+                      key={i}
+                      prodName={prod.prodName}
+                      prodPrice={prod.prodPrice}
+                      image={`/images/more/${i + 1}.png`}
+                      star={prod.star}
+                      store={prod.store}
+                      branch={prod.branch}
+                      others={{ ...prod }}
+                    />
+                  ))
+                ) : (
+                  <Box className="flex flex-col items-center justify-center my-6">
+                    <CircleLoader />
+                    <Typography className="!mt-3">{prodsStatus}</Typography>
+                  </Box>
+                )}
               </Box>
             </Box>
           </Box>

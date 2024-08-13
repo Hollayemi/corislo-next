@@ -7,3 +7,13 @@ export const jsonHeader = (by) => {
   };
   return config;
 };
+
+export const superHeader = () => {
+  const config = {
+    headers: {
+      "content-type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("super_token"),
+    },
+  };
+  return config;
+};

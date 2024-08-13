@@ -154,7 +154,7 @@ function Header({ search, setSearch, setPinSearch }) {
           <Box className="mx-3 md:!mr-5">
             <Badge badgeContent={5} size="small" variant="dot" color="primary">
               <IconImage
-                image="notification"
+                image="rre"
                 className="w-6 !flex-shrink-0"
                 onClick={showOverlay("notification")}
               />

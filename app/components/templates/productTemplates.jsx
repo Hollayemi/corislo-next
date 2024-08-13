@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import Link from "next/link";
 import { useEffect } from "react";
-import { formatCurrency, ngnPrice } from "@/app/utils/format";
+import { formatCurrency, formatDistance, ngnPrice } from "@/app/utils/format";
 import { Map } from "@mui/icons-material";
 import { useUserData } from "@/app/hooks/useData";
 import ReactSlickSlider from "../wrapper/react-slick";
@@ -298,7 +298,7 @@ export const ProductOnShowcase = ({
             name="size-small"
             size="small"
           />
-          <Box className="flex justify-between items-center w-full mt-1">
+          <Box className="flex justify-between items-center w-full mt-1 px-1">
             <Link href={`/biz/${store}-${branch}/`}>
               <Typography
                 variant="body2"
@@ -308,18 +308,18 @@ export const ProductOnShowcase = ({
               </Typography>
             </Link>
             <Box
-              className="flex items-center cursor-pointer mr-3"
+              className="flex items-center cursor-pointer md:mr-3"
               onClick={() => showMapScreen()}
             >
               <IconifyIcon
-                icon="tabler:map-pin-filled"
-                className="!mr-1 !text-[15px]"
+                icon="tabler:map-pin"
+                className="!text-[10px] md:!text-[15px] mr-px -mt-1"
               />
               <Typography
                 variant="body2"
                 className="whitespace-nowrap text-ellipsis !text-[10px]"
               >
-                {others?.distance?.toFixed(1)}m
+                {formatDistance(others?.distance)}
               </Typography>
             </Box>
           </Box>

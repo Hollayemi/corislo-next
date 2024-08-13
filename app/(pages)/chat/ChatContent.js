@@ -206,10 +206,10 @@ const ChatContent = (props) => {
                       />
                     }
                   >
-                    {selectedChat.contact.avatar ? (
+                    {selectedChat.contact.picture ? (
                       <MuiAvatar
                         sx={{ width: 38, height: 38 }}
-                        src={selectedChat.contact.avatar}
+                        src={selectedChat.contact.picture}
                         alt={selectedChat.contact.chatName || selectedChat.contact.businessName}
                       />
                     ) : (
@@ -257,9 +257,6 @@ const ChatContent = (props) => {
                   }}
                   options={[
                     "View Contact",
-                    "Mute Notifications",
-                    "Block Contact",
-                    "Clear Chat",
                     "Report",
                   ]}
                 />
