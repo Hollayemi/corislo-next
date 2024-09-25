@@ -229,7 +229,7 @@ const SidebarLeft = (props) => {
                   primary={
                     <Typography
                       noWrap
-                      className="!font-bold !text-[14px]"
+                      className="!font-bold !text-[14px] pr-7 max-w-48"
                       sx={{ fontWeight: 500 }}
                     >
                       {chatLog.chatName}
@@ -239,18 +239,19 @@ const SidebarLeft = (props) => {
                     <Typography
                       // noWrap
                       variant="body2"
-                      className="!leading-2 !text-[11px]"
+                      className="!leading-2 !text-[11px] "
                       sx={{
                         ...(!activeCondition && { color: "text.secondary" }),
                       }}
                     >
                       {lastMessage
-                        ? mySubstring(lastMessage.message, 80)
+                        ? mySubstring(lastMessage.message, 70)
                         : null}
                     </Typography>
                   }
                 />
                 <Box
+                className="absolute right-0"
                   sx={{
                     display: "flex",
                     alignItems: "flex-end",
@@ -260,7 +261,7 @@ const SidebarLeft = (props) => {
                 >
                   <Typography
                     variant="body2"
-                    className="!text-[11px]"
+                    className="!text-[11px] !mr-2"
                     sx={{
                       whiteSpace: "nowrap",
                       color: activeCondition
@@ -321,7 +322,6 @@ const SidebarLeft = (props) => {
             />
           </Box>
         </Box>
-
         <Box
           sx={{
             py: 1,
@@ -330,41 +330,6 @@ const SidebarLeft = (props) => {
             alignItems: "center",
           }}
         >
-          {/* {store && store.userProfile ? (
-            <Badge
-              overlap="circular"
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              sx={{ mr: 1.5 }}
-              onClick={handleUserProfileLeftSidebarToggle}
-              badgeContent={
-                <Box
-                  component="span"
-                  sx={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: "50%",
-                    color: `${statusObj[userStatus]}.main`,
-                    backgroundColor: `${statusObj[userStatus]}.main`,
-                    boxShadow: (theme) =>
-                      `0 0 0 2px ${theme.palette.background.paper}`,
-                  }}
-                />
-              }
-            >
-              <MuiAvatar
-                src={store.userProfile.avatar}
-                alt={store.userProfile.chatName}
-                sx={{
-                  width: "2.375rem",
-                  height: "2.375rem",
-                  cursor: "pointer",
-                }}
-              />
-            </Badge>
-          ) : null} */}
           {mdAbove && (
               <TextField
                 fullWidth
@@ -400,16 +365,9 @@ const SidebarLeft = (props) => {
           ) : null} */}
         </Box>
 
-        <StyleList sx={{ height: "calc(100vh - 11.5375rem)" }}>
+        <StyleList sx={{ height: {xs: "calc(100vh - 9.2375rem)", md: "calc(100vh - 14.2375rem)"} }}>
           <Box className="overflow-hidden">
-            <Box sx={{ p: (theme) => theme.spacing(2, 2, 2) }}>
-              {/* <Typography
-                variant="h6"
-                className="!text-[16px] !font-bold"
-                sx={{ ml: 1.5, mb: 1.5, color: "primary.main" }}
-              >
-                Following Stores
-              </Typography> */}
+            <Box className="px-2">
               <List sx={{ mb: 2.5, p: 0 }}>{renderChats()}</List>
             </Box>
           </Box>

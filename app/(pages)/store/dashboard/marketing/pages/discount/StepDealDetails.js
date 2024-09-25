@@ -45,6 +45,7 @@ const CustomInput = forwardRef((props, ref) => {
 
 const StepDealDetails = ({ campaignData, setCampaignData, formHandler }) => {
   // ** State
+  const now = new Date()
   const { startDate, notification, endDate } = campaignData;
   
   const handleDateChange = (dates) => {
@@ -105,34 +106,7 @@ const StepDealDetails = ({ campaignData, setCampaignData, formHandler }) => {
             </MenuItem>
           </Select>
         </FormControl> */}
-        <DatePicker
-          selectsRange
-          endDate={endDate || ""}
-          selected={new Date()}
-          startDate={startDate || ""}
-          id="date-range-picker"
-          onChange={handleDateChange}
-          shouldCloseOnSelect={false}
-          customInput={
-            <CustomInput
-              label="Deal Duration"
-              start={campaignData.startDate}
-              end={campaignData.endDate}
-            />
-          }
-        />
-        <TextField
-          fullWidth
-          onChange={formHandler("usageLimit")}
-          type="number"
-          label="Max Users"
-          className="!mt-4"
-          value={campaignData.usageLimit}
-          placeholder="500"
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <FormControl fullWidth>
+        <FormControl fullWidth className="!mb-4">
           <InputLabel id="select-deal-status">Campaign Status</InputLabel>
           <Select
             labelId="select-deal-status"
@@ -142,11 +116,39 @@ const StepDealDetails = ({ campaignData, setCampaignData, formHandler }) => {
             onChange={formHandler("status")}
           >
             <MenuItem value="active">Active</MenuItem>
-            <MenuItem value="inactive">Inactive</MenuItem>
             <MenuItem value="scheduled">Scheduled</MenuItem>
             {/* <MenuItem value="abandoned">Abandoned</MenuItem> */}
           </Select>
         </FormControl>
+        <DatePicker
+          selectsRange
+          endDate={endDate || ""}
+          selected={new Date()}
+          startDate={startDate || ""}
+          minDate={campaignData.status === "active" ? now : now.setDate(new Date().getDate() + 1)}
+          id="date-range-picker"
+          onChange={handleDateChange}
+          shouldCloseOnSelect={false}
+          customInput={
+            <CustomInput
+              label="Deal Duration"
+              start={campaignData.status === "active" ? now : campaignData.startDate}
+              end={campaignData.endDate}
+            />
+          }
+        />
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <TextField
+          fullWidth
+          onChange={formHandler("usageLimit")}
+          type="number"
+          label="Max Users"
+          
+          value={campaignData.usageLimit}
+          placeholder="500"
+        />
+        
       </Grid>
       <Grid item xs={12} sm={6}>
         <FormControl component="fieldset">

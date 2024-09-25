@@ -10,7 +10,7 @@ import { updateStaff, updateStaffPicture } from "@/app/redux/state/slices/shop/b
 import useSWR from "swr";
 
 const StaffSettings = () => {
-  const { setLoading, showSnackbar } = useStoreData();
+  const { setLoading, showSnackbar } = useStoreData()
   const { data } = useSWR(`branch/staff`);
   const myAccount = data?.data || {};
   const dispatch = useDispatch();
@@ -72,9 +72,9 @@ const StaffSettings = () => {
                   src={
                     localFile
                       ? URL?.createObjectURL(localFile[0])
-                      : myAccount.picture || "/images/misc/no-profile"
+                      : myAccount.picture || "/images/misc/no-profile.png"
                   }
-                  alt="settings.png"
+                  alt="profile.png"
                   width={250}
                   height={250}
                   className="w-24 h-24 !rounded-full"

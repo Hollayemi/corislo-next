@@ -59,9 +59,10 @@ const AppChat = () => {
     offline: "secondary",
   };
 
+  console.log(storeList)
+
   useEffect(() => {
     socket?.on("newMessage", (data) => {
-      
       setMessageLog((prev) => { return { ...prev, log:data } });
     });
   }, [socket, messageLog]);
@@ -92,6 +93,7 @@ const AppChat = () => {
       },
     };
   }
+
   if (!storeListLoading && !loadingChat && itIsNewChat) {
     storeList.selectedChat = {
       chat: null,
@@ -102,22 +104,6 @@ const AppChat = () => {
     };
   }
 
-  const ScrollWrapper = ({ children }) => {
-    if (hidden) {
-      return (
-        <Box sx={{ height: "100%", overflowY: "auto", overflowX: "hidden" }}>
-          {children}
-        </Box>
-      );
-    } else {
-      return (
-        <PerfectScrollbar options={{ wheelPropagation: false }}>
-          {children}
-        </PerfectScrollbar>
-      );
-    }
-  };
-
   return (
     <StoreLeftSideBar
       hidebreadCrumb
@@ -125,7 +111,7 @@ const AppChat = () => {
       path={{ sidebar: "chat" }}
     >
       <Box
-        className="app-chat -mt-3 -mb-12"
+        className="app-chat -mb-12"
         sx={{
           display: "flex",
           borderRadius: 1,

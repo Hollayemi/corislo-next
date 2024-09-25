@@ -18,14 +18,15 @@ const updateOrderApi = createAsyncThunk("post/update", async (payload) => {
   return data;
 });
 
-export const storeUpdateOrder = (dispatch, payload) => {
+export const storeUpdateOrder = (dispatch, payload, callback) => {
   dispatch(updateOrderApi(payload))
     .then(unwrapResult)
     .then((res) => {
+      toaster({ ...res });
       if (res.type === "success") {
         mutate(`/branch/order-request?order=${payload.orderId}`);
-        toaster({ ...res });
       }
+      callback()
     })
     .catch((err) => {
       console.log(err);

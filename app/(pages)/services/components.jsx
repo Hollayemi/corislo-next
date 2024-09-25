@@ -189,7 +189,7 @@ export const StatusView = ({ close }) => {
           <Box className="h-auto max-h-[350px]">
             <ReactSlickSlider config={2} noArrowStyle>
               {images.map((_, i) => (
-                <StatusMedia image={`/images/more/${i + 1}.png`} />
+                <StatusMedia key={i} image={`/images/more/${i + 1}.png`} />
               ))}
             </ReactSlickSlider>
           </Box>

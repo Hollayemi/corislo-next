@@ -315,10 +315,10 @@ export const LineChartStatistic = ({ label, discounts, flashsales }) => {
 };
 
 export const reshapePrice = (price) => {
-  if (typeof parseInt(price) === "number") {
-    return `₦ ${parseInt(price).toLocaleString()}`;
+  if (typeof parseInt(price) === 'number') {
+    return `₦ ${parseInt(price).toLocaleString()}`
   }
-};
+}
 
 export const GrowthCard = ({ title, growth, count, toExpire }) => {
   return (

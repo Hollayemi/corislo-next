@@ -119,12 +119,26 @@ export const columns = (setStatus) => [
             Select
           </Button>
         }
-        options={[`Activate`, `Deativate`, `Delete`]}
+        options={[
+          {
+            rest: "Activate",
+            component: <Box className={`w-44 px-3 ${params.row.status === "active" && "hidden"}`}>Activate</Box>
+          },
+          {
+            rest: "Deactivate",
+            component: <Box className={`w-44 px-3  ${params.row.status === "inactive" && "hidden"}`}>Deactivate</Box>
+          },
+          {
+            rest: "Delete",
+            component: <Box className="!bg-red-500 !h-8 w-44 !text-white px-3 rounded !leading-8">Delete</Box>
+          }
+        ]}
         setOption={(status) => setStatus(`${status}-${params.row.id}`)}
         iconButtonProps={{
           size: "small",
           sx: { color: "text.disabled", cursor: "pointer" },
         }}
+        itemsClassName="!px-2"
       />
     ),
   },

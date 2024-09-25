@@ -4,6 +4,8 @@ import { Box } from "@mui/material";
 import { SWRConfig } from "swr";
 import martApi from "@/app/redux/state/slices/api/baseApi";
 import { SuperDataProvider } from "@/app/context/superContex";
+import { Provider } from "react-redux";
+import { store } from '@/app/redux/state/store'
 
 // export const metadata = {
 //   title: "Store - corislo",
@@ -18,20 +20,22 @@ export default function MySuperDashboardLayout({ children }) {
         revalidateOnFocus: false,
 
         fetcher: async (resource, init) => {
-          const getToken = superHeader();
-          const res = await martApi.get(resource, getToken);
-          return res.data;
+          const getToken = superHeader()
+          const res = await martApi.get(resource, getToken)
+          return res.data
         },
       }}
     >
-      <SuperDataProvider>
-        <Box
-          className="h-full !w-full absolute min-h-scren !overflow-x-hidden"
-          bgcolor="custom.bodyGray"
-        >
-          {children}
-        </Box>
-      </SuperDataProvider>
+      <Provider store={store}>
+        <SuperDataProvider>
+          <Box
+            className="h-full !w-full absolute min-h-scren !overflow-x-hidden"
+            bgcolor="custom.bodyGray"
+          >
+            {children}
+          </Box>
+        </SuperDataProvider>
+      </Provider>
     </SWRConfig>
-  );
+  )
 }

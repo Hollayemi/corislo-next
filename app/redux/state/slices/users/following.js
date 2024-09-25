@@ -25,6 +25,7 @@ export const followStore = (payload, dispatch, socket, isIncluded) => {
       });
       toaster({ ...res });
       mutate("/user/following");
+      mutate(`/branch/info?store=${payload.store}&branch=${payload.branch}`);
     })
     .catch((e) => {});
 };

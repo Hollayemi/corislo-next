@@ -6,21 +6,21 @@ import { mutate } from "swr";
 
 const saveBillingApi = createAsyncThunk(
   "post/saveBillingApi",
-  async (payload) => {
+  async (insert) => {
     const { data } = await martApi
-      .post("/user/billing", payload, jsonHeader())
+      .post(`/${insert.forBusiness ? 'store' : 'user'}/billing`, insert.payload, jsonHeader(insert.forBusiness && "store"))
       .then((e) => e)
       .catch((e) => e.response);
     return data;
   }
 );
 
-export const saveBilling = (payload, dispatch) => {
-  dispatch(saveBillingApi(payload))
+export const saveBilling = (payload, dispatch, forBusiness) => {
+  dispatch(saveBillingApi({payload, forBusiness}))
     .then(unwrapResult)
     .then((res) => {
       toaster({ ...res });
-      mutate("/user/billings");
+      mutate(`/${insert.forBusiness ? 'store' : 'user'}/billings`);
     })
     .catch((e) => {});
 };

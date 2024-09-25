@@ -27,7 +27,7 @@ import { useRouter } from "next/navigation";
 // ** Styled Components
 const ChatWrapperStartChat = styled(Box)(({ theme }) => ({
   flexGrow: 1,
-  height: "calc(100vh - 5.0375rem)",
+  height: "calc(100vh - 7.0375rem)",
   display: "flex",
   borderRadius: 1,
   alignItems: "center",

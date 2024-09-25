@@ -218,7 +218,7 @@ const DashboardBubbleChart = ({ interval }) => {
   return (
     <Card className="!shadow-none">
       <Box className="!p-3">
-        <Typography className="!text-[17px] font-bold">Buyers</Typography>
+        <Typography className="text-[13px] !font-bold">Buyers</Typography>
       </Box>
       <CardContent>
         <Bubble data={data} height={300} options={options} />

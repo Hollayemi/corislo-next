@@ -1,24 +1,25 @@
-import { Dot } from "@/app/components/cards";
-import IconifyIcon from "@/app/components/icon";
+import { Dot } from '@/app/components/cards'
+import IconifyIcon from '@/app/components/icon'
 import {
   formatCurrency,
   formatDate,
   formatDateToMonthShort,
   mySubstring,
-} from "@/app/utils/format";
-import { CancelOutlined } from "@mui/icons-material";
-import { useState } from "react";
-import { useUserData } from "@/app/hooks/useData";
-import useSWR from "swr";
-import Link from "next/link";
+} from '@/app/utils/format'
+import { CancelOutlined } from '@mui/icons-material'
+import { useState } from 'react'
+import { useUserData } from '@/app/hooks/useData'
+import useSWR from 'swr'
+import Link from 'next/link'
 
-const { Box, Typography, Rating } = require("@mui/material");
-const { default: Image } = require("next/image");
+const { Box, Typography, Rating } = require('@mui/material')
+const { default: Image } = require('next/image')
 
 const Notification = () => {
-  const { notifications, showOverlay } = useUserData();
+  const { notifications, showOverlay } = useUserData()
+  const {} = useSWR('/user/notification/view-all')
   return (
-    <Box className="mt-20 relative md:absolute px-2 md:right-2">
+    <Box className="mt-16 relative md:absolute px-2 md:right-2">
       <Box className="w-full md:w-[420px] h-[600px] md:h-[500px] relative bg-white rounded-xl md:mr-10 flex flex-col">
         <Box className="flex justify-between items-center px-4 h-14 border-b !w-full flex-shrink-0">
           <Typography variant="body2" className="!font-bold">
@@ -38,22 +39,23 @@ const Notification = () => {
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default Notification;
+export default Notification
 
-const OrderNotif = ({ data }) => {
-  const [open, setOpen] = useState(0);
+export const OrderNotif = ({ data, forStore }) => {
+  console.log(data)
+  const [open, setOpen] = useState(0)
   return (
-    <Box className="w-full border-b">
+    <Box className="w-full border-b-2">
       <Box className="px-4 w-full flex justify between items-center mt-2">
         <Typography variant="caption" className="!text-[11px] !font-bold">
           {data._id}
         </Typography>
       </Box>
       {data.info.map((each, i) => (
-        <Box key={i} className="flex items-start p-3 w-full">
+        <Box key={i} className="flex items-start p-3 w-full border-b border-gray-100">
           {data.image && (
             <Box className="w-11 h-11 flex-shrink-0">
               <Image
@@ -66,57 +68,66 @@ const OrderNotif = ({ data }) => {
             </Box>
           )}
           <Box className="pl-3 relative w-full min-w-48">
-            <Box className="w-9/12 min-w-48">
+            <Box className=" w-11/12 md:w-9/12 min-w-48">
               <Typography variant="body2" className="!font-bold !text-black">
                 {each.title}
               </Typography>
               <Typography variant="body2" className="!text-[11px] !mt-2">
-                {mySubstring(each.note, 100)}
+                {mySubstring(each.note, open == i ? 1000 : 100)}
               </Typography>
             </Box>
 
-            <Box
-              className={`rounded-md ${
-                open === i ? "h-20 p-2 border" : "h-0"
-              } transition-all duration-300 !mt-3 w-full !overflow-hidden`}
-            >
-              {each?.orderId && <NotifOrderDisplay orderId={each.orderId} />}
-              {each?.productId && (
-                <NotifProductDisplay productId={each.productId} />
-              )}
-            </Box>
+            {!each.isText && (
+              <Box
+                className={`rounded-md ${
+                  open === i ? 'h-20 p-2 border' : 'h-0'
+                } transition-all duration-300 !mt-3 w-full !overflow-hidden`}
+              >
+                {each?.orderId && (
+                  <NotifOrderDisplay
+                    forStore={forStore}
+                    orderId={each.orderId}
+                  />
+                )}
+                {each?.productId && (
+                  <NotifProductDisplay productId={each.productId} />
+                )}
+              </Box>
+            )}
 
             <Box className="absolute top-0 right-0 pr-2 flex flex-col items-end">
               <Typography variant="caption" className="!text-[10px]">
                 {formatDateToMonthShort(each.date)}
               </Typography>
               <Box className="w-full flex justify-end mt-2 -ml-3">
-                <Box
-                  onClick={() => setOpen((prev) => prev === i ? 100 : i)}
-                  className="flex justify-center items-center w-4 h-4 cursor-pointer rounded-full border border-black"
-                >
-                  <IconifyIcon
-                    icon={`${
-                      open === i ? "tabler:chevron-up" : "tabler:chevron-down"
-                    }`}
-                  />
-                </Box>
-                {/* <Box
+                {each.isText || each.note.length > 100 && (
+                  <Box
+                    onClick={() => setOpen((prev) => (prev === i ? 100 : i))}
+                    className="flex justify-center items-center w-4 h-4 cursor-pointer rounded-full border border-black"
+                  >
+                    <IconifyIcon
+                      icon={`${
+                        open === i ? 'tabler:chevron-up' : 'tabler:chevron-down'
+                      }`}
+                    />
+                  </Box>
+                )}
+                {each.unread && <Box
                   className="w-2 h-2 rounded-full bg-orange-400"
                   bgcolor="warning"
-                ></Box> */}
+                ></Box>}
               </Box>
             </Box>
           </Box>
         </Box>
       ))}
     </Box>
-  );
-};
+  )
+}
 
 const NotifProductDisplay = ({ productId }) => {
-  const { data: prod, error } = useSWR(`/products?productId=${productId}`);
-  const product = prod ? prod?.data[0] : {};
+  const { data: prod, error } = useSWR(`/products?productId=${productId}`)
+  const product = prod ? prod?.data[0] : {}
   return (
     <Box className="flex items-center relative ">
       <Box className="w-12 h-12 flex-shrink-0">
@@ -191,11 +202,12 @@ const NotifProductDisplay = ({ productId }) => {
         </Box>
       </Box>
     </Box>
-  );
-};
-export const NotifOrderDisplay = ({ orderId }) => {
-  const { data: result } = useSWR(`/user/order/${orderId}`);
-  const orderProducts = result?.data[0] || {};
+  )
+}
+
+export const NotifOrderDisplay = ({ orderId, forStore = false }) => {
+  const { data: result } = useSWR(`/user/order/${orderId}`)
+  const orderProducts = result?.data[0] || {}
   return (
     <Box className="flex items-start relative !overfow-hidden ">
       <Box className="w-12 h-12 flex-shrink-0">
@@ -242,17 +254,19 @@ export const NotifOrderDisplay = ({ orderId }) => {
             </Typography>
           </Box>
         </Box>
-        <Box className="absolute bottom-0 md:top-0 right-0 flex flex-col items-end">
-          <Link href={`/order/${orderId}`}>
-            <Box className="flex justify-center items-center w-6 h-6 md:w-9 md:h-9 mt-2 cursor-pointer rounded-full border border-black">
-              <IconifyIcon
-                icon="tabler:arrow-up-right"
-                className="!text-[16px] md:!text-[26px]"
-              />
-            </Box>
-          </Link>
-        </Box>
+        {!forStore && (
+          <Box className="absolute bottom-0 md:top-0 right-0 flex flex-col items-end">
+            <Link href={`/order/${orderId}`}>
+              <Box className="flex justify-center items-center w-6 h-6 md:w-9 md:h-9 mt-2 cursor-pointer rounded-full border border-black">
+                <IconifyIcon
+                  icon="tabler:arrow-up-right"
+                  className="!text-[16px] md:!text-[26px]"
+                />
+              </Box>
+            </Link>
+          </Box>
+        )}
       </Box>
     </Box>
-  );
-};
+  )
+}

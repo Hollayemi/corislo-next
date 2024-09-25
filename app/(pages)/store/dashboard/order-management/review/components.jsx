@@ -1,8 +1,18 @@
-import IconifyIcon from "@/app/components/icon";
-import { formatCurrency } from "@/app/utils/format";
-import { Box, Menu, MenuItem, Typography } from "@mui/material";
-import { statusObj } from "../components";
-import CustomChip from "@/app/components/chip";
+import IconifyIcon from '@/app/components/icon'
+import { formatCurrency } from '@/app/utils/format'
+import {
+  Box,
+  Button,
+  InputAdornment,
+  Menu,
+  MenuItem,
+  TextField,
+  Typography,
+} from '@mui/material'
+import { statusObj } from '../components'
+import CustomChip from '@/app/components/chip'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 export const ProductPrev = ({
   _id,
@@ -20,7 +30,7 @@ export const ProductPrev = ({
         <Box className={`flex items-center justify-between w-full `}>
           <Box className="flex items-start w-full">
             <img
-              src={image || "/images/more/2.png"}
+              src={image || '/images/more/2.png'}
               alt="prod_image"
               width={150}
               height={150}
@@ -76,31 +86,31 @@ export const ProductPrev = ({
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 export const CustomizeStatus = ({ text, size }) => {
   const status = statusObj.filter(
-    (e) => e.title === text.replaceAll(" ", "_").toLowerCase()
-  )[0];
+    (e) => e.title === text.replaceAll(' ', '_').toLowerCase()
+  )[0]
   return (
     <CustomChip
       rounded
-      size={size||"small"}
+      size={size || 'small'}
       skin="light"
       color={status?.color}
-      label={status?.title?.replaceAll("_", " ")}
-      sx={{ "& .MuiChip-label": { textTransform: "capitalize" } }}
+      label={status?.title?.replaceAll('_', ' ')}
+      sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
       className="flex-shrink-0 !rounded-sm mx-1.5"
     />
-  );
-};
+  )
+}
 
 export const OrderSummary = ({ title, info, price, bold }) => {
   return (
     <Box className="flex items-center justify-between">
       <Typography
-        className={`${bold && "!font-bold !mt-2"} !text-[14px] !mb-2`}
+        className={`${bold && '!font-bold !mt-2'} !text-[14px] !mb-2`}
       >
         {title}
       </Typography>
@@ -108,14 +118,14 @@ export const OrderSummary = ({ title, info, price, bold }) => {
       <Box className="flex items-center justify-between w-1/2">
         <Typography className=" !text-[14px] !mb-2 ">{info}</Typography>
         <Typography
-          className={`${bold && "!font-bold !mt-2"} !text-[14px] !mb-2`}
+          className={`${bold && '!font-bold !mt-2'} !text-[14px] !mb-2`}
         >
           {formatCurrency(price)}
         </Typography>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 export const IconValue = ({ icon, value, className }) => {
   return (
@@ -123,67 +133,103 @@ export const IconValue = ({ icon, value, className }) => {
       <IconifyIcon icon={icon} className="!text-inherit !mr-3" />
       <Typography className={`!text-[12px] !text-inherit`}>{value}</Typography>
     </Box>
-  );
-};
+  )
+}
 
-
-  export const renderMenu = ({ handleMenuItemClick, anchorEl, open, handleMenuClose }) => (
-    <Menu
-      anchorEl={anchorEl}
-      open={open}
-      className="left-0"
-      onClose={handleMenuClose}
+export const renderMenu = ({
+  handleMenuItemClick,
+  anchorEl,
+  open,
+  handleMenuClose,
+}) => (
+  <Menu
+    anchorEl={anchorEl}
+    open={open}
+    className="left-0"
+    onClose={handleMenuClose}
+  >
+    <MenuItem
+      onClick={handleMenuItemClick('')}
+      className="flex items-center  justify-between w-full"
     >
-      <MenuItem
-        onClick={handleMenuItemClick("")}
-        className="flex items-center  justify-between w-full"
-      >
-        Update Order Status{" "}
-        <IconifyIcon icon="tabler:chevron-right" className="text-[15px] ml-5 md:ml-8" />
-      </MenuItem>
-      <MenuItem
-        onClick={handleMenuItemClick("Refunded")}
-        className="text-orange-500"
-      >
-        Refund
-      </MenuItem>
-      <MenuItem
-        onClick={handleMenuItemClick("Cancelled")}
-        className="text-red-500"
-      >
-        Cancel Order
-      </MenuItem>
-    </Menu>
-  );
-
-  export const renderSubMenu = ({
-    anchorEl,
-    openSub,
-    handleMenuClose,
-    handleMenuItemClick,
-    row,
-  }) => (
-    <Menu
-      anchorEl={anchorEl}
-      open={openSub}
-      onClose={handleMenuClose}
-      className={` w-full !-mr-80 py-4 px-4`}
+      Update Order Status{' '}
+      <IconifyIcon
+        icon="tabler:chevron-right"
+        className="text-[15px] ml-5 md:ml-8"
+      />
+    </MenuItem>
+    <MenuItem
+      onClick={handleMenuItemClick('Refunded')}
+      className="text-orange-500"
     >
-      <MenuItem
-        onClick={handleMenuItemClick("Processing")}
-        className="flex items-center justify-between w-full"
-      >
-        Processing
+      Refund
+    </MenuItem>
+    <MenuItem
+      onClick={handleMenuItemClick('Cancelled')}
+      className="text-red-500"
+    >
+      Cancel Order
+    </MenuItem>
+  </Menu>
+)
+
+export const renderSubMenu = ({
+  anchorEl,
+  openSub,
+  handleMenuClose,
+  handleMenuItemClick,
+  row,
+}) => (
+  <Menu
+    anchorEl={anchorEl}
+    open={openSub}
+    onClose={handleMenuClose}
+    className={` w-full !-mr-80 py-4 px-4`}
+  >
+    <MenuItem
+      onClick={handleMenuItemClick('Processing')}
+      className="flex items-center justify-between w-full"
+    >
+      Processing
+    </MenuItem>
+    {row?.deliveryMedium !== 'pickup' ? (
+      <MenuItem onClick={handleMenuItemClick('Out for delivery')}>
+        Out for Delivery
       </MenuItem>
-      {row?.deliveryMedium !== "pickup" ? (
-        <MenuItem onClick={handleMenuItemClick("Out for delivery")}>
-          Out for Delivery
-        </MenuItem>
-      ) : (
-        <MenuItem onClick={handleMenuItemClick("Pickable")}>Pickable</MenuItem>
-      )}
-      <MenuItem onClick={handleMenuItemClick("Pending")}>On Hold</MenuItem>
-      <MenuItem onClick={handleMenuItemClick("Completed")}>Received</MenuItem>
-    </Menu>
-  );
-  
+    ) : (
+      <MenuItem onClick={handleMenuItemClick('Pickable')}>Pickable</MenuItem>
+    )}
+    <MenuItem onClick={handleMenuItemClick('Pending')}>On Hold</MenuItem>
+    <MenuItem onClick={handleMenuItemClick('Completed')}>Received</MenuItem>
+  </Menu>
+)
+
+export const ConfirmPicker = ({ payload, storeUpdateOrder, setRightOpen }) => {
+  const [slug, setSlug] = useState('PIK-')
+  const dispatch = useDispatch()
+  const npayload = { pickerSlug: slug, ...payload }
+  return (
+    <Box className="px-3">
+      <Typography variant="body2" className="!text-[13px] !mt-4 !mb-2">
+        Confirm Picker by ID
+      </Typography>
+      <TextField
+        onChange={(e) => setSlug(e.target.value)}
+        value={slug}
+        size="small"
+        placeholder="************"
+        className="w-full"
+        startAdornment={<InputAdornment position="start">PIK-</InputAdornment>}
+      />
+      {
+        <Button
+          variant="contained"
+          onClick={() => storeUpdateOrder(dispatch, npayload, setRightOpen(null))}
+          className="!h-10 w-full !mt-6"
+        >
+          Confirm ID
+        </Button>
+      }
+    </Box>
+  )
+}

@@ -25,7 +25,7 @@ export const MyTextField = ({
       <div className="relative w-full">
         <TextField
           type={newType}
-          className="h-8 w-full px-3 rounded-md bg-gray-50 border-1"
+          className="h-8 w-full px- rounded-md bg-gray-50 border-1"
           style={{ height: 40 }}
           size="small"
           value={value}

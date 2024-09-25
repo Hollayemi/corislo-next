@@ -1,14 +1,15 @@
-"use client";
-import { usePathname, useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
-import jwt_decode from "jwt-decode";
-import useSWR from "swr";
-import io from "socket.io-client";
-import { useUserData } from "../hooks/useData";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
+'use client'
+import { usePathname, useRouter } from 'next/navigation'
+import { useSelector } from 'react-redux'
+import jwt_decode from 'jwt-decode'
+import useSWR from 'swr'
+import io from 'socket.io-client'
+import { useUserData } from '../hooks/useData'
+import Snackbar from '@mui/material/Snackbar'
+import Alert from '@mui/material/Alert'
+import { Box } from '@mui/material'
 
-const { createContext, useEffect, useState } = require("react");
+const { createContext, useEffect, useState } = require('react')
 
 const defaultProvider = {
   staffInfo: {},
@@ -18,51 +19,52 @@ const defaultProvider = {
   connection: false,
   overLay: null,
   socket: null,
-};
-const StoreDataContext = createContext(defaultProvider);
+  notifications: [],
+}
+const StoreDataContext = createContext(defaultProvider)
 
 const StoreDataProvider = ({ children }) => {
-  const { setOverflow } = useUserData();
-  const router = useRouter();
-  const pathname = usePathname();
-  const [socket, setSocket] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [overLay, setOpenOverlay] = useState(null);
-  const { userData } = useSelector((state) => state.reducer.loginReducer);
+  const [hideOverflow, setOverflow] = useState(true)
+  const [notifications, setNotifications] = useState([])
+  const router = useRouter()
+  const pathname = usePathname()
+  const [socket, setSocket] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [overLay, setOpenOverlay] = useState(null)
   const [snackbar, setSnackbar] = useState({
     open: false,
-    message: "",
-    severity: "info", // 'success', 'error', 'warning', 'info'
-  });
+    message: '',
+    severity: 'info', // 'success', 'error', 'warning', 'info'
+  })
 
-  const getPath = pathname.split("/");
+  const getPath = pathname.split('/')
 
   const showOverlay = (pageName = null) => {
     if (overLay) {
-      setOverflow(false);
-      setOpenOverlay(null);
+      setOverflow(false)
+      setOpenOverlay(null)
     } else {
-      setOverflow(true);
-      setOpenOverlay(pageName);
+      setOverflow(true)
+      setOpenOverlay(pageName)
     }
-  };
+  }
 
-  const showSnackbar = (message, severity = "info") => {
+  const showSnackbar = (message, severity = 'info') => {
     setSnackbar({
       open: true,
       message,
       severity,
-    });
-  };
+    })
+  }
 
   const hideSnackbar = () => {
     setSnackbar((prev) => ({
       ...prev,
       open: false,
-    }));
-  };
+    }))
+  }
 
-  useEffect(() => setOverflow(loading), [loading]);
+  useEffect(() => setOverflow(loading), [loading])
   // useEffect(() => {
   //   if (
   //     !connection &&
@@ -73,85 +75,95 @@ const StoreDataProvider = ({ children }) => {
   //   }else{
   //     router.replace(`/store/dashboard`);
   //   }
-  // }, [userData, getPath, router]);
+  // }, [getPath, router]);
 
   useEffect(() => {
     if (!socket) {
-      let server = "http://localhost:5001";
-      if (process.env.NODE_ENV === "production") {
-        server = "https://corislo-backend.onrender.com";
+      let server = 'http://localhost:5001'
+      if (process.env.NODE_ENV === 'production') {
+        server = 'https://corislo-backend.onrender.com'
       }
       const newSocket = io(server, {
         query: {
-          token: localStorage.getItem("store_token"),
-          by: "store_token",
+          token: localStorage.getItem('store_token'),
+          by: 'store_token',
           port: 3033,
         },
-      });
-      setSocket(newSocket);
+      })
+      setSocket(newSocket)
 
-      newSocket.on("connect", () => {
-        console.log("Socket connected");
-      });
+      newSocket.on('connect', () => {
+        newSocket.emit('registerUser', 'business')
+        console.log('Socket connected')
+      })
 
-      newSocket.on("disconnect", () => {
-        console.log("Socket disconnected");
-      });
+      newSocket.on('disconnect', () => {
+        console.log('Socket disconnected')
+      })
 
-      newSocket.on("roomJoined", ({ room }) => {
-        console.log(`Successfully joined room: ${room}`);
-      });
+      newSocket.on('newMessage', (data) => {
+        console.log(data)
+      })
 
-      newSocket.on("newMessage", (data) => {
-        console.log(data);
-      });
+      newSocket.on('notify', (data) => {
+
+        setNotifications(data)
+      })
     }
 
     // Cleanup when the component unmounts
     return () => {
       if (socket) {
-        socket.disconnect();
+        socket.disconnect()
       }
-    };
-  }, [socket]);
+    }
+  }, [socket])
 
   useEffect(() => {
     const getLocalToken =
-      typeof window !== "undefined" && localStorage.getItem("store_token");
+      typeof window !== 'undefined' && localStorage.getItem('store_token')
 
-    if (
-      getLocalToken &&
-      userData?.accessToken &&
-      getPath[1] === "auth" &&
-      getPath[2] === "login"
-    ) {
-      router.replace(`/`);
+    if (getLocalToken && getPath[1] === 'auth' && getPath[2] === 'login') {
+      router.replace(`/`)
     }
-  }, [userData, getPath, router]);
+  }, [getPath, router])
 
   const connection = () => {
     const getLocalToken =
-      typeof window !== "undefined" && localStorage.getItem("store_token");
+      typeof window !== 'undefined' && localStorage.getItem('store_token')
     if (getLocalToken) {
-      const decodedToken = jwt_decode(getLocalToken); // Decode the JWT token
-      const currentTime = Date.now() / 1000; // Get the current time in seconds
+      const decodedToken = jwt_decode(getLocalToken) // Decode the JWT token
+      const currentTime = Date.now() / 1000 // Get the current time in seconds
       // // Check if the token is still valid based on its expiration time
-      return decodedToken.exp > currentTime;
+      return decodedToken.exp > currentTime
     }
-    return Boolean(getLocalToken);
-  };
+    return Boolean(getLocalToken)
+  }
 
   useEffect(() => {
-    const whiteList = ["login", "register"];
+    const whiteList = ['login', 'register']
     if (
       !connection() &&
-      getPath[1] === "store" &&
+      getPath[1] === 'store' &&
       !whiteList.includes(getPath[2])
     ) {
-      router.replace(`/store/login`);
+      router.replace(`/store/login`)
     }
-  }, [getPath, router]);
+  }, [getPath, router])
 
+  const {
+    data: notif,
+    error: notifErr,
+    isLoading: notifIsLoading,
+  } = useSWR(connection() && '/store/notification')
+
+  const loadNotif = (!notifErr && !notifIsLoading && notif?.data) || []
+
+  useEffect(() => {
+    setNotifications(loadNotif)
+  }, [notif])
+
+  //
   //
   //
   //
@@ -166,7 +178,7 @@ const StoreDataProvider = ({ children }) => {
     data: staffInfo,
     error: staffErr,
     isLoading: staffIsLoading,
-  } = useSWR(connection() && "/branch/logged-in-staff");
+  } = useSWR(connection() && '/branch/logged-in-staff')
   //
   //
   // fetch storeInfo
@@ -175,40 +187,44 @@ const StoreDataProvider = ({ children }) => {
     data: storeInfo,
     error: storeErr,
     isLoading: storeIsLoading,
-  } = useSWR(connection() && "/store");
+  } = useSWR(connection() && '/store')
   //
 
   return (
-    <StoreDataContext.Provider
-      value={{
-        staffInfo: (!staffErr && !staffIsLoading && staffInfo?.data) || {},
-        storeInfo: (!storeErr && !storeIsLoading && storeInfo) || {},
-        selectedAddress: {},
-        connection: connection(),
-        showOverlay,
-        setLoading: setLoading,
-        showSnackbar,
-        hideSnackbar,
-        overLay,
-        socket,
-      }}
-    >
-      {children}
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={6000}
-        onClose={hideSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+    <Box className={`${hideOverflow && '!overflow-hidden'}`}>
+      <StoreDataContext.Provider
+        value={{
+          staffInfo: (!staffErr && !staffIsLoading && staffInfo?.data) || {},
+          storeInfo: (!storeErr && !storeIsLoading && storeInfo) || {},
+          selectedAddress: {},
+          notifications,
+          connection: connection(),
+          showOverlay,
+          setLoading: setLoading,
+          showSnackbar,
+          hideSnackbar,
+          overLay,
+          socket,
+        }}
       >
-        <Alert
+        {children}
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={6000}
           onClose={hideSnackbar}
-          severity={snackbar.severity}
-          sx={{ width: "100%" }}
+          className="!mt-12 !shadow-md"
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
-    </StoreDataContext.Provider>
-  );
-};
-export { StoreDataProvider, StoreDataContext };
+          <Alert
+            onClose={hideSnackbar}
+            severity={snackbar.severity}
+            sx={{ width: '100%' }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+      </StoreDataContext.Provider>
+    </Box>
+  )
+}
+export { StoreDataProvider, StoreDataContext }

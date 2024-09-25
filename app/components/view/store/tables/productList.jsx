@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 // ** React Imports
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
 // ** MUI Imports
@@ -167,7 +168,7 @@ const columns = (clickFunc) => [
     fixed: "right",
     headerName: "Actions",
     renderCell: (params) => {
-      const [anchorEl, setAnchorEl] = useState(null);
+      const [anchorEl, setAnchorEl] = React.useState(null);
       const open = Boolean(anchorEl);
 
       const handleButtonClick = (event) => {

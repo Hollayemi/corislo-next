@@ -1,10 +1,8 @@
-"use client";
-import { useEffect, useState } from "react";
-import { Typography, Box, Grid, Paper, TextField, Button } from "@mui/material";
-import Link from "next/link";
-import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
-import Image from "next/image";
-import themeConfig from "@/app/configs/themeConfig";
+'use client'
+import { useEffect, useState } from 'react'
+import { Typography, Box, Grid, Paper, TextField, Button } from '@mui/material'
+import Link from 'next/link'
+import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
 
 import {
   InputBoxWithSideLabel,
@@ -13,68 +11,68 @@ import {
   SocialMediaConponent,
   StoreBreadCrumb,
   BreadcrumbRightEle,
-} from "./component";
-import Icon from "@/app/components/icon";
-import { storeBottomBar, storeInnerList } from "@/app/data/store/innerList";
-import { useStoreData } from "@/app/hooks/useData";
-import { useDispatch } from "react-redux";
-import useSWR from "swr";
-import { updateStoreProfile } from "@/app/redux/state/slices/shop/settings/editShop";
-import MapGraph from "@/app/components/view/home/Map/map";
-import ProfilePictureUploader from "@/app/components/cards/fileUpload";
-import { updateBranchImages } from "@/app/redux/state/slices/shop/branches";
+} from './component'
+import Icon from '@/app/components/icon'
+import { storeBottomBar } from '@/app/data/store/innerList'
+import { useStoreData } from '@/app/hooks/useData'
+import { useDispatch } from 'react-redux'
+import useSWR from 'swr'
+import { updateStoreProfile } from '@/app/redux/state/slices/shop/settings/editShop'
+import ProfilePictureUploader from '@/app/components/cards/fileUpload'
+import { updateBranchImages } from '@/app/redux/state/slices/shop/branches'
 
 const StorePage = ({ params }) => {
-  const { storeInfo: originalInfo } = useStoreData();
-  const dispatch = useDispatch();
+  const { storeInfo: originalInfo } = useStoreData()
+  const dispatch = useDispatch()
   const {
     data: storeInfo,
     error: storeErr,
     isLoading: storeIsLoading,
   } = useSWR(
     `/store?branch=${params?.sublist || originalInfo?.profile?.branch}`
-  );
-  const { data } = useSWR("/branch/all?sidelist=true");
-  const InnerList = data?.data ? data.data : [];
+  )
+  const branchOwner =
+    originalInfo?.profile?.branch === storeInfo?.profile?.branch
+  const { data } = useSWR('/branch/all?sidelist=true')
+  const InnerList = data?.data ? data.data : []
 
-  const [openHours, setOpenHours] = useState({});
-  const [socialMedia, setSocialMedia] = useState({});
-  const [files, setFiles] = useState([]);
-  const [localFiles, setLocalFiles] = useState([]);
+  const [openHours, setOpenHours] = useState({})
+  const [socialMedia, setSocialMedia] = useState({})
+  const [files, setFiles] = useState([])
+  const [localFiles, setLocalFiles] = useState([])
 
-  const [profile, setProfile] = useState([]);
-  const [localProfile, setLocalProfile] = useState("");
-  const path = { ...params, sidebar: "stores" };
+  const [profile, setProfile] = useState([])
+  const [localProfile, setLocalProfile] = useState('')
+  const path = { ...params, sidebar: 'stores' }
 
   const [inputValues, setValues] = useState({
-    address: "",
-    city: "",
-    landmark: "",
-    about_store: "",
-  });
+    address: '',
+    city: '',
+    landmark: '',
+    about_store: '',
+  })
   useEffect(() => {
     setValues({
-      address: storeInfo?.profile?.address || "",
-      city: storeInfo?.profile?.city || "",
-      landmark: storeInfo?.profile?.landmark || "",
-      about_store: storeInfo?.profile?.about_store || "",
-    });
-    setSocialMedia(storeInfo?.profile?.social_media || {});
-    setOpenHours(storeInfo?.profile?.opening_hours || {});
-  }, [storeIsLoading]);
-
+      address: storeInfo?.profile?.address || '',
+      city: storeInfo?.profile?.city || '',
+      landmark: storeInfo?.profile?.landmark || '',
+      about_store: storeInfo?.profile?.about_store || '',
+    })
+    setSocialMedia(storeInfo?.profile?.social_media || {})
+    setOpenHours(storeInfo?.profile?.opening_hours || {})
+  }, [storeIsLoading])
 
   const handleChange = (prop) => (event) => {
-    setValues({ ...inputValues, [prop]: event.target.value });
-  };
+    setValues({ ...inputValues, [prop]: event.target.value })
+  }
   return (
     <StoreLeftSideBar
       path={path}
       subListBar={false}
-      InnerList={{ title: "Store List", content: InnerList }}
+      InnerList={{ title: 'Store List', content: InnerList }}
       BottomList={storeBottomBar}
       breadCrumbRIghtChildren={<BreadcrumbRightEle />}
-      crumb={[...StoreBreadCrumb, { text: "All Stores", link: "" }]}
+      crumb={[...StoreBreadCrumb, { text: 'All Stores', link: '' }]}
     >
       <Box className="px-10 !hidden sm:!flex z-50 -mt-6">
         <Typography className="pb-1 border-b-2 cursor-pointer !text-[13px] !w-24 text-center border-blue-900">
@@ -114,7 +112,7 @@ const StorePage = ({ params }) => {
                         localProfile
                           ? URL?.createObjectURL(localProfile[0])
                           : storeInfo?.profile?.profile_image ||
-                            "/images/misc/no-profile"
+                            '/images/misc/no-profile.png'
                       }
                       alt="Profile"
                       height="70"
@@ -133,30 +131,32 @@ const StorePage = ({ params }) => {
               <Typography className="!text-[12px] !text-gray-400 !mt-2">
                 JPG, GIF or PNG, Max size of 500kb
               </Typography>
-              <Box className="flex item-center mt-4">
-                <Box
-                  onClick={() =>
-                    updateBranchImages(
-                      {
-                        image: profile[0],
-                        type: "profile_image",
-                        state: "add",
-                      },
-                      dispatch
-                    )
-                  }
-                  className="px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3"
-                >
-                  Change Photo
+              {branchOwner && (
+                <Box className="flex item-center mt-4">
+                  <Box
+                    onClick={() =>
+                      updateBranchImages(
+                        {
+                          image: profile[0],
+                          type: 'profile_image',
+                          state: 'add',
+                        },
+                        dispatch
+                      )
+                    }
+                    className="px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3"
+                  >
+                    Change Photo
+                  </Box>
+                  <Paper className="px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3">
+                    Delete
+                  </Paper>
                 </Box>
-                <Paper className="px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3">
-                  Delete
-                </Paper>
-              </Box>
+              )}
             </Box>
             <Box className="!mt-8 !border-b !pb-3">
               <InputBoxWithSideLabel
-                value={storeInfo?.profile?.store || ""}
+                value={storeInfo?.profile?.store || ''}
                 inputProps={{
                   disabled: true,
                 }}
@@ -176,17 +176,17 @@ const StorePage = ({ params }) => {
               <br />
               <InputBoxWithSideLabel
                 value={inputValues.city}
-                onChange={handleChange("city")}
+                onChange={handleChange('city')}
                 label="City"
               />
               <InputBoxWithSideLabel
                 value={inputValues.address}
-                onChange={handleChange("address")}
+                onChange={handleChange('address')}
                 label="Address"
               />
               <InputBoxWithSideLabel
                 value={inputValues.landmark}
-                onChange={handleChange("landmark")}
+                onChange={handleChange('landmark')}
                 label="Closest Bus Stop or Landmark"
               />
             </Box>
@@ -205,7 +205,7 @@ const StorePage = ({ params }) => {
                 fullWidth
                 multiline
                 value={inputValues.about_store}
-                onChange={handleChange("about_store")}
+                onChange={handleChange('about_store')}
                 // defaultValue="About Store: Welcome to Sport Zone, your ultimate destination for all things sports and fitness. We are dedicated to providing athletes and fitness enthusiasts with top-notch sports equipment, apparel, and accessories to help you excel in your game and achieve your fitness goals. At Sport Zone, we understand the importance of having the right gear to enhance your performance. Our extensive collection features top brands and high-quality products that cater to a wide range of sports, including basketball, soccer, tennis, running, and more. Whether you're a professional athlete, a weekend warrior, or a fitness enthusiast, we have everything you need to unleash your full potential."
                 id="textarea-outlined"
                 maxRows={12}
@@ -225,11 +225,10 @@ const StorePage = ({ params }) => {
 
               <Grid container spacing={2}>
                 {storeInfo?.profile?.gallery?.map((gal, i) => (
-                  <Grid item xs={6} md={4}>
+                  <Grid item xs={6} md={4} key={i}>
                     <Box className="p-1 md:p-1.5 border rounded-md bg-gray-50">
                       <Box className="w-full h-full flex items-center rounded-md  justify-center overflow-hidden ">
                         <img
-                          key={i}
                           className="w-auto h-auto max-h-28 max-w-40 rounded-md"
                           alt={`image ${i}`}
                           src={gal}
@@ -238,13 +237,15 @@ const StorePage = ({ params }) => {
                     </Box>
                   </Grid>
                 ))}
-                <FileUploader
-                  files={files}
-                  setFiles={setFiles}
-                  localFiles={localFiles}
-                  setLocalFiles={setLocalFiles}
-                  directUpload
-                />
+                {branchOwner && (
+                  <FileUploader
+                    files={files}
+                    setFiles={setFiles}
+                    localFiles={localFiles}
+                    setLocalFiles={setLocalFiles}
+                    directUpload
+                  />
+                )}
               </Grid>
             </Box>
 
@@ -323,22 +324,24 @@ const StorePage = ({ params }) => {
               />
             </Box>
 
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              className="!py-2 !bg-blue-900"
-              startIcon={<Icon icon="tabler:device-floppy" />}
-              onClick={() =>
-                updateStoreProfile(dispatch, {
-                  ...inputValues,
-                  social_media: socialMedia,
-                  opening_hours: openHours,
-                })
-              }
-            >
-              Save
-            </Button>
+            {branchOwner && (
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                className="!py-2 !bg-blue-900"
+                startIcon={<Icon icon="tabler:device-floppy" />}
+                onClick={() =>
+                  updateStoreProfile(dispatch, {
+                    ...inputValues,
+                    social_media: socialMedia,
+                    opening_hours: openHours,
+                  })
+                }
+              >
+                Save
+              </Button>
+            )}
           </Grid>
           <Grid item sm={12} md={5} className="!relative !pl-5">
             {/* <Box className="h-[500px] bg-gray-50 !sticky top-0 md:mt-32">
@@ -358,7 +361,7 @@ const StorePage = ({ params }) => {
         </Grid>
       </Box>
     </StoreLeftSideBar>
-  );
-};
+  )
+}
 
-export default StorePage;
+export default StorePage

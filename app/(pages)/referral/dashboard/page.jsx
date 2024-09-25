@@ -47,7 +47,7 @@ const ReferralDashboard = () => {
   const agentData = data?.data[0] || {};
 
   const reshapePrice = (price) => {
-    if(typeof parseInt(price) === "number"){
+    if (typeof parseInt(price) === 'number') {
       return parseInt(price).toLocaleString()
     }
   }
@@ -75,6 +75,7 @@ const ReferralDashboard = () => {
     };
 
   const price = 8000;
+  console.log(agentData)
   return (
     <HomeWrapper noFooter>
       <Box className="flex flex-col md:flex-row items-start px-1  md:px-2 lg:px-16 mt-4 mb-14">
@@ -145,7 +146,7 @@ const ReferralDashboard = () => {
                 variation="body2"
                 className="!text-xl !font-black !text-black !mt-2"
               >
-                ₦{" "}
+                ₦{' '}
                 <span className="mr-2">
                   {reshapePrice(agentData.lifeEarning)}
                 </span>
@@ -160,7 +161,10 @@ const ReferralDashboard = () => {
                 <EarningsBoxes
                   color="blue"
                   title="Points"
-                  price={reshapePrice(agentData.used_coin + agentData.coin)}
+                  price={reshapePrice(
+                    parseInt(agentData.used_coin || 0) +
+                      parseInt(agentData.coin)
+                  )}
                   about="From other activities"
                 />
                 <EarningsBoxes
@@ -199,7 +203,7 @@ const ReferralDashboard = () => {
                         )
                       }
                     >
-                      {!isCopied ? "Copy" : "Copied"}
+                      {!isCopied ? 'Copy' : 'Copied'}
                     </Button>
                   </Box>
                   <Box className="flex items-center justify-center  mt-6">
@@ -316,32 +320,35 @@ const ReferralDashboard = () => {
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle id="alert-dialog-slide-title" className="!text-[16px]">
+        <DialogTitle
+          id="alert-dialog-slide-title"
+          className="!text-[16px] !mt-2"
+        >
           Update Bank Account Details
         </DialogTitle>
         <DialogContent>
           <MyTextField
             title="Full Name"
             value={accountDetails.account_name}
-            onChange={handleAccountInputs("account_name")}
+            onChange={handleAccountInputs('account_name')}
             PClassName="w-full md:w-auto"
           />
           <Box className="flex">
             <MyTextField
               title="Account Number"
               value={accountDetails.account_number}
-              onChange={handleAccountInputs("account_number")}
+              onChange={handleAccountInputs('account_number')}
               PClassName="w-full md:w-auto px-1"
             />
             <MyTextField
               title="Bank"
               value={accountDetails.bank_name}
-              onChange={handleAccountInputs("bank_name")}
+              onChange={handleAccountInputs('bank_name')}
               PClassName="w-full md:w-auto px-1"
             />
           </Box>
         </DialogContent>
-        <DialogActions className="dialog-actions-dense">
+        <DialogActions className="dialog-actions-dense !mb-4">
           <Button onClick={handleClose}>close</Button>
           <Button
             variant="contained"
@@ -353,7 +360,7 @@ const ReferralDashboard = () => {
         </DialogActions>
       </Dialog>
     </HomeWrapper>
-  );
+  )
 };
 
 export default ReferralDashboard;

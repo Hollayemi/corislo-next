@@ -141,7 +141,7 @@ const TreeView = styled(MuiTreeView)(({ theme }) => ({
           <TreeItem nodeId={brandId} key={brandId} label={`${brand.name} (${brand.groups.length})`}>
             {brand.groups.map((group, groupId) =>{
               return (
-                <TreeItem nodeId={`${group._id.group}-${groupId}`} label={`${group._id.group} (${group.products.length})`}>
+                <TreeItem key={groupId} nodeId={`${group._id.group}-${groupId}`} label={`${group._id.group} (${group.products.length})`}>
                   {group.products.map((product, productId) =>{
                     console.log(product)
                     return (

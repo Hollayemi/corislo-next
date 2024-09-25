@@ -149,7 +149,7 @@ export const FlashSale = () => {
 export const PopularAds = ({ store, title, brief, image, url }) => {
   const router = useRouter()
   return (
-    <Box className="!w-[350px] !h-48 flex !bg-yellow-50 !rounded-xl p-5">
+    <Box className="!w-[350px] !h-48 flex !bg-yellow-50 !rounded-xl p-5 mx-2">
       <Box className="w-1/2 pr-6 relative">
         <Typography variant="body2" className="!text-[10px] !font-bold">
           {store}

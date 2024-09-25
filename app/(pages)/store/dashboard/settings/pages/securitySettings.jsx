@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Switch,
   Typography,
   Paper,
   Table,
@@ -25,15 +24,13 @@ import {
 import IconifyIcon from "@/app/components/icon";
 import OtpInput from "@/app/(pages)/auth/otp-verification/component";
 import { resendOtp } from "@/app/redux/state/slices/auth/otp";
-import { changeEmailHandler } from "@/app/redux/state/slices/auth/changeEmail";
-import { changePasswordHandler } from "@/app/redux/state/slices/auth/resetPassword";
-import { useStoreData, useUserData } from "@/app/hooks/useData";
 import { formatDate } from "@/app/utils/format";
 import CustomOption from "@/app/components/option-menu/option";
 import CheckPassword from "@/app/(pages)/user/checkPassword";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { changeStaffEmail } from "@/app/redux/state/slices/shop/auth/storeLogin";
 import { changeStorePassword } from "@/app/redux/state/slices/shop/auth/resetPassword";
+import OtpVerification from "@/app/(pages)/auth/otp-verification/page";
 
 const Index = () => {
   const [display, setDisplay] = useState("all");
@@ -45,6 +42,16 @@ const Index = () => {
     password: <ChangePassword setDisplay={setDisplay} />,
     email: <EmailAddress setDisplay={setDisplay} myAccount={myAccount} />,
     activities: <AccountActivities setDisplay={setDisplay} />,
+    verify: (
+      <OtpVerification
+        email={myAccount.email}
+        account="staff"
+        callback={() => {
+          mutate("branch/staff");
+          setDisplay("all");
+        }}
+      />
+    ),
   };
   return pages[display];
 };
@@ -154,7 +161,8 @@ const AccountActivities = () => {
 };
 
 const SecuritySettings = ({ setDisplay, myAccount }) => {
-  
+  const dispatch = useDispatch()
+  console.log(myAccount);
   return (
     <Box>
       <TitleSubtitle title="Security Settings" />
@@ -180,10 +188,10 @@ const SecuritySettings = ({ setDisplay, myAccount }) => {
             <Typography
               variant="body2"
               className={`${
-                myAccount.isActive ? "!text-green-500" : "!text-red-500"
+                myAccount.isVerified ? "!text-green-500" : "!text-red-500"
               } !text-[12px]`}
             >
-              {myAccount.isActive ? "Active" : "Not Active"}
+              {myAccount.isVerified ? "Verified" : "Verify email"}
             </Typography>
           </Box>
           <Button
@@ -196,9 +204,20 @@ const SecuritySettings = ({ setDisplay, myAccount }) => {
               />
             }
             className="!rounded-full !border-gray-400 !text-gray-500 !ml-2 md:!ml-5"
-            onClick={() => setDisplay("email")}
+            onClick={() =>
+              myAccount.isVerified
+                ? setDisplay("email")
+                : resendOtp(
+                    {
+                      email: myAccount.email,
+                      action: { to: "email-verification", account: "staff" },
+                    },
+                    dispatch,
+                    () => setDisplay("verify")
+                  )
+            }
           >
-            Edit
+            {myAccount.isVerified ? "Edit" : "Verify"}
           </Button>
         </Box>
       </Box>

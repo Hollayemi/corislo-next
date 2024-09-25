@@ -42,19 +42,19 @@ const Index = () => {
   const pages = {
     all: <SecuritySettings setDisplay={setDisplay} />,
     password: <ChangePassword setDisplay={setDisplay} />,
-    email: <EmailAddress setDisplay={setDisplay} />,
+    email: <EmailAddress setDisplay={setDisplay} email={userInfo.email} />,
     activities: <AccountActivities setDisplay={setDisplay} />,
     verify: (
       <OtpVerification
         email={userInfo.email}
         account="user"
         callback={() => {
-          mutate("/user/get-account");
-          setDisplay("all");
+          mutate('/user/get-account')
+          setDisplay('all')
         }}
       />
     ),
-  };
+  }
   return pages[display];
 };
 
@@ -393,7 +393,7 @@ const ChangePassword = ({ setDisplay }) => {
   );
 };
 
-const EmailAddress = ({ setDisplay }) => {
+const EmailAddress = ({ setDisplay, email }) => {
   const dispatch = useDispatch();
   const [countdown, setCountdown] = useState(60); // Initial countdown value in seconds
   const [resendDisabled, setResendDisabled] = useState(false);
@@ -494,6 +494,7 @@ const EmailAddress = ({ setDisplay }) => {
           onClick={() =>
             changeEmailHandler(
               {
+                oldEmail: email,
                 newEmailAddress: emailData.email,
                 password: emailData.password,
                 otp: otpValues,

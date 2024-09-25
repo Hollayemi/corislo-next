@@ -24,18 +24,17 @@ export const TopCards = () => {
     interval: "monthly",
   };
 
-  console.log(dateFrom, query);
   const queryString = new URLSearchParams(query).toString();
   const { data: swrData, isLoading } = useSWR(`/dashboard/cards`);
   const result = (swrData && swrData.data) || {};
-  console.log(result);
+
   const data = [
     {
       stats: result.views?.sum?.toLocaleString() || 0,
       title: "Invetory Turnover",
       avatarIcon: "tabler:currency-dollar",
       increase:
-        result.views?.growth > 100 ? "100+" : result.views?.growth || "-",
+        result.views?.growth > 100 ? "100+" : result.views?.growth || 0,
     },
     {
       progress: 59,
@@ -47,7 +46,7 @@ export const TopCards = () => {
       increase:
         result.cartAndSaved?.growth > 100
           ? "100+"
-          : result.cartAndSaved?.growth || "-",
+          : result.cartAndSaved?.growth || 0,
     },
     {
       progress: 22,
@@ -92,7 +91,10 @@ export const TopCards = () => {
                     }}
                     bgcolor="secondary"
                   >
-                    <Typography sx={{ fontWeight: 500 }} className="text-[12px]">
+                    <Typography
+                      sx={{ fontWeight: 500 }}
+                      className="text-[12px]"
+                    >
                       {item.title}
                     </Typography>
                     <CustomAvatar
@@ -116,15 +118,15 @@ export const TopCards = () => {
                     label={
                       <div className="flex items-center">
                         <Icon
-                          fontSize="0.8rem"
-                          className="mr-px"
+                          fontSize="0.6rem"
+                          className=""
                           icon={
                             item.increase > 0
                               ? "tabler:arrow-narrow-up"
                               : "tabler:arrow-narrow-down"
                           }
                         />
-                        {item.increase}%
+                        {parseFloat(item?.increase || 0).toFixed(0)}%
                       </div>
                     }
                   />

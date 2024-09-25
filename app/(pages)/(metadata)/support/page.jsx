@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { SecurityTypeCard } from "@/app/components/cards/homeCards";
-import IconifyIcon from "@/app/components/icon";
-import HomeWrapper from "@/app/components/view/home";
+import { SecurityTypeCard } from '@/app/components/cards/homeCards'
+import IconifyIcon from '@/app/components/icon'
+import HomeWrapper from '@/app/components/view/home'
 import {
   Accordion,
   AccordionDetails,
@@ -14,27 +14,27 @@ import {
   Select,
   TextField,
   Typography,
-} from "@mui/material";
+} from '@mui/material'
 
-import { faqData } from "@/app/data/home/faq";
-import { useState } from "react";
+import { faqData } from '@/app/data/home/faq'
+import { useState } from 'react'
 
 const SupportPage = () => {
   const [showing, setShowing] = useState(
-    faqData[0]?.subtitles[0]?.discussion || ""
-  );
+    faqData[0]?.subtitles[0]?.discussion || ''
+  )
   const [values, setValues] = useState({
-    name: "",
-    email: "",
-    message: "",
-    subject: "",
-  });
+    name: '',
+    email: '',
+    message: '',
+    subject: '',
+  })
 
   const handleChange = (prop) => (event) => {
     setValues((prev) => {
-      return { ...prev, [prop]: event.target.value };
-    });
-  };
+      return { ...prev, [prop]: event.target.value }
+    })
+  }
 
   const IconText = ({ icon, text }) => {
     return (
@@ -44,8 +44,8 @@ const SupportPage = () => {
           {text}
         </Typography>
       </Box>
-    );
-  };
+    )
+  }
 
   return (
     <HomeWrapper customersReview={false}>
@@ -138,8 +138,8 @@ const SupportPage = () => {
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails className="!min-h-14 !pb-0">
-                    {item.subtitles.map((each) => (
-                      <Box onClick={() => setShowing(each.discussion)}>
+                    {item.subtitles.map((each, i) => (
+                      <Box key={i} onClick={() => setShowing(each.discussion)}>
                         <Typography className="!text-[12px] h-6 cursor-pointer">
                           {each.topic}
                         </Typography>
@@ -147,15 +147,15 @@ const SupportPage = () => {
                     ))}
                   </AccordionDetails>
                 </Accordion>
-              );
+              )
             })}
           </Box>
           <Box className="w-full md:w-3/5 px-6">{showing}</Box>
         </Box>
       </Box>
-<br />
-<br />
-<br />
+      <br />
+      <br />
+      <br />
       <Grid container spacing={1}>
         <Grid
           item
@@ -199,7 +199,7 @@ const SupportPage = () => {
               value={values.name}
               placeholder="Full Name"
               className="!mb-4 w-full px-3 h-10 rounded-md focus:outline-none focus:ring focus:ring-[#2C337C] !bg-white"
-              onChange={handleChange("name")}
+              onChange={handleChange('name')}
               fullWidth
             />
             <input
@@ -208,7 +208,7 @@ const SupportPage = () => {
               placeholder="Email Address"
               className="!mb-4 w-full px-3 h-10 rounded-md focus:outline-none focus:ring focus:ring-[#2C337C] !bg-white"
               fullWidth
-              onChange={handleChange("email")}
+              onChange={handleChange('email')}
             />
             <input
               size="small"
@@ -216,13 +216,13 @@ const SupportPage = () => {
               placeholder="Subject"
               className="!mb-4 w-full px-3 h-10 rounded-md focus:outline-none focus:ring focus:ring-[#2C337C] !bg-white"
               fullWidth
-              onChange={handleChange("subject")}
+              onChange={handleChange('subject')}
             />
             <textarea
               size="small"
               placeholder="Message"
               multiline
-              onChange={handleChange("message")}
+              onChange={handleChange('message')}
               rows={5}
               className="!mb-4 w-full px-3 py-2 h-28 rounded-md focus:outline-none focus:ring focus:ring-[#2C337C] !bg-white"
               fullWidth
@@ -239,7 +239,7 @@ const SupportPage = () => {
         </Grid>
       </Grid>
     </HomeWrapper>
-  );
-};
+  )
+}
 
-export default SupportPage;
+export default SupportPage

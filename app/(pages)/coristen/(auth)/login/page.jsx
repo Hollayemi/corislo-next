@@ -13,7 +13,6 @@ import { Button, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { storeLoginHandler } from "@/app/redux/state/slices/shop/auth/storeLogin";
 import SuperAdminAuth from "@/app/components/layouts/superAdminAuth";
 import { superLoginHandler } from "@/app/redux/state/slices/super/login";
 
@@ -22,7 +21,7 @@ const StoreLogin = () => {
   const dispatch = useDispatch();
   const [values, setValues] = useState({
     password: "",
-    username: "",
+    email: "",
   });
 
   const handleChange = (prop) => (event) => {
@@ -33,8 +32,8 @@ const StoreLogin = () => {
     <SuperAdminAuth title="Sign in to dashboard" center>
       <Box className="!mt-4 w-full max-w-[480px] md:p-10 md:shadow-md rounded-md md:border md:border-blue-800">
         <CustomInput
-          title="Username"
-          onChange={handleChange("username")}
+          title="Email or Username"
+          onChange={handleChange("email")}
           hideCheck={true}
           id="username"
           inputProps={{ type: "text", placeholder: "Enter your username" }}

@@ -1,35 +1,37 @@
-"use client";
-import useSWR from "swr";
-import { Typography, Box, Select, MenuItem } from "@mui/material";
-import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
-import ProductList from "@/app/components/view/store/tables/productList";
-import OverViewCard from "./overview";
-import { prodInnerList } from "@/app/data/store/innerList";
-import { BreadcrumbRightEle, productBreadCrumb } from "./components";
-import { productListingRows } from "./rows";
-import { StoreSalesApi } from "@/app/redux/state/slices/shop/overview/sales";
-import DialogPop from "@/app/components/cards/popup";
-import { useState } from "react";
+'use client'
+import useSWR from 'swr'
+import { Typography, Box, Select, MenuItem } from '@mui/material'
+import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import ProductList from '@/app/components/view/store/tables/productList'
+import OverViewCard from './overview'
+import { prodInnerList } from '@/app/data/store/innerList'
+import { BreadcrumbRightEle, productBreadCrumb } from './components'
+import { productListingRows } from './rows'
+import { StoreSalesApi } from '@/app/redux/state/slices/shop/overview/sales'
+import DialogPop from '@/app/components/cards/popup'
+import { useState } from 'react'
 
 const ProductManagement = ({ params }) => {
-  const { data, error, isLoading } = useSWR("/store/get-products");
-  const [dialogInfo, updateDialogInfo] = useState({
-    open: false,
-    title: "Action Confirmation",
-    alert: `Are you sure you want to ${
-      status?.toLowerCase()?.split("-")[0]
-    } the campaign status to?`,
-    acceptFunctionText: "Yes, Delete",
-    acceptFunction: () => {},
-  });
+  const { data, error, isLoading } = useSWR('/store/get-products')
+  const [dialogInfo, updateDialogInfo] = useState((status) => {
+    return {
+      open: false,
+      title: 'Action Confirmation',
+      alert: `Are you sure you want to ${
+        status?.toLowerCase()?.split('-')[0]
+      } the campaign status to?`,
+      acceptFunctionText: 'Yes, Delete',
+      acceptFunction: () => {},
+    }
+  })
 
   // const dispatch = useDispatch();
   // useEffect(() => {
   //   dispatch(StoreSalesApi({ time: "1_month" }));
   // }, []);
 
-  console.log(data);
-  const path = { ...params, sidebar: "product-management" };
+  console.log(data)
+  const path = { ...params, sidebar: 'product-management' }
   return (
     <StoreLeftSideBar
       path={path}
@@ -38,7 +40,7 @@ const ProductManagement = ({ params }) => {
       breadCrumbRIghtChildren={<BreadcrumbRightEle />}
       crumb={[
         ...productBreadCrumb,
-        { text: "Product listing", link: "product-management" },
+        { text: 'Product listing', link: 'product-management' },
       ]}
       dialogInfo={dialogInfo}
       updateDialogInfo={updateDialogInfo}
@@ -65,7 +67,7 @@ const ProductManagement = ({ params }) => {
         </Box>
       </Box>
     </StoreLeftSideBar>
-  );
-};
+  )
+}
 
-export default ProductManagement;
+export default ProductManagement

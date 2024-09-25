@@ -1,24 +1,26 @@
-"use client";
-import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
-import { settingsInnerList } from "@/app/data/store/innerList";
-import { useRouter } from "next/navigation";
-import { Box, Button } from "@mui/material";
-import { settingsBreadCrumb } from "../components";
-import { TitleSubtitle } from "@/app/(pages)/user/components";
-import { OrderBoxes } from "@/app/components/cards/homeCards";
-import IconifyIcon from "@/app/components/icon";
-import { BranchCard } from "./branch.component";
-import useSWR from "swr";
+'use client'
+import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import { settingsInnerList } from '@/app/data/store/innerList'
+import { useRouter } from 'next/navigation'
+import { Box, Button } from '@mui/material'
+import { settingsBreadCrumb } from '../components'
+import { TitleSubtitle } from '@/app/(pages)/user/components'
+import { OrderBoxes } from '@/app/components/cards/homeCards'
+import IconifyIcon from '@/app/components/icon'
+import { BranchCard } from './branch.component'
+import useSWR from 'swr'
+import { useStoreData } from '@/app/hooks/useData'
 
 const Branches = ({ params }) => {
-  const router = useRouter();
-  const {data,  isLoading} = useSWR("/branch/all");
-  const myBranches = data && data.data || []
+  const { storeInfo } = useStoreData()
+  const router = useRouter()
+  const { data, isLoading } = useSWR('/branch/all')
+  const myBranches = (data && data.data) || []
   const path = {
     ...params,
-    sidebar: "settings",
-    sublist: "branches",
-  };
+    sidebar: 'settings',
+    sublist: 'branches',
+  }
 
   return (
     <StoreLeftSideBar
@@ -26,7 +28,7 @@ const Branches = ({ params }) => {
       permission="view_stores"
       subListBar={false}
       InnerList={settingsInnerList}
-      crumb={[...settingsBreadCrumb, { text: "Branches", link: "staff" }]}
+      crumb={[...settingsBreadCrumb, { text: 'Branches', link: 'staff' }]}
     >
       <Box className="h-ful w-full bg-white px-1 md:px-5 py-8 rounded-md">
         <Box className="flex items-start justify-between w-full">
@@ -37,18 +39,18 @@ const Branches = ({ params }) => {
             subtitleClass="!text-[13px] !mt-2"
             className=""
           />
-          <Button
+          {storeInfo?.profile?.branchName === "HQ" && <Button
             variant="contained"
             className="!text-[13px] !w-auto !h-10 !rounded-md !shadow-none"
-            onClick={() => router.push("/store/dashboard/stores/sub-store")}
+            onClick={() => router.push('/store/dashboard/stores/sub-store')}
             startIcon={<IconifyIcon icon="tabler:plus" />}
           >
             <span className="hidden md:block mr-1">Create New</span> Branch
-          </Button>
+          </Button>}
         </Box>
 
         <Box className="w-full py-6 px-2  rounded-xl">
-          <Box className="flex items-center flex-wrap">
+          {/* <Box className="flex items-center flex-wrap">
             <OrderBoxes
               image="/images/misc/all-orders.png"
               title="All Employees"
@@ -73,11 +75,12 @@ const Branches = ({ params }) => {
               value={40}
               color="#3B47AF"
             />
-          </Box>
+          </Box> */}
         </Box>
         <Box className=" flex flex-wrap">
           {myBranches.map((each, i) => (
             <BranchCard
+              key={i}
               branchName={each.more.branchName}
               branch={each.branch}
               image={`/images/misc/shop/${i + 1}.png`}
@@ -89,7 +92,7 @@ const Branches = ({ params }) => {
         </Box>
       </Box>
     </StoreLeftSideBar>
-  );
-};
+  )
+}
 
-export default Branches;
+export default Branches

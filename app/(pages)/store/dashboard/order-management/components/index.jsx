@@ -29,7 +29,6 @@ export const OrderListComponents = ({ value, setValue, rows, isLoading }) => {
     if (!by || by === "all") {
       return rows || [];
     } else {
-      console.log(rows);
       return rows ? rows.filter((e) => e.status.toLowerCase() === by) : [];
     }
   };
@@ -41,7 +40,7 @@ export const OrderListComponents = ({ value, setValue, rows, isLoading }) => {
     }
 
     if (action === "message") {
-      router.push(`/store/chat?customer=${row.customerUsername}`);
+      router.push(`/store/dashboard/chat?customer=${row.customerUsername}`);
     }
   };
   const onRowClick = (row, id) => {

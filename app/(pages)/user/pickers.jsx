@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import {
   Box,
   Button,
@@ -6,51 +6,51 @@ import {
   Grid,
   Radio,
   Typography,
-} from "@mui/material";
-import React, { useState } from "react";
-import { MyTextField, TitleSubtitle } from "./components";
-import { Add, Remove } from "@mui/icons-material";
-import useSWR from "swr";
-import Image from "next/image";
-import { mySubstring } from "@/app/utils/format";
-import IconifyIcon from "@/app/components/icon";
-import { useDispatch } from "react-redux";
-import { useUserData } from "@/app/hooks/useData";
-import { addPickupPerson } from "@/app/redux/state/slices/users/pickup";
+} from '@mui/material'
+import React, { useState } from 'react'
+import { MyTextField, TitleSubtitle } from './components'
+import { Add, Remove } from '@mui/icons-material'
+import useSWR from 'swr'
+import Image from 'next/image'
+import { mySubstring } from '@/app/utils/format'
+import IconifyIcon from '@/app/components/icon'
+import { useDispatch } from 'react-redux'
+import { useUserData } from '@/app/hooks/useData'
+import { addPickupPerson } from '@/app/redux/state/slices/users/pickup'
 
 const Pickers = () => {
-  const { userInfo } = useUserData();
-  const { data: agents } = useSWR("/user/pickers");
-  const pickers = agents?.data || [];
-  const [open, openNewPicker] = useState(false);
-  const [selected, select] = useState(1);
+  const { userInfo } = useUserData()
+  const { data: agents } = useSWR('/user/pickers')
+  const pickers = agents?.data || []
+  const [open, openNewPicker] = useState(false)
+  const [selected, select] = useState(1)
 
   const [pickerPayload, setPickerData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    relationship: "",
-  });
+    name: '',
+    email: '',
+    phone: '',
+    relationship: '',
+  })
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const handlePickerData =
     (prop) =>
     ({ target }) => {
       setPickerData((data) => {
-        return { ...data, [prop]: target.value };
-      });
-    };
+        return { ...data, [prop]: target.value }
+      })
+    }
 
   const AddBtn = ({ btnText, click }) => (
     <Button
       variant="text"
       className="!text-black !w-36 !h-7 !shadow-none !bg-gray-200 !text-[12px] !my-4"
-      startIcon={btnText === "Close" ? <Remove /> : <Add />}
+      startIcon={btnText === 'Close' ? <Remove /> : <Add />}
       onClick={() => click((prev) => !Boolean(prev))}
     >
       {btnText}
     </Button>
-  );
+  )
 
   return (
     <Box>
@@ -61,7 +61,7 @@ const Pickers = () => {
             subtitle="Give access to my people I know to pick my orders"
           />
           <AddBtn
-            btnText={open ? "Close" : "Add New Picker"}
+            btnText={open ? 'Close' : 'Add New Picker'}
             click={openNewPicker}
           />
 
@@ -71,7 +71,7 @@ const Pickers = () => {
                 <MyTextField
                   title="Fullname"
                   value={pickerPayload.name}
-                  onChange={handlePickerData("name")}
+                  onChange={handlePickerData('name')}
                   PClassName="w-full sm:w-1/2 px-1 !tracking-wider"
                 />
                 <MyTextField
@@ -79,7 +79,7 @@ const Pickers = () => {
                   value={pickerPayload.phone}
                   placeholder=""
                   type="number"
-                  onChange={handlePickerData("phone")}
+                  onChange={handlePickerData('phone')}
                   PClassName="w-full sm:w-1/2 px-1 !tracking-wider"
                 />
               </Box>
@@ -88,7 +88,7 @@ const Pickers = () => {
                   title="Email"
                   value={pickerPayload.email}
                   type="email"
-                  onChange={handlePickerData("email")}
+                  onChange={handlePickerData('email')}
                   PClassName="w-full sm:w-1/2 px-1 !tracking-wider"
                 />
                 <MyTextField
@@ -96,7 +96,7 @@ const Pickers = () => {
                   value={pickerPayload.relationship}
                   type="text"
                   placeholder=""
-                  onChange={handlePickerData("relationship")}
+                  onChange={handlePickerData('relationship')}
                   PClassName="w-full sm:w-1/2 px-1 !tracking-wider"
                 />
               </Box>
@@ -121,6 +121,7 @@ const Pickers = () => {
           <Box className="mt-4 w-full">
             {pickers.map((each, i) => (
               <Person
+                key={i}
                 sn={i + 1}
                 name={each.name}
                 relationship={each.relationship}
@@ -141,15 +142,15 @@ const Pickers = () => {
         </Grid>
       </Grid>
     </Box>
-  );
-};
+  )
+}
 
-export default Pickers;
+export default Pickers
 
 const Person = ({ sn, name, relationship, selected, onClick }) => (
   <Box
     className={`flex items-center justify-between mt-2 cursor-pointer ${
-      sn === selected && "text-blue-600"
+      sn === selected && 'text-blue-600'
     }`}
     onClick={onClick}
   >
@@ -176,4 +177,4 @@ const Person = ({ sn, name, relationship, selected, onClick }) => (
       ({relationship})
     </Typography>
   </Box>
-);
+)

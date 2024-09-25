@@ -120,7 +120,7 @@ export default function StoreAuthLayout({
               <StageBox text="Personal Info" level={0} />
               <StageBox text="Business Profile" level={1} />
               <StageBox text="Verification" level={2} />
-              <StageBox text="Pricing" level={3} />
+              <StageBox text="Set Location" level={3} />
             </Box>
             {/* This for the app */}
             {children}

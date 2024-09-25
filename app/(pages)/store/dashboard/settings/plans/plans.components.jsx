@@ -1,9 +1,12 @@
+import { CheckList } from "@/app/components/cards/plans";
+import { Box, Button, Typography } from "@mui/material";
+
 export const PlansComponents = ({ opportunities, from, price, name }) => {
   return (
     <Box className="w-full sm:w-72 !rounded-xl bg-gradient-to-b from-blue-700 via-blue-500 to-blue-700 py-8 m-1 my-4">
       <Box className="flex flex-col items-center">
         <Typography variant="body2" className="!text-xl !text-white !font-bold">
-          {name || "-"}
+          {name || '-'}
         </Typography>
         <Typography
           variant="body2"
@@ -29,5 +32,5 @@ export const PlansComponents = ({ opportunities, from, price, name }) => {
         ))}
       </Box>
     </Box>
-  );
+  )
 };

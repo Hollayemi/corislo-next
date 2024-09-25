@@ -15,8 +15,8 @@ const Chip = props => {
   const bgColors = useBgColor()
 
   const colors = {
-    primary: { ...bgColors.primaryLight },
-    secondary: { ...bgColors.secondaryLight },
+    primary: { ...bgColors.deepblue },
+    secondary: { ...bgColors.yellow },
     success: { ...bgColors.successLight },
     error: { ...bgColors.errorLight },
     warning: { ...bgColors.warningLight },

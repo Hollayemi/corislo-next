@@ -137,6 +137,7 @@ textarea::placeholder {
   width: 280px;
   min-width: 280px;
   height: 150px;
+  z-index: 30000000000000000;
 }
 .tooltipContainter {
   width: 280px;

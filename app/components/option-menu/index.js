@@ -54,6 +54,7 @@ const OptionsMenu = (props) => {
     iconButtonProps,
     setOption,
     addBtn,
+    itemsClassName
   } = props;
 
   // ** State
@@ -120,7 +121,7 @@ const OptionsMenu = (props) => {
         {...menuProps}
       >
         {addBtn && (
-          <MenuItem className="!min-w-[200px] !bg-gray-50 border-b">
+          <MenuItem className={`!min-w-[200px] !bg-gray-50 border-b ${itemsClassName}`}>
             {addBtn}
           </MenuItem>
         )}
@@ -129,7 +130,7 @@ const OptionsMenu = (props) => {
             return (
               <MenuItem
                 key={index}
-                className="!min-w-[200px]"
+                className={`!min-w-[200px] ${itemsClassName}`}
                 onClick={() => optionClick(butPush ? butPush[index] : option)}
               >
                 {option}
@@ -145,11 +146,13 @@ const OptionsMenu = (props) => {
                 key={index}
                 {...option.menuItemProps}
                 {...(option.href && { sx: { p: 0 } })}
+                 className={`${itemsClassName}`}
                 onClick={(e) => optionClick(butPush ? butPush[index] : option.rest)}
               >
                 <MenuItemWrapper option={option}>
                   {option.icon ? option.icon : null}
                   {option.text}
+                  {option.component}
                 </MenuItemWrapper>
               </MenuItem>
             );

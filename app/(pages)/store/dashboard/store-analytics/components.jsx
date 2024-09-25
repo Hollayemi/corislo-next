@@ -1,42 +1,42 @@
-"use client";
-import { forwardRef } from "react";
-import { useTheme } from "@emotion/react";
-import useSWR from "swr";
-import { Box, Typography, TextField } from "@mui/material";
-import { DashboardCrumb } from "../components";
+'use client'
+import { forwardRef } from 'react'
+import { useTheme } from '@emotion/react'
+import useSWR from 'swr'
+import { Box, Typography, TextField } from '@mui/material'
+import { DashboardCrumb } from '../components'
 import {
   revenueOptions,
   generatedLeadOptions,
   salesOptions,
   categoryOptions,
-} from "./chartOptions";
-import { intervals, correctInterval } from "./interval";
-import DatePicker from "react-datepicker";
-import Icon from "@/app/components/icon";
-import { CircleLoader } from "@/app/components/cards/loader";
-import ReactApexcharts from "@/app/components/chart/react-apexcharts";
+} from './chartOptions'
+import { intervals, correctInterval } from './interval'
+import DatePicker from 'react-datepicker'
+import Icon from '@/app/components/icon'
+import { CircleLoader } from '@/app/components/cards/loader'
+import ReactApexcharts from '@/app/components/chart/react-apexcharts'
 // import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 
 const PickersComponent = forwardRef(({ ...props }, ref) => {
-  const { label, readOnly } = props;
+  const { label, readOnly } = props
   return (
     <TextField
       inputRef={ref}
       {...props}
-      label={label || ""}
+      label={label || ''}
       {...(readOnly && { inputProps: { readOnly: true } })}
     />
-  );
-});
+  )
+})
 
 export const analyticsBreadCrumb = [
   ...DashboardCrumb,
   {
-    text: "Analytics",
-    link: "store-analytics",
-    icon: "shop",
+    text: 'Analytics',
+    link: 'store-analytics',
+    icon: 'shop',
   },
-];
+]
 
 export const RightBreadCrumbChildren = ({
   setStartDate,
@@ -65,24 +65,24 @@ export const RightBreadCrumbChildren = ({
         />
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 export const TotalSaleGrowth = ({ interval, queryString, label }) => {
-  const { data, isLoading } = useSWR(`/store/growth?${queryString}`);
+  const { data, isLoading } = useSWR(`/store/growth?${queryString}`)
   let getSeries = data
     ? Object.values(data?.salesGrowth).map((x) => x.branchSale || x)
-    : [];
+    : []
 
-  const theme = useTheme();
-  const series = [{ data: getSeries }];
+  const theme = useTheme()
+  const series = [{ data: getSeries }]
 
   if (isLoading) {
     return (
       <Box className="w-full h-full min-h-[180px] flex justify-center items-center">
         <CircleLoader />
       </Box>
-    );
+    )
   }
 
   return (
@@ -137,23 +137,23 @@ export const TotalSaleGrowth = ({ interval, queryString, label }) => {
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export const GrowthCard = ({ title, type, interval = "monthly" }) => {
-  const theme = useTheme();
+export const GrowthCard = ({ title, type, interval = 'monthly' }) => {
+  const theme = useTheme()
   const fetch = {
     product: `/store/product-count?interval=${interval.toLowerCase()}`,
     sales: `/store/sales-count?interval=${interval.toLowerCase()}`,
-  };
+  }
 
-  const { data, isLoading } = useSWR(fetch[type]);
-  const result = data?.data || {};
+  const { data, isLoading } = useSWR(fetch[type])
+  const result = data?.data || {}
 
-  const series = Object.values(result);
-  let labels = Object.keys(result);
-  if (["daily", "monthly"].includes(interval.toLowerCase())) {
-    labels = labels.map((x) => intervals[interval.toLowerCase()][parseInt(x)]);
+  const series = Object.values(result)
+  let labels = Object.keys(result)
+  if (['daily', 'monthly'].includes(interval.toLowerCase())) {
+    labels = labels.map((x) => intervals[interval.toLowerCase()][parseInt(x)])
   }
 
   if (isLoading) {
@@ -161,7 +161,7 @@ export const GrowthCard = ({ title, type, interval = "monthly" }) => {
       <Box className="w-1/2 h-44 !max-h-[120px] flex justify-center items-center">
         <CircleLoader />
       </Box>
-    );
+    )
   }
 
   return (
@@ -193,27 +193,27 @@ export const GrowthCard = ({ title, type, interval = "monthly" }) => {
         <Growth percentage={20} />
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 export const reshapePrice = (price) => {
-  if (typeof parseInt(price) === "number") {
-    return `₦ ${parseInt(price).toLocaleString()}`;
+  if (typeof parseInt(price) === 'number') {
+    return `₦ ${parseInt(price).toLocaleString()}`
   }
-};
+}
 
 export const Growth = ({ percentage }) => {
   return (
     <Box
       className={`flex items-center w-auto ${
         parseInt(percentage) < 0
-          ? "!text-red-600 bg-red-200"
-          : "!text-green-600 bg-green-200"
+          ? '!text-red-600 bg-red-200'
+          : '!text-green-600 bg-green-200'
       }  rounded px-1`}
     >
       <Icon
         icon={
-          parseInt(percentage) < 0 ? "tabler:chevron-down" : "tabler:chevron-up"
+          parseInt(percentage) < 0 ? 'tabler:chevron-down' : 'tabler:chevron-up'
         }
         fontSize="1.22rem"
       />
@@ -225,12 +225,12 @@ export const Growth = ({ percentage }) => {
         {parseInt(percentage).toFixed(1)}%
       </Typography>
     </Box>
-  );
-};
+  )
+}
 
 export const GeneatedLeadChart = () => {
-  const theme = useTheme();
-  const series = [32, 41, 41, 70];
+  const theme = useTheme()
+  const series = [32, 41, 41, 70]
   return (
     <Box className="w-full">
       <Typography
@@ -264,8 +264,8 @@ export const GeneatedLeadChart = () => {
         />
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 const Itemize = ({ title, info }) => (
   <Box className="flex flex-col items-end !mb-3">
@@ -276,15 +276,15 @@ const Itemize = ({ title, info }) => (
       {info}
     </Typography>
   </Box>
-);
+)
 
 export const StoreGrowth = ({ interval, queryString, label }) => {
-  const theme = useTheme();
-  const { data, isLoading } = useSWR(`/store/branch-sales?${queryString}`);
-  const result = data?.data || {};
+  const theme = useTheme()
+  const { data, isLoading } = useSWR(`/store/branch-sales?${queryString}`)
+  const result = data?.data || {}
 
   const myBranches = result.branches?.map((x, key) => {
-    const series = Object.values(x.sales).map((x) => x.sale || x);
+    const series = Object.values(x.sales).map((x) => x.sale || x)
     return (
       <Box
         key={key}
@@ -307,29 +307,32 @@ export const StoreGrowth = ({ interval, queryString, label }) => {
           <Itemize title="Growth" info={<Growth percentage={x.lastGrowth} />} />
         </Box>
       </Box>
-    );
-  });
+    )
+  })
 
   if (isLoading) {
     return (
       <Box className="w-full sm:w-1/2 md:w-80 h-60 md:border-r flex justify-center items-center">
         <CircleLoader />
       </Box>
-    );
+    )
   }
-  return myBranches;
-};
+  return myBranches
+}
 
 export const CategoriesGrowth = ({ interval, queryString, label }) => {
-  const theme = useTheme();
+  const theme = useTheme()
 
-  const { data, isLoading } = useSWR(`/store/category-sales?${queryString}`);
-  const result = data?.data || {};
+  const { data, isLoading } = useSWR(`/store/category-sales?${queryString}`)
+  const result = data?.data || {}
   const myCategories = result.cate?.map((x) => {
-    const series = Object.values(x.data).map((x) => x.sale || x);
+    const series = Object.values(x.data).map((x, i) => x.sale || x)
 
     return (
-      <Box className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-3 md:border-r !border-gray-100 h-full flex items-start">
+      <Box
+        key={i}
+        className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-3 md:border-r !border-gray-100 h-full flex items-start"
+      >
         <Box className="w-9/12">
           <Typography variant="body2" className="!text-[12px] !font-[600]">
             {x._id}
@@ -347,15 +350,15 @@ export const CategoriesGrowth = ({ interval, queryString, label }) => {
           <Itemize title="Growth" info={<Growth percentage={x.lastGrowth} />} />
         </Box>
       </Box>
-    );
-  });
+    )
+  })
 
   if (isLoading) {
     return (
       <Box className="w-full sm:w-1/2 md:w-80 h-60 border-r flex justify-center items-center">
         <CircleLoader />
       </Box>
-    );
+    )
   }
-  return myCategories;
-};
+  return myCategories
+}

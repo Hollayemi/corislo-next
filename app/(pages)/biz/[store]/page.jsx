@@ -30,7 +30,7 @@ const BusinessPage = ({ params, searchParams }) => {
   const getStore = params.store.split("-");
   const { data, error } = useSWR(
     `/branch/info?store=${getStore[0]}&branch=${getStore[1]}`
-  );
+  )
   const branchInfo = data ? data?.data : {};
   // ** State
   const [open, setOpen] = useState(true);
@@ -55,8 +55,8 @@ const BusinessPage = ({ params, searchParams }) => {
         searchParams={searchParams}
       />
     ),
-    2: <Policies />,
-  };
+    2: <Policies store={getStore[0]} branch={getStore[1]} />,
+  }
   const followers = 12432000;
   const dispatch = useDispatch();
   return (
@@ -115,7 +115,7 @@ const BusinessPage = ({ params, searchParams }) => {
                 </Box>
                 <Box className="flex items-center">
                   <Typography noWrap className="!font-bold !text-[13px]">
-                    {summarizeFollowers(followers)} Followers
+                    {summarizeFollowers(branchInfo.followers || 0)} Followers
                   </Typography>
                 </Box>
               </Box>
@@ -141,13 +141,13 @@ const BusinessPage = ({ params, searchParams }) => {
                   startIcon={
                     <IconifyIcon
                       icon={
-                        isIncluded ? "tabler:user-minus" : "tabler:user-plus"
+                        isIncluded ? 'tabler:user-minus' : 'tabler:user-plus'
                       }
                       className="!text-blue-800 !text-[16px]"
                     />
                   }
                 >
-                  {isIncluded ? "Following" : "Follow"}
+                  {isIncluded ? 'Following' : 'Follow'}
                 </Button>
               </Box>
             </Box>
@@ -166,7 +166,7 @@ const BusinessPage = ({ params, searchParams }) => {
         </Box>
       </Box>
     </HomeWrapper>
-  );
+  )
 };
 
 export default BusinessPage;

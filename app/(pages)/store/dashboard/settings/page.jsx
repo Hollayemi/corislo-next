@@ -39,7 +39,7 @@ const StoreSettings = ({ params }) => {
             orientation="horizontal"
             variant="scrollable"
             onChange={handleChangeTab}
-            className="flex-shrink-0 border-b overflow-x-scroll"
+            className="flex-shrink-0 border-b overflow-x-auto"
             aria-label="Product Page"
           >
             {tabs.map((each, i) => (

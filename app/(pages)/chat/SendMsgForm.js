@@ -12,7 +12,7 @@ import Icon from "@/app/components/icon";
 // ** Styled Components
 const ChatFormWrapper = styled(Box)(({ theme }) => ({
   display: "flex",
-  alignItems: "center",
+  alignItems: "start",
   justifyContent: "space-between",
 }));
 
@@ -75,6 +75,11 @@ const SendMsgForm = (props) => {
             minRows={1}
             maxRows={4}
             multiline
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                handleSendMsg(event)
+              }
+            }}
             placeholder="Type your message here…"
             onChange={(e) => setMsg(e.target.value)}
             sx={{

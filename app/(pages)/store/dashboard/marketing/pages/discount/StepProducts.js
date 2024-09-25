@@ -1,28 +1,20 @@
 // ** React Imports
-import { useState, Fragment, forwardRef } from "react";
+import { useState, Fragment } from "react";
 import useSWR from "swr";
 // ** MUI Imports
 import {
   Grid,
-  OutlinedInput,
-  Select,
-  Box,
-  Typography,
-  MenuItem,
-  InputLabel,
-  FormControl,
   TextField,
   Autocomplete,
 } from "@mui/material";
 // ** Custom Components Imports
-import CustomChip from "@/app/components/chip";
 import { CircleLoader } from "@/app/components/cards/loader";
 import { useStoreData } from "@/app/hooks/useData";
 
 const StepProducts = ({ campaignData, setCampaignData, formHandler }) => {
   const { storeInfo: { profile } } = useStoreData();
   const { data, isLoading } = useSWR(
-    `/store/products-campaign?store=${profile.store}&branch=${profile.branch}`
+    `/store/products-campaign?store=${profile.store}&branch=${profile.branch}&limit=4000`
   );
   const options = data ? data.data.all : [];
   const [newOptions, setNewOptions] = useState([]);

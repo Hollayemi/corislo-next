@@ -42,7 +42,7 @@ const CustomAvatar = forwardRef((props, ref) => {
     pink: getAvatarStyles(skin, 'pink')
   }
 
-  return <MuiAvatar ref={ref} {...props} sx={!src && skin && color ? Object.assign(colors[color], sx) : sx} />
+  return <MuiAvatar ref={ref} {...props} name='kjlk' sx={!src && skin && color ? Object.assign(colors[color], sx) : sx} />
 })
 CustomAvatar.defaultProps = {
   skin: "filled",

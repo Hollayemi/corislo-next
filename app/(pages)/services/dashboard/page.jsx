@@ -1,38 +1,38 @@
-"use client";
-import { Box, Button, Divider, Typography } from "@mui/material";
-import { ProgressBar } from "react-loader-spinner";
-import { useState } from "react";
-import { StatusView } from "../components";
-import { BasicModal } from "@/app/components/cards/popup";
-import ServiceDashboardWrapper from "@/app/components/view/services";
-import { SetLocation } from "./component";
-import { FileUploader } from "../../store/dashboard/stores/component";
-import ProfilePictureUploader from "@/app/components/cards/fileUpload";
-import IconifyIcon from "@/app/components/icon";
-import Image from "next/image";
+'use client'
+import { Box, Button, Divider, Typography } from '@mui/material'
+import { ProgressBar } from 'react-loader-spinner'
+import { useState } from 'react'
+import { StatusView } from '../components'
+import { BasicModal } from '@/app/components/cards/popup'
+import ServiceDashboardWrapper from '@/app/components/view/services'
+import { SetLocation } from './component'
+import { FileUploader } from '../../store/dashboard/stores/component'
+import ProfilePictureUploader from '@/app/components/cards/fileUpload'
+import IconifyIcon from '@/app/components/icon'
+import Image from 'next/image'
 import {
   addImageLink,
   deletePicture,
   updateBranchImages,
-} from "@/app/redux/state/slices/shop/branches";
-import { useDispatch } from "react-redux";
-import { formatBytes } from "@/app/utils/format";
+} from '@/app/redux/state/slices/shop/branches'
+import { useDispatch } from 'react-redux'
+import { formatBytes } from '@/app/utils/format'
 
 const ServiceDashboard = () => {
-  const dispatch = useDispatch();
-  const [url, setUrl] = useState("");
-  const [files, setFiles] = useState([]);
-  const [localFiles, setLocalFiles] = useState([]);
-  const [openModal, setOpenModal] = useState(true);
+  const dispatch = useDispatch()
+  const [url, setUrl] = useState('')
+  const [files, setFiles] = useState([])
+  const [localFiles, setLocalFiles] = useState([])
+  const [openModal, setOpenModal] = useState(true)
   const UploadBar = ({ file, link, done = 0 }) => {
-    const url = files.filter(x => x.name === file.name)[0]
+    const url = files.filter((x) => x.name === file.name)[0]
     return (
       <Box className="flex flex-col items-center h-fit mt-3 w-full bg-gray-100 rounded-md px-2 ">
         <Box className="flex justify-between items-center w-full h-14">
           <Box className="flex items-center">
             <Image
               src={`/images/misc/${
-                file.type.startsWith("video") ? "video" : "image"
+                file.type.startsWith('video') ? 'video' : 'image'
               }-file.png`}
               alt="video png"
               className="h-8 w-8"
@@ -51,8 +51,8 @@ const ServiceDashboard = () => {
                 variant="body2"
                 className="!text-[10px] !text-gray-400"
               >
-                {formatBytes(file?.size || 0)} <span className="px-2 ">.</span>{" "}
-                {!done ? "uploading" : "uploaded"}
+                {formatBytes(file?.size || 0)} <span className="px-2 ">.</span>{' '}
+                {!done ? 'uploading' : 'uploaded'}
               </Typography>
             </Box>
           </Box>
@@ -63,8 +63,8 @@ const ServiceDashboard = () => {
                 className="text-red-500 text-[16px]"
                 onClick={() =>
                   deletePicture(url.link, dispatch, () =>
-                    setLocalFiles(
-                      (prev) => prev.filter((x) => x.name !== file.name)
+                    setLocalFiles((prev) =>
+                      prev.filter((x) => x.name !== file.name)
                     )
                   )
                 }
@@ -86,22 +86,22 @@ const ServiceDashboard = () => {
                 borderColor="blue"
                 barColor="blue"
                 ariaLabel="progress-bar-loading"
-                wrapperStyle={{ width: "50px" }}
+                wrapperStyle={{ width: '50px' }}
                 wrapperClass="mr-5"
               />
             )}
           </Box>
         </Box>
       </Box>
-    );
-  };
+    )
+  }
   return (
     <ServiceDashboardWrapper
     // popup={
     //   <BasicModal
     //     openModal={openModal}
     //     toggleModal={() => setOpenModal(false)}
-    //     content={<SetLocation close={() => setOpenModal(false)} />}
+    //     content={<Box className="md:w-[400px] h-[500px]"><SetLocation close={() => setOpenModal(false)} /></Box>}
     //   />
     // }
     >
@@ -130,7 +130,7 @@ const ServiceDashboard = () => {
                         variant="caption"
                         className="!text-[12px] z-50 !text-gray-600"
                       >
-                        Drag & Drop or{" "}
+                        Drag & Drop or{' '}
                         <span className="text-blue-600">Choose</span> file to
                         upload
                       </Typography>
@@ -147,10 +147,10 @@ const ServiceDashboard = () => {
                   updateBranchImages(
                     {
                       image,
-                      type: "gallery",
-                      state: "add",
+                      type: 'gallery',
+                      state: 'add',
                       name: file.name,
-                      isVideo: file.type.startsWith("video"),
+                      isVideo: file.type.startsWith('video'),
                     },
                     dispatch,
                     () => {},
@@ -161,7 +161,7 @@ const ServiceDashboard = () => {
               />
             </Box>
             {localFiles?.map((file, i) => {
-              const isFile = files.filter((x) => x.name === file.name);
+              const isFile = files.filter((x) => x.name === file.name)
               return (
                 <UploadBar
                   file={file}
@@ -169,7 +169,7 @@ const ServiceDashboard = () => {
                   link={isFile.link}
                   done={isFile.length > 0}
                 />
-              );
+              )
             })}
             <br />
             <br />
@@ -198,7 +198,7 @@ const ServiceDashboard = () => {
               />
 
               <Button
-                onClick={() => addImageLink({ url, type: "gallery" }, dispatch)}
+                onClick={() => addImageLink({ url, type: 'gallery' }, dispatch)}
                 className="!absolute top-1 -mt-0.5 right-2 mr-3 cursor-pointer"
               >
                 Upload
@@ -230,6 +230,6 @@ const ServiceDashboard = () => {
         </Box>
       </Box>
     </ServiceDashboardWrapper>
-  );
-};
-export default ServiceDashboard;
+  )
+}
+export default ServiceDashboard

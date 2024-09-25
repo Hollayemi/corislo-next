@@ -35,7 +35,7 @@ const Review = ({ store, branch, searchParams }) => {
       {!isOffline && (
         <Box className="!bg-white rounded-xl px-3 md:px-10 py-8 mt-6">
           <Typography variant="body2" className="!font-bold !text-xl">
-            Rate this app
+            Rate this store
           </Typography>
           <Typography variant="body2" className="!text-[12px]">
             Tell others what you think

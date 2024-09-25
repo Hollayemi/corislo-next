@@ -19,8 +19,10 @@ import {
   WhoIsWaiting,
 } from "@/app/components/view/home/Components/Footer";
 import AllPlans from "@/app/components/cards/plans";
+import { useRouter } from "next/navigation";
 
 const SellerPage = () => {
+  const router = useRouter()
   return (
     <HomeWrapper bg="custom.bodyGray">
       <Box>
@@ -45,6 +47,7 @@ const SellerPage = () => {
                 <Button
                   variant="contained"
                   className="!text-[9px] md:!text-[10px] !bg-orange-400 h-10  w-40 md:w-44 !shadow-none !rounded-full"
+                  onClick={() => router.push("/store/register")}
                 >
                   Register your Store
                 </Button>

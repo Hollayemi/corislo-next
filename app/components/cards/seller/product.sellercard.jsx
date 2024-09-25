@@ -10,16 +10,14 @@ import { followStore } from "@/app/redux/state/slices/users/following";
 import Link from "next/link";
 
 export const ProductSellerCard = ({ branchId }) => {
-  console.log(branchId);
   const dispatch = useDispatch();
   const router = useRouter();
   const { data, error } = useSWR(`/branch/info?branchId=${branchId}`);
-  console.log(data);
   const storeInfo = data?.data || {};
   const { following, socket } = useUserData();
   const isFollowing = following.includes(branchId);
   return (
-    <Box className="bg-white w-full rounded-xl p-4 mt-4">
+    <Box className="bg-white w-full rounded-xl p-4 mt-4 relative">
       <Box className="flex  justify-between">
         <Box className="flex item-start">
           <Image
@@ -33,7 +31,8 @@ export const ProductSellerCard = ({ branchId }) => {
             <Box className="mt-3 ml-2">
               <Typography
                 variant="body2"
-                className="!text-[14px] !font-[400] !leading-3"
+                className="!text-[14px] !font-bold !leading-3 !w-36 md:!w-52"
+                noWrap
                 color="custom.pri"
               >
                 {storeInfo.businessName}
@@ -51,11 +50,11 @@ export const ProductSellerCard = ({ branchId }) => {
         <Box className="flex items-center justify-center">
           <Button
             variant="outlined"
-            className="!rounded-full h-9 w-14 md:w-32 !bg-white !shadow-none"
+            className="!rounded-full h-9 w-9 !min-w-[12px] md:w-32 !bg-white !shadow-none"
             startIcon={
               <IconifyIcon
                 icon="tabler:message-2-plus"
-                className="!text-blue-800"
+                className="!text-blue-800 ml-3"
               />
             }
             onClick={() => router.push(`/chat?new=${branchId}`)}
@@ -64,7 +63,13 @@ export const ProductSellerCard = ({ branchId }) => {
           </Button>
           <Button
             variant="outlined"
-            className="!rounded-full h-9 w-14 md:w-28 !bg-white !shadow-none !ml-3"
+            className="!rounded-full h-9 w-9 !min-w-[12px] md:w-28 !bg-white !shadow-none !ml-3"
+            startIcon={
+              <IconifyIcon
+                icon={isFollowing ? "tabler:user-minus" : "tabler:user-plus"}
+                className="!text-blue-800 ml-3"
+              />
+            }
             onClick={() =>
               followStore(storeInfo, dispatch, socket, isFollowing)
             }
@@ -87,10 +92,10 @@ export const ProductSellerCard = ({ branchId }) => {
           <StoreNumberStatus status="Reviews" value={524} />
         </Box>
 
-        <Box className="mt-2 md:mt-0 md:w-2/5 block">
+        {/* <Box className="mt-2 md:mt-0 md:w-2/5 block">
           <TickCheck title="Order Fufilment Rate:" icon result="Average" />
           <TickCheck title="Customer Rating:" icon result="Good" />
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );

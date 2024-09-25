@@ -2,7 +2,6 @@ import { createAsyncThunk, unwrapResult } from "@reduxjs/toolkit";
 import toaster from "@/app/configs/toaster";
 import martApi from "../../api/baseApi";
 import { jsonHeader } from "../../api/setAuthHeaders";
-import { storeLogout } from "../shopInfo";
 import { mutate } from "swr";
 
 const addStaffApi = createAsyncThunk("post/addStaff", async (payload) => {
@@ -46,14 +45,15 @@ const updateStaffApi = createAsyncThunk(
   }
 );
 
-export const updateStaff = (dispatch, payload, showSnackbar) => {
+export const updateStaff = (dispatch, payload, showSnackbar, callback) => {
   dispatch(updateStaffApi(payload))
     .then(unwrapResult)
     .then((res) => {
-      console.log(res)
       showSnackbar(res.message, res.type)
       mutate("/branch/staffs")
-      if (res.type === "success") {
+      mutate("/branch/logged-in-staff");
+      if (res.type === "success" && res.message.startsWith("Viewing")) {
+        callback()
       }
     })
     .catch((e) => {});
@@ -77,7 +77,6 @@ export const updateStaffPicture = (payload, dispatch, setLoading) => {
     .then(unwrapResult)
     .then((res) => {
       toaster({ ...res });
-      console.log(res);
       mutate("/branch/logged-in-staff");
       setLoading(false)
     })

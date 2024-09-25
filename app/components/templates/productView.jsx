@@ -277,7 +277,7 @@ export const GroupCartProducts = ({
                 variant="outlined"
                 className="w-32 h-7 !rounded-full !border !border-blue-500 !text-[12px] !text-blue-600"
               >
-                {mySubstring(picker?.name, 15) || "Myself"}
+                {mySubstring(picker?.name, 13) || "Myself"}
               </Button>
             }
             // template={<TitleSubtitle />}

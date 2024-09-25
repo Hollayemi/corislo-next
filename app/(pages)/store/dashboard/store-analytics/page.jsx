@@ -20,6 +20,7 @@ import {
   generateDateRange,
 } from "@/app/utils/format";
 import DatePicker from "react-datepicker";
+import { useStoreData } from "@/app/hooks/useData";
 
 const CustomInput = forwardRef((props, ref) => {
   const startDate = props.start !== null ? formatDate(props.start) : null;
@@ -41,6 +42,7 @@ const CustomInput = forwardRef((props, ref) => {
 
 const StoreAnalysisPage = ({ params }) => {
   const path = { ...params, sidebar: "store-analytics" };
+  const { staffInfo } = useStoreData();
   const defaultInterval = {
     Daily: "10_days",
     Weekly: "5_weeks",
@@ -175,46 +177,48 @@ const StoreAnalysisPage = ({ params }) => {
         </Box>
 
         {/* Store Sales Growth */}
-        <Box>
-          <Box className="mt-6 flex items-center relative">
-            <Typography
-              variant="body2"
-              className="!text-black !text[14px] !font-bold"
-            >
-              Branches Sales
-            </Typography>
-            <OptionsMenu
-              icon={
-                <Button
-                  variant="outlined"
-                  className="!text-xs !border-gray-200 !rounded-full !text-gray-400 !bg-white !ml-3"
-                  endIcon={
-                    <Icon
-                      icon="tabler:arrows-exchange"
-                      className="!text-[17px] rotate-90"
-                    />
-                  }
-                >
-                  {interval}
-                </Button>
-              }
-              options={Object.keys(defaultInterval)}
-              setOption={setInterval}
-              iconButtonProps={{
-                size: "small",
-                sx: { color: "text.disabled", cursor: "pointer" },
-              }}
-            />
-          </Box>
+        {staffInfo.viewAsAdmin && (
+          <Box>
+            <Box className="mt-6 flex items-center relative">
+              <Typography
+                variant="body2"
+                className="!text-black !text[14px] !font-bold"
+              >
+                Branches Sales
+              </Typography>
+              <OptionsMenu
+                icon={
+                  <Button
+                    variant="outlined"
+                    className="!text-xs !border-gray-200 !rounded-full !text-gray-400 !bg-white !ml-3"
+                    endIcon={
+                      <Icon
+                        icon="tabler:arrows-exchange"
+                        className="!text-[17px] rotate-90"
+                      />
+                    }
+                  >
+                    {interval}
+                  </Button>
+                }
+                options={Object.keys(defaultInterval)}
+                setOption={setInterval}
+                iconButtonProps={{
+                  size: "small",
+                  sx: { color: "text.disabled", cursor: "pointer" },
+                }}
+              />
+            </Box>
 
-          <Box className="mt-2  flex-wrap w-full flex bg-white rounded-xl">
-            <StoreGrowth
-              queryString={`${queryString}&interval=${interval.toLowerCase()}`}
-              interval={interval}
-              label={label}
-            />
+            <Box className="mt-2  flex-wrap w-full flex bg-white rounded-xl">
+              <StoreGrowth
+                queryString={`${queryString}&interval=${interval.toLowerCase()}`}
+                interval={interval}
+                label={label}
+              />
+            </Box>
           </Box>
-        </Box>
+        )}
         {/* Categories Sales Growth */}
         <Box>
           <Box className="mt-6 flex items-center relative">

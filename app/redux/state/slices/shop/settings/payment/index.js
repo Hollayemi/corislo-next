@@ -1,22 +1,24 @@
 import { createAsyncThunk, unwrapResult } from '@reduxjs/toolkit';
 import toaster from "@/app/configs/toaster";
 import martApi from '../../../api/baseApi';
+import { jsonHeader } from '../../../api/setAuthHeaders';
 
-export const myPaymentRef = createAsyncThunk(
+export const businessSubscriptionApi = createAsyncThunk(
     'post/paymentRef',
     async (payload) => {
         const { data } = await martApi
-            .post('/saveShopPayment', payload, {})
+            .post('/store/plan/new', payload, jsonHeader("store"))
             .then((e) => e)
             .catch((e) => e.response);
         return data;
     }
 );
 
-export const handlePaymentSuccess = (dispatch, payload) => {
-    dispatch(myPaymentRef(payload))
+export const businessSubscription = (dispatch, payload) => {
+    dispatch(businessSubscriptionApi(payload))
         .then(unwrapResult)
         .then((res) => {
+            console.log(res)
             if (res.type === 'Transaction was successful') {
                 toaster({ ...res });
             }

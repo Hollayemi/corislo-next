@@ -19,10 +19,18 @@ const settings2 = {
   ...settings,
   variableWidth: false,
   dots: true,
+  fade: true,
+};
+
+const settings3 = {
+  ...settings,
+  variableWidth: false,
+  fade: true,
 };
 const configs = {
     1: settings,
-    2: settings2
+    2: settings2,
+    3: settings3
 }
 
 

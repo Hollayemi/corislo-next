@@ -2,7 +2,7 @@
 import { useState, forwardRef } from "react";
 
 // ** MUI Imports
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { PopularAds } from "@/app/components/cards/homeCards";
 import { useStoreData } from "@/app/hooks/useData";
 import useSWR from "swr";
@@ -46,7 +46,8 @@ const Announcements = ({ formData, setFormData, formHandler }) => {
   return (
     <Box className="flex flex-wrap">
       {ads.map((ad, i) => (
-        <Box className="m-1">
+        <Box className="m-1 relative" key={i}>
+          <Typography variant="caption" className="!text-[10px] !ml-3">({ad.status})</Typography>
           <PopularAds
             store={storeInfo?.profile?.store}
             key={i}

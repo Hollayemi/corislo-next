@@ -1,7 +1,7 @@
-"use client";
-import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+'use client'
+import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import {
   Avatar,
   Box,
@@ -9,104 +9,119 @@ import {
   Divider,
   TextField,
   Typography,
-} from "@mui/material";
-import CustomChip from "@/app/components/chip";
+} from '@mui/material'
+import CustomChip from '@/app/components/chip'
 import {
   formatCurrency,
   formatDate,
   formatDateToMonthShort,
-} from "@/app/utils/format";
-import { OrderProductPrev } from "@/app/(pages)/order/pending-reviews/page";
-import useSWR from "swr";
+} from '@/app/utils/format'
+import { OrderProductPrev } from '@/app/(pages)/order/pending-reviews/page'
+import useSWR from 'swr'
 import {
+  ConfirmPicker,
   CustomizeStatus,
   IconValue,
   OrderSummary,
   ProductPrev,
   renderMenu,
   renderSubMenu,
-} from "./components";
-import { DetailsDesign } from "../components";
-import IconifyIcon from "@/app/components/icon";
-import { useRouter, useSearchParams } from "next/navigation";
-import { storeUpdateOrder } from "@/app/redux/state/slices/shop/order";
-import ModalHook from "@/app/hooks/modalHook";
-import Link from "next/link";
+} from './components'
+import { DetailsDesign } from '../components'
+import IconifyIcon from '@/app/components/icon'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { storeUpdateOrder } from '@/app/redux/state/slices/shop/order'
+import ModalHook from '@/app/hooks/modalHook'
+import Link from 'next/link'
 
 const OrderReview = ({ params }) => {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const searchParams = useSearchParams();
-  const order = searchParams.get("order");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [subAnchorEl, setSubAnchorEl] = useState(null);
-  const [payload, setPayload] = useState({ orderId: order });
-  const { dialogInfo, updateDialogInfo } = ModalHook(payload);
-  const path = { ...params, sidebar: "order-management" };
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const searchParams = useSearchParams()
+  const order = searchParams.get('order')
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [rightOpen, setRightOpen] = useState(null)
+  const [subAnchorEl, setSubAnchorEl] = useState(null)
+  const [payload, setPayload] = useState({ orderId: order })
+  const { dialogInfo, updateDialogInfo } = ModalHook(payload)
+  const path = { ...params, sidebar: 'order-management' }
 
   const {
     data: orderInfo,
     error: orderErr,
     isLoading: orderLoading,
-  } = useSWR(`/branch/order-request?order=${order}`);
+  } = useSWR(`/branch/order-request?order=${order}`)
 
   const {
     data: prodInfo,
     error: prodErr,
     isLoading: prodLoading,
-  } = useSWR(`/branch/order-product/${order}`);
+  } = useSWR(`/branch/order-product/${order}`)
 
-  const row = (!orderLoading && !orderErr && orderInfo?.data[0]) || null;
-  const products = (!prodLoading && !prodErr && prodInfo?.data)[0] || {};
-  const picker = (products?.picker && products.picker[0]) || {};
-  const open = Boolean(anchorEl);
-  const openSub = Boolean(subAnchorEl);
+  const row = (!orderLoading && !orderErr && orderInfo?.data[0]) || null
+  const products = (!prodLoading && !prodErr && prodInfo?.data)[0] || {}
+  const picker = (products?.picker && products.picker[0]) || {}
+  const open = Boolean(anchorEl)
+  const openSub = Boolean(subAnchorEl)
   const handleButtonClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
-    setSubAnchorEl(null);
-  };
+    setAnchorEl(null)
+    setSubAnchorEl(null)
+  }
 
   const handleChange = (prop) => (event) => {
-    setPayload({ ...payload, [prop]: event?.target?.value });
-  };
+    setPayload({ ...payload, [prop]: event?.target?.value })
+  }
 
   const handleChange2 = (prop, aux) => {
     setPayload({
       ...payload,
-      [prop]: aux?.replaceAll(" ", "_"),
-    });
-  };
+      [prop]: aux?.replaceAll(' ', '_'),
+    })
+  }
 
   const handleMenuItemClick = (action) => (e) => {
-    handleChange2("status", action);
+    handleChange2('status', action)
     // Handle action here
-    if (action === "") {
-      setSubAnchorEl(true);
+    if (action === '') {
+      setSubAnchorEl(true)
     } else {
-      setAnchorEl(null);
-      setSubAnchorEl(null);
+      setAnchorEl(null)
+      setSubAnchorEl(null)
     }
-  };
+  }
   const saveData = () => {
-    updateDialogInfo((prev) => {
-      return {
-        ...prev,
-        open: true,
-        alert: `Are you sure to change order status to ${payload.status}. The buyer will be notified instantly.`,
-        acceptFunction: () => storeUpdateOrder(dispatch, payload),
-      };
-    });
-  };
+    if (payload.status !== 'Completed') {
+      updateDialogInfo((prev) => {
+        return {
+          ...prev,
+          open: true,
+          alert: `Are you sure to change order status to ${payload.status}. The buyer will be notified instantly.`,
+          acceptFunction: () =>
+            storeUpdateOrder(dispatch, payload, setPayload({ orderId: order })),
+        }
+      })
+    } else {
+      setRightOpen(
+        <ConfirmPicker
+          payload={payload}
+          storeUpdateOrder={storeUpdateOrder}
+          setRightOpen={setRightOpen}
+        />
+      )
+    }
+  }
   return (
     <StoreLeftSideBar
       path={path}
       subListBar={false}
       dialogInfo={dialogInfo}
       updateDialogInfo={updateDialogInfo}
+      rightOpen={rightOpen}
+      setRightOpen={setRightOpen}
     >
       <Box className="py-2">
         <Box className="flex justify-between">
@@ -114,7 +129,7 @@ const OrderReview = ({ params }) => {
             <IconifyIcon
               icon="tabler:chevron-left"
               className="text-[30px] mr-2 cursor-pointer"
-              onClick={() => router.push("/store/dashboard/order-management")}
+              onClick={() => router.push('/store/dashboard/order-management')}
             />
             <Box className="">
               <Box className="flex items-center">
@@ -125,18 +140,21 @@ const OrderReview = ({ params }) => {
                 >
                   {row?.orderId}
                 </Typography>
-                <CustomizeStatus text={row?.status || "..."} />
-                <CustomizeStatus text={"Pending"} />
+                <CustomizeStatus text={row?.status || '...'} />
+                <CustomizeStatus text={'Pending'} />
               </Box>
-              <Typography variant="caption" className="!text-[12px] !mb-6 italic">
+              <Typography
+                variant="caption"
+                className="!text-[12px] !mb-6 italic"
+              >
                 {formatDateToMonthShort(
                   new Date(row?.dateAdded || null),
                   true,
                   {
-                    month: "long",
-                    year: "numeric",
+                    month: 'long',
+                    year: 'numeric',
                   }
-                )}{" "}
+                )}{' '}
                 from {row?.status?.toLowerCase()} orders
               </Typography>
             </Box>
@@ -148,7 +166,7 @@ const OrderReview = ({ params }) => {
               variant="contained"
               className="!flex !items-center !shadow-none !justify-between px-4 !text-white"
             >
-              {payload.status || "Status"}
+              {payload.status || 'Status'}
               {open ? (
                 <IconifyIcon icon="tabler:chevron-up" className="text-[18px]" />
               ) : (
@@ -179,7 +197,7 @@ const OrderReview = ({ params }) => {
                 <Typography className=" !text-[15px] !mb-2 !mr-4">
                   Order Items
                 </Typography>
-                <CustomizeStatus text={"Pending"} />
+                <CustomizeStatus text={'Pending'} />
                 <br />
                 <br />
                 {products?.products?.map((each, i) => (
@@ -201,9 +219,9 @@ const OrderReview = ({ params }) => {
                 rounded
                 size="small"
                 skin="light"
-                color={"success"}
-                label={"Paid"}
-                sx={{ "& .MuiChip-label": { textTransform: "capitalize" } }}
+                color={'success'}
+                label={'Paid'}
+                sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
                 className="flex-shrink-0 !rounded-sm"
               />
               <br />
@@ -231,9 +249,9 @@ const OrderReview = ({ params }) => {
                 avatar={<Avatar alt={row?.customerName} src={row?.picture} />}
                 size="large"
                 skin="light"
-                color={"success"}
+                color={'success'}
                 label={row?.customerName}
-                sx={{ "& .MuiChip-label": { textTransform: "capitalize" } }}
+                sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
                 className="flex-shrink-0"
               />
               <br />
@@ -246,8 +264,8 @@ const OrderReview = ({ params }) => {
                 multiline
                 label="Leave a comment...."
                 id="textarea-outlined"
-                defaultValue={row?.comment?.comment || ""}
-                onChange={handleChange("comment")}
+                defaultValue={row?.comment?.comment || ''}
+                onChange={handleChange('comment')}
                 maxRows={6}
                 placeholder="Timeline comment..."
                 minRows={5}
@@ -260,7 +278,7 @@ const OrderReview = ({ params }) => {
                     variant="contained"
                     className="!flex !items-center !shadow-none !justify-between px-4 !text-white w-40"
                   >
-                    {payload.status || "Status"}
+                    {payload.status || 'Status'}
                     {open ? (
                       <IconifyIcon
                         icon="tabler:chevron-up"
@@ -317,7 +335,7 @@ const OrderReview = ({ params }) => {
               </Box>
             </Box>
 
-            {row?.deliveryMedium === "pickup" && (
+            {row?.deliveryMedium === 'pickup' && (
               <Box className="w-full px-3 mt-2 py-4 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
                 <Box className="flex items-center justify-between">
                   <Typography className=" !text-[15px] !mb-2 !mr-4">
@@ -341,7 +359,7 @@ const OrderReview = ({ params }) => {
                 {picker.name ? (
                   <Box className="mt-2">
                     <IconValue icon="tabler:user" value={picker.name} />
-                    <IconValue icon="tabler:hash" value={picker.slug} />
+                    <IconValue icon="tabler:hash" value={'***-********'} />
                     <IconValue
                       icon="tabler:friends"
                       value={picker.relationship}
@@ -388,7 +406,7 @@ const OrderReview = ({ params }) => {
           })}
       </Box>
     </StoreLeftSideBar>
-  );
-};
+  )
+}
 
-export default OrderReview;
+export default OrderReview

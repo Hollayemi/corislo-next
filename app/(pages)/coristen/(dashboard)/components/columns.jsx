@@ -1,9 +1,10 @@
-import { reshapePrice } from "@/app/(pages)/store/dashboard/marketing/components";
-import { CustomizeStatus } from "@/app/(pages)/store/dashboard/order-management/review/components";
-import CustomAvatar from "@/app/components/avatar";
-import IconifyIcon from "@/app/components/icon";
-import OptionsMenu from "@/app/components/option-menu";
-import { formatDate, formatSegmentation } from "@/app/utils/format";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { reshapePrice } from '@/app/(pages)/store/dashboard/marketing/components'
+import { CustomizeStatus } from '@/app/(pages)/store/dashboard/order-management/review/components'
+import CustomAvatar from '@/app/components/avatar'
+import IconifyIcon from '@/app/components/icon'
+import OptionsMenu from '@/app/components/option-menu'
+import { formatDate, formatSegmentation } from '@/app/utils/format'
 import {
   Avatar,
   AvatarGroup,
@@ -14,19 +15,19 @@ import {
   MenuItem,
   Rating,
   Typography,
-} from "@mui/material";
-import { useState } from "react";
+} from '@mui/material'
+import { useState } from 'react'
 
 export const allCustomers = [
   {
     flex: 1,
     minWidth: 200,
-    headerName: "User",
-    field: "user",
+    headerName: 'User',
+    field: 'user',
     renderCell: (params) => (
       <Box className="flex items-center">
         <CustomAvatar src={params.row?.picture} className="!w-7 !h-7 mr-2" />
-        <Typography variant="body2" sx={{ color: "text.primary" }}>
+        <Typography variant="body2" sx={{ color: 'text.primary' }}>
           {params.row.fullname}
         </Typography>
       </Box>
@@ -35,10 +36,10 @@ export const allCustomers = [
   {
     flex: 0.9,
     minWidth: 150,
-    headerName: "Email",
-    field: "email",
+    headerName: 'Email',
+    field: 'email',
     renderCell: (params) => (
-      <Typography variant="body2" sx={{ color: "text.primary" }}>
+      <Typography variant="body2" sx={{ color: 'text.primary' }}>
         {params.row.email}
       </Typography>
     ),
@@ -46,11 +47,11 @@ export const allCustomers = [
   {
     flex: 0.5,
     minWidth: 150,
-    headerName: "Items bought",
-    field: "quantity",
+    headerName: 'Items bought',
+    field: 'quantity',
     renderCell: (params) => (
-      <Typography variant="body2" sx={{ color: "text.primary" }}>
-        {params.row.order?.quantity?.toString() || "0"}
+      <Typography variant="body2" sx={{ color: 'text.primary' }}>
+        {params.row.order?.quantity?.toString() || '0'}
       </Typography>
     ),
   },
@@ -58,10 +59,10 @@ export const allCustomers = [
   {
     flex: 0.6,
     minWidth: 150,
-    headerName: "Segmentation",
-    field: "Segmentation",
+    headerName: 'Segmentation',
+    field: 'Segmentation',
     renderCell: (params) => (
-      <Typography variant="body2" sx={{ color: "text.primary" }}>
+      <Typography variant="body2" sx={{ color: 'text.primary' }}>
         {formatSegmentation(
           params.row?.order?.quantity,
           params.row?.order?.totalSpent,
@@ -73,29 +74,29 @@ export const allCustomers = [
   {
     flex: 0.6,
     minWidth: 150,
-    headerName: "Last Purchase",
-    field: "lastPurchase",
+    headerName: 'Last Purchase',
+    field: 'lastPurchase',
     renderCell: (params) => (
-      <Typography variant="body2" sx={{ color: "text.primary" }}>
+      <Typography variant="body2" sx={{ color: 'text.primary' }}>
         {formatDate(params.row.order?.lastDate)}
       </Typography>
     ),
   },
-];
+]
 
 export const businessColumns = (clickFunc) => [
   {
     flex: 1.2,
     minWidth: 300,
-    headerName: "Business Name",
-    field: "user",
+    headerName: 'Business Name',
+    field: 'user',
     renderCell: (params) => (
       <Box className="flex items-center !p-3">
         <CustomAvatar
           src={
             (params.row.branches &&
               params.row.branches.branches[0].profile_image) ||
-            "/images/misc/storeImage.png"
+            '/images/misc/storeImage.png'
           }
           className="!w-16 !h-16 mr-2 relative !rounded-md"
         />
@@ -110,6 +111,7 @@ export const businessColumns = (clickFunc) => [
             {params.row.branches &&
               params.row.branches.branches.map((branch, i) => (
                 <Avatar
+                  key={i}
                   alt="Remy Sharp"
                   src={branch.profile_image || `/images/misc/shop/${i}.png`}
                   sx={{ width: 24, height: 24 }}
@@ -123,11 +125,11 @@ export const businessColumns = (clickFunc) => [
   {
     flex: 0.4,
     minWidth: 150,
-    headerName: "Status",
-    field: "email",
+    headerName: 'Status',
+    field: 'email',
     renderCell: (params) => (
       <CustomizeStatus
-        text={params.row.isActive ? "Active" : "Inactive"}
+        text={params.row.isActive ? 'Active' : 'Inactive'}
         size="large"
       />
     ),
@@ -135,10 +137,10 @@ export const businessColumns = (clickFunc) => [
   {
     flex: 0.6,
     minWidth: 100,
-    headerName: "Date Joined",
-    field: "medium",
+    headerName: 'Date Joined',
+    field: 'medium',
     renderCell: (params) => (
-      <Typography variant="body2" sx={{ color: "text.primary" }}>
+      <Typography variant="body2" sx={{ color: 'text.primary' }}>
         {formatDate(params.row.createdAt)}
       </Typography>
     ),
@@ -146,8 +148,8 @@ export const businessColumns = (clickFunc) => [
   {
     flex: 1.5,
     minWidth: 450,
-    headerName: "Stats",
-    field: "type",
+    headerName: 'Stats',
+    field: 'type',
     renderCell: (params) => (
       <Box className="flex items-center">
         <Box className="flex flex-col">
@@ -200,28 +202,28 @@ export const businessColumns = (clickFunc) => [
   {
     flex: 0.5,
     minWidth: 120,
-    field: "actions",
-    fixed: "right",
-    headerName: "Actions",
+    field: 'actions',
+    fixed: 'right',
+    headerName: 'Actions',
     renderCell: (params) => {
-      const [anchorEl, setAnchorEl] = useState(null);
-      const open = Boolean(anchorEl);
+      const [anchorEl, setAnchorEl] = React.useState(null)
+      const open = Boolean(anchorEl)
 
       const handleButtonClick = (event) => {
-        setAnchorEl(event.currentTarget);
-      };
+        setAnchorEl(event.currentTarget)
+      }
 
       const handleMenuClose = () => {
-        setAnchorEl(null);
-      };
+        setAnchorEl(null)
+      }
 
       const handleMenuItemClick = (action) => () => {
-        setAnchorEl(null);
-        clickFunc(params.row, action);
-      };
-      const currStatus = params.row.status;
+        setAnchorEl(null)
+        clickFunc(params.row, action)
+      }
+      const currStatus = params.row.status
 
-      const active = params.row.isActive;
+      const active = params.row.isActive
 
       return (
         <div>
@@ -239,7 +241,7 @@ export const businessColumns = (clickFunc) => [
           >
             <MenuItem
               className="!text-gray-500 !text-[15px]"
-              onClick={handleMenuItemClick("view")}
+              onClick={handleMenuItemClick('view')}
             >
               <IconifyIcon
                 icon="tabler:library-photo"
@@ -249,7 +251,7 @@ export const businessColumns = (clickFunc) => [
             </MenuItem>
             <MenuItem
               className="!text-gray-500 !text-[15px]"
-              onClick={handleMenuItemClick("edit")}
+              onClick={handleMenuItemClick('edit')}
             >
               <IconifyIcon
                 icon="tabler:package"
@@ -298,25 +300,25 @@ export const businessColumns = (clickFunc) => [
             </MenuItem>
             <Divider className="!my-2" />
             <MenuItem
-              className={active ? "!text-red-600" : "!text-green-600"}
-              onClick={handleMenuItemClick("changeStatus")}
+              className={active ? '!text-red-600' : '!text-green-600'}
+              onClick={handleMenuItemClick('changeStatus')}
             >
               <IconifyIcon
-                icon={active ? "tabler:square-x" : "tabler:check"}
+                icon={active ? 'tabler:square-x' : 'tabler:check'}
                 className="!text-[17px] mr-4"
               />
-              {active ? "Deactivate" : "Activate"} Business
+              {active ? 'Deactivate' : 'Activate'} Business
             </MenuItem>
             <MenuItem
               className="!text-red-600"
-              onClick={handleMenuItemClick("delete-permanently")}
+              onClick={handleMenuItemClick('delete-permanently')}
             >
               <IconifyIcon icon="tabler:trash" className="!text-[17px] mr-4" />
               Delete Business
             </MenuItem>
           </Menu>
         </div>
-      );
+      )
     },
   },
-];
+]

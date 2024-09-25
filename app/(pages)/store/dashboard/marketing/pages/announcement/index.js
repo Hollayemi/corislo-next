@@ -97,6 +97,7 @@ const AnnouncementWizard = () => {
   const [formData, setFormData] = useState({
     title: "",
     brief: "",
+    purpose: "",
     notification: "push-notification",
     url: "",
     startDate: null,

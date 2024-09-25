@@ -1,7 +1,53 @@
+import { formatName } from "@/app/utils/get-initials";
 import { Box, Typography } from "@mui/material";
 import React from "react";
+import useSWR from "swr";
 
-const Policies = () => {
+
+// ****
+
+// .
+
+// ****  
+// 
+
+// **Contact Us**  
+// 
+
+// **About Us**  
+// At [BusinessName], we believe in quality and customer satisfaction. Whether you’re visiting for the first time or a returning customer, we want you to feel at home in our store.
+
+// **Social Media**  
+// Stay connected with us on social media! Follow us on Facebook, Instagram, Twitter, and TikTok to get the latest updates, promotions, and more.
+
+
+// **Payments and Refunds**  
+// We offer secure payment options. If you need to make a payment, please have your account details ready. We also have a clear refund policy in place, ensuring that if you are not satisfied with your purchase, you have the option for a refund or exchange as per our terms.
+
+// **Notifications**  
+// We’ll keep you informed with notifications about your order status, including order confirmation, shipping updates, and more. If any item is low on stock or out of stock, we’ll notify you promptly to ensure you can plan your purchases accordingly.
+
+// **Pre-orders**  
+// 
+
+// **Gallery and Profile**  
+// Check out our gallery to see the latest products and store updates. Our profile image represents our commitment to quality and customer satisfaction.
+
+// Thank you for choosing [BusinessName]. We look forward to serving you!
+
+const Policies = ({ store, branch }) => {
+  const { data, error } = useSWR(
+    `/branch/info?store=${store}&branch=${branch}`
+  )
+  const info = data ? data?.data : {}
+  console.log(info)
+  const days = Object.keys(info?.opening_hours || {})
+  const opening_hours = days.map(
+    (x) =>
+      info.opening_hours[x].isset && `${formatName(x)}: from ${
+        info.opening_hours[x].from
+      } to ${info.opening_hours[x].to},`
+  )
   return (
     <Box className="!bg-white rounded-xl px-8 py-8 mt-10 !text-black">
       <Typography className="!font-bold !text-[12px]" variant="body2">
@@ -12,71 +58,97 @@ const Policies = () => {
         className="!text-[13px] !text-justify !font-light !leading-8 "
         variant="body2"
       >
-        Introduction Welcome to Clothing Store! <br />
-        We're committed to providing you with an exceptional shopping
-        experience. Our store policies ensure clarity, transparency, and
-        fairness for all our valued customers. By shopping with us, you agree to
-        adhere to the following policies.
+        Welcome to {info.businessName} at {info.branchName}!
+        <br />
+        At {info.businessName}, we pride ourselves on providing top-notch
+        service to our community. Located in {info.city},{info.state}, our store
+        is easily accessible at {info.address}, near {info.landmark}. Our team
+        is dedicated to making your shopping experience as smooth and enjoyable
+        as possible
       </Typography>
       <EachExpression
-        title="1. Shipping and Delivery Policies"
+        title="Store Hours"
         body={[
-          "Shipping Methods: We offer a variety of shipping options for your convenience. Choose from standard, express, or overnight shipping, and more. We also provide international shipping to reach our global customers.",
-          "Delivery Times: Our estimated delivery times are as follows: [Provide time frames for different shipping options]. Please note that these times may vary based on your location.",
-          "Shipping Fees: [Explain any applicable shipping fees or charges]. Keep an eye on our promotions, as we often offer free shipping for specific orders.",
+          'We understand the importance of convenience, which is why we are opening in the days below. Please note that we are closed on Sundays to allow our staff some well-deserved rest.',
+          '------------------------',
+          ...opening_hours,
+          '------------------------',
         ]}
       />
       <EachExpression
-        title="2. Return and Refund Policies"
+        title="Product Pickup and Delivery"
         body={[
-          "Returns: If you're not satisfied with your purchase, you can return it within [number of days] days of receiving it. To initiate a return, please [provide instructions on how to request a return].",
-          "Refunds: We aim to process refunds within [number of days] days after receiving your returned item. [Explain any conditions or exceptions related to refunds].",
-          "Non-Returnable Items: Please note that the following items are non-returnable: [List specific non-returnable products or categories].",
+          `We offer ${
+            info.pickup && info.waybill?.isset
+              ? `both in-store pickup and waybill delivery options . For your convenience, you can pick up your order at the store or choose to have it delivered to your doorstep. Please note that a minimum purchase amount of ₦${
+                  info.waybill?.minimum_amount
+                } is required for delivery, and waybill fees are paid  ${
+                  info.waybill?.waybill_fee_paid_seperately
+                    ? 'on delivery'
+                    : 'together with order.'
+                }.`
+              : info.pickup
+              ? 'in-store pickup delivery option . For your convenience, you can pick up your order at the store or designate someone to pick your order on your behalf.'
+              : `waybill delivery option . For your convenience, choose to have it delivered to your doorstep. Please note that a minimum purchase amount of ₦${
+                  info.waybill?.minimum_amount
+                } is required for delivery, and waybill fees are paid ${
+                  info.waybill?.waybill_fee_paid_seperately
+                    ? 'on delivery'
+                    : 'together with order.'
+                }.`
+          }`,
         ]}
       />
-      <EachExpression
-        title="3. Payment and Pricing Information"
+      {/* <EachExpression
+        title="Payment and Pricing Information"
         body={[
-          "Accepted Payment Methods: We accept a variety of payment methods, including [list accepted payment options]. You can shop with confidence knowing your transactions are secure.",
-          "Pricing: Our pricing is based on [explain how pricing is determined, e.g., cost, demand, market factors]. Prices are subject to change based on market conditions.",
-          "Additional Charges: [Specify any additional charges like taxes, customs duties, or fees that customers should be aware of].",
+          'Accepted Payment Methods: We accept a variety of payment methods, including [list accepted payment options]. You can shop with confidence knowing your transactions are secure.',
+          'Pricing: Our pricing is based on [explain how pricing is determined, e.g., cost, demand, market factors]. Prices are subject to change based on market conditions.',
+          'Additional Charges: [Specify any additional charges like taxes, customs duties, or fees that customers should be aware of].',
         ]}
-      />
+      /> */}
+      {info.allow_preorder && (
+        <EachExpression
+          title="Pre-Order"
+          body={[
+            `Looking for something special? You can also place pre-orders with us. This ensures that your desired items are reserved and ready for you when you visit.`,
+          ]}
+        />
+      )}
+      {info?.refund_policies?.isset && (
+        <EachExpression
+          title="Terms and Conditions"
+          body={[
+            'By using our platform, you agree to abide by our terms and conditions. These include:',
+            `Refund Policy: ${info?.refund_policies?.refund_policy}`,
+            `Refund Option: ${info?.refund_policies?.refund_option?.join(
+              ', '
+            )}`,
+            `Repayment Method: ${info?.refund_policies?.repayment_method?.join(
+              ', '
+            )}`,
+          ]}
+        />
+      )}
       <EachExpression
-        title="4. Privacy and Security"
-        body={[
-          "Data Security: Your privacy and data security are paramount to us. We have rigorous data protection measures in place to safeguard your personal information.",
-          "Third-Party Services: In some cases, we use trusted third-party services for payment processing and other functions. Rest assured, these services meet our stringent security standards.",
-          "Privacy Policy: For detailed information about our privacy practices, please review our [link to Privacy Policy].",
-        ]}
-      />
-      <EachExpression
-        title="5. Terms and Conditions"
-        body={[
-          "Usage Terms: By using our platform, you agree to abide by our terms and conditions. These include [mention key usage terms like content ownership and acceptable use].",
-          "Prohibited Content: We do not permit [list any specific types of content or behavior that are prohibited on your platform].",
-        ]}
-      />
-      <EachExpression
-        title="6. Contact Information"
+        title="Contact Information"
         body={[
           "If you have any questions or need assistance, please don't hesitate to reach out to our dedicated customer support team.",
-          "Email: [Your Customer Support Email]",
-          "Phone: [Your Customer Support Phone Number]",
-          "Business Hours: [Your Customer Support Business Hours]",
+          `Email: ${info.email}`,
+          `Phone: ${info.phone}`,
         ]}
       />
       <EachExpression
-        title="7. Feedback and Reviews"
+        title="Feedback and Reviews"
         body={[
-          "SWe welcome your feedback and encourage you to leave reviews for products you've purchased. Your reviews can help fellow shoppers make informed choices.",
-          "Conclusion We're thrilled to have you as our valued customer. These policies are designed to create a safe, transparent, and rewarding shopping environment. We recommend reviewing these policies before making a purchase to ensure a smooth shopping journey. Thank you for choosing [Your Store Name].",
+          "We welcome your feedback and encourage you to leave reviews for products you've purchased. Your reviews can help fellow shoppers make informed choices.",
+          `Conclusion We're thrilled to have you as our valued customer. These policies are designed to create a safe, transparent, and rewarding shopping environment. We recommend reviewing these policies before making a purchase to ensure a smooth shopping journey. Thank you for choosing ${info.businessName}.`,
           "If you have any questions or need further clarification on any policy, please don't hesitate to contact us. Your satisfaction is our priority.",
         ]}
       />
     </Box>
-  );
-};
+  )
+}
 
 export default Policies;
 

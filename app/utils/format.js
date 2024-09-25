@@ -131,7 +131,7 @@ export const formatDateToMonthShort = (
   const date = new Date(value);
   let formatting = { month: "short", day: "numeric", ...format };
   if (toTimeForCurrentDay && isToday(date)) {
-    formatting = { hour: "numeric", minute: "numeric", ...formatting };
+    formatting = { hour: "numeric", minute: "numeric" };
   }
 
   return new Intl.DateTimeFormat("en-US", formatting).format(new Date(value));

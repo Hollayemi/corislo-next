@@ -68,7 +68,7 @@ const AppChat = () => {
     online: "success",
     offline: "secondary",
   };
-
+  
   useEffect(() => {
     socket?.on("newMessage", (data) => {
       setMessageLog((prev) => {

@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 
 export const defaultCol = [
   { id: "module", label: "Module", minWidth: 180 },
@@ -244,7 +244,7 @@ export const Checked = ({ check, onClick }) => (
 export const NewRole = () => {
   return (
     <Box className="bg-red-600">
-      <TextInpu
+      <TextField
         placeholder="Role title"
         value={"roleTitle"}
         onChange={(e) => {}}

@@ -10,12 +10,6 @@ const Pricing = ({ setStage, userValues, storeValues }) => {
   const router = useRouter();
   return (
     <Box>
-      <Typography
-        variant="body1"
-        className="!font-bold !text-2xl !text-center !my-6"
-      >
-        Choose your Plan
-      </Typography>
       <AllPlans />
       <br />
       <Box className="w-full  mb-8 md:pb-0 flex justify-center">

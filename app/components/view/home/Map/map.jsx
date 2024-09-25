@@ -101,7 +101,7 @@ const MapGraph = ({ mapType = "default", markers }) => {
         center={center}
         options={{
           styles: customMapStyle,
-          fullscreenControl: false,
+          fullscreenControl: true,
           mapTypeId: mapTypes[mapType] || google.maps.MapTypeId.HYBRID,
         }}
       >

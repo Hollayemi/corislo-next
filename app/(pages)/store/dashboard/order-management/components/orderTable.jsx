@@ -17,7 +17,7 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
       >
         {title}
       </Typography>
-      <Typography variant="body1" className="!font-bold mt-3 !text-[13px]">
+      <Typography variant="body1" className="!font-bold mt-0 !text-[13px]">
         {info}
       </Typography>
     </Box>
@@ -25,10 +25,10 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
   return (
     <Box className="w-full">
       <Box
-        className="w-full h-48 md:px-10 flex items-center justify-between rounded-2xl p-5 py-7"
+        className="w-full h-48 md:px-10 flex items-center justify-between rounded-2xl p-5 py-7 overflow-hidden"
         bgcolor="custom.pri"
       >
-        <Box className="w-7/12">
+        <Box className="w-7/12 md:w-7/12 shrink-0">
           <Typography
             variant="body1"
             className="!font-black !text-white !text-[15px] sm:!text-xl md:!text-3xl"
@@ -53,7 +53,8 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
         </Box>
         <Image
           src="/images/misc/store-picker.png"
-          className=" -ml-12 md:ml-0 -mt-8"
+          alt="picker-img"
+          className=" -ml-20 md:ml-0 -mt-8"
           width={400}
           height={400}
         />
@@ -79,7 +80,7 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
           </Button>
         </Box>
       </Box>
-      <Box className="h-16 w-full overflow-auto  rounded-md py-2 flex justify-evenly items-center bg-white">
+      <Box className="h-16 w-full overflow-auto overflow-y-hidden rounded-md py-2 flex justify-evenly items-center bg-white">
         <Box className="flex items-center w-full h-full px-3 border-r">
           <IconifyIcon icon="tabler:calendar" />
           <Typography variant="caption" className="!text-[12px] !ml-4">

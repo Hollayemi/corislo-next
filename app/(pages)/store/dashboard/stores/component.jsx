@@ -26,6 +26,7 @@ import { convertFileToBase64 } from "@/app/components/cards/fileUpload";
 import { updateBranchImages } from "@/app/redux/state/slices/shop/branches";
 import { useDispatch } from "react-redux";
 import { CircleLoader } from "@/app/components/cards/loader";
+import { useStoreData } from "@/app/hooks/useData";
 
 // Styled component for the upload image inside the dropzone area
 const Img = styled("img")(({ theme }) => ({
@@ -279,9 +280,10 @@ export const StoreBreadCrumb = [
 ];
 
 export const BreadcrumbRightEle = () => {
+  const { storeInfo } = useStoreData()
   const router = useRouter();
   return (
-    <Box className="flex items-center -mr-6 md:mr-0">
+    storeInfo.profile?.branchName && <Box className="flex items-center -mr-6 md:mr-0">
       <Button
         variant="contained"
         className="!mr-4 !bg-blue-900 !shadow-none !text-[12px] !rounded-full"

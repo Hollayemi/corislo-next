@@ -1,36 +1,34 @@
-"use client";
-import Chip from "@/app/components/chip";
-import IconifyIcon from "@/app/components/icon";
-import ReactSlickSlider from "@/app/components/wrapper/react-slick";
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
-import useSWR from "swr";
-import { useDispatch } from "react-redux";
-import { mySubstring } from "@/app/utils/format";
-import { verifyAction } from "@/app/redux/state/slices/super/actions";
+'use client'
+import Chip from '@/app/components/chip'
+import IconifyIcon from '@/app/components/icon'
+import ReactSlickSlider from '@/app/components/wrapper/react-slick'
+import { Box, Button, Grid, TextField, Typography } from '@mui/material'
+import React, { useState } from 'react'
+import useSWR from 'swr'
+import { useDispatch } from 'react-redux'
+import { mySubstring } from '@/app/utils/format'
+import { verifyAction } from '@/app/redux/state/slices/super/actions'
 
 const PendingProduct = ({ productId }) => {
-  const dispatch = useDispatch();
-  const [comment, setComment] = useState();
+  const dispatch = useDispatch()
+  const [comment, setComment] = useState()
   const {
     data: prod,
     isLoading,
     error,
-  } = useSWR(`/products?productId=${productId}`);
+  } = useSWR(`/products?productId=${productId}`)
 
-  console.log(prod);
-  const product = prod?.data ? prod?.data?.result[0] : {};
-  console.log(product);
-  const ImagesArray = [1, 2, 3, 4, 5, 6, 7];
+  console.log(prod)
+  const product = prod?.data ? prod?.data?.result[0] : {}
+  console.log(product)
+  const ImagesArray = [1, 2, 3, 4, 5, 6, 7]
   // ** State
-  const [size, setSize] = useState("");
+  const [size, setSize] = useState('')
   const [more, setMore] = useState({
     variation: 7,
-  });
+  })
 
-  const otherVariations = Object.keys(
-    product?.specifications?.variations || {}
-  );
+  const otherVariations = Object.keys(product?.specifications?.variations || {})
 
   const payload = {
     store: product.store,
@@ -38,9 +36,9 @@ const PendingProduct = ({ productId }) => {
     name: product.prodName,
     comment,
     _id: product._id,
-  };
+  }
 
-  const [showingImage, showImage] = useState(null);
+  const [showingImage, showImage] = useState(null)
   return (
     <Box className="!px-2 sm:!px-16 md:!px-16  md:!py-7 bg-white rounded-lg">
       <Grid container spacing={2}>
@@ -48,7 +46,7 @@ const PendingProduct = ({ productId }) => {
           <Box className="w-full !max-w-[430px]">
             <Box className="!rounded-xl overflow-hidden mb-3 md:mb-6">
               <img
-                src={showingImage || "/images/misc/about-image.png"}
+                src={showingImage || '/images/misc/about-image.png'}
                 alt=""
                 width={100}
                 height={100}
@@ -87,19 +85,19 @@ const PendingProduct = ({ productId }) => {
             <Box className="w-full mt-5 flex flex-wrap !max-w-[430px]">
               <TitleValue
                 title="Collection"
-                value={product.collectionName || "Flangesio"}
+                value={product.collectionName || 'Flangesio'}
               />
               <TitleValue
                 title="Category"
-                value={product.category || "Clothing and Fashion"}
+                value={product.category || 'Clothing and Fashion'}
               />
               <TitleValue
                 title="Sub-Category"
-                value={product.subCollectionName || "Shoes"}
+                value={product.subCollectionName || 'Shoes'}
               />
               <TitleValue
                 title="Classes"
-                value={product.group || "Men’s Shoes"}
+                value={product.group || 'Men’s Shoes'}
               />
               <Box>
                 {product.discount && (
@@ -154,9 +152,9 @@ const PendingProduct = ({ productId }) => {
                           <Chip
                             onClick={() => setSize(each)}
                             bgcolor="#000"
-                            sx={{ margin: 0.5, borderRadius: "5px" }}
+                            sx={{ margin: 0.5, borderRadius: '5px' }}
                             className={`hover:!text-white ${
-                              size === each && "!bg-blue-900 !text-white"
+                              size === each && '!bg-blue-900 !text-white'
                             }`}
                             label={
                               <Box className="flex items-center ">
@@ -189,7 +187,8 @@ const PendingProduct = ({ productId }) => {
                   <Box className="w-full mt-5 flex flex-wrap !max-w-[430px]">
                     {otherVariations?.map((each, i) => (
                       <TitleValue
-                        title={each.replaceAll("_", " ") + ":"}
+                        key={i}
+                        title={each.replaceAll('_', ' ') + ':'}
                         value={
                           Object.values(
                             product?.specifications?.variations || {}
@@ -217,7 +216,7 @@ const PendingProduct = ({ productId }) => {
                 variant="contained"
                 className="!rounded-md h-10 !w-32 !shadow-none !mx-1 !text[10px] !my-3"
                 onClick={() =>
-                  verifyAction(dispatch, { ...payload, status: "approved" })
+                  verifyAction(dispatch, { ...payload, status: 'approved' })
                 }
                 startIcon={
                   <IconifyIcon
@@ -236,8 +235,8 @@ const PendingProduct = ({ productId }) => {
                   />
                 }
                 onClick={() => {
-                  verifyAction(dispatch, { ...payload, status: "rejected" });
-                  setComment("")
+                  verifyAction(dispatch, { ...payload, status: 'rejected' })
+                  setComment('')
                 }}
                 variant="contained"
                 className="!rounded-md h-10 w-32 !border !bg-red-500 !text-white !shadow-none !text[11px] !my-3"
@@ -249,14 +248,14 @@ const PendingProduct = ({ productId }) => {
         </Grid>
       </Grid>
     </Box>
-  );
-};
+  )
+}
 
-export default PendingProduct;
+export default PendingProduct
 
 const TitleValue = ({ title, value }) => (
   <Box className="w-fit md:w-1/2 flex items-center">
-    <Box className="md:w-16 md:w-24">
+    <Box className="w-16 md:w-24">
       <Typography
         variant="body2"
         className="!text-[12px] !text-gray-500 !leading-5"
@@ -274,4 +273,4 @@ const TitleValue = ({ title, value }) => (
       </Typography>
     </Box>
   </Box>
-);
+)

@@ -110,7 +110,7 @@ const InnerBar = ({ path, InnerList }) => {
   } = useStoreData();
   return (
     permissions && (
-      <StyledBox className="overflow-y-scroll">
+      <StyledBox className="overflow-y-auto">
         <List className="overflow-hidden shrink-0">
           <Box className="p-3">
             <Typography

@@ -484,9 +484,9 @@ const AddNewProduct = ({ params }) => {
                   </Box>
                 </Box>
                 <Box className="px-4 !mb-14">
-                  {Object.keys(formData.specifications).map((val) => {
+                  {Object.keys(formData.specifications).map((val, i) => {
                     return (
-                      <Box>
+                      <Box key={i}>
                         {val.replace("_", " ")} : {formData.specifications[val]}{" "}
                       </Box>
                     );

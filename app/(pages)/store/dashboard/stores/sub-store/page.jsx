@@ -23,7 +23,7 @@ import { addSubStore } from "@/app/redux/state/slices/shop/settings/editShop";
 import MapGraph from "@/app/components/view/home/Map/map";
 
 const StorePage = ({ params }) => {
-  const { storeInfo } = useStoreData();
+  const { storeInfo } = useStoreData()
   const dispatch = useDispatch();
   const { data } = useSWR("/branch/all?sidelist=true");
   const InnerList = data?.data ? data.data : [];

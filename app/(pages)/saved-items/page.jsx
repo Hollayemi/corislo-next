@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
 
-const Checkout = () => {
+const SavedItems = () => {
   const dispatch = useDispatch()
   const { savedProds } = useUserData()
   const { data: saved, error } = useSWR("/user/saved-items/group");
@@ -236,4 +236,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout;
+export default SavedItems

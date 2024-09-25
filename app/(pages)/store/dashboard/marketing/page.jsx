@@ -1,37 +1,35 @@
-"use client";
-import { useState, useEffect, forwardRef } from "react";
-import { Box, Button } from "@mui/material";
-import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
-import OptionsMenu from "@/app/components/option-menu";
+'use client'
+import { useState, useEffect, forwardRef } from 'react'
+import { Box, Button } from '@mui/material'
+import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import OptionsMenu from '@/app/components/option-menu'
 import {
   marketingBreadCrumb,
   LineChartStatistic,
   RightBreadCrumbChildren,
   GrowthCard,
   reshapePrice,
-} from "./components";
-import { columns } from "./data";
-import { DataGrid } from "@mui/x-data-grid";
-import Icon from "@/app/components/icon";
-import DatePicker from "react-datepicker";
-import DatePickerWrapper from "@/app/styles/react-datepicker";
+} from './components'
+import { columns } from './data'
+import { DataGrid } from '@mui/x-data-grid'
+import Icon from '@/app/components/icon'
+import DatePicker from 'react-datepicker'
+import DatePickerWrapper from '@/app/styles/react-datepicker'
 import {
   calculateDateDiff,
   dateNumericOption,
   formatDate,
   generateDateRange,
   mySubstring,
-} from "@/app/utils/format";
-import useSWR from "swr";
-import Image from "next/image";
-import {
-  FileDownloadOutlined,
-} from "@mui/icons-material";
+} from '@/app/utils/format'
+import useSWR from 'swr'
+import Image from 'next/image'
+import { FileDownloadOutlined } from '@mui/icons-material'
 
 const CustomInput = forwardRef((props, ref) => {
-  const startDate = props.start !== null ? formatDate(props.start) : null;
-  const endDate = props.end !== null ? ` - ${formatDate(props.end)}` : null;
-  const value = `${startDate}${endDate !== null ? endDate : ""}`;
+  const startDate = props.start !== null ? formatDate(props.start) : null
+  const endDate = props.end !== null ? ` - ${formatDate(props.end)}` : null
+  const value = `${startDate}${endDate !== null ? endDate : ''}`
 
   return (
     <Box className="flex items-center !w-fit">
@@ -45,24 +43,24 @@ const CustomInput = forwardRef((props, ref) => {
       />
       <Icon icon="tabler:chevron-down" className="!text-[17px] -ml-4" />
     </Box>
-  );
-});
+  )
+})
 
 const MarketingPage = ({ params }) => {
-  const [interval, setInterval] = useState("Daily");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filtered, setFiltered] = useState();
-  const [status, setStatus] = useState("");
+  const [interval, setInterval] = useState('Daily')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [filtered, setFiltered] = useState()
+  const [status, setStatus] = useState('')
 
   const [dialogInfo, updateDialogInfo] = useState({
     open: false,
-    title: "Action Confirmation",
+    title: 'Action Confirmation',
     alert: `Are you sure you want to ${
-      status?.toLowerCase()?.split("-")[0]
+      status?.toLowerCase()?.split('-')[0]
     } the campaign status to?`,
-    acceptFunctionText: "Yes, Continue",
+    acceptFunctionText: 'Yes, Continue',
     acceptFunction: () => {},
-  });
+  })
 
   useEffect(() => {
     {
@@ -71,47 +69,47 @@ const MarketingPage = ({ params }) => {
           ...prev,
           open: Boolean(status),
           alert: `Are you sure you want to ${
-            status?.toLowerCase()?.split("-")[0]
+            status?.toLowerCase()?.split('-')[0]
           } the campaign status?`,
-        };
-      });
+        }
+      })
     }
-  }, [status]);
+  }, [status])
 
-  const path = { ...params, sidebar: "marketing" };
+  const path = { ...params, sidebar: 'marketing' }
 
-  const { data, isLoading } = useSWR(`/branch/campaign`);
-  const all = data?.data || [];
+  const { data, isLoading } = useSWR(`/branch/campaign`)
+  const all = data?.data || []
 
   const defaultInterval = {
-    Daily: "30_days",
-    Weekly: "9_weeks",
-    Monthly: "5_months",
-    Yearly: "4_years",
-  };
+    Daily: '30_days',
+    Weekly: '9_weeks',
+    Monthly: '5_months',
+    Yearly: '4_years',
+  }
 
   const handleFilter = (input) => {
-    setSearchQuery(input);
+    setSearchQuery(input)
     if (all.length) {
-      let lowerInput = input.toLowerCase();
+      let lowerInput = input.toLowerCase()
       const searchFilterFunction = (campaign) =>
         campaign.title.toLowerCase().includes(lowerInput) ||
         campaign.campaignType.toLowerCase().includes(lowerInput) ||
-        campaign.discount.toString().includes(lowerInput);
-      const filteredArray = all.filter(searchFilterFunction);
-      setFiltered(filteredArray);
+        campaign.discount.toString().includes(lowerInput)
+      const filteredArray = all.filter(searchFilterFunction)
+      setFiltered(filteredArray)
     }
-  };
+  }
 
   const [intervals, setDate] = useState({
     startDate: calculateDateDiff(
       defaultInterval[interval],
       new Date(),
-      "-",
+      '-',
       true
     ),
     endDate: new Date(),
-  });
+  })
 
   useEffect(
     () =>
@@ -121,46 +119,46 @@ const MarketingPage = ({ params }) => {
           startDate: calculateDateDiff(
             defaultInterval[interval],
             new Date(),
-            "-",
+            '-',
             true
           ),
-        };
+        }
       }),
     [interval]
-  );
-  const daee = new Date();
-  console.log(daee, new Date().toLocaleString(), new Date(daee));
-  
+  )
+  const daee = new Date()
+  console.log(daee, new Date().toLocaleString(), new Date(daee))
+
   const query = {
     startdate: formatDate(intervals.startDate, dateNumericOption),
     enddate: formatDate(intervals.endDate, dateNumericOption),
-  };
+  }
 
-  console.log(query);
+  console.log(query)
 
-  const queryString = new URLSearchParams(query).toString();
+  const queryString = new URLSearchParams(query).toString()
   const { data: statData, isLoading: statLoading } = useSWR(
     `/branch/campaign/stats?${queryString}&interval=${interval.toLowerCase()}`
-  );
-  const series = statData?.data || {};
+  )
+  const series = statData?.data || {}
 
   const handleDateChange = (dates) => {
     if (dates) {
-      const [start, end] = dates;
+      const [start, end] = dates
       setDate((prev) => {
-        return { ...prev, startDate: start, endDate: end };
-      });
+        return { ...prev, startDate: start, endDate: end }
+      })
     }
-  };
+  }
   return (
     <StoreLeftSideBar
       path={path}
       crumb={[
         ...marketingBreadCrumb,
         {
-          text: "Overview",
-          link: "marketing",
-          icon: "shop",
+          text: 'Overview',
+          link: 'marketing',
+          icon: 'shop',
         },
       ]}
       breadCrumbRIghtChildren={<RightBreadCrumbChildren />}
@@ -174,8 +172,8 @@ const MarketingPage = ({ params }) => {
               <Box className="!w-60">
                 <DatePicker
                   selectsRange
-                  startDate={intervals.startDate || ""}
-                  endDate={intervals.endDate || ""}
+                  startDate={intervals.startDate || ''}
+                  endDate={intervals.endDate || ''}
                   selected={new Date()}
                   maxDate={new Date()}
                   id="date-range-picker"
@@ -206,11 +204,11 @@ const MarketingPage = ({ params }) => {
                     {interval}
                   </Button>
                 }
-                options={["Daily", "Weekly", "Monthly"]}
+                options={['Daily', 'Weekly', 'Monthly']}
                 setOption={setInterval}
                 iconButtonProps={{
-                  size: "small",
-                  sx: { color: "text.disabled", cursor: "pointer" },
+                  size: 'small',
+                  sx: { color: 'text.disabled', cursor: 'pointer' },
                 }}
               />
             </Box>
@@ -279,7 +277,7 @@ const MarketingPage = ({ params }) => {
         </Box>
       </DatePickerWrapper>
     </StoreLeftSideBar>
-  );
-};
+  )
+}
 
-export default MarketingPage;
+export default MarketingPage

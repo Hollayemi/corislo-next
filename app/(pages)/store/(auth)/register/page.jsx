@@ -1,112 +1,116 @@
-"use client";
+'use client'
 
-import StoreAuthLayout from "@/app/components/layouts/StoreAuthLayout";
-import React, { useEffect, useState } from "react";
-import PersonalProfile from "./personal";
-import StoreProfile from "./store/business";
-import Verification from "./store/verification";
-import { useSearchParams } from "next/navigation";
-import Pricing from "./store/pricing";
-import validationRegisterSchema from "../../../auth/register/validation";
-import validationStoreSchema from "./storeValidation";
-import BusinessType from "./businessType";
-import Sevices from "./services/upload";
-import useGeolocation from "@/app/hooks/useGeolocation";
-import OtpVerification from "@/app/(pages)/auth/otp-verification/page";
+import StoreAuthLayout from '@/app/components/layouts/StoreAuthLayout'
+import React, { useEffect, useState } from 'react'
+import PersonalProfile from './personal'
+import StoreProfile from './store/business'
+import Verification from './store/verification'
+import { useSearchParams } from 'next/navigation'
+import Pricing from './store/pricing'
+import validationRegisterSchema from '../../../auth/register/validation'
+import validationStoreSchema from './storeValidation'
+import BusinessType from './businessType'
+import Sevices from './services/upload'
+import useGeolocation from '@/app/hooks/useGeolocation'
+import OtpVerification from '@/app/(pages)/auth/otp-verification/page'
+import { SetLocation } from '@/app/(pages)/services/dashboard/component'
+import { Box } from '@mui/material'
+import MapSelection from './store/map'
 
 const RegisterStore = () => {
-  const { coordinates } = useGeolocation();
-  console.log(coordinates);
-  const [stage, setStage] = useState(0);
-  const [readyToNext, showAllError] = useState(false);
-  const searchParams = useSearchParams();
-  const referrer = searchParams.get("ref");
+  const { coordinates } = useGeolocation()
+  console.log(coordinates)
+  const [readyToNext, showAllError] = useState(false)
+  const searchParams = useSearchParams()
+  const referrer = searchParams.get('ref')
+  const page = searchParams.get('p')
+  const [stage, setStage] = useState(parseInt(page) || 0)
 
   const [errors, setErrors] = useState({
-    fullname: "",
-    email: "",
-    username: "",
-    password: "",
-    state: "",
-    phoneNumber: "",
-    businessEmail: "",
-    businessName: "",
-    businessType: "",
-    about_store: "",
-    city: "",
-    address: "",
-    state: "",
-    category: "",
-    about: "",
-  });
+    fullname: '',
+    email: '',
+    username: '',
+    password: '',
+    state: '',
+    phoneNumber: '',
+    businessEmail: '',
+    businessName: '',
+    businessType: '',
+    about_store: '',
+    city: '',
+    address: '',
+    state: '',
+    category: '',
+    about: '',
+  })
 
   const [storeValues, setStoreValues] = useState({
-    businessEmail: "",
-    businessName: "",
-    businessType: "",
-    about_store: "",
-    city: "",
-    address: "",
-    state: "",
-    category: "",
+    businessEmail: '',
+    businessName: '',
+    businessType: '',
+    about_store: '',
+    city: '',
+    address: '',
+    state: '',
+    category: '',
     coordinates: {
-      type: "Point",
+      type: 'Point',
       coordinates: [coordinates.latitude || 0, coordinates.longitude || 0],
     },
     referrer,
-  });
+  })
 
   const BusinessProfile =
-    storeValues.businessType === "services" ? Sevices : StoreProfile;
+    storeValues.businessType === 'services' ? Sevices : StoreProfile
 
   const handleStoreChange = (prop) => (event) => {
-    console.log(event);
-    setStoreValues({ ...storeValues, [prop]: event?.target?.value });
-  };
+    console.log(event)
+    setStoreValues({ ...storeValues, [prop]: event?.target?.value })
+  }
   const [userValues, setUserValues] = useState({
-    fullname: "",
-    email: "",
-    username: "",
-    password: "",
-    state: "",
-    phoneNumber: "",
-  });
-  const [confPass, setConfPass] = useState("");
+    fullname: '',
+    email: '',
+    username: '',
+    password: '',
+    state: '',
+    phoneNumber: '',
+  })
+  const [confPass, setConfPass] = useState('')
 
   const handleUserChange = (prop) => (event) => {
-    setUserValues({ ...userValues, [prop]: event.target.value });
-  };
+    setUserValues({ ...userValues, [prop]: event.target.value })
+  }
 
   useEffect(() => {
     validationRegisterSchema
       .validate(userValues, { abortEarly: false })
       .then(() => {
-        setErrors({});
+        setErrors({})
       })
       .catch((validationErrors) => {
         const newErrors = validationErrors.inner.reduce((acc, error) => {
-          acc[error.path] = error.message;
-          return acc;
-        }, {});
-        setErrors(newErrors);
-      });
-  }, [userValues]);
+          acc[error.path] = error.message
+          return acc
+        }, {})
+        setErrors(newErrors)
+      })
+  }, [userValues])
 
   // console.log(validationStoreSchema.validate(storeValues))
   useEffect(() => {
     validationStoreSchema
       .validate(storeValues, { abortEarly: false })
       .then(() => {
-        setErrors({});
+        setErrors({})
       })
       .catch((validationErrors) => {
         const newErrors = validationErrors.inner.reduce((acc, error) => {
-          acc[error.path] = error.message;
-          return acc;
-        }, {});
-        setErrors(newErrors);
-      });
-  }, [storeValues]);
+          acc[error.path] = error.message
+          return acc
+        }, {})
+        setErrors(newErrors)
+      })
+  }, [storeValues])
 
   const pages = {
     0: (
@@ -145,14 +149,19 @@ const RegisterStore = () => {
       />
     ),
     3: (
-      <Pricing
+      // <Pricing
+      //   setStage={setStage}
+      //   userValues={userValues}
+      //   storeValues={storeValues}
+      // />
+      <MapSelection
         setStage={setStage}
         userValues={userValues}
         storeValues={storeValues}
       />
     ),
-  };
-  console.log(readyToNext);
+  }
+  console.log(readyToNext)
   return (
     <StoreAuthLayout
       title="Create Business Account"
@@ -165,7 +174,7 @@ const RegisterStore = () => {
     >
       {pages[stage]}
     </StoreAuthLayout>
-  );
-};
+  )
+}
 
-export default RegisterStore;
+export default RegisterStore

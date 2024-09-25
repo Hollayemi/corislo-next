@@ -1,3 +1,6 @@
+import { Box } from "@mui/material";
+import { Line } from "react-chartjs-2";
+
 export const LineChartStatistic = ({ label, discounts, flashsales }) => {
   console.log(discounts, flashsales);
   // ** Hook

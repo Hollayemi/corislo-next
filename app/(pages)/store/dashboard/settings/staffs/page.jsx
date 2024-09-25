@@ -91,7 +91,7 @@ const Staffs = ({ params }) => {
         </Box>
 
         <Box className="w-full py-6 px-1 rounded-xl">
-          <Box className="flex items-center flex-wrap">
+          {/* <Box className="flex items-center flex-wrap">
             <OrderBoxes
               image="/images/misc/all-orders.png"
               title="All Employees"
@@ -116,7 +116,7 @@ const Staffs = ({ params }) => {
               value={40}
               color="#3B47AF"
             />
-          </Box>
+          </Box> */}
 
           <Box className="flex flex-col md:flex-row items-center justify-center mt-4">
             <Box className="w-full md:w-3/5 mb-2 md:mb-0 md:px-2">

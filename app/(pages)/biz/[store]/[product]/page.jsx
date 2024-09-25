@@ -1,63 +1,58 @@
-"use client";
-import Chip from "@/app/components/chip";
-import IconifyIcon from "@/app/components/icon";
-import HomeWrapper from "@/app/components/view/home";
-import ReactSlickSlider from "@/app/components/wrapper/react-slick";
-import { productSizes } from "@/app/data/store/productData";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Box, Button, Grid, Rating, Tab, Typography } from "@mui/material";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { ProdDescription } from "./tabs";
-import { SectionTitle } from "@/app/components/cards/homeCards";
-import { hotDealData, popularProducts } from "@/app/data/home/homepage";
+'use client'
+import Chip from '@/app/components/chip'
+import IconifyIcon from '@/app/components/icon'
+import HomeWrapper from '@/app/components/view/home'
+import ReactSlickSlider from '@/app/components/wrapper/react-slick'
+import { productSizes } from '@/app/data/store/productData'
+import { TabContext, TabList, TabPanel } from '@mui/lab'
+import { Box, Button, Grid, Rating, Tab, Typography } from '@mui/material'
+import Image from 'next/image'
+import React, { useEffect, useState } from 'react'
+import { ProdDescription } from './tabs'
+import { SectionTitle } from '@/app/components/cards/homeCards'
+import { hotDealData, popularProducts } from '@/app/data/home/homepage'
 import {
   HotDeal,
   PopularProduct,
-} from "@/app/components/templates/productTemplates";
-import { Review } from "./review";
-import useSWR from "swr";
-import { removeOrAddToArray } from "@/app/utils/arrayFunctions";
-import { useDispatch } from "react-redux";
-import {
-  addCartHandler,
-  saveProduct,
-} from "@/app/redux/state/slices/home/cart";
-import { useUserData } from "@/app/hooks/useData";
-import { addNewViewProduct } from "@/app/redux/state/slices/home/view/view";
-import { ProductSellerCard } from "@/app/components/cards/seller/product.sellercard";
-import { mySubstring } from "@/app/utils/format";
+} from '@/app/components/templates/productTemplates'
+import { Review } from './review'
+import useSWR from 'swr'
+import { removeOrAddToArray } from '@/app/utils/arrayFunctions'
+import { useDispatch } from 'react-redux'
+import { addCartHandler, saveProduct } from '@/app/redux/state/slices/home/cart'
+import { useUserData } from '@/app/hooks/useData'
+import { addNewViewProduct } from '@/app/redux/state/slices/home/view/view'
+import { ProductSellerCard } from '@/app/components/cards/seller/product.sellercard'
+import { mySubstring } from '@/app/utils/format'
 
 const ProductDisplay = ({ params, searchParams }) => {
-  const dispatch = useDispatch();
-  const { product: prodNameParam } = params;
-  const { cartedProds, savedProds } = useUserData();
-  console.log(prodNameParam.split("%2B").join(" "));
+  const dispatch = useDispatch()
+  const { product: prodNameParam } = params
+  const { cartedProds, savedProds } = useUserData()
   const {
     data: prod,
     isLoading,
     error,
-  } = useSWR(`/products?prodName=${prodNameParam.split("%2B").join(" ")}`);
+  } = useSWR(`/products?prodName=${prodNameParam.split('%2B').join(' ')}`)
 
-  console.log(prod);
-  const product = prod?.data ? prod?.data?.result[0] : {};
-  console.log(product);
-  const ImagesArray = [1, 2, 3, 4, 5, 6, 7];
+  const product = prod?.data ? prod?.data?.result[0] : {}
+
+  const ImagesArray = [1, 2, 3, 4, 5, 6, 7]
   // ** State
-  const [colors, setColors] = useState([]);
-  const [size, setSize] = useState("");
+  const [colors, setColors] = useState([])
+  const [size, setSize] = useState('')
   const [more, setMore] = useState({
     variation: 7,
-  });
-  const [value, setTabValue] = useState("1");
+  })
+  const [value, setTabValue] = useState('1')
 
   const handleChangeTab = (event, newValue) => {
-    setTabValue(newValue);
-  };
+    setTabValue(newValue)
+  }
 
   const filteredSizes = productSizes.filter(
-    (obj) => obj.size.split("-")[0] === "EU"
-  );
+    (obj) => obj.size.split('-')[0] === 'EU'
+  )
 
   useEffect(() => {
     addNewViewProduct(
@@ -68,8 +63,8 @@ const ProductDisplay = ({ params, searchParams }) => {
         branch: product?.branch,
       },
       dispatch
-    );
-  }, [isLoading]);
+    )
+  }, [isLoading])
 
   const payload = {
     productId: product?._id,
@@ -79,53 +74,53 @@ const ProductDisplay = ({ params, searchParams }) => {
     },
     store: product?.store,
     branch: product?.branch,
-  };
+  }
 
   const colorArray = [
-    "#eefabb",
-    "#aecabb",
-    "#eabdbb",
-    "#beea45",
-    "#afedda",
-    "#34ee",
-    "#000",
-  ];
+    '#eefabb',
+    '#aecabb',
+    '#eabdbb',
+    '#beea45',
+    '#afedda',
+    '#34ee',
+    '#000',
+  ]
 
-  const otherVariations = Object.keys(
-    product?.specifications?.variations || {}
-  );
+  const otherVariations = Object.keys(product?.specifications?.variations || {})
 
-  const [showingImage, showImage] = useState(null);
+  const [showingImage, showImage] = useState(null)
   return (
     <HomeWrapper>
-      <Box className="!px-2 sm:!px-16 md:!px-24 lg:!px-32 md:!py-7">
+      <Box className="!px-2 sm:!px-16 md:!px-10 lg:!px-32 md:!py-7">
         <Grid container spacing={2}>
           <Grid item xs={12} md={5}>
-            <Box className="w-full">
-              <Box className="!rounded-xl overflow-hidden mb-3 md:mb-6">
-                <img
-                  src={showingImage || "/images/misc/about-image.png"}
-                  alt=""
-                  width={100}
-                  height={100}
-                  className="m-3 md:m-0 flex-shrink-0 w-full h-[400px]"
-                />
-              </Box>
-              <Box className="flex w-full px-6 justify-center">
-                <Box className="md:mt-0 w-full md:block md:w-10/12">
-                  <ReactSlickSlider noArrowStyle>
-                    {ImagesArray.map((item, i) => (
-                      <img
-                        src={`/images/more/${i + 1}.png`}
-                        key={i}
-                        onClick={() => showImage(`/images/more/${i + 1}.png`)}
-                        alt=""
-                        width={150}
-                        height={150}
-                        className="m-1 md:mb-0 !w-16 !h-16 !rounded-md"
-                      />
-                    ))}
-                  </ReactSlickSlider>
+            <Box className="flex justify-center w-full">
+              <Box className="w-full !max-w-[430px]">
+                <Box className="!rounded-xl overflow-hidden mb-3 md:mb-6">
+                  <img
+                    src={showingImage || '/images/misc/about-image.png'}
+                    alt=""
+                    width={100}
+                    height={100}
+                    className="md:m-0 flex-shrink-0 w-full h-[400px]"
+                  />
+                </Box>
+                <Box className="flex w-full px-6 justify-center">
+                  <Box className="md:mt-0 w-full md:block md:w-10/12">
+                    <ReactSlickSlider noArrowStyle>
+                      {ImagesArray.map((item, i) => (
+                        <img
+                          src={`/images/more/${i + 1}.png`}
+                          key={i}
+                          onClick={() => showImage(`/images/more/${i + 1}.png`)}
+                          alt=""
+                          width={150}
+                          height={150}
+                          className="m-1 md:mb-0 !w-16 !h-16 !rounded-md"
+                        />
+                      ))}
+                    </ReactSlickSlider>
+                  </Box>
                 </Box>
               </Box>
             </Box>
@@ -142,19 +137,19 @@ const ProductDisplay = ({ params, searchParams }) => {
               <Box className="w-full mt-5 flex flex-wrap">
                 <TitleValue
                   title="Collection"
-                  value={product.collectionName || "Flangesio"}
+                  value={product.collectionName || 'Flangesio'}
                 />
                 <TitleValue
                   title="Category"
-                  value={product.category || "Clothing and Fashion"}
+                  value={product.category || 'Clothing and Fashion'}
                 />
                 <TitleValue
                   title="Sub-Category"
-                  value={product.subCollectionName || "Shoes"}
+                  value={product.subCollectionName || 'Shoes'}
                 />
                 <TitleValue
                   title="Classes"
-                  value={product.group || "Men’s Shoes"}
+                  value={product.group || 'Men’s Shoes'}
                 />
                 <Box className="w-1/2 mt-1 flex items-center">
                   <Box className="w-20">
@@ -182,7 +177,7 @@ const ProductDisplay = ({ params, searchParams }) => {
                       <IconifyIcon
                         icon="tabler:heart"
                         className={` ${
-                          savedProds.includes(product?._id) && "!text-red-500"
+                          savedProds.includes(product?._id) && '!text-red-500'
                         } hover:text-red-500 !text-[17px]`}
                       />
                     </Typography>
@@ -256,9 +251,9 @@ const ProductDisplay = ({ params, searchParams }) => {
                             <Chip
                               onClick={() => setSize(each)}
                               bgcolor="#000"
-                              sx={{ margin: 0.5, borderRadius: "5px" }}
+                              sx={{ margin: 0.5, borderRadius: '5px' }}
                               className={`hover:!text-white ${
-                                size === each && "!bg-blue-900 !text-white"
+                                size === each && '!bg-blue-900 !text-white'
                               }`}
                               label={
                                 <Box className="flex items-center ">
@@ -297,7 +292,7 @@ const ProductDisplay = ({ params, searchParams }) => {
                                 variant="body2"
                                 className="!text-[12px] !mr-2"
                               >
-                                {each.replaceAll("_", " ")}:
+                                {each.replaceAll('_', ' ')}:
                               </Typography>
                               <Typography
                                 variant="body2"
@@ -320,13 +315,13 @@ const ProductDisplay = ({ params, searchParams }) => {
                               return {
                                 ...prev,
                                 variation: more.variation === 7 ? 1000 : 7,
-                              };
+                              }
                             })
                           }
                           variant="body2"
                           className="!text-[12px] !text-blue-600 -ml-2 cursor-pointer"
                         >
-                          {more.variation === 7 ? "more" : "less"}...
+                          {more.variation === 7 ? 'more' : 'less'}...
                         </Box>
                       )}
                     </Box>
@@ -352,10 +347,10 @@ const ProductDisplay = ({ params, searchParams }) => {
                     }
                   >
                     {cartedProds.includes(product?._id)
-                      ? "Remove from cart"
-                      : "Add to cart"}
+                      ? 'Remove from cart'
+                      : 'Add to cart'}
                   </Button>
-                  <Button
+                  {/* <Button
                     startIcon={
                       <IconifyIcon
                         icon="tabler:wallet"
@@ -366,16 +361,16 @@ const ProductDisplay = ({ params, searchParams }) => {
                     className="!rounded-full h-10 w-32 !border !border-blue-800 !text-blue-800 !shadow-none !text[11px] !bg-white !my-3"
                   >
                     Buy Now
-                  </Button>
+                  </Button> */}
                 </Box>
               </Box>
 
-              <ProductSellerCard branchId={product?.branchId} />
+              {product?.branchId && (
+                <ProductSellerCard branchId={product?.branchId} />
+              )}
             </Grid>
           ) : (
-            <Grid item xs={12} md={7}>
-
-            </Grid>
+            <Grid item xs={12} md={7}></Grid>
           )}
         </Grid>
 
@@ -441,10 +436,10 @@ const ProductDisplay = ({ params, searchParams }) => {
         </Box>
       </Box>
     </HomeWrapper>
-  );
-};
+  )
+}
 
-export default ProductDisplay;
+export default ProductDisplay
 
 const TitleValue = ({ title, value }) => (
   <Box className="w-fit md:w-1/2 flex items-center">
@@ -466,4 +461,4 @@ const TitleValue = ({ title, value }) => (
       </Typography>
     </Box>
   </Box>
-);
+)

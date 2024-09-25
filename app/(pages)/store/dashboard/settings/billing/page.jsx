@@ -1,7 +1,7 @@
-"use client";
-import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
-import { settingsInnerList } from "@/app/data/store/innerList";
-import { Box, Button, Typography } from "@mui/material";
+'use client'
+import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import { settingsInnerList } from '@/app/data/store/innerList'
+import { Box, Button, Typography } from '@mui/material'
 import {
   Table,
   TableBody,
@@ -11,50 +11,63 @@ import {
   TablePagination,
   TableRow,
   Paper,
-} from "@mui/material";
-import Image from "next/image";
-import { settingsBreadCrumb } from "../components";
-import { TitleSubtitle } from "@/app/(pages)/user/components";
-import IconifyIcon from "@/app/components/icon";
-import { formatDate } from "@/app/utils/format";
-import { history, historyHeader } from "./billing.components";
-import { useState } from "react";
-import { reshapePrice } from "../../marketing/components";
+} from '@mui/material'
+import Image from 'next/image'
+import { settingsBreadCrumb } from '../components'
+import { TitleSubtitle } from '@/app/(pages)/user/components'
+import IconifyIcon from '@/app/components/icon'
+import { detectCardType, formatDate } from '@/app/utils/format'
+import { history, historyHeader } from './billing.components'
+import { useState } from 'react'
+import { reshapePrice } from '../../marketing/components'
+import BillingCard from './addCard'
+import useSWR from 'swr'
+import { CircleLoader } from '@/app/components/cards/loader'
+import { businessSubscription } from '@/app/redux/state/slices/shop/settings/payment'
+import { useDispatch } from 'react-redux'
 
 const Billing = ({ params }) => {
+  const dispatch = useDispatch()
   const path = {
     ...params,
-    sidebar: "settings",
-    sublist: "billing",
-  };
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(30);
+    sidebar: 'settings',
+    sublist: 'billing',
+  }
+  const { data, isLoading: cardLoading } = useSWR('/store/billings')
+  const card = data?.data[0] || {}
+  const [page, setPage] = useState(0)
+  const [rightOpen, setRightOpen] = useState(null)
+  const [rowsPerPage, setRowsPerPage] = useState(30)
   const [dialogInfo, updateDialogInfo] = useState({
     open: false,
-    title: "Action Confirmation",
-    acceptFunctionText: "Yes, Cancel Subscription",
-    alert: "Are you sure to proceed the cancellation on this plan. this action cannot be reversed",
+    title: 'Action Confirmation',
+    acceptFunctionText: 'Yes, Cancel Subscription',
+    alert:
+      'Are you sure to proceed the cancellation on this plan. this action cannot be reversed',
     acceptFunction: () => {
-      createRole({ title: roleTitle }, dispatch);
+      createRole({ title: roleTitle }, dispatch)
     },
-  });
+  })
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+    setPage(newPage)
+  }
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+    setRowsPerPage(+event.target.value)
+    setPage(0)
+  }
+  const cardType = detectCardType(card.openDigits && card.openDigits[0])
   return (
     <StoreLeftSideBar
       path={path}
       subListBar={false}
       InnerList={settingsInnerList}
-      crumb={[...settingsBreadCrumb, { text: "Billing", link: "billing" }]}
+      crumb={[...settingsBreadCrumb, { text: 'Billing', link: 'billing' }]}
       dialogInfo={dialogInfo}
       updateDialogInfo={updateDialogInfo}
+      rightOpen={rightOpen}
+      setRightOpen={setRightOpen}
     >
       <Box className="h-ful w-full bg-white px-1 md:px-5 py-8 rounded-md">
         <TitleSubtitle
@@ -87,7 +100,9 @@ const Billing = ({ params }) => {
                 </Typography>
                 <br />
                 <Button
-                  onClick={() => updateDialogInfo({ ...dialogInfo, open: true })}
+                  onClick={() =>
+                    updateDialogInfo({ ...dialogInfo, open: true })
+                  }
                   className="!text-red-500 hover:!bg-transparent !px-0 !h-6 "
                 >
                   Cancel Subscription
@@ -95,6 +110,12 @@ const Billing = ({ params }) => {
                 <Button
                   variant="contained"
                   className="!absolute !top-2 !text-[11px] md:!text-[13px] w-[120px] md:!w-auto !h-8 md:!h-10 !right-2 !rounded-full !mt-1.5 !mr-1.5 !shadow-none"
+                  onClick={() =>
+                    businessSubscription(dispatch, {
+                      plan_name: 'Zetto',
+                      period: 'monthly',
+                    })
+                  }
                 >
                   Upgrade Plan
                 </Button>
@@ -106,36 +127,66 @@ const Billing = ({ params }) => {
                 titleClass="!text-[15px]"
                 className=""
               />
-              <Box className="flex items-center justify-between mt-2 mb-7">
-                <Image
-                  src="/images/misc/mastercard.png"
-                  alt="imcard"
-                  className="w-16 h-8 p-1 border rounded-md"
-                  width={100}
-                  height={100}
-                />
-                <Box className="flex flex-col items-center mx-2">
-                  <Typography variant="body2" className="!text-[12px]">
-                    44555*********5344
-                  </Typography>
-                  <Typography variant="body2" className="!text-[10px]">
-                    Exp Date: {formatDate(new Date())}
-                  </Typography>
+              {!cardLoading && card.name ? (
+                <>
+                  <Box className="flex items-center justify-between mt-2 mb-7">
+                    <Image
+                      src={`/images/misc/${cardType}.png`}
+                      alt="imcard"
+                      className="w-14 h-10 p-1 border rounded-md"
+                      width={100}
+                      height={100}
+                    />
+                    <Box className="flex flex-col items-center mx-2">
+                      <Typography variant="body2" className="!text-[12px]">
+                        {card.openDigits &&
+                          card.openDigits[0] + '*********' + card.openDigits[1]}
+                      </Typography>
+                      <Typography variant="body2" className="!text-[10px]">
+                        Exp Date: {card.expiry}
+                      </Typography>
+                    </Box>
+                    <Button
+                      variant="outlined"
+                      className="!text-[11px] md:!text-[13px] w-20 !h-8  !rounded-full !mt-1.5 !mr-1.5 !shadow-none"
+                      onClick={() => setRightOpen(<BillingCard card={card} />)}
+                    >
+                      Update
+                    </Button>
+                  </Box>
+                  <Box className="flex items-center">
+                    <IconifyIcon
+                      icon="tabler:mail"
+                      className="mr-1 !text-[17px]"
+                    />
+                    <Typography variant="caption" className="!text-[12px]">
+                      {card.email}
+                    </Typography>
+                  </Box>
+                </>
+              ) : (
+                <Box className="flex justify-center mt-6">
+                  {cardLoading ? (
+                    <CircleLoader />
+                  ) : (
+                    <Box className="flex flex-col items-center justify-center">
+                      <Typography
+                        variant="caption"
+                        className="!text-[12px] !mb-2"
+                      >
+                        No Card Found
+                      </Typography>
+                      <Button
+                        variant="outlined"
+                        className="!text-[11px] md:!text-[13px] w-28 !h-8  !rounded-full !mt-1.5 !mr-1.5 !shadow-none"
+                        onClick={() => setRightOpen(<BillingCard card={{}} />)}
+                      >
+                        Add Card
+                      </Button>
+                    </Box>
+                  )}
                 </Box>
-                <Button
-                  variant="outlined"
-                  className="!text-[11px] md:!text-[13px] w-20 !h-8  !rounded-full !mt-1.5 !mr-1.5 !shadow-none"
-                >
-                  Update
-                </Button>
-              </Box>
-
-              <Box className="flex items-center">
-                <IconifyIcon icon="tabler:mail" className="mr-1 !text-[17px]" />
-                <Typography variant="caption" className="!text-[12px]">
-                  billing@mamafeeds.com
-                </Typography>
-              </Box>
+              )}
             </Box>
           </Box>
 
@@ -144,7 +195,7 @@ const Billing = ({ params }) => {
             titleClass="!text-[13px] !mb-3"
           />
 
-          <Paper sx={{ width: "100%", overflow: "hidden" }}>
+          <Paper sx={{ width: '100%', overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 440 }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
@@ -175,7 +226,7 @@ const Billing = ({ params }) => {
                           <TableCell>{row.status}</TableCell>
                           <TableCell>{row.action}</TableCell>
                         </TableRow>
-                      );
+                      )
                     })}
                 </TableBody>
               </Table>
@@ -193,7 +244,7 @@ const Billing = ({ params }) => {
         </Box>
       </Box>
     </StoreLeftSideBar>
-  );
-};
+  )
+}
 
-export default Billing;
+export default Billing

@@ -24,6 +24,7 @@ import ProfilePictureUploader from "@/app/components/cards/fileUpload";
 // ** Third Party Imports
 import format from "date-fns/format";
 import DatePicker from "react-datepicker";
+import Image from "next/image";
 
 const CustomInput = forwardRef((props, ref) => {
   const startDate =
@@ -85,13 +86,30 @@ const NewAnnouncement = ({ formData, setFormData, formHandler }) => {
           label="Brief Information"
           placeholder="Get up to 80% discount."
         />
-        <TextField
+         
+        <FormControl fullWidth className="!my-4">
+          <InputLabel id="select-deal-purpose">Purpose</InputLabel>
+          <Select
+            labelId="select-deal-purpose"
+            label="Purpose"
+            placeholder="What do you want people to do when they see this ad"
+            defaultValue=""
+            value={formData.purpose}
+            onChange={formHandler("purpose")}
+          >
+            <MenuItem value="view-business">To view your business</MenuItem>
+            <MenuItem value="follow">Gain Followers</MenuItem>
+            <MenuItem value="url">Make people discover your products</MenuItem>
+          </Select>
+        </FormControl>
+     
+        {formData.purpose === "url" && <TextField
           fullWidth
           label="URL"
           placeholder="Page to link to e.g (product page, category page, etc )"
           onChange={formHandler("url")}
           value={formData.url}
-        />
+        />}
         <DatePicker
           selectsRange
           className="!my-4"
@@ -157,9 +175,7 @@ const NewAnnouncement = ({ formData, setFormData, formHandler }) => {
             onChange={formHandler("status")}
           >
             <MenuItem value="active">Active</MenuItem>
-            <MenuItem value="inactive">Inactive</MenuItem>
             <MenuItem value="scheduled">Scheduled</MenuItem>
-            {/* <MenuItem value="abandoned">Abandoned</MenuItem> */}
           </Select>
         </FormControl>
         <Box className="relative w-full flex justify-center mt-4">
@@ -169,19 +185,21 @@ const NewAnnouncement = ({ formData, setFormData, formHandler }) => {
             component={
               <Box className="relative w-60 h-60 flex justify-center">
                   <Box className="flex flex-col items-center border-2 border-dashed justify-center w-full h-full rounded-md absolute top-0 left-0 !text-white">
-                    {localFile && (
-                      <img
-                        src={URL?.createObjectURL(localFile[0])}
-                        alt="settings.png"
-                        width={250}
-                        height={250}
-                        className="w-full h-full x absolute top-0 left-0"
-                      />
-                    )}
+                    
+                    <Image
+                      src={localFile[0] ? URL?.createObjectURL(localFile[0]) : formData.purpose === "view-business" ? "/images/misc/storeImage.png" : "" }
+                      alt="settings.png"
+                      width={250}
+                      height={250}
+                      className="w-full h-full x absolute top-0 left-0"
+                    />
+                    
                     <Box className="w-full h-full z-30 rounded-md bg-black opacity-30 absolute top-0 left-0"></Box>
-                    <img
+                    <Image
                       className="w-16  z-50 h-16"
                       alt="Upload img"
+                      width={250}
+                      height={250}
                       src={`/images/misc/upload-cloud.png`}
                     />
                     <Typography

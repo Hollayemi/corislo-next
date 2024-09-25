@@ -5,7 +5,7 @@ import HomeWrapper from "@/app/components/view/home";
 import { userGroupCartData } from "@/app/data/home/homepage";
 import { useUserData } from "@/app/hooks/useData";
 import { addNewOrder } from "@/app/redux/state/slices/home/order";
-import { Box, Button, FormControlLabel, Grid, Typography } from "@mui/material";
+import { Box, Button, FormControlLabel, Grid, Radio, Typography } from "@mui/material";
 import Image from "next/image";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -61,7 +61,7 @@ const Checkout = () => {
                   <Typography variant="body2" className="!text-[11px] w-8/12">
                     {address
                       ? `${address?.address}, ${address?.state}, ${address?.city} (${address?.postal_code})`
-                      : "No address"}
+                      : 'No address'}
                   </Typography>
                   <CustomOption
                     addBtn={
@@ -80,7 +80,7 @@ const Checkout = () => {
                         variant="outlined"
                         className="w-20 h-6 !rounded-full !border !border-blue-500 !text-[12px] !text-blue-600"
                       >
-                        {address ? "Change " : "Select "}
+                        {address ? 'Change ' : 'Select '}
                       </Button>
                     }
                     template={<TitleSubtitle />}
@@ -91,7 +91,7 @@ const Checkout = () => {
                     butPush={addresses.map((e) => e)}
                     clickFunction={(e) =>
                       updatePayload((prev) => {
-                        return { ...prev, shippingAddress: e };
+                        return { ...prev, shippingAddress: e }
                       })
                     }
                   />
@@ -151,7 +151,7 @@ const Checkout = () => {
                         variant="body2"
                         className="!text-[12px] !text-red-500"
                       >
-                        {reshapePrice(amounts?.discountAmount)}
+                        {reshapePrice(amounts?.originalPrice)}
                       </Typography>
                     </Box>
                   ) : null}
@@ -260,8 +260,8 @@ const Checkout = () => {
                         variant="body2"
                         className="!text-[15px] !text-blue-800 mt-5"
                       >
-                        <span className="mr-3 !text-[17px]">+</span>{" "}
-                        {card ? "Change " : "Select "}
+                        <span className="mr-3 !text-[17px]">+</span>{' '}
+                        {card ? 'Change ' : 'Select '}
                         payment option
                       </Typography>
                     }
@@ -274,7 +274,7 @@ const Checkout = () => {
                     butPush={billings.map((e) => e)}
                     clickFunction={(e) =>
                       updatePayload((prev) => {
-                        return { ...prev, billingCard: e };
+                        return { ...prev, billingCard: e }
                       })
                     }
                   />
@@ -292,7 +292,7 @@ const Checkout = () => {
         </Box>
       </Box>
     </HomeWrapper>
-  );
+  )
 };
 
 export default Checkout;

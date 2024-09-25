@@ -1,35 +1,36 @@
-"use client";
-import HomeWrapper from "../components/view/home";
-import React, { useState } from "react";
-import { Box, Button, Grid, Typography } from "@mui/material";
-import Image from "next/image";
-import IconifyIcon from "@/app/components/icon";
+'use client'
+import HomeWrapper from '../components/view/home'
+import React, { useState } from 'react'
+import { Box, Button, Grid, Typography } from '@mui/material'
+import Image from 'next/image'
+import IconifyIcon from '@/app/components/icon'
 import {
   FlashSale,
   PopularAds,
   SectionMiddleTitle,
   SectionTitle,
   TopStores,
-} from "@/app/components/cards/homeCards";
-import { categoryData, topStoresData } from "@/app/data/home/homepage";
-import ReactSlickSlider from "@/app/components/wrapper/react-slick";
+} from '@/app/components/cards/homeCards'
+import { categoryData, topStoresData } from '@/app/data/home/homepage'
+import ReactSlickSlider from '@/app/components/wrapper/react-slick'
 import {
   HotDeal,
   PopularProduct,
   ProductOnShowcase,
-} from "@/app/components/templates/productTemplates";
-import CountdownTimer from "@/app/components/cards/countDown";
+} from '@/app/components/templates/productTemplates'
+import CountdownTimer from '@/app/components/cards/countDown'
 import {
   TestimonialsComponent,
   WhoIsWaiting,
-} from "@/app/components/view/home/Components/Footer";
-import useSWR from "swr";
-import { NumberExplained } from "../components/cards/sellerCards";
-import { useUserData } from "../hooks/useData";
-import { ServicesSlider } from "./services/page";
-import Link from "next/link";
-import useSWRWithCoordinates from "../hooks/fetchWithCoordinates";
-import { CircleLoader } from "../components/cards/loader";
+} from '@/app/components/view/home/Components/Footer'
+import useSWR from 'swr'
+import { NumberExplained } from '../components/cards/sellerCards'
+import { useUserData } from '../hooks/useData'
+import { ServicesSlider } from './services/page'
+import Link from 'next/link'
+import useSWRWithCoordinates from '../hooks/fetchWithCoordinates'
+import { CircleLoader } from '../components/cards/loader'
+import { useRouter } from 'next/navigation'
 
 const HomePage = ({ params }) => {
   const {
@@ -38,11 +39,12 @@ const HomePage = ({ params }) => {
     status: prodsStatus,
     lat,
     lng,
-  } = useSWRWithCoordinates("/products?limit=30");
-  const { data: ads } = useSWR("/home/ads");
-  const products = prods ? prods.data : [];
-  const popularAds = ads ? ads.data : [];
-  const { setShopNow } = useUserData();
+  } = useSWRWithCoordinates('/products?limit=30')
+  const { data: ads } = useSWR('/home/ads')
+  const products = prods ? prods.data : []
+  const popularAds = ads ? ads.data : []
+  const router = useRouter()
+
   return (
     <HomeWrapper shopMode={params.sm}>
       <Box className="!mb-20 mt-6 md:mt-16">
@@ -75,7 +77,7 @@ const HomePage = ({ params }) => {
 
               <Button
                 variant="contained"
-                onClick={() => setShopNow(true)}
+                onClick={() => router.push('/explore')}
                 className="!text-[12px] !text-white !bg-[#fcb415] hover:!bg-[#c99628] transition-all duration-500 !w-40 !h-10 !rounded-full !mt-8 !shadow-none"
               >
                 Shop Now
@@ -324,11 +326,7 @@ const HomePage = ({ params }) => {
           {/*  */}
           <Box className="mt-14">
             <Box className="px-3 md:px-10">
-              <SectionTitle
-                black="More"
-                blue="Products"
-                right={`${lat},  ${lng}`}
-              />
+              <SectionTitle black="More" blue="Products" />
               <Box className="!mt-6 flex flex-wrap justify-center">
                 {!prodsLoading ? (
                   products?.result?.map((prod, i) => (
@@ -390,7 +388,7 @@ const HomePage = ({ params }) => {
                   <Button
                     variant="contained"
                     className="!mt-4 !shadow-none !text-[11px] !h-10 !w-28 !rounded-full"
-                    onClick={() => setShopNow(true)}
+                    onClick={() => router.push('/explore')}
                   >
                     Shop Now
                   </Button>
@@ -483,7 +481,7 @@ const HomePage = ({ params }) => {
         </Box>
       </Box>
     </HomeWrapper>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage

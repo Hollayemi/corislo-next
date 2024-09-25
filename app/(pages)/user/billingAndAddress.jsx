@@ -85,7 +85,7 @@ const BillingAndAddress = () => {
       startIcon={btnText === "Close" ? <Remove /> : <Add />}
       onClick={() => click((prev) => !Boolean(prev))}
     >
-      {btnText}
+          {btnText}
     </Button>
   );
   const cardType = detectCardType(cardPayload.number);
