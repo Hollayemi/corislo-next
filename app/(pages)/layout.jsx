@@ -109,9 +109,9 @@ export default function RootLayout({ children }) {
                   currentSearchParams.set('lat', resource[1])
                   currentSearchParams.set('lng', resource[2])
                   url = currentSearchParams
-                    .toString()
-                    .replaceAll('%2F', '/')
-                    .replaceAll('%3F', '?')
+                    ?.toString()
+                    ?.replaceAll('%2F', '/')
+                    ?.replaceAll('%3F', '?')
                 }
 
                 const getToken = jsonHeader('user')

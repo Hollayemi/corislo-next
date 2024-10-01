@@ -12,9 +12,9 @@ import { Map } from "@mui/icons-material";
 import { useUserData } from "@/app/hooks/useData";
 import ReactSlickSlider from "../wrapper/react-slick";
 
-export const PopularProduct = (props) => {
+export const PopularProduct = ({endpoint, ...props}) => {
   const router = useRouter();
-  const { data: popularProds } = useSWR("/home/popular-products");
+  const { data: popularProds } = useSWR(endpoint || "/home/popular-products");
   const popularProducts = popularProds ? popularProds.data : [];
 
   const View = ({ image, prodName, store, price, small, others }) => (

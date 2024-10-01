@@ -1,48 +1,49 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { Box, Button, Grid, Typography } from "@mui/material";
-import HomeWrapper from "@/app/components/view/home";
-import { hexToRGBA } from "@/app/utils/hex-to-rgba";
-import { rgbaToHex } from "@/app/utils/rgba-to-hex";
-import IconifyIcon from "@/app/components/icon";
-import OptionsMenu from "@/app/components/option-menu";
-import { OrderProductView } from "@/app/components/templates/productView";
-import useSWR from "swr";
-import { OrderBoxes } from "@/app/components/cards/homeCards";
+'use client'
+import React, { useEffect, useState } from 'react'
+import Image from 'next/image'
+import { Box, Button, Grid, Typography } from '@mui/material'
+import HomeWrapper from '@/app/components/view/home'
+import { hexToRGBA } from '@/app/utils/hex-to-rgba'
+import { rgbaToHex } from '@/app/utils/rgba-to-hex'
+import IconifyIcon from '@/app/components/icon'
+import OptionsMenu from '@/app/components/option-menu'
+import { OrderProductView } from '@/app/components/templates/productView'
+import useSWR from 'swr'
+import { OrderBoxes } from '@/app/components/cards/homeCards'
+import MyPagination from '@/app/components/templates/pagination'
 
-const OrderPage = () => {
-  const [orderShowing, setOrderShowing] = useState("All Orders");
+const OrderPage = ({ searchParams }) => {
+  const [orderShowing, setOrderShowing] = useState('All Orders')
+  const { page } = searchParams
   const { data: result } = useSWR(
-    `/user/order?status=${orderShowing.split(" ")[0]}`
-  );
-  const { data: count } = useSWR(`/user/order-count`);
+    `/user/order?status=${orderShowing.split(' ')[0]}&page=${page || 1}`
+  )
+  const { data: count } = useSWR(`/user/order-count`)
   const counter = count?.data || {}
-  const fetchedOrder = result?.data || [];
-  const [dateInterval, setDateInterval] = useState("March 2023 - October 2023");
-  const [clipboard, setIsCopied] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredOrder, setFilteredOrder] = useState([]);
-  console.log(fetchedOrder);
+  const { result: fetchedOrder, totalNumber } = result?.data || {}
+  const [dateInterval, setDateInterval] = useState('March 2023 - October 2023')
+  const [clipboard, setIsCopied] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [filteredOrder, setFilteredOrder] = useState([])
 
   const handleFilter = (input) => {
-    setSearchQuery(input);
+    setSearchQuery(input)
     if (fetchedOrder.length) {
       const searchFilterFunction = (order) =>
         order.store.toLowerCase().includes(input.toLowerCase()) ||
         order.orderSlug.toLowerCase().includes(input.toLowerCase()) ||
-        order.items.tracker.toLowerCase().includes(input.toLowerCase());
-      const filteredOrdersArr = fetchedOrder.filter(searchFilterFunction);
-      setFilteredOrder(filteredOrdersArr);
+        order.items.tracker.toLowerCase().includes(input.toLowerCase())
+      const filteredOrdersArr = fetchedOrder.filter(searchFilterFunction)
+      setFilteredOrder(filteredOrdersArr)
     }
-  };
+  }
 
   useEffect(() => {
-    setSearchQuery("");
-    setFilteredOrder([]);
-  }, [orderShowing]);
+    setSearchQuery('')
+    setFilteredOrder([])
+  }, [orderShowing])
 
-  const orderArray = !filteredOrder.length ? fetchedOrder : filteredOrder;
+  const orderArray = !filteredOrder?.length ? fetchedOrder || [] : filteredOrder
 
   return (
     <HomeWrapper>
@@ -115,7 +116,7 @@ const OrderPage = () => {
                   </Box>
                   <Box className="">
                     <Typography variant="caption" className="!text-[14px]">
-                      Status:{" "}
+                      Status:{' '}
                       <span className="!font-bold !text-blue-800">
                         En Route
                       </span>
@@ -142,7 +143,7 @@ const OrderPage = () => {
                   </Box>
                   <Box>
                     <Typography variant="caption" className="!text-[14px]">
-                      Status:{" "}
+                      Status:{' '}
                       <span className="!font-bold !text-blue-800">
                         Processing
                       </span>
@@ -163,7 +164,7 @@ const OrderPage = () => {
             <Typography variant="body2" className="!font-bold !text-[14px]">
               Orders
             </Typography>
-            <Box>
+            <Box className="hidden">
               <OptionsMenu
                 icon={
                   <Button
@@ -180,14 +181,14 @@ const OrderPage = () => {
                   </Button>
                 }
                 options={[
-                  "January 2021 - December 2021",
-                  "March 2022 - October 2022",
-                  "March 2023 - October 2023",
+                  'January 2021 - December 2021',
+                  'March 2022 - October 2022',
+                  'March 2023 - October 2023',
                 ]}
                 setOption={setDateInterval}
                 iconButtonProps={{
-                  size: "small",
-                  sx: { color: "text.disabled", cursor: "pointer" },
+                  size: 'small',
+                  sx: { color: 'text.disabled', cursor: 'pointer' },
                   // disableRipple: true,
                 }}
               />
@@ -212,17 +213,18 @@ const OrderPage = () => {
                     </Button>
                   }
                   options={[
-                    "All Orders",
-                    "Unpaid Orders",
-                    "Paid Orders",
-                    "Processing Orders",
-                    "Completed Orders",
-                    "Cancelled Orders",
+                    'All Orders',
+                    'Pending Orders',
+                    'Unpaid Orders',
+                    'Paid Orders',
+                    'Processing Orders',
+                    'Completed Orders',
+                    'Cancelled Orders',
                   ]}
                   setOption={setOrderShowing}
                   iconButtonProps={{
-                    size: "small",
-                    sx: { color: "text.disabled", cursor: "pointer" },
+                    size: 'small',
+                    sx: { color: 'text.disabled', cursor: 'pointer' },
                     // disableRipple: true,
                   }}
                 />
@@ -262,30 +264,41 @@ const OrderPage = () => {
                 <Typography variant="caption">No record found</Typography>
               </Box>
             ) : (
-              orderArray.map((res, i) => (
-                <OrderProductView
-                  key={i}
-                  clipboard={clipboard}
-                  setIsCopied={setIsCopied}
-                  deliveryMedium={res.deliveryMedium}
-                  totalAmount={parseInt(res.totalAmount)}
-                  product={res.items.storeProducts}
-                  status={res?.status[res?.status?.length - 1]?.state}
-                  orderSlug={res.orderSlug}
-                  orderId={res._id}
-                  createdAt={res.createdAt}
-                  store={res.store}
-                  mutateStatus={orderShowing.split(" ")[0]}
-                />
-              ))
+              <Box>
+                {orderArray.map((res, i) => (
+                  <OrderProductView
+                    key={i}
+                    clipboard={clipboard}
+                    setIsCopied={setIsCopied}
+                    deliveryMedium={res.deliveryMedium}
+                    totalAmount={parseInt(res.totalAmount)}
+                    product={res.items.storeProducts}
+                    status={res?.status[res?.status?.length - 1]?.state}
+                    orderSlug={res.orderSlug}
+                    orderId={res._id}
+                    createdAt={res.createdAt}
+                    store={res.store}
+                    mutateStatus={`/user/order?status=${
+                      orderShowing.split(' ')[0]
+                    }&page=${page || 1}`}
+                  />
+                ))}
+                <Box className="flex justify-center mt-6">
+                  <MyPagination
+                    searchParams={searchParams}
+                    currentPage={searchParams?.page || 1}
+                    totalNumber={totalNumber || 0}
+                    limit={6}
+                    query="page"
+                  />
+                </Box>
+              </Box>
             )}
           </Box>
         </Box>
       </Box>
     </HomeWrapper>
-  );
-};
+  )
+}
 
-export default OrderPage;
-
-
+export default OrderPage

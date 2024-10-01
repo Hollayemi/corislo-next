@@ -1,12 +1,13 @@
 'use client'
 import { usePathname, useRouter } from 'next/navigation'
-import { useDispatch, useSelector } from 'react-redux'
 import jwt_decode from 'jwt-decode'
 import useSWR from 'swr'
 import io from 'socket.io-client'
 import useGeolocation from '../hooks/useGeolocation'
 import { UserPages } from '../components/view/home/Components'
+import { isMobile, osName, osVersion } from 'react-device-detect'
 
+const deviceKey = `${osName} ${osVersion}`.replace(/[^a-zA-Z0-9_]/g, '_')
 const { createContext, useEffect, useState } = require('react')
 
 const defaultProvider = {
@@ -50,18 +51,6 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
   useEffect(() => setOverflow(loading), [loading])
 
   const getPath = pathname.split('/')
-  // useEffect(() => {
-  //   const getLocalToken =
-  //     typeof window !== "undefined" && localStorage.getItem("user_token");
-
-  //   if (
-  //     getLocalToken &&
-  //     getPath[1] === "auth" &&
-  //     getPath[2] === "login"
-  //   ) {
-  //     router.replace(`/`);
-  //   }
-  // }, [getPath, router]);
 
   const isOffline = () => {
     const getLocalToken =
@@ -74,19 +63,6 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
     }
     return true
   }
-
-  // useEffect(() => {
-  //   if (getPath[1]) {
-  //     if (
-  //       isOffline() &&
-  //       getPath[1] !== "auth" &&
-  //       getPath[1] !== "store" &&
-  //       getPath[2] !== "login"
-  //     ) {
-  //       router.replace(`/auth/login?returnurl=${pathname.substring(1)}`);
-  //     }
-  //   }
-  // }, [userData, getPath, router]);
 
   useEffect(() => {
     const offlinePages = UserPages.isOffline.map((x) => x.link)
@@ -140,7 +116,6 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
   const showOverlay =
     (pageName = null) =>
     (e) => {
-      console.log(pageName, overLay)
       if ((overLay && !pageName) || pageName === overLay) {
         setOverflow(false)
         setOpenOverlay(null)
@@ -151,7 +126,6 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
     }
 
   const showMapScreen = () => {
-    console.log('hello')
     if (popMap) {
       setOverflow(false)
       setMapPopup(false)
@@ -180,6 +154,11 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
   useEffect(() => {
     setConnection(userInfo?.user?.push_subscription)
   }, [userInfo])
+
+  
+  userInfo?.user?.loginActivities &&
+    userInfo.user.loginActivities[deviceKey]?.logout &&
+    localStorage.removeItem('user_token')
 
   //
   //

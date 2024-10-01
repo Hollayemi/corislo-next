@@ -11,33 +11,34 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-} from "@mui/material";
+} from '@mui/material'
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from 'react'
+import Image from 'next/image'
+import { useDispatch } from 'react-redux'
 import {
   MyTextField,
   TitleSubtitle,
   TextCheck,
   devicesColumn,
   rowSample,
-} from "./components";
-import IconifyIcon from "@/app/components/icon";
-import OtpInput from "@/app/(pages)/auth/otp-verification/component";
-import { resendOtp } from "@/app/redux/state/slices/auth/otp";
-import { changeEmailHandler } from "@/app/redux/state/slices/auth/changeEmail";
-import { changePasswordHandler } from "@/app/redux/state/slices/auth/resetPassword";
-import { useUserData } from "@/app/hooks/useData";
-import { formatDate } from "@/app/utils/format";
-import CustomOption from "@/app/components/option-menu/option";
-import CheckPassword from "./checkPassword";
-import OtpVerification from "../auth/otp-verification/page";
-import { mutate } from "swr";
+} from './components'
+import IconifyIcon from '@/app/components/icon'
+import OtpInput from '@/app/(pages)/auth/otp-verification/component'
+import { resendOtp } from '@/app/redux/state/slices/auth/otp'
+import { changeEmailHandler } from '@/app/redux/state/slices/auth/changeEmail'
+import { changePasswordHandler } from '@/app/redux/state/slices/auth/resetPassword'
+import { useUserData } from '@/app/hooks/useData'
+import { formatDate } from '@/app/utils/format'
+import CustomOption from '@/app/components/option-menu/option'
+import CheckPassword from './checkPassword'
+import OtpVerification from '../auth/otp-verification/page'
+import { mutate } from 'swr'
+import { deviceLogout } from '@/app/redux/state/slices/auth/Login'
 
 const Index = () => {
-  const [display, setDisplay] = useState("all");
-  const { userInfo } = useUserData();
+  const [display, setDisplay] = useState('all')
+  const { userInfo } = useUserData()
 
   const pages = {
     all: <SecuritySettings setDisplay={setDisplay} />,
@@ -55,23 +56,30 @@ const Index = () => {
       />
     ),
   }
-  return pages[display];
-};
+  return pages[display]
+}
 
-export default Index;
+export default Index
 
 const AccountActivities = () => {
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0)
+  const dispatch = useDispatch()
+  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const {
+    userInfo: { loginActivities = {} },
+  } = useUserData()
+
+  const accounts = Object.values(loginActivities)
+  const keys = Object.keys(loginActivities)
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+    setPage(newPage)
+  }
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+    setRowsPerPage(+event.target.value)
+    setPage(0)
+  }
 
   return (
     <Box>
@@ -84,7 +92,7 @@ const AccountActivities = () => {
         className="mt-5 mb-5"
       />
 
-      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -101,7 +109,7 @@ const AccountActivities = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rowSample
+              {accounts
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, i) => {
                   return (
@@ -109,27 +117,32 @@ const AccountActivities = () => {
                       <TableCell>
                         <Box className="flex items-center">
                           <Image
-                            src={`/images/misc/${row.deviceType}.png`}
+                            src={`/images/misc/${
+                              row.isMobile ? 'phone' : 'laptop'
+                            }.png`}
                             alt="imgs"
                             width={200}
                             height={200}
                             className="w-7 mr-2"
                           />
-                          <Typography>{row.deviceName}</Typography>
+                          <Typography>{row.device}</Typography>
                         </Box>
                       </TableCell>
                       <TableCell>{row.location}</TableCell>
                       <TableCell>{row.via}</TableCell>
                       <TableCell>{formatDate(row.date)}</TableCell>
-                      <TableCell>
-                        <CustomOption
+                      <TableCell className='!text-green-600 !font-bold'>
+                       {row.logout ? "Logged Out" : <CustomOption
                           addBtn={
-                            <Typography
+                            <Button
                               variant="body2"
                               className="!text-[15px] !text-red-500 !font-bold mt-5"
+                              onClick={() =>
+                                deviceLogout({ key: keys[i] }, dispatch)
+                              }
                             >
                               Log out of this device
-                            </Typography>
+                            </Button>
                           }
                           icon={
                             <Button
@@ -140,10 +153,10 @@ const AccountActivities = () => {
                             </Button>
                           }
                           options={[]}
-                        />
+                        />}
                       </TableCell>
                     </TableRow>
-                  );
+                  )
                 })}
             </TableBody>
           </Table>
@@ -159,12 +172,12 @@ const AccountActivities = () => {
         />
       </Paper>
     </Box>
-  );
-};
+  )
+}
 
 const SecuritySettings = ({ setDisplay }) => {
-  const { showOverlay, userInfo } = useUserData();
-  const dispatch = useDispatch();
+  const { showOverlay, userInfo } = useUserData()
+  const dispatch = useDispatch()
   return (
     <Box>
       <TitleSubtitle title="Security Settings" />
@@ -189,10 +202,10 @@ const SecuritySettings = ({ setDisplay }) => {
             <Typography
               variant="body2"
               className={`${
-                userInfo.isVerified ? "!text-green-500" : "!text-red-500"
+                userInfo.isVerified ? '!text-green-500' : '!text-red-500'
               } !text-[12px]`}
             >
-              {userInfo.isVerified ? "Verified" : "Not Verified"}
+              {userInfo.isVerified ? 'Verified' : 'Not Verified'}
             </Typography>
           </Box>
           <Button
@@ -201,7 +214,7 @@ const SecuritySettings = ({ setDisplay }) => {
             startIcon={
               <IconifyIcon
                 icon={
-                  userInfo.isVerified ? "tabler:edit-circle" : "tabler:check"
+                  userInfo.isVerified ? 'tabler:edit-circle' : 'tabler:check'
                 }
                 className="!text-gray-500"
               />
@@ -209,18 +222,18 @@ const SecuritySettings = ({ setDisplay }) => {
             className="!rounded-full !border-gray-400 !text-gray-500 !ml-2 md:!ml-5"
             onClick={() =>
               userInfo.isVerified
-                ? setDisplay("email")
+                ? setDisplay('email')
                 : resendOtp(
                     {
                       email: userInfo.email,
-                      action: { to: "email-verification", account: "user" },
+                      action: { to: 'email-verification', account: 'user' },
                     },
                     dispatch,
-                    () => setDisplay("verify")
+                    () => setDisplay('verify')
                   )
             }
           >
-            {userInfo.isVerified ? "Edit" : "Verify"}
+            {userInfo.isVerified ? 'Edit' : 'Verify'}
           </Button>
         </Box>
       </Box>
@@ -256,7 +269,7 @@ const SecuritySettings = ({ setDisplay }) => {
               />
             }
             className="!rounded-full !border-gray-400 !text-gray-500 !ml-2 md:!ml-5"
-            onClick={() => setDisplay("phone")}
+            onClick={() => setDisplay('phone')}
           >
             Edit
           </Button>
@@ -276,7 +289,7 @@ const SecuritySettings = ({ setDisplay }) => {
           variant="outlined"
           size="small"
           className="!rounded-full !border-gray-400 !text-gray-500 flex-shrink-0 !ml-2 !w-36"
-          onClick={() => setDisplay("password")}
+          onClick={() => setDisplay('password')}
         >
           Change Password
         </Button>
@@ -293,7 +306,7 @@ const SecuritySettings = ({ setDisplay }) => {
         <Switch
           edge="end"
           checked={userInfo.two_fa}
-          onClick={showOverlay("TwoFA")}
+          onClick={showOverlay('TwoFA')}
         />
       </Box>
       {/* Account Activities */}
@@ -310,37 +323,37 @@ const SecuritySettings = ({ setDisplay }) => {
           variant="outlined"
           size="small"
           className="!rounded-full !border-gray-400 !text-gray-500 !ml-5"
-          onClick={() => setDisplay("activities")}
+          onClick={() => setDisplay('activities')}
         >
           View
         </Button>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 const ChangePassword = ({ setDisplay }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const [passData, setPassData] = useState({
-    oldPassword: "",
-    confirmPassword: "",
-    newPassword: "",
-  });
+    oldPassword: '',
+    confirmPassword: '',
+    newPassword: '',
+  })
 
   const handleChange =
     (prop) =>
     ({ target }) => {
       setPassData((prev) => {
-        return { ...prev, [prop]: target.value };
-      });
-    };
+        return { ...prev, [prop]: target.value }
+      })
+    }
   return (
     <Box className="">
       <MyTextField
         title="Current Password"
         placeholder="Enter your current password"
         value={passData.oldPassword}
-        onChange={handleChange("oldPassword")}
+        onChange={handleChange('oldPassword')}
         type="password"
         PClassName="w-full sm:w-80"
       />
@@ -348,7 +361,7 @@ const ChangePassword = ({ setDisplay }) => {
         title="New Password"
         placeholder="Enter your new password"
         value={passData.newPassword}
-        onChange={handleChange("newPassword")}
+        onChange={handleChange('newPassword')}
         type="password"
         PClassName="w-full sm:w-80"
       />
@@ -356,7 +369,7 @@ const ChangePassword = ({ setDisplay }) => {
         title="Confirm Password"
         placeholder="Confirm your new password"
         value={passData.confirmPassword}
-        onChange={handleChange("confirmPassword")}
+        onChange={handleChange('confirmPassword')}
         type="password"
         PClassName="w-full sm:w-80"
       />
@@ -384,24 +397,24 @@ const ChangePassword = ({ setDisplay }) => {
         <Button
           className="!w-28 !h-10 !rounded-full !shadow-none !ml-4"
           variant="outlined"
-          onClick={() => setDisplay("all")}
+          onClick={() => setDisplay('all')}
         >
           Cancel
         </Button>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 const EmailAddress = ({ setDisplay, email }) => {
-  const dispatch = useDispatch();
-  const [countdown, setCountdown] = useState(60); // Initial countdown value in seconds
-  const [resendDisabled, setResendDisabled] = useState(false);
-  const [inputValues, setInputValues] = useState(["", "", "", "", "", ""]);
+  const dispatch = useDispatch()
+  const [countdown, setCountdown] = useState(60) // Initial countdown value in seconds
+  const [resendDisabled, setResendDisabled] = useState(false)
+  const [inputValues, setInputValues] = useState(['', '', '', '', '', ''])
   const [emailData, setEmailData] = useState({
-    password: "",
-    email: "",
-  });
+    password: '',
+    email: '',
+  })
 
   const handleResend = () => {
     // Handle OTP resend logic here
@@ -410,45 +423,45 @@ const EmailAddress = ({ setDisplay, email }) => {
     resendOtp(
       {
         email: emailData.email,
-        action: { to: "change-email", account: "user" },
+        action: { to: 'change-email', account: 'user' },
       },
       dispatch
-    );
-    setCountdown(60);
-    setResendDisabled(true);
-  };
+    )
+    setCountdown(60)
+    setResendDisabled(true)
+  }
 
   useEffect(() => {
-    let intervalId;
+    let intervalId
 
     if (countdown > 0) {
       intervalId = setInterval(() => {
-        setCountdown((prevCountdown) => prevCountdown - 1);
-      }, 1000);
+        setCountdown((prevCountdown) => prevCountdown - 1)
+      }, 1000)
     } else {
-      setResendDisabled(false);
-      clearInterval(intervalId);
+      setResendDisabled(false)
+      clearInterval(intervalId)
     }
 
-    return () => clearInterval(intervalId);
-  }, [countdown]);
+    return () => clearInterval(intervalId)
+  }, [countdown])
 
-  const otpValues = inputValues.join("");
+  const otpValues = inputValues.join('')
 
   const handleChange =
     (prop) =>
     ({ target }) => {
       setEmailData((prev) => {
-        return { ...prev, [prop]: target.value };
-      });
-    };
+        return { ...prev, [prop]: target.value }
+      })
+    }
   return (
     <Box className="">
       <MyTextField
         title="New email"
         placeholder="Enter your new email"
         value={emailData.email}
-        onChange={handleChange("email")}
+        onChange={handleChange('email')}
         type="email"
         PClassName="w-full sm:w-80"
       />
@@ -456,7 +469,7 @@ const EmailAddress = ({ setDisplay, email }) => {
         title="Email Password"
         placeholder="Enter your password"
         value={emailData.password}
-        onChange={handleChange("password")}
+        onChange={handleChange('password')}
         type="email"
         PClassName="w-full sm:w-80"
       />
@@ -508,11 +521,11 @@ const EmailAddress = ({ setDisplay, email }) => {
         <Button
           className="!w-28 !h-10 !rounded-full !shadow-none !ml-4"
           variant="outlined"
-          onClick={() => setDisplay("all")}
+          onClick={() => setDisplay('all')}
         >
           Cancel
         </Button>
       </Box>
     </Box>
-  );
-};
+  )
+}

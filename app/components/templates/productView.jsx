@@ -1,38 +1,38 @@
-"use client"
+'use client'
 import {
   Box,
   Checkbox,
   FormControlLabel,
   Button,
   Typography,
-} from "@mui/material";
-import Image from "next/image";
-import IconifyIcon from "../icon";
-import { useDispatch } from "react-redux";
+} from '@mui/material'
+import Image from 'next/image'
+import IconifyIcon from '../icon'
+import { useDispatch } from 'react-redux'
 import {
   addCartHandler,
   changeQuantity,
   saveProduct,
   savedQuantity,
-} from "@/app/redux/state/slices/home/cart";
+} from '@/app/redux/state/slices/home/cart'
 import {
   getCommonValuesInArrays,
   isArraySubset,
   removeOrAddToArray,
-} from "@/app/utils/arrayFunctions";
-import OptionsMenu from "../option-menu";
-import { formatDateToMonthShort, mySubstring } from "@/app/utils/format";
-import Link from "next/link";
-import { copyToClipboard } from "@/app/utils/clipboard";
-import { deleteOrder } from "@/app/redux/state/slices/home/order";
-import { useState } from "react";
-import { Delete, ShoppingCartSharp } from "@mui/icons-material";
+} from '@/app/utils/arrayFunctions'
+import OptionsMenu from '../option-menu'
+import { formatDateToMonthShort, mySubstring } from '@/app/utils/format'
+import Link from 'next/link'
+import { copyToClipboard } from '@/app/utils/clipboard'
+import { deleteOrder } from '@/app/redux/state/slices/home/order'
+import { useState } from 'react'
+import { Delete, ShoppingCartSharp } from '@mui/icons-material'
 import {
   OrderActionBtn,
   trackMainSteps,
-} from "@/app/(pages)/order/[detail]/components";
-import { OrderStages } from "@/app/(pages)/order/timeline";
-import CustomOption from "../option-menu/option";
+} from '@/app/(pages)/order/[detail]/components'
+import { OrderStages } from '@/app/(pages)/order/timeline'
+import CustomOption from '../option-menu/option'
 
 const ChangeQty = ({
   payload,
@@ -42,11 +42,11 @@ const ChangeQty = ({
   qtyFunc,
   isSavedView,
 }) => {
-  const dispatch = useDispatch();
-  const [qty, newQty] = useState(quantity);
+  const dispatch = useDispatch()
+  const [qty, newQty] = useState(quantity)
   return (
     <Box
-      className={`w-20  ${!isSavedView && " absolute top-2 right-0"} mt-1 mr-2`}
+      className={`w-20  ${!isSavedView && ' absolute top-2 right-0'} mt-1 mr-2`}
     >
       {!isSavedView && (
         <Box
@@ -63,10 +63,10 @@ const ChangeQty = ({
         <Box
           onClick={() =>
             quantity > 1 &&
-            qtyFunc({ id, operator: "-", saveItem }, dispatch, newQty)
+            qtyFunc({ id, operator: '-', saveItem }, dispatch, newQty)
           }
           className={`h-5 w-5 rounded-full cursor-pointer !text-[14px] border ${
-            quantity > 1 ? "border-blue-800" : "border-gray-300"
+            quantity > 1 ? 'border-blue-800' : 'border-gray-300'
           } !font-black flex items-center justify-center transition-all duration-300`}
         >
           -
@@ -76,7 +76,7 @@ const ChangeQty = ({
         </Typography>
         <Box
           onClick={() =>
-            qtyFunc({ id, operator: "+", saveItem }, dispatch, newQty)
+            qtyFunc({ id, operator: '+', saveItem }, dispatch, newQty)
           }
           className="h-5 w-5 rounded-full cursor-pointer !text-[14px] border border-blue-800 !font-black flex items-center justify-center"
         >
@@ -84,14 +84,14 @@ const ChangeQty = ({
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 const SaveItemRightButtons = ({ payload, id }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   return (
-    <Box className="w-20 absolute bottom-4 md:top-2 right-0 -mr-3 md:mr-2">
-      <Box className="float-right items-center md:mb-6 ">
+    <Box className="w-60 absolute bottom-4 md:top-10 !left-3/4  md:!right-0 md:!-ml-8">
+      <Box className="items-center md:mb-6 flex">
         <Box
           variant="contained"
           className="!w-9 !min-w-10 md:!w-24 bg-blue-800 text-white !text-[12px] flex cursor-pointer justify-center items-center !rounded-full !h-9 !shadow-none"
@@ -102,7 +102,7 @@ const SaveItemRightButtons = ({ payload, id }) => {
         </Box>
         <Box
           variant="outlined"
-          className="!w-9 !min-w-10 md:!w-24 border border-blue-800 text-blue-800 !text-[12px] flex cursor-pointer justify-center items-center !rounded-full !h-9 !shadow-none !mt-2"
+          className="!w-9 !min-w-10 md:!w-24 border border-blue-800 text-blue-800 !text-[12px] flex cursor-pointer justify-center items-center !rounded-full !h-9 !shadow-none !m-2"
           onClick={() => saveProduct(payload, dispatch)}
         >
           <p className="hidden md:block">Remove Item</p>
@@ -110,8 +110,8 @@ const SaveItemRightButtons = ({ payload, id }) => {
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 export const CartProductView = ({
   image,
@@ -130,24 +130,24 @@ export const CartProductView = ({
   selectCart,
 }) => {
   const colorArray = [
-    "#eefabb",
-    "#aecabb",
-    "#eabdbb",
-    "#beea45",
-    "#afedda",
-    "#34ee",
-    "#000",
-  ];
-  const dispatch = useDispatch();
+    '#eefabb',
+    '#aecabb',
+    '#eabdbb',
+    '#beea45',
+    '#afedda',
+    '#34ee',
+    '#000',
+  ]
+  const dispatch = useDispatch()
   const payload = {
     productId: productId,
     store,
     branch,
-  };
+  }
   return (
     <Box className="flex items-start py-3 w-full relative">
       <Box
-        className={`flex items-center w-full ${hideQtyFunc ? "pr-6" : "pr-20"}`}
+        className={`flex items-center w-full ${hideQtyFunc ? 'pr-6' : 'pr-20'}`}
       >
         {!hideCheckbox && (
           <FormControlLabel
@@ -167,14 +167,14 @@ export const CartProductView = ({
         )}
         <Box className="flex items-start w-full">
           <Image
-            src={image || "/images/more/2.png"}
+            src={image || '/images/more/2.png'}
             alt="prod_image"
             width={150}
             height={150}
             className="w-20 h-20 flex-shrink-0 !rounded-xl"
           />
           <Box
-            className={`px-3 ${hideQtyFunc ? "w-10/12" : "w-8/12"} relative`}
+            className={`px-3 ${hideQtyFunc ? 'w-10/12' : 'w-8/12'} relative`}
           >
             <Typography
               variant="body2"
@@ -230,8 +230,8 @@ export const CartProductView = ({
       )}
       {isSavedView && <SaveItemRightButtons payload={payload} id={cartId} />}
     </Box>
-  );
-};
+  )
+}
 
 export const GroupCartProducts = ({
   store,
@@ -241,12 +241,11 @@ export const GroupCartProducts = ({
   payload,
   pickers,
 }) => {
-  console.log(branch);
   const getCommonDeliveryMethods = getCommonValuesInArrays(
-    ...branch.map((x) => x?.product?.delivery || ["pickup"])
-  );
-  const deliveryType = payload.delivery[store];
-  const picker = payload.picker[store];
+    ...branch.map((x) => x?.product?.delivery || ['pickup'])
+  )
+  const deliveryType = payload.delivery[store]
+  const picker = payload.picker[store]
   return (
     <Box>
       <Box className="w-full flex justify-between items-center !mt-5">
@@ -256,9 +255,9 @@ export const GroupCartProducts = ({
         >
           {store}
         </Typography>
-        {deliveryType === "waybilling" ? (
+        {deliveryType === 'waybilling' ? (
           <Typography variant="body2" className="!text-[13px] !font-bold">
-            {`${deliveryType} fee: ${branchPrice}` || "Pickup"}
+            {`${deliveryType} fee: ${branchPrice}` || 'Pickup'}
           </Typography>
         ) : (
           <CustomOption
@@ -277,7 +276,7 @@ export const GroupCartProducts = ({
                 variant="outlined"
                 className="w-32 h-7 !rounded-full !border !border-blue-500 !text-[12px] !text-blue-600"
               >
-                {mySubstring(picker?.name, 13) || "Myself"}
+                {mySubstring(picker?.name, 13) || 'Myself'}
               </Button>
             }
             // template={<TitleSubtitle />}
@@ -285,7 +284,7 @@ export const GroupCartProducts = ({
             butPush={pickers.map((e) => e)}
             clickFunction={(x) =>
               updatePayload((prev) => {
-                return { ...prev, picker: { ...prev.picker, [store]: x } };
+                return { ...prev, picker: { ...prev.picker, [store]: x } }
               })
             }
           />
@@ -339,8 +338,8 @@ export const GroupCartProducts = ({
                 <Typography variant="body2" className="!text-[13px]">
                   <span className="!font-bold !text-gray-600 mr-3">
                     Shipping Method:
-                  </span>{" "}
-                  {deliveryType || "Pickup"}
+                  </span>{' '}
+                  {deliveryType || 'Pickup'}
                 </Typography>
                 <Typography
                   variant="body2"
@@ -358,19 +357,19 @@ export const GroupCartProducts = ({
           options={getCommonDeliveryMethods}
           setOption={(x) =>
             updatePayload((prev) => {
-              return { ...prev, delivery: { ...prev.delivery, [store]: x } };
+              return { ...prev, delivery: { ...prev.delivery, [store]: x } }
             })
           }
           iconButtonProps={{
-            size: "small",
-            sx: { color: "text.disabled", cursor: "pointer" },
-            className: "!w-full",
+            size: 'small',
+            sx: { color: 'text.disabled', cursor: 'pointer' },
+            className: '!w-full',
           }}
         />
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 export const GroupSavedProducts = ({
   store,
@@ -385,11 +384,11 @@ export const GroupSavedProducts = ({
   selectItem,
 }) => {
   const getCommonDeliveryMethods = getCommonValuesInArrays(
-    ...fromBranch.map((x) => x.product.delivery || ["pickup"])
-  );
-  const branchSavedIds = fromBranch.map((x) => x.productId);
-  const deliveryType = payload.delivery[store];
-  const picker = payload.picker[store];
+    ...fromBranch.map((x) => x.product.delivery || ['pickup'])
+  )
+  const branchSavedIds = fromBranch.map((x) => x.productId)
+  const deliveryType = payload.delivery[store]
+  const picker = payload.picker[store]
   return (
     <Box>
       {fromBranch.length > 1 && (
@@ -434,36 +433,38 @@ export const GroupSavedProducts = ({
         >
           {store}
         </Typography>
-        {deliveryType === "waybilling" ? (
+        {deliveryType === 'waybilling' ? (
           <Typography variant="body2" className="!text-[13px] !font-bold">
-            {`${deliveryType} fee: ${branchPrice}` || "Pickup"}
+            {`${deliveryType} fee: ${branchPrice}` || 'Pickup'}
           </Typography>
         ) : (
-          <OptionsMenu
+          <CustomOption
+            addBtn={
+              <Link href="/user?to=2" className="!w-full">
+                <Typography
+                  variant="body2"
+                  className="!text-[15px] !text-blue-800 mt-5"
+                >
+                  <span className="mr-3 !text-[17px]">+</span> Add Picker
+                </Typography>
+              </Link>
+            }
             icon={
               <Button
                 variant="outlined"
-                className="!text-xs !rounded-full !text-blue-600"
-                endIcon={
-                  <IconifyIcon
-                    icon="tabler:chevron-down"
-                    className="!ml-3 !text-[14px]"
-                  />
-                }
+                className="w-36 h-7 !rounded-full !border !border-blue-500 !text-[12px] !text-blue-600"
               >
-                {picker || "You"}
+                {mySubstring(picker?.name, 13) || 'Myself'}
               </Button>
             }
-            options={pickers?.map((x) => x?.fullname)}
-            setOption={(x) =>
+            // template={<TitleSubtitle />}
+            options={pickers.map((e) => `${e?.name}, (${e?.relationship})`)}
+            butPush={pickers.map((e) => e)}
+            clickFunction={(x) =>
               updatePayload((prev) => {
-                return { ...prev, picker: { ...prev.picker, [store]: x } };
+                return { ...prev, picker: { ...prev.picker, [store]: x } }
               })
             }
-            iconButtonProps={{
-              size: "small",
-              sx: { color: "text.disabled", cursor: "pointer" },
-            }}
           />
         )}
       </Box>
@@ -494,8 +495,8 @@ export const GroupSavedProducts = ({
                 <Typography variant="body2" className="!text-[13px]">
                   <span className="!font-bold !text-gray-600 mr-3">
                     Shipping Method:
-                  </span>{" "}
-                  {deliveryType || "Pickup"}
+                  </span>{' '}
+                  {deliveryType || 'Pickup'}
                 </Typography>
                 <Typography
                   variant="body2"
@@ -513,19 +514,20 @@ export const GroupSavedProducts = ({
           options={getCommonDeliveryMethods}
           setOption={(x) =>
             updatePayload((prev) => {
-              return { ...prev, delivery: { ...prev.delivery, [store]: x } };
+              return { ...prev, delivery: { ...prev.delivery, [store]: x } }
             })
           }
           iconButtonProps={{
-            size: "small",
-            sx: { color: "text.disabled", cursor: "pointer" },
-            className: "!w-full",
+            size: 'small',
+            sx: { color: 'text.disabled', cursor: 'pointer' },
+            className: '!w-full',
           }}
         />
+
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 export const OrderProductView = ({
   clipboard,
@@ -541,11 +543,11 @@ export const OrderProductView = ({
   status,
   mutateStatus,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const TitleValue = ({ title, value, allowCopy }) => (
     <Box className="flex items-center">
       <Typography variant="body2" className="!text-xs">
-        {title}{" "}
+        {title}{' '}
         <span
           className="ml-2 !text-black"
           onClick={() => allowCopy && copyToClipboard(value, setIsCopied)}
@@ -554,7 +556,7 @@ export const OrderProductView = ({
         </span>
       </Typography>
     </Box>
-  );
+  )
   return (
     <Box className="px-1.5 md:px-6 pb-2 rounded-md bg-white mb-5">
       <Box className="flex justify-between px-3 items-center py-5 border-b-2">
@@ -582,7 +584,7 @@ export const OrderProductView = ({
           <Box className="h-5 border mx-2 md:mx-4"></Box>
           <Box
             className="flex items-center cursor-pointer"
-            onClick={() => deleteOrder(orderId, dispatch)}
+            onClick={() => deleteOrder(orderId, dispatch, mutateStatus)}
           >
             <IconifyIcon
               icon="tabler:trash"
@@ -601,7 +603,7 @@ export const OrderProductView = ({
       <Box className="flex flex-col md:flex-row items-start w-full my-3 relative">
         <Box className="flex items-start w-full">
           <Image
-            src={image || "/images/more/2.png"}
+            src={image || '/images/more/2.png'}
             alt="prod_img"
             width={150}
             height={150}
@@ -668,5 +670,5 @@ export const OrderProductView = ({
         delivery={deliveryMedium}
       /> */}
     </Box>
-  );
-};
+  )
+}

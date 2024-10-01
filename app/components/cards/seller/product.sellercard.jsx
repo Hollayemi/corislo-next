@@ -66,7 +66,7 @@ export const ProductSellerCard = ({ branchId }) => {
             className="!rounded-full h-9 w-9 !min-w-[12px] md:w-28 !bg-white !shadow-none !ml-3"
             startIcon={
               <IconifyIcon
-                icon={isFollowing ? "tabler:user-minus" : "tabler:user-plus"}
+                icon={isFollowing ? 'tabler:user-minus' : 'tabler:user-plus'}
                 className="!text-blue-800 ml-3"
               />
             }
@@ -75,21 +75,24 @@ export const ProductSellerCard = ({ branchId }) => {
             }
           >
             <span className="hidden md:block">
-              {isFollowing ? "Following" : "Follow"}
+              {isFollowing ? 'Following' : 'Follow'}
             </span>
           </Button>
         </Box>
       </Box>
       <Box className="mt-3 flex flex-col md:flex-row ">
         <Box className="flex items-center justify-evenly md:w-3/5">
-          <StoreNumberStatus status="Items" value={1400} />
+          <StoreNumberStatus status="Items" value={storeInfo.totalItems || "..."} />
           <Box className="w-0.5 h-6 bg-gray-300"></Box>
           <StoreNumberStatus
             status="Followers"
-            value={summarizeFollowers(3300)}
+            value={summarizeFollowers(storeInfo.followers)}
           />
           <Box className="w-0.5 h-6 bg-gray-300"></Box>
-          <StoreNumberStatus status="Reviews" value={524} />
+          <StoreNumberStatus
+            status="Reviews"
+            value={storeInfo?.feedback?.totalReviews}
+          />
         </Box>
 
         {/* <Box className="mt-2 md:mt-0 md:w-2/5 block">
@@ -98,7 +101,7 @@ export const ProductSellerCard = ({ branchId }) => {
         </Box> */}
       </Box>
     </Box>
-  );
+  )
 };
 
 const TickCheck = ({ title, result, icon }) => (

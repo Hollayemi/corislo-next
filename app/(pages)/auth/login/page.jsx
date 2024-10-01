@@ -16,6 +16,8 @@ import { server } from "@/app/redux/state/slices/api/baseApi";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { useUserData } from "@/app/hooks/useData";
+import { isMobile, osName, osVersion } from 'react-device-detect'
+
 
 const LoginV1 = () => {
   const router = useRouter();
@@ -24,9 +26,15 @@ const LoginV1 = () => {
   const returnUrl = searchParams.get("returnurl");
   const { setLoading } = useUserData();
   const [values, setValues] = useState({
-    password: "",
+    password: '',
     email: false,
-  });
+    meta: {
+      device: `${osName} ${osVersion}`,
+      location: '...',
+      via: 'Website',
+      isMobile,
+    },
+  })
 
   // .then(response => {
   //   if (!response.ok) {
@@ -61,18 +69,18 @@ const LoginV1 = () => {
     <Box className="!mt-10 mb-16 w-full max-w-[380px]">
       <CustomInput
         title="Email Adderess"
-        onChange={handleChange("email")}
+        onChange={handleChange('email')}
         hideCheck={true}
         id="email"
-        inputProps={{ type: "text", placeholder: "Enter your email address" }}
+        inputProps={{ type: 'text', placeholder: 'Enter your email address' }}
       />
       <br />
       <CustomInput
         title="Password"
-        onChange={handleChange("password")}
+        onChange={handleChange('password')}
         id="password"
         hideCheck={true}
-        inputProps={{ type: "password", placeholder: "Password" }}
+        inputProps={{ type: 'password', placeholder: 'Password' }}
       />
 
       <Button
@@ -101,7 +109,7 @@ const LoginV1 = () => {
 
       <Box className="flex justify-center">
         <Typography className="!text-[13px] !mt-5">
-          Don’t have an account?{" "}
+          Don’t have an account?{' '}
           <Link
             href="/auth/register"
             color="custom.pri"
@@ -112,7 +120,7 @@ const LoginV1 = () => {
         </Typography>
       </Box>
     </Box>
-  );
+  )
 };
 
 export default LoginV1;

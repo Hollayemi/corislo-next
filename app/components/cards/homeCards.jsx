@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { mySubstring } from "@/app/utils/format";
 import { hexToRGBA } from "@/app/utils/hex-to-rgba";
 import { rgbaToHex } from "@/app/utils/rgba-to-hex";
+import Link from "next/link";
 
 export const SectionTitle = ({ black, blue, right }) => {
   return (
@@ -186,7 +187,7 @@ export const PopularAds = ({ store, title, brief, image, url }) => {
   );
 };
 
-export const TopStores = ({ image, name, rating, followers = 0 }) => {
+export const TopStores = ({ image, name,store, branch, rating, followers = 0 }) => {
   return (
     <Box className="flex flex-col items-center justify-center px-2">
       <Image
@@ -197,9 +198,11 @@ export const TopStores = ({ image, name, rating, followers = 0 }) => {
         className="!w-36 h-36 !rounded-full flex-shrink-0 !mb-3"
       />
 
-      <Typography variant="body2" className="!text-[13px] !font-bold">
-        {name}
-      </Typography>
+      <Link href={`/biz/${store}-${branch}`}>
+        <Typography variant="body2" className="!text-[13px] !font-bold">
+          {name}
+        </Typography>
+      </Link>
       <Typography variant="caption" className="!text-[10px]">
         {followers.toLocaleString()} Followers
       </Typography>
@@ -211,7 +214,7 @@ export const TopStores = ({ image, name, rating, followers = 0 }) => {
         defaultValue={rating || 4}
       />
     </Box>
-  );
+  )
 };
 
 export const SecurityTypeCard = ({ image, title, caption }) => {

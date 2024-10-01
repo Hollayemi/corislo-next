@@ -27,6 +27,7 @@ import CustomAvatar from "@/app/components/avatar";
 import { StyleList } from "./Styled";
 import Image from "next/image";
 import useSWR from "swr";
+import Link from "next/link";
 
 const UserProfileRight = (props) => {
   const {
@@ -92,18 +93,17 @@ export default UserProfileRight;
 
 export const UserProfileRightComponent = ({
   store,
-  hidden,
   statusObj,
   hideCancel,
   getInitials,
-  sidebarWidth,
-  userProfileRightOpen,
   handleUserProfileRightSidebarToggle,
 }) => {
   const contact = store.selectedChat.contact;
+  
   const { data: result } = useSWR(
     `/user/order?store=${contact.store}&branch=${contact.branch}`
   );
+  const { result: fetchedOrder, totalNumber } = result?.data || {}
   const MyListItem = ({ info, title, infoComponent }) => (
     <Box className="flex items-start mb-2">
       <Typography
@@ -224,7 +224,7 @@ export const UserProfileRightComponent = ({
                 <MyListItem title="Store Email Address:" info={contact.email} />
                 <MyListItem title="Phone Number:" info={contact.phone} />
                 <MyListItem title="Physical Address:" info={contact.address} />
-                <MyListItem
+                {/* <MyListItem
                   title="Store Rating:"
                   infoComponent={
                     <Box className="flex items-center flex-shrink-0">
@@ -243,7 +243,7 @@ export const UserProfileRightComponent = ({
                       </Typography>
                     </Box>
                   }
-                />
+                /> */}
               </List>
             </Box>
             <Box>
@@ -260,10 +260,11 @@ export const UserProfileRightComponent = ({
                 </AccordionSummary>
                 <AccordionDetails>
                   {result &&
-                    result.data.map((res, i) => (
+                    fetchedOrder.map((res, i) => (
                       <NotifOrderDisplay key={i} orderId={res._id} />
                     ))}
                 </AccordionDetails>
+                <Box className="flex justify-center items-center border-t pt-3"><Link href={`/order?store=${contact.store}&branch=${contact.store}`} className="!text-[12px] text-center w-full">See More</Link></Box>
               </Accordion>
             </Box>
           </Box>

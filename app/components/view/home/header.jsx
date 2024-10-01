@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Badge,
   Box,
@@ -40,7 +40,7 @@ const menuToHide = (menu = []) => {
   return toHide
 }
 
-function Header({ search, setSearch, setPinSearch }) {
+function Header({}) {
   const router = useRouter()
   const pathname = usePathname()
   const {
@@ -51,7 +51,7 @@ function Header({ search, setSearch, setPinSearch }) {
     overLay,
     showOverlay,
   } = useUserData()
-
+  const [search, setSearch] = useState()
   const getPath = pathname.split('/')
   const unread = notifications.reduce((sum, notification) => {
     return sum + (notification?.unread || 0)
@@ -65,7 +65,6 @@ function Header({ search, setSearch, setPinSearch }) {
     // color: "black",
   }))
 
-  
   const onlinePages = UserPages.isOnline.map((x) => x.link.toLowerCase())
   const menu = [...UserPages[isOffline ? 'isOffline' : 'isOnline']]
   const hiddenMenu = menuToHide(menu)
@@ -178,12 +177,17 @@ function Header({ search, setSearch, setPinSearch }) {
             value={search}
             className="w-full md:hidden lg:block lg:w-40 pl-10 text-[13px] !bg-[#F3F5FF] pr-4 h-8 border rounded-xl transition-all outline-none  md:focus:w-64"
             onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                router.push(`/explore?search=${search}`)
+              }
+            }}
           />
           <IconImage image="search" className="w-4 absolute top-2 ml-4" />
         </Box>
         <IconImage
           image="search"
-          onClick={() => router.push("/explore")}
+          onClick={() => router.push('/explore')}
           className="w-6 md:hidden mx-3"
         />
         {!isOffline && (

@@ -12,12 +12,13 @@ const addOrderApi = createAsyncThunk("post/myOrder", async (payload) => {
   return data;
 });
 
-export const addNewOrder = (payload, dispatch) => {
+export const addNewOrder = (payload, dispatch, endpoint) => {
   dispatch(addOrderApi(payload))
     .then(unwrapResult)
     .then((res) => {
       toaster({ ...res });
       mutate("/user/order");
+      mutate(endpoint);
     })
     .catch((e) => {});
 };
@@ -30,12 +31,14 @@ const deleteOrderApi = createAsyncThunk("post/deleteOrder", async (payload) => {
   return data;
 });
 
-export const deleteOrder = (orderId, dispatch) => {
+export const deleteOrder = (orderId, dispatch, mutateOrder) => {
   dispatch(deleteOrderApi(orderId))
     .then(unwrapResult)
     .then((res) => {
       toaster({ ...res });
       mutate("/user/order");
+      mutate(`/user/order-count`);
+      mutate(mutateOrder)
     })
     .catch((e) => {});
 };
@@ -56,7 +59,7 @@ export const orderAction = (payload, dispatch) => {
     .then(unwrapResult)
     .then(() => {
       payload.orderStatus &&
-        mutate(`/user/order?status=${payload.orderStatus}`);
+        mutate(payload.orderStatus);
       mutate(`/user/order/${payload.orderId}`);
       mutate(`/user/order-count`);
       mutate(`/user/order-track?order=${payload.orderId}`);

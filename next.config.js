@@ -11,6 +11,20 @@ const nextConfig = {
 
     return config;
   },
+   images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/xmart/image/upload/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'res.cloudinary.com',
+        pathname: '/xmart/image/upload/**',
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;

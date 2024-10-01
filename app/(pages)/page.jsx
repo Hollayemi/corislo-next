@@ -31,8 +31,11 @@ import Link from 'next/link'
 import useSWRWithCoordinates from '../hooks/fetchWithCoordinates'
 import { CircleLoader } from '../components/cards/loader'
 import { useRouter } from 'next/navigation'
+import { BasicModal } from '../components/cards/popup'
+import { WatchVideo } from '../components/cards/watchVideo'
 
 const HomePage = ({ params }) => {
+  const [openModal, setOpenModal] = useState(false)
   const {
     data: prods,
     isLoading: prodsLoading,
@@ -40,13 +43,33 @@ const HomePage = ({ params }) => {
     lat,
     lng,
   } = useSWRWithCoordinates('/products?limit=30')
+
+  const { data: nearStores } = useSWRWithCoordinates(
+    '/home/near-stores?limit=20'
+  )
   const { data: ads } = useSWR('/home/ads')
+  const { data: cates, isLoading: cateLoading } = useSWR(
+    '/corisio/all-categories'
+  )
+  const categories = cates ? cates.data : []
   const products = prods ? prods.data : []
   const popularAds = ads ? ads.data : []
+  const stores = nearStores ? nearStores.data : []
   const router = useRouter()
 
+  console.log(stores)
+
   return (
-    <HomeWrapper shopMode={params.sm}>
+    <HomeWrapper
+      shopMode={params.sm}
+      popup={
+        <BasicModal
+          openModal={openModal}
+          toggleModal={() => setOpenModal(false)}
+          content={<WatchVideo close={() => setOpenModal(false)} />}
+        />
+      }
+    >
       <Box className="!mb-20 mt-6 md:mt-16">
         <Grid container spacing={2} className="px-4 md:px-10">
           <Grid item xs={12} md={5}>
@@ -121,6 +144,7 @@ const HomePage = ({ params }) => {
                 className="!rounded-full p-2 h-10 w-40 !z-40 !-mr-20 md:!mr-0 !absolute mt-10 !right-1/2 md:!right-2 bottom-0"
                 bgcolor="custom.bodyLight"
                 startIcon={<IconifyIcon icon="tabler:player-play-filled" />}
+                onClick={() => setOpenModal(true)}
               >
                 Watch Video
               </Button>
@@ -142,29 +166,31 @@ const HomePage = ({ params }) => {
         <Box className="sm:px-5 md:px-14">
           <Box className="!mt-20 lg:!mt-32 px-2 md:px-10">
             <SectionMiddleTitle black="Shop by" blue="Categories" />
-            <Box className="flex items-center md:justify-center overflow-auto pb-5">
-              {categoryData.map((cate, i) => (
+            {/* <Box className="flex items-center md:justify-cente overflow-auto pb-5"> */}
+            <ReactSlickSlider>
+              {categories.map((cate, i) => (
                 <Box
                   key={i}
-                  className="flex flex-col flex-shrink-0 w-24 h-24 items-center justify-center p-2 bg-white !m-2 !rounded-xl"
+                  className="!flex !flex-col cursor-pointer flex-shrink-0 w-24 py-5 max-w-24 min-w-24 h-[110px] !items-center !text-center !justify-center p-2 bg-white !m-2 !rounded-xl"
                   bgcolor="custom.bodyLight"
                 >
                   <Image
-                    src={cate.img}
+                    src={cate.icon}
                     alt="category"
                     width={200}
                     height={200}
-                    className="w-10 h-10 mb-2"
+                    className="w-12 h-12 mb-2 rounded-md"
                   />
                   <Typography
                     variant="caption"
-                    className="!text-[11px] text-center"
+                    className="!text-[11px] text-center !leading-1 !h-6"
                   >
-                    {cate.name}
+                    {cate.label}
                   </Typography>
                 </Box>
               ))}
-            </Box>
+            </ReactSlickSlider>
+            {/* </Box> */}
           </Box>
           <Box className="!my-12 px-2 md:px-10 hidden">
             <ReactSlickSlider config={2}>
@@ -369,7 +395,7 @@ const HomePage = ({ params }) => {
 
           <Box className="mt-14">
             <Box className="px-3 md:px-10">
-              <SectionTitle black="Top" blue="Selling Stores" />
+              <SectionTitle black="Store" blue="Around You" />
               <Box className="!mt-6 flex flex-col md:flex-row justify-center">
                 <Box className="w-full md:w-2/6 md:pr-6">
                   <Typography
@@ -377,7 +403,8 @@ const HomePage = ({ params }) => {
                     className="!text-xl !font-extrabold"
                     color="primary"
                   >
-                    Discover Our <br /> Best-Selling Stores
+                    {/* Discover Our <br /> Best-Selling Stores */}
+                    Discover Stores <br /> Closer to you
                   </Typography>
                   <br />
                   <Typography variant="caption" className="" color="black">
@@ -395,13 +422,17 @@ const HomePage = ({ params }) => {
                 </Box>
                 <Box className="w-full md:w-4/6 mt-10 md:mt-0">
                   <ReactSlickSlider>
-                    {topStoresData.map((store, i) => (
+                    {stores.map((store, i) => (
                       <TopStores
-                        name={store.name}
+                        name={store.businessName}
+                        store={store.store}
+                        branch={store.branch}
                         key={i}
                         followers={store.followers}
-                        rating={store.rating}
-                        image={store.image}
+                        rating={store?.feedback?.averageRating}
+                        image={
+                          store.profile_image || '/images/misc/storeImage.png'
+                        }
                       />
                     ))}
                   </ReactSlickSlider>

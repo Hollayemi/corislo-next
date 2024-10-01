@@ -1,39 +1,58 @@
-"use client";
-import IconifyIcon from "@/app/components/icon";
-import { GroupSavedProducts } from "@/app/components/templates/productView";
-import HomeWrapper from "@/app/components/view/home";
-import { userGroupCartData } from "@/app/data/home/homepage";
-import { useUserData } from "@/app/hooks/useData";
-import { deleteBulkSaved } from "@/app/redux/state/slices/home/cart";
-import { addNewOrder, orderPrice } from "@/app/redux/state/slices/home/order";
-import { ngnPrice } from "@/app/utils/format";
-import { Box, Button, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import useSWR from "swr";
+'use client'
+import IconifyIcon from '@/app/components/icon'
+import CustomOption from '@/app/components/option-menu/option'
+import { GroupSavedProducts } from '@/app/components/templates/productView'
+import HomeWrapper from '@/app/components/view/home'
+import { userGroupCartData } from '@/app/data/home/homepage'
+import { useUserData } from '@/app/hooks/useData'
+import { deleteBulkSaved } from '@/app/redux/state/slices/home/cart'
+import { addNewOrder, orderPrice } from '@/app/redux/state/slices/home/order'
+import { ngnPrice } from '@/app/utils/format'
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Typography,
+} from '@mui/material'
+import Image from 'next/image'
+import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import useSWR from 'swr'
+import { TitleSubtitle } from '../user/components'
+import { ChangeAddress, PaymentOptions } from '../checkout/page'
 
 const SavedItems = () => {
   const dispatch = useDispatch()
-  const { savedProds } = useUserData()
-  const { data: saved, error } = useSWR("/user/saved-items/group");
-  const { data: pickups, pickupError } = useSWR("/user/pickup");
-  const groupedCart = saved ? saved.data : [];
-  const [selected, selectItem] = useState([]);
-  const [totalPrice, setTotalPrice] = useState([]);
-  const pickers = pickups ? pickups.data : [];
+  const { savedProds, userInfo, temp, seletedCartProds } = useUserData()
+  const { data: saved, error } = useSWR('/user/saved-items/group')
+  const { data: agents } = useSWR('/user/pickers')
+  const pickers = agents?.data || []
+  const groupedCart = saved ? saved.data : []
+  const [selected, selectItem] = useState([])
+  const [totalPrice, setTotalPrice] = useState([])
+
+  console.log(selected)
 
   const [payload, updatePayload] = useState({
-    products: selected,
+    ids: selected,
     delivery: {},
-    deliveryFee: {},
     picker: {},
-    shippingAddress: {},
-  });
+    type: 'saved',
+    shippingAddress: temp.address || userInfo?.selectedAddress || null,
+    billingCard: userInfo?.selectedBilling || null,
+  })
 
   useEffect(() => {
-    orderPrice({ products: selected, model: "saved" }, dispatch, setTotalPrice);
+    orderPrice({ products: selected, model: 'saved' }, dispatch, setTotalPrice)
+    updatePayload((prev) => ({ ...prev, ids: selected }))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected])
+
+  const address = payload.shippingAddress
+  const card = payload.billingCard
 
   return (
     <HomeWrapper>
@@ -59,8 +78,8 @@ const SavedItems = () => {
                       <Checkbox
                         checked={selected.length === savedProds.length}
                         onChange={(e) => {
-                          const checked = e.target.checked;
-                          selectItem(() => (checked ? savedProds : []));
+                          const checked = e.target.checked
+                          selectItem(() => (checked ? savedProds : []))
                         }}
                         disabled={false}
                         name="basic-checked"
@@ -70,7 +89,7 @@ const SavedItems = () => {
                   <Button
                     variant="text"
                     className={`!text-[12px] !text-blue-700 !mt-1 ${
-                      !selected.length > 0 && "cursor-cancel"
+                      !selected.length > 0 && 'cursor-cancel'
                     }`}
                     disabled={!selected.length > 0}
                     onClick={() => deleteBulkSaved(selected, dispatch)}
@@ -100,7 +119,6 @@ const SavedItems = () => {
                       payload={payload}
                       pickers={pickers}
                       selected={selected}
-                      savedProds={savedProds}
                       selectItem={selectItem}
                     />
                   </Box>
@@ -109,7 +127,7 @@ const SavedItems = () => {
             </Grid>
             <Grid item xs={12} md={4}>
               <Box>
-                <Box className="bg-white rounded-md py-5 px-4">
+                <Box className="bg-white rounded-md py-5 px-4 mb-4">
                   <Typography
                     variant="body2"
                     className="!font-bold !text-[15px]"
@@ -121,7 +139,7 @@ const SavedItems = () => {
                       Sub total
                     </Typography>
                     <Typography variant="body2" className="!text-[12px]">
-                      {ngnPrice(totalPrice?.sum_totalBeforeDiscount || 0)}
+                      {ngnPrice(totalPrice?.originalPrice || 0)}
                     </Typography>
                   </Box>
                   <Box className="w-full flex justify-between items-center !mt-2">
@@ -133,17 +151,9 @@ const SavedItems = () => {
                       className="!text-[12px] !text-red-500"
                     >
                       {ngnPrice(
-                        totalPrice?.sum_totalPrice -
+                        totalPrice?.discountedPrice -
                           totalPrice?.sum_totalBeforeDiscount || 0
                       )}
-                    </Typography>
-                  </Box>
-                  <Box className="w-full flex justify-between items-center !mt-2">
-                    <Typography variant="body2" className="!text-[12px]">
-                      Way-Billing
-                    </Typography>
-                    <Typography variant="body2" className="!text-[12px]">
-                      {ngnPrice(0)}
                     </Typography>
                   </Box>
 
@@ -159,11 +169,11 @@ const SavedItems = () => {
                       variant="body2"
                       className="!text-[13px] !font-bold"
                     >
-                      {ngnPrice(totalPrice?.sum_totalPrice || 0)}
+                      {ngnPrice(totalPrice?.discountAmount || 0)}
                     </Typography>
                   </Box>
                 </Box>
-                <Box className="bg-white rounded-md py-5 px-4 mt-4">
+                {/* <Box className="bg-white rounded-md py-5 px-4 mt-4">
                   <Typography
                     variant="body2"
                     className="!font-bold !text-[15px]"
@@ -183,47 +193,19 @@ const SavedItems = () => {
                       </Typography>
                     </Box>
                   </Box>
-                </Box>
-                <Box className="bg-white rounded-md py-5 px-4 mt-4">
-                  <Typography
-                    variant="body2"
-                    className="!font-bold !text-[15px]"
-                  >
-                    Payment Option
-                  </Typography>
-                  <Box className="w-full flex justify-between items-center !mt-5">
-                    <Box className="flex items-center">
-                      <input type="radio" />
-                      <Image
-                        src="/images/misc/visa.png"
-                        alt="visa"
-                        width={150}
-                        height={150}
-                        className="w-14 h-10 ml-3"
-                      />
-                    </Box>
-                    <Box className="flex justify-between items-center w-2/3">
-                      <Typography variant="body2" className="!text-[12px]">
-                        4253********4356
-                      </Typography>
-                      <Typography variant="body2" className="!text-[12px]">
-                        05/24
-                      </Typography>
-                    </Box>
-                  </Box>
-                  <Typography
-                    variant="body2"
-                    className="!text-[11px] !text-blue-800 mt-5"
-                  >
-                    <span className="mr-3 !text-[15px]">+</span> Add new payment
-                    option
-                  </Typography>
-                </Box>
+                </Box> */}
+                <ChangeAddress
+                  address={address}
+                  updatePayload={updatePayload}
+                />
+                <PaymentOptions card={card} updatePayload={updatePayload} />
                 <Button
                   variant="contained"
                   disabled={selected.length < 1}
                   className="w-full !mt-6 !h-12 !rounded-full !border-none !text-[14px] !text-white"
-                  onClick={() => addNewOrder(payload, dispatch)}
+                  onClick={() =>
+                    addNewOrder(payload, dispatch, '/user/saved-items/group')
+                  }
                 >
                   Place Order ({selected.length || 0})
                 </Button>
@@ -233,7 +215,7 @@ const SavedItems = () => {
         </Box>
       </Box>
     </HomeWrapper>
-  );
-};
+  )
+}
 
 export default SavedItems

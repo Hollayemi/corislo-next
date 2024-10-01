@@ -12,7 +12,6 @@ import HelpAndSupport from "./helpAndSupport";
 import Pickers from "./pickers";
 
 const UserSettings = ({ searchParams }) => {
-  console.log(2);
   const [value, setTabValue] = useState(searchParams?.to || "1");
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);

@@ -23,14 +23,13 @@ export const getAccount = createAsyncThunk("post/loginSlice", async () => {
   const { data } = await martApi
     .get(`/user/get-account`, jsonHeader())
     .then((res) => {
-      console.log(res);
-      const { accessToken } = res.data.user;
-      localStorage.setItem("user_token", accessToken);
       return res;
     })
     .catch((e) => console.log(e.response));
   return data;
 });
+
+
 
 const initialState = {
   userData: {},
@@ -88,12 +87,10 @@ export const loginHandler = (
   returnUrl,
   setLoading
 ) => {
-  console.log(returnUrl);
   setLoading(true);
   dispatch(UserLoginApi(payload))
     .then(unwrapResult)
     .then((res) => {
-      console.log(res);
       toaster({ ...res });
       if (res.type === "success") {
         dispatch(getAccount())
@@ -148,5 +145,31 @@ export const oAuthHandler = (payload, router, dispatch) => {
     })
     .catch((err) => {
       console.log(err);
+    });
+};
+
+
+
+const deviceLogoutApi = createAsyncThunk("post/deviceLogout", async (payload) => {
+  const { data } = await martApi
+    .post("/auth/logout-device", payload, jsonHeader("user"))
+    .then((res) => 
+       res
+    )
+    .catch((err) => err.response);
+
+  return data;
+});
+
+export const deviceLogout = (payload, dispatch) => {
+  dispatch(deviceLogoutApi(payload))
+    .then(unwrapResult)
+    .then((res) => {
+      toaster({ ...res });
+      if (res.type === "success") {
+        dispatch(getAccount())
+      }
+    })
+    .catch((err) => {
     });
 };

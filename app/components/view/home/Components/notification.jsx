@@ -112,10 +112,10 @@ export const OrderNotif = ({ data, forStore }) => {
                     />
                   </Box>
                 )}
-                {each.unread && <Box
+                {each.unread ? <Box
                   className="w-2 h-2 rounded-full bg-orange-400"
                   bgcolor="warning"
-                ></Box>}
+                ></Box> : null}
               </Box>
             </Box>
           </Box>

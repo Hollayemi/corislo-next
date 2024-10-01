@@ -1,43 +1,43 @@
-"use client";
-import { CartProductView } from "@/app/components/templates/productView";
-import HomeWrapper from "@/app/components/view/home";
-import { Box, Button, Grid, Typography } from "@mui/material";
-import Link from "next/link";
-import Image from "next/image";
-import React, { useState } from "react";
-import useSWR from "swr";
-import TimelineLeft, { OrderStages } from "../timeline";
+'use client'
+import { CartProductView } from '@/app/components/templates/productView'
+import HomeWrapper from '@/app/components/view/home'
+import { Box, Button, Grid, Typography } from '@mui/material'
+import Link from 'next/link'
+import Image from 'next/image'
+import React, { useState } from 'react'
+import useSWR from 'swr'
+import TimelineLeft, { OrderStages } from '../timeline'
 import {
   formatDate,
   formatDateToMonthShort,
   ngnPrice,
-} from "@/app/utils/format";
-import { OrderActionBtn, trackMainSteps } from "./components";
-import { useDispatch } from "react-redux";
-import { shopFeedbackHandler } from "@/app/redux/state/slices/home/feedback";
+} from '@/app/utils/format'
+import { OrderActionBtn, trackMainSteps } from './components'
+import { useDispatch } from 'react-redux'
+import { shopFeedbackHandler } from '@/app/redux/state/slices/home/feedback'
+import { useUserData } from '@/app/hooks/useData'
 
 const OrderDetails = ({ params }) => {
   const dispatch = useDispatch()
-  const { data: result } = useSWR(`/user/order/${params.detail}`);
-  const orderProducts = result?.data[0] || {};
+  const { data: result } = useSWR(`/user/order/${params.detail}`)
+  const { userInfo } = useUserData()
+  const orderProducts = result?.data[0] || {}
   const { data: branchInfo } = useSWR(
     orderProducts._id &&
       `/branch/info?branch=${orderProducts._id.branch}&store=${orderProducts._id.store}`
-  );
-  console.log(orderProducts);
-  const [mouseOn, setMouseOn] = useState(-1);
-  const [review, setReview] = useState("");
-  console.log(mouseOn);
-  const orderFrom = branchInfo?.data || {};
+  )
+  const [mouseOn, setMouseOn] = useState(-1)
+  const [review, setReview] = useState('')
+  const orderFrom = branchInfo?.data || {}
   const TitleValue = ({ title, value }) => (
     <Box className="flex items-center">
       <Typography variant="body2" className="!text-xs">
         {title} <span className="ml-2 !text-black">{value}</span>
       </Typography>
     </Box>
-  );
-  const emojis = ["Bad", "Poor", "Average", "Good", "Best"];
-  const orderStatus = orderProducts?._id?.status;
+  )
+  const emojis = ['Bad', 'Poor', 'Average', 'Good', 'Best']
+  const orderStatus = orderProducts?._id?.status
 
   const feedbackPayload = {
     review,
@@ -45,7 +45,11 @@ const OrderDetails = ({ params }) => {
     store: orderProducts._id?.store,
     branch: orderProducts._id?.branch,
     orderId: params.detail,
-  };
+  }
+
+  const picker = orderProducts?.picker ? orderProducts.picker[0] : {}
+  const address = orderProducts?._id?.shippingAddress || {}
+  const deliveryMedium = orderProducts?._id?.deliveryMedium
 
   return (
     <HomeWrapper>
@@ -65,10 +69,10 @@ const OrderDetails = ({ params }) => {
                     variant="caption"
                     className="!text-black !text-[12px]"
                   >
-                    as of today{" "}
+                    as of today{' '}
                     {formatDateToMonthShort(new Date(), false, {
-                      month: "long",
-                      year: "numeric",
+                      month: 'long',
+                      year: 'numeric',
                     })}
                     .
                   </Typography>
@@ -80,7 +84,7 @@ const OrderDetails = ({ params }) => {
                   />
                 }
               </Box>
-              {orderStatus?.toLowerCase() === "completed" && (
+              {orderStatus?.toLowerCase() === 'completed' && (
                 <Box className="bg-white w-full rounded-md py-5 px-2 md:px-4 mt-5">
                   <Typography
                     variant="caption"
@@ -200,7 +204,7 @@ const OrderDetails = ({ params }) => {
                   <OrderStages
                     at={
                       trackMainSteps[
-                        orderStatus?.toLowerCase()?.replaceAll(" ", "_")
+                        orderStatus?.toLowerCase()?.replaceAll(' ', '_')
                       ] || 0
                     }
                     price={500000}
@@ -225,18 +229,42 @@ const OrderDetails = ({ params }) => {
                 >
                   Customer Delivery Details
                 </Typography>
+
                 <TitleWithValueUnder
-                  title="Customer Name"
-                  value="Creative Box"
+                  title="Delivery Medium"
+                  value={deliveryMedium}
                 />
-                <TitleWithValueUnder
-                  title="Customer Phone Number"
-                  value="+234 (901) 234 5678"
-                />
-                <TitleWithValueUnder
-                  title="Delivery Address"
-                  value="54, Adelubido crescent, opposite chicken republic (Ondo State, Nigeria)"
-                />
+                {deliveryMedium === 'pickup' ? (
+                  <>
+                    <TitleWithValueUnder
+                      title="Picker Name"
+                      value={picker.name}
+                    />
+                    <TitleWithValueUnder
+                      title="Picker Phone Number"
+                      value={picker.phone}
+                    />
+                    <TitleWithValueUnder
+                      title="Relationship"
+                      value={picker.relationship}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <TitleWithValueUnder
+                      title="Customer Name"
+                      value={userInfo.fullname}
+                    />
+                    <TitleWithValueUnder
+                      title="Customer Phone Number"
+                      value={userInfo.phone}
+                    />
+                    <TitleWithValueUnder
+                      title="Delivery Address"
+                      value={`${address.address}, ${address.city}, ${address.state}. (${address.postal_code})`}
+                    />
+                  </>
+                )}
               </Box>
               <Box className="bg-white rounded-md py-5 px-4 mt-4">
                 <Typography
@@ -268,10 +296,10 @@ const OrderDetails = ({ params }) => {
         </Grid>
       </Box>
     </HomeWrapper>
-  );
-};
+  )
+}
 
-export default OrderDetails;
+export default OrderDetails
 
 const TitleWithValueUnder = ({ title, value, link }) => {
   return (
@@ -297,8 +325,8 @@ const TitleWithValueUnder = ({ title, value, link }) => {
         </Link>
       )}
     </Box>
-  );
-};
+  )
+}
 
 export const EmojiRating = ({ name, index, mouseOn, setMouseOn }) => {
   return (
@@ -310,12 +338,12 @@ export const EmojiRating = ({ name, index, mouseOn, setMouseOn }) => {
         onMouseEnter={() => setMouseOn(index + 1)}
         height={100}
         className={`w-10 h-10 !mb-2 !filter ${
-          mouseOn <= index ? "!grayscale" : "!grayscale-0"
+          mouseOn <= index ? '!grayscale' : '!grayscale-0'
         }`}
       />
       <Typography variant="caption" color="custom.sec" className="!text-[12px]">
         {name}
       </Typography>
     </Box>
-  );
-};
+  )
+}

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import Chip from '@/app/components/chip'
 import IconifyIcon from '@/app/components/icon'
@@ -8,7 +9,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Grid, Rating, Tab, Typography } from '@mui/material'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
-import { ProdDescription } from './tabs'
+import { ProdDescription, Specifications } from './tabs'
 import { SectionTitle } from '@/app/components/cards/homeCards'
 import { hotDealData, popularProducts } from '@/app/data/home/homepage'
 import {
@@ -24,6 +25,7 @@ import { useUserData } from '@/app/hooks/useData'
 import { addNewViewProduct } from '@/app/redux/state/slices/home/view/view'
 import { ProductSellerCard } from '@/app/components/cards/seller/product.sellercard'
 import { mySubstring } from '@/app/utils/format'
+import { CircleLoader } from '@/app/components/cards/loader'
 
 const ProductDisplay = ({ params, searchParams }) => {
   const dispatch = useDispatch()
@@ -37,7 +39,6 @@ const ProductDisplay = ({ params, searchParams }) => {
 
   const product = prod?.data ? prod?.data?.result[0] : {}
 
-  const ImagesArray = [1, 2, 3, 4, 5, 6, 7]
   // ** State
   const [colors, setColors] = useState([])
   const [size, setSize] = useState('')
@@ -88,7 +89,13 @@ const ProductDisplay = ({ params, searchParams }) => {
 
   const otherVariations = Object.keys(product?.specifications?.variations || {})
 
-  const [showingImage, showImage] = useState(null)
+  const [showingImage, showImage] = useState(
+    product?.images ? product?.images[0] : ''
+  )
+
+  useEffect(() => {
+    showImage(product?.images ? product?.images[0] : '')
+  }, [isLoading])
   return (
     <HomeWrapper>
       <Box className="!px-2 sm:!px-16 md:!px-10 lg:!px-32 md:!py-7">
@@ -97,28 +104,36 @@ const ProductDisplay = ({ params, searchParams }) => {
             <Box className="flex justify-center w-full">
               <Box className="w-full !max-w-[430px]">
                 <Box className="!rounded-xl overflow-hidden mb-3 md:mb-6">
-                  <img
-                    src={showingImage || '/images/misc/about-image.png'}
-                    alt=""
-                    width={100}
-                    height={100}
-                    className="md:m-0 flex-shrink-0 w-full h-[400px]"
-                  />
+                  {!isLoading ? (
+                    <Image
+                      src={showingImage || '/images/misc/no-image.png'}
+                      alt=""
+                      width={700}
+                      height={700}
+                      className="md:m-0 flex-shrink-0 w-full h-[400px]"
+                    />
+                  ) : (
+                    <Box className="md:m-0 flex-shrink-0 w-full h-[400px] flex justify-center items-center">
+                      <CircleLoader />
+                    </Box>
+                  )}
                 </Box>
                 <Box className="flex w-full px-6 justify-center">
                   <Box className="md:mt-0 w-full md:block md:w-10/12">
                     <ReactSlickSlider noArrowStyle>
-                      {ImagesArray.map((item, i) => (
-                        <img
-                          src={`/images/more/${i + 1}.png`}
-                          key={i}
-                          onClick={() => showImage(`/images/more/${i + 1}.png`)}
-                          alt=""
-                          width={150}
-                          height={150}
-                          className="m-1 md:mb-0 !w-16 !h-16 !rounded-md"
-                        />
-                      ))}
+                      {product?.images?.length > 1
+                        ? product.images.map((item, i) => (
+                            <Image
+                              src={item}
+                              key={i}
+                              onClick={() => showImage(item)}
+                              alt=""
+                              width={150}
+                              height={150}
+                              className="m-1 md:mb-0 !w-16 !h-16 !rounded-md"
+                            />
+                          ))
+                        : null}
                     </ReactSlickSlider>
                   </Box>
                 </Box>
@@ -137,19 +152,19 @@ const ProductDisplay = ({ params, searchParams }) => {
               <Box className="w-full mt-5 flex flex-wrap">
                 <TitleValue
                   title="Collection"
-                  value={product.collectionName || 'Flangesio'}
+                  value={product.collectionName}
                 />
                 <TitleValue
                   title="Category"
-                  value={product.category || 'Clothing and Fashion'}
+                  value={product.category }
                 />
                 <TitleValue
                   title="Sub-Category"
-                  value={product.subCollectionName || 'Shoes'}
+                  value={product.subCollectionName }
                 />
                 <TitleValue
                   title="Classes"
-                  value={product.group || 'Men’s Shoes'}
+                  value={product.group}
                 />
                 <Box className="w-1/2 mt-1 flex items-center">
                   <Box className="w-20">
@@ -227,10 +242,12 @@ const ProductDisplay = ({ params, searchParams }) => {
                           className={`w-4 h-4 rounded-full m-1.5 flex items-center justify-center`}
                         >
                           {colors.includes(col) && (
-                            <img
+                            <Image
                               src="/images/misc/check.png"
                               alt="."
                               className="w-2.5 h-2.5"
+                              width={150}
+                              height={150}
                             />
                           )}
                         </Box>
@@ -342,7 +359,7 @@ const ProductDisplay = ({ params, searchParams }) => {
                     startIcon={
                       <IconifyIcon
                         icon="tabler:shopping-cart"
-                        className="!text-blue-800 !text-white"
+                        className=" !text-white"
                       />
                     }
                   >
@@ -400,7 +417,7 @@ const ProductDisplay = ({ params, searchParams }) => {
                     variant="body2"
                     className="!text-xs md:!w-44 !font-bold !text-left"
                   >
-                    Specifications
+                    Customer Reviews
                   </Typography>
                 }
               />
@@ -411,24 +428,26 @@ const ProductDisplay = ({ params, searchParams }) => {
                     variant="body2"
                     className="!text-xs md:!w-44 !font-bold !text-left"
                   >
-                    Customer Reviews
+                    Specifications
                   </Typography>
                 }
               />
             </TabList>
             <TabPanel value="1" className="!px-3">
-              <ProdDescription />
+              <ProdDescription desc={product?.prodInfo} />
             </TabPanel>
-            <TabPanel value="2"></TabPanel>
-            <TabPanel value="3" className="!px-0">
+            <TabPanel value="2">
               <Review productId={product._id} searchParams={searchParams} />
+            </TabPanel>
+            <TabPanel value="3" className="!px-0">
+              <Specifications otherVariations={otherVariations} />
             </TabPanel>
           </TabContext>
         </Box>
 
         <Box className="mt-16">
           <SectionTitle black="More items from this seller" />
-          <PopularProduct small />
+          {product && <PopularProduct endpoint={`/home/popular-products?store=${product.store}&branch=${product.branch}`} small />}
         </Box>
         <Box className="mt-8">
           <SectionTitle black="You may also like" />
@@ -443,7 +462,7 @@ export default ProductDisplay
 
 const TitleValue = ({ title, value }) => (
   <Box className="w-fit md:w-1/2 flex items-center">
-    <Box className="md:w-16 md:w-24">
+    <Box className="md:w-24">
       <Typography
         variant="body2"
         className="!text-[12px] !text-gray-500 !leading-5"
@@ -457,7 +476,7 @@ const TitleValue = ({ title, value }) => (
         noWrap
         className="!text-black !text-[12px] w-full !leading-5 !ml-2 md:!ml-0 !mr-5 md:!mr-0 "
       >
-        {mySubstring(value, 25)}
+        {value ? mySubstring(value, 25): <CircleLoader />}
       </Typography>
     </Box>
   </Box>

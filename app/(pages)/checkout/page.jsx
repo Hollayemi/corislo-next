@@ -1,112 +1,59 @@
-"use client";
-import IconifyIcon from "@/app/components/icon";
-import { GroupCartProducts } from "@/app/components/templates/productView";
-import HomeWrapper from "@/app/components/view/home";
-import { userGroupCartData } from "@/app/data/home/homepage";
-import { useUserData } from "@/app/hooks/useData";
-import { addNewOrder } from "@/app/redux/state/slices/home/order";
-import { Box, Button, FormControlLabel, Grid, Radio, Typography } from "@mui/material";
-import Image from "next/image";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import useSWR from "swr";
-import { TitleSubtitle } from "../user/components";
-import CustomOption from "@/app/components/option-menu/option";
-import { detectCardType } from "@/app/utils/format";
-import { CardTemplate } from "../user/billingAndAddress";
-import Link from "next/link";
-import { reshapePrice } from "../store/dashboard/marketing/components";
+'use client'
+import IconifyIcon from '@/app/components/icon'
+import { GroupCartProducts } from '@/app/components/templates/productView'
+import HomeWrapper from '@/app/components/view/home'
+import { useUserData } from '@/app/hooks/useData'
+import { addNewOrder } from '@/app/redux/state/slices/home/order'
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  Grid,
+  Radio,
+  Typography,
+} from '@mui/material'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import useSWR from 'swr'
+import { TitleSubtitle } from '../user/components'
+import CustomOption from '@/app/components/option-menu/option'
+import { detectCardType } from '@/app/utils/format'
+import { CardTemplate } from '../user/billingAndAddress'
+import Link from 'next/link'
+import { reshapePrice } from '../store/dashboard/marketing/components'
 
 const Checkout = () => {
-  const dispatch = useDispatch();
-  const { cartedProds, userInfo, temp, seletedCartProds } = useUserData();
-  const { data: carts, error } = useSWR(
-    `/user/cart-group?${
-      seletedCartProds.length && `prods=${seletedCartProds.join(".")}`
-    }`
-  );
-  const { data: addrs } = useSWR("/user/addresses");
-  const { data: cards } = useSWR("/user/billings");
-  const { data: agents } = useSWR("/user/pickers");
-  const pickers = agents?.data || [];
-  const addresses = addrs?.data || [];
-  const billings = cards?.data || [];
-  const groupedCart = carts ? carts.data.result : [];
-  const amounts = carts ? carts.data.total : [];
+  const dispatch = useDispatch()
+  const { cartedProds, userInfo, temp, seletedCartProds } = useUserData()
+  const endPoint = `/user/cart-group?${
+    seletedCartProds.length && `prods=${seletedCartProds.join('.')}`
+  }`
+  const { data: carts, error } = useSWR(endpoint)
 
-  console.log(groupedCart);
+  console.log(seletedCartProds)
+
+  const { data: agents } = useSWR('/user/pickers')
+  const pickers = agents?.data || []
+  const groupedCart = carts ? carts.data.result : []
+  const amounts = carts ? carts.data.total : []
 
   const [payload, updatePayload] = useState({
-    products: cartedProds,
+    ids: seletedCartProds.length ? seletedCartProds : cartedProds,
     delivery: {},
-    deliveryFee: {},
     picker: {},
     shippingAddress: temp.address || userInfo?.selectedAddress || null,
     billingCard: userInfo?.selectedBilling || null,
-  });
-  console.log(payload);
-  const address = payload.shippingAddress;
-  const card = payload.billingCard;
+  })
+  console.log(payload)
+  const address = payload.shippingAddress
+  const card = payload.billingCard
   return (
     <HomeWrapper>
       <Box>
         <Box className="!px-2 my-5 sm:!px-16 md:!px-24 lg:!px-32 md:!py-7 relative">
           <Grid container spacing={2}>
             <Grid item xs={12} md={8}>
-              <Box className="bg-white rounded-md py-5 px-4">
-                <Typography variant="body2" className="!font-bold !text-[16px]">
-                  Delivery Address
-                </Typography>
-                <Box className="w-full flex justify-between items-center !mt-5">
-                  <Typography variant="body2" className="!text-[11px] w-8/12">
-                    {address
-                      ? `${address?.address}, ${address?.state}, ${address?.city} (${address?.postal_code})`
-                      : 'No address'}
-                  </Typography>
-                  <CustomOption
-                    addBtn={
-                      <Link href="/user" className="!w-full">
-                        <Typography
-                          variant="body2"
-                          className="!text-[15px] !text-blue-800 mt-5"
-                        >
-                          <span className="mr-3 !text-[17px]">+</span> Add
-                          address
-                        </Typography>
-                      </Link>
-                    }
-                    icon={
-                      <Button
-                        variant="outlined"
-                        className="w-20 h-6 !rounded-full !border !border-blue-500 !text-[12px] !text-blue-600"
-                      >
-                        {address ? 'Change ' : 'Select '}
-                      </Button>
-                    }
-                    template={<TitleSubtitle />}
-                    options={addresses.map(
-                      (e) =>
-                        `${e?.address}, ${e?.state}, ${e?.city} (${e?.postal_code})`
-                    )}
-                    butPush={addresses.map((e) => e)}
-                    clickFunction={(e) =>
-                      updatePayload((prev) => {
-                        return { ...prev, shippingAddress: e }
-                      })
-                    }
-                  />
-                </Box>
-                <Box className="w-full flex justify-between !text-black px-4 py-3 !rounded-md bg-red-100 items-center !mt-8">
-                  <Typography variant="body2" className="!text-[11px]">
-                    Before making an order, make sure the address is correct and
-                    matches your expected delivery location.
-                  </Typography>
-                  <IconifyIcon
-                    icon="tabler:chevron-right"
-                    className="text-[14px]"
-                  />
-                </Box>
-              </Box>
+              <ChangeAddress address={address} updatePayload={updatePayload} />
               <Box className="bg-white rounded-md py-5 px-4 mt-5">
                 {groupedCart.map((each, i) => (
                   <Box key={i}>
@@ -206,83 +153,11 @@ const Checkout = () => {
                     </Box>
                   </Box>
                 </Box>
-                <Box className="bg-white rounded-md py-5 px-4 mt-4">
-                  <Typography
-                    variant="body2"
-                    className="!font-bold !text-[15px]"
-                  >
-                    Payment Option
-                  </Typography>
-                  <Box className="w-full flex justify-between items-center !my-5">
-                    <Box className="flex items-center">
-                      {card ? (
-                        <CardTemplate
-                          cardType={detectCardType(card?.openDigits[0])}
-                          name={card?.name}
-                          openDigits={card?.openDigits}
-                          id={card?._id}
-                          expiry={card?.expiry}
-                          hideDelete
-                        />
-                      ) : (
-                        <Typography
-                          variant="body2"
-                          className="!text-[14px] !text-black !mb-5 !text-center !w-full"
-                        >
-                          No card selected
-                        </Typography>
-                      )}
-                    </Box>
-                  </Box>
-                  {/* <Link href="/user">
-                    <Typography
-                      variant="body2"
-                      className="!text-[15px] !text-blue-800 mt-5"
-                    >
-                      <span className="mr-3 !text-[17px]">+</span> Add payment
-                      option
-                    </Typography>
-                  </Link> */}
-                  <CustomOption
-                    addBtn={
-                      <Link href="/user" className="!w-full">
-                        <Typography
-                          variant="body2"
-                          className="!text-[15px] !text-blue-800 mt-5"
-                        >
-                          <span className="mr-3 !text-[17px]">+</span> Add
-                          Payment
-                        </Typography>
-                      </Link>
-                    }
-                    icon={
-                      <Typography
-                        variant="body2"
-                        className="!text-[15px] !text-blue-800 mt-5"
-                      >
-                        <span className="mr-3 !text-[17px]">+</span>{' '}
-                        {card ? 'Change ' : 'Select '}
-                        payment option
-                      </Typography>
-                    }
-                    options={billings?.map(
-                      (e) =>
-                        `${e?.name}, ${e?.openDigits[0]}****${
-                          e?.openDigits[1]
-                        }, ${e?.expiry}. (${detectCardType(e?.openDigits[0])})`
-                    )}
-                    butPush={billings.map((e) => e)}
-                    clickFunction={(e) =>
-                      updatePayload((prev) => {
-                        return { ...prev, billingCard: e }
-                      })
-                    }
-                  />
-                </Box>
+                <PaymentOptions card={card} updatePayload={updatePayload} />
                 <Button
                   variant="contained"
                   className="w-full !mt-6 !h-12 !rounded-full !border-none !text-[14px] !text-white"
-                  onClick={() => addNewOrder(payload, dispatch)}
+                  onClick={() => addNewOrder(payload, dispatch, endPoint)}
                 >
                   Place Order
                 </Button>
@@ -293,24 +168,138 @@ const Checkout = () => {
       </Box>
     </HomeWrapper>
   )
-};
+}
 
-export default Checkout;
+export default Checkout
 
-const SelectedAddressTemplate = ({ data, onClick, checked }) => {
+export const ChangeAddress = ({ address, updatePayload }) => {
+  const { data: addrs } = useSWR('/user/addresses')
+  const addresses = addrs?.data || []
   return (
-    <FormControlLabel
-      className="!w-full !mb-5"
-      label={
-        <Box className="flex !w-full justify-between items-start">
-          <TitleSubtitle
-            title={data.address}
-            subtitle={`${data.state}, Nigeria, ${data.postal_code}"`}
-            titleClass="!text-[13px]"
-          />
+    <Box className="bg-white rounded-md py-5 px-4">
+      <Typography variant="body2" className="!font-bold !text-[16px]">
+        Delivery Address
+      </Typography>
+      <Box className="w-full flex justify-between items-center !mt-5">
+        <Typography variant="body2" className="!text-[11px] w-8/12">
+          {address
+            ? `${address?.address}, ${address?.state}, ${address?.city} (${address?.postal_code})`
+            : 'No address'}
+        </Typography>
+        <CustomOption
+          addBtn={
+            <Link href="/user" className="!w-full">
+              <Typography
+                variant="body2"
+                className="!text-[15px] !text-blue-800 mt-5"
+              >
+                <span className="mr-3 !text-[17px]">+</span> Add address
+              </Typography>
+            </Link>
+          }
+          icon={
+            <Button
+              variant="outlined"
+              className="w-20 h-6 !rounded-full !border !border-blue-500 !text-[12px] !text-blue-600"
+            >
+              {address ? 'Change ' : 'Select '}
+            </Button>
+          }
+          template={<TitleSubtitle />}
+          options={addresses.map(
+            (e) => `${e?.address}, ${e?.state}, ${e?.city} (${e?.postal_code})`
+          )}
+          butPush={addresses.map((e) => e)}
+          clickFunction={(e) =>
+            updatePayload((prev) => {
+              return { ...prev, shippingAddress: e }
+            })
+          }
+        />
+      </Box>
+      <Box className="w-full flex justify-between !text-black px-4 py-3 !rounded-md bg-red-100 items-center !mt-8">
+        <Typography variant="body2" className="!text-[11px]">
+          Before making an order, make sure the address is correct and matches
+          your expected delivery location.
+        </Typography>
+        <IconifyIcon icon="tabler:chevron-right" className="text-[14px]" />
+      </Box>
+    </Box>
+  )
+}
+
+export const PaymentOptions = ({ card, updatePayload }) => {
+  const { data: cards } = useSWR('/user/billings')
+  const billings = cards?.data || []
+  return (
+    <Box className="bg-white rounded-md py-5 px-4 mt-4">
+      <Typography variant="body2" className="!font-bold !text-[15px]">
+        Payment Option
+      </Typography>
+      <Box className="w-full flex justify-between items-center !my-5">
+        <Box className="flex items-center">
+          {card ? (
+            <CardTemplate
+              cardType={detectCardType(card?.openDigits[0])}
+              name={card?.name}
+              openDigits={card?.openDigits}
+              id={card?._id}
+              expiry={card?.expiry}
+              hideDelete
+            />
+          ) : (
+            <Typography
+              variant="body2"
+              className="!text-[14px] !text-black !mb-5 !text-center !w-full"
+            >
+              No card selected
+            </Typography>
+          )}
         </Box>
-      }
-      control={<Radio onClick={onClick} checked={checked} />}
-    />
-  );
-};
+      </Box>
+      {/* <Link href="/user">
+                    <Typography
+                      variant="body2"
+                      className="!text-[15px] !text-blue-800 mt-5"
+                    >
+                      <span className="mr-3 !text-[17px]">+</span> Add payment
+                      option
+                    </Typography>
+                  </Link> */}
+      <CustomOption
+        addBtn={
+          <Link href="/user" className="!w-full">
+            <Typography
+              variant="body2"
+              className="!text-[15px] !text-blue-800 mt-5"
+            >
+              <span className="mr-3 !text-[17px]">+</span> Add Payment
+            </Typography>
+          </Link>
+        }
+        icon={
+          <Typography
+            variant="body2"
+            className="!text-[15px] !text-blue-800 mt-5"
+          >
+            <span className="mr-3 !text-[17px]">+</span>{' '}
+            {card ? 'Change ' : 'Select '}
+            payment option
+          </Typography>
+        }
+        options={billings?.map(
+          (e) =>
+            `${e?.name}, ${e?.openDigits[0]}****${e?.openDigits[1]}, ${
+              e?.expiry
+            }. (${detectCardType(e?.openDigits[0])})`
+        )}
+        butPush={billings.map((e) => e)}
+        clickFunction={(e) =>
+          updatePayload((prev) => {
+            return { ...prev, billingCard: e }
+          })
+        }
+      />
+    </Box>
+  )
+}
