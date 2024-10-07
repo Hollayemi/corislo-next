@@ -1,8 +1,8 @@
-"use client";
-import { useEffect, useState } from "react";
-import { prodInnerList } from "@/app/data/store/innerList";
-import { useSearchParams } from "next/navigation";
-import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+'use client'
+import { useEffect, useState } from 'react'
+import { prodInnerList } from '@/app/data/store/innerList'
+import { useSearchParams } from 'next/navigation'
+import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
 import {
   Box,
   Typography,
@@ -14,70 +14,72 @@ import {
   MenuItem,
   Select,
   Autocomplete,
-} from "@mui/material";
-import { useTheme } from "@mui/material/styles";
+} from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 import {
   SimpleDropDown,
   SizeComponent,
   QuantityComponent,
   ColorComponent,
-} from "./components";
-import FileUploader from "./dropZone";
-import useSWR from "swr";
-import { removeOrAddToArray } from "@/app/utils/arrayFunctions";
-import { createProductHandler } from "@/app/redux/state/slices/shop/products/productSlice";
-import { useDispatch } from "react-redux";
-import { productBreadCrumb } from "../components";
-import { editProductHandler } from "@/app/redux/state/slices/shop/products/updateProduct";
-import IconifyIcon from "@/app/components/icon";
+} from './components'
+import FileUploader from './dropZone'
+import useSWR from 'swr'
+import { removeOrAddToArray } from '@/app/utils/arrayFunctions'
+import { createProductHandler } from '@/app/redux/state/slices/shop/products/productSlice'
+import { useDispatch } from 'react-redux'
+import { productBreadCrumb } from '../components'
+import { editProductHandler } from '@/app/redux/state/slices/shop/products/updateProduct'
+import IconifyIcon from '@/app/components/icon'
+import QuillTextEditor from '@/app/components/text-editor/quill'
+import Image from 'next/image'
 // no allow (),+,
 const AddNewProduct = ({ params }) => {
-  const theme = useTheme();
-  const searchParams = useSearchParams();
-  const editID = searchParams.get("edit");
-  const brk = theme.breakpoints.down;
-  const [selectedSizes, setSelectedSizes] = useState([]);
-  const [newSpec, setNewSpec] = useState("");
-  const [specValue, setSpecValue] = useState("");
-  const [specId, setspecId] = useState(null);
-  const [files, setFiles] = useState([]);
-  const [localFiles, setLocalFiles] = useState([]);
-  const [delivery, selectDelivery] = useState(["pickup"]);
-  const { data: getData, error } = useSWR("/store/collections/thread");
-  const { data: toEdit } = useSWR(editID && `/products?productId=${editID}`);
+  const theme = useTheme()
+  const searchParams = useSearchParams()
+  const editID = searchParams.get('edit')
+  const brk = theme.breakpoints.down
+  const [selectedSizes, setSelectedSizes] = useState([])
+  const [newSpec, setNewSpec] = useState('')
+  const [specValue, setSpecValue] = useState('')
+  const [specId, setspecId] = useState(null)
+  const [files, setFiles] = useState([])
+  const [localFiles, setLocalFiles] = useState([])
+  const [delivery, selectDelivery] = useState(['pickup'])
+  const { data: getData, error } = useSWR('/store/collections/thread')
+  const { data: toEdit } = useSWR(editID && `/products?productId=${editID}`)
   const { data: specData } = useSWR(
     specId && `/corisio/get-spec?specId=${specId}`
-  );
-  let specInfo = specData && specData?.data;
-  const collections = getData ? getData?.data : [{}];
-  const prodToEdit = toEdit ? toEdit.data?.result : [];
-  const specWithSize = ["cloth_spec", "shoe_spec"];
-  const reduxFuntion = editID ? editProductHandler : createProductHandler;
+  )
+  let specInfo = specData && specData?.data
+  const collections = getData ? getData?.data : [{}]
+  const prodToEdit = toEdit ? toEdit.data?.result : []
+  const specWithSize = ['cloth_spec', 'shoe_spec']
+  const reduxFuntion = editID ? editProductHandler : createProductHandler
   const [formData, setFormData] = useState({
-    prodName: "",
-    prodPrice: "",
-    prodKey: "",
-    prodInfo: "",
+    prodName: '',
+    prodPrice: '',
+    prodKey: '',
+    prodInfo: '',
     specifications: {},
     images: [],
-    totInStock: "",
-    collectionId: "",
-    subCollection: "",
-    subCollectionName: "",
-    collectionName: "",
-    category: "",
+    totInStock: '',
+    collectionId: '',
+    subCollection: '',
+    subCollectionName: '',
+    collectionName: '',
+    category: '',
     subcategory: { sizes: selectedSizes },
-    productGroup: "",
+    productGroup: '',
     delivery,
-  });
-  console.log(files);
+  })
+  console.log(files)
   let fromCollection = collections.filter(
     (x) => x.collectionId === formData.collectionId
-  )[0];
+  )[0]
 
   useEffect(() => {
     if (toEdit) {
-      const toEditData = prodToEdit[0] || {};
+      const toEditData = prodToEdit[0] || {}
       setFormData(() => {
         return {
           prodName: toEditData.prodName,
@@ -97,52 +99,53 @@ const AddNewProduct = ({ params }) => {
           specifications: toEditData.specifications?.variations || {},
           category: toEditData.categoryId,
           _id: toEditData._id,
-        };
-      });
-      selectDelivery(toEditData.delivery);
+        }
+      })
+      selectDelivery(toEditData.delivery)
       fromCollection = collections.filter(
         (x) => x.collectionId === toEditData.collectionId
-      )[0];
+      )[0]
     }
-  }, [toEdit]);
+  }, [toEdit])
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const handleChange = (prop) => (event) => {
-    setFormData({ ...formData, [prop]: event?.target?.value || "" });
-  };
+    setFormData({ ...formData, [prop]: event?.target?.value || '' })
+  }
 
   const deliveryHandler = (value) => {
-    removeOrAddToArray(value, delivery, selectDelivery);
-  };
+    removeOrAddToArray(value, delivery, selectDelivery)
+  }
 
   const path = {
     ...params,
-    sidebar: "product-management",
-    sublist: "add-new-product",
-  };
+    sidebar: 'product-management',
+    sublist: 'add-new-product',
+  }
 
   const handleSubCateSelection = (event) => {
-    const { _id, ...others } = event.target.value;
+    const { _id, ...others } = event.target.value
     setFormData({
       ...formData,
       ...others,
       subCollection: _id,
       collectionName: fromCollection.collectionName,
-    });
-    setspecId(null);
-  };
+    })
+    setspecId(null)
+  }
 
   const handleProductGroupSelection = (event) => {
-    const { _id, spec } = event.target.value;
+    const det = event.target.value.split('&&&&& ')
+
     setFormData({
       ...formData,
-      productGroup: _id,
-    });
-    setspecId(spec);
-  };
+      productGroup: det[0],
+    })
+    setspecId(det[1])
+  }
 
-  console.log(formData);
+  console.log(formData)
   return (
     <StoreLeftSideBar
       path={path}
@@ -151,52 +154,102 @@ const AddNewProduct = ({ params }) => {
       crumb={[
         ...productBreadCrumb,
         {
-          text: editID ? "Edit Product" : "Add Product",
-          link: "add-new-product",
+          text: editID ? 'Edit Product' : 'Add Product',
+          link: 'add-new-product',
         },
       ]}
     >
       <Box className="bg-white rounded-md md:px-5 pt-6 pb-8 !text-[13px]">
         <Grid container spacing={4} className="!px-3">
           <Grid item xs={12} md={5}>
-            <Typography sx={{ fontWeight: "bold", mb: 2.5 }}>
+            <Typography sx={{ fontWeight: 'bold', mb: 2.5 }}>
               Description
             </Typography>
-            <Box sx={{ pl: 0.2, pl: brk("md") && "0.5", mb: 0.5 }}>
+            <Box sx={{ pl: 0.2, pl: brk('md') && '0.5', mb: 0.5 }}>
               <Typography variant="caption" className="!mb-1">
                 Product Name
               </Typography>
+
               <TextField
                 className="!mt-1 !mb-3"
                 fullWidth
                 size="small"
                 value={formData.prodName}
                 id="outlined-basic"
-                onChange={handleChange("prodName")}
+                onChange={handleChange('prodName')}
                 // label="Product Name"
               />
-
-              <Typography variant="caption" className="!mb-1">
-                Product Description
-              </Typography>
-              <TextField
+              <Box className="flex justify-between items-center">
+                <Typography variant="caption" className="!mb-1">
+                  Product Description
+                </Typography>
+                {/* <IconifyIcon
+                  icon="tabler:grain"
+                  className="text-[14px]"
+                  title="s"
+                /> */}
+                <Box className="flex items-center cursor-pointer hover:bg-gray-50 p-0.5 px-2 rounded ">
+                  <Typography variant="caption" className="!mr-1">
+                    Generate
+                  </Typography>
+                  <span className="relative" data-animate="false">
+                    <svg
+                      width="6"
+                      height="6"
+                      viewBox="0 0 14 15"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="absolute -ml-0.5 -mt-0.5"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M7 0.714966C6.57172 0.714966 6.19841 1.00644 6.09453 1.42193C5.64458 3.22175 5.11525 4.31311 4.3567 5.07167C3.59815 5.83022 2.50678 6.35955 0.706966 6.8095C0.291477 6.91337 -3.32794e-07 7.28669 -3.32794e-07 7.71497C-3.32794e-07 8.14324 0.291477 8.51656 0.706966 8.62043C2.50678 9.07039 3.59815 9.59971 4.3567 10.3583C5.11525 11.1168 5.64458 12.2082 6.09453 14.008C6.19841 14.4235 6.57172 14.715 7 14.715C7.42828 14.715 7.80159 14.4235 7.90547 14.008C8.35542 12.2082 8.88475 11.1168 9.6433 10.3583C10.4019 9.59971 11.4932 9.07039 13.293 8.62043C13.7085 8.51656 14 8.14324 14 7.71497C14 7.28669 13.7085 6.91337 13.293 6.8095C11.4932 6.35955 10.4019 5.83022 9.6433 5.07167C8.88475 4.31311 8.35542 3.22175 7.90547 1.42193C7.80159 1.00644 7.42828 0.714966 7 0.714966Z"
+                      ></path>
+                    </svg>
+                    <svg
+                      width="14"
+                      height="15"
+                      viewBox="0 0 14 15"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className=""
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M7 0.714966C6.57172 0.714966 6.19841 1.00644 6.09453 1.42193C5.64458 3.22175 5.11525 4.31311 4.3567 5.07167C3.59815 5.83022 2.50678 6.35955 0.706966 6.8095C0.291477 6.91337 -3.32794e-07 7.28669 -3.32794e-07 7.71497C-3.32794e-07 8.14324 0.291477 8.51656 0.706966 8.62043C2.50678 9.07039 3.59815 9.59971 4.3567 10.3583C5.11525 11.1168 5.64458 12.2082 6.09453 14.008C6.19841 14.4235 6.57172 14.715 7 14.715C7.42828 14.715 7.80159 14.4235 7.90547 14.008C8.35542 12.2082 8.88475 11.1168 9.6433 10.3583C10.4019 9.59971 11.4932 9.07039 13.293 8.62043C13.7085 8.51656 14 8.14324 14 7.71497C14 7.28669 13.7085 6.91337 13.293 6.8095C11.4932 6.35955 10.4019 5.83022 9.6433 5.07167C8.88475 4.31311 8.35542 3.22175 7.90547 1.42193C7.80159 1.00644 7.42828 0.714966 7 0.714966Z"
+                      ></path>
+                    </svg>
+                    <span className=""></span>
+                  </span>
+                </Box>
+              </Box>
+              {/* <TextField
                 sx={{ mb: 0.5 }}
                 fullWidth
                 multiline
                 id="textarea-outlined"
-                onChange={handleChange("prodInfo")}
+                onChange={handleChange('prodInfo')}
                 maxRows={7}
                 value={formData.prodInfo}
                 // placeholder="Product Description"
                 minRows={6}
                 // label="Product Description"
+              /> */}
+              <QuillTextEditor
+                value={formData.prodInfo}
+                className="h-52 mt-1 mb-10"
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, prodInfo: e }))
+                }
               />
             </Box>
 
-            <Typography sx={{ fontWeight: "bold", my: 2.5 }}>
+            <Typography sx={{ fontWeight: 'bold', my: 2.5 }}>
               Category
             </Typography>
-            <Box sx={{ pl: 0.2, pl: brk("md") && "0.5", mb: 1.5 }}>
+            <Box sx={{ pl: 0.2, pl: brk('md') && '0.5', mb: 1.5 }}>
               <SimpleDropDown
                 render={collections?.map((res, i) => (
                   <MenuItem key={i} value={res.collectionId}>
@@ -204,7 +257,7 @@ const AddNewProduct = ({ params }) => {
                   </MenuItem>
                 ))}
                 defaultValue={fromCollection?.collectionId}
-                onChange={handleChange("collectionId")}
+                onChange={handleChange('collectionId')}
                 label="Product Category"
                 sx={{ mb: 2 }}
               />
@@ -225,28 +278,24 @@ const AddNewProduct = ({ params }) => {
               />
               <SimpleDropDown
                 render={fromCollection?.group?.map((res, i) => (
-                  <MenuItem key={i} value={res}>
+                  <MenuItem key={i} value={`${res?._id}&&&&& ${res?.spec}`}>
                     {res.label}
                   </MenuItem>
                 ))}
-                defaultValue={
-                  fromCollection?.group?.filter(
-                    (x) => x.spec == formData.subCollection
-                  )[0]
-                }
+                defaultValue={`${formData?.productGroup}&&&&& ${specId}`}
                 onChange={handleProductGroupSelection}
                 label="Product Class"
                 sx={{ mb: 2 }}
               />
             </Box>
 
-            <Typography sx={{ fontWeight: "bold", mb: 1.5 }}>
+            <Typography sx={{ fontWeight: 'bold', mb: 1.5 }}>
               Pricing
             </Typography>
-            <Box sx={{ pl: 0.2, pl: brk("md") && "0.5", mb: 2.5 }}>
+            <Box sx={{ pl: 0.2, pl: brk('md') && '0.5', mb: 2.5 }}>
               <TextField
                 sx={{ mb: 0.5 }}
-                onChange={handleChange("prodPrice")}
+                onChange={handleChange('prodPrice')}
                 type="number"
                 value={formData.prodPrice}
                 fullWidth
@@ -256,13 +305,13 @@ const AddNewProduct = ({ params }) => {
               />
             </Box>
 
-            <Typography sx={{ fontWeight: "bold", mb: 1.5 }}>
+            <Typography sx={{ fontWeight: 'bold', mb: 1.5 }}>
               Total In Stock
             </Typography>
-            <Box sx={{ pl: 0.2, pl: brk("md") && "0.5", mb: 2.5 }}>
+            <Box sx={{ pl: 0.2, pl: brk('md') && '0.5', mb: 2.5 }}>
               <TextField
                 sx={{ mb: 0.5 }}
-                onChange={handleChange("totInStock")}
+                onChange={handleChange('totInStock')}
                 type="number"
                 fullWidth
                 value={formData.totInStock}
@@ -272,16 +321,16 @@ const AddNewProduct = ({ params }) => {
               />
             </Box>
 
-            <Typography sx={{ fontWeight: "bold", mb: 1.5 }}>
+            <Typography sx={{ fontWeight: 'bold', mb: 1.5 }}>
               Product Preference
             </Typography>
-            <Box sx={{ pl: 0.2, pl: brk("md") && "0.5" }}>
+            <Box sx={{ pl: 0.2, pl: brk('md') && '0.5' }}>
               <FormControlLabel
                 value="Physical Pick-Up"
                 control={
                   <Checkbox
-                    checked={delivery?.includes("pickup")}
-                    onChange={() => deliveryHandler("pickup")}
+                    checked={delivery?.includes('pickup')}
+                    onChange={() => deliveryHandler('pickup')}
                     disabled={false}
                     name="pickup-checked"
                   />
@@ -294,8 +343,8 @@ const AddNewProduct = ({ params }) => {
                 value="waybilling"
                 control={
                   <Checkbox
-                    checked={delivery?.includes("waybilling")}
-                    onChange={() => deliveryHandler("waybilling")}
+                    checked={delivery?.includes('waybilling')}
+                    onChange={() => deliveryHandler('waybilling')}
                     disabled={false}
                     name="waybilling-checked"
                   />
@@ -308,8 +357,8 @@ const AddNewProduct = ({ params }) => {
                 value="Courier Service"
                 control={
                   <Checkbox
-                    checked={delivery?.includes("courier")}
-                    onChange={() => deliveryHandler("courier")}
+                    checked={delivery?.includes('courier')}
+                    onChange={() => deliveryHandler('courier')}
                     disabled={true}
                     name="courier-checked"
                   />
@@ -326,12 +375,12 @@ const AddNewProduct = ({ params }) => {
 
 */}
           <Grid item xs={12} md={7}>
-            <Typography sx={{ fontWeight: "bold", mb: 1.5 }}>
+            <Typography sx={{ fontWeight: 'bold', mb: 1.5 }}>
               Product Media
             </Typography>
             <Box className="pl-2 md:pl-4 mb-5">
-              <Box className="flex flex-col md:flex-row items-start mb-5 p-3 bg-gray-50 border rounded">
-                {formData.video && (
+              {formData.video && (
+                <Box className="flex flex-col md:flex-row items-start mb-5 p-3 bg-gray-50 border rounded">
                   <video className=" w-full md:w-52 md:h-40 relative" controls>
                     <source
                       // src="https://www.w3schools.com/html/mov_bbb.mp4"
@@ -345,25 +394,28 @@ const AddNewProduct = ({ params }) => {
                       <IconifyIcon icon="tabler:trash" fontSize={16} />
                     </div>
                   </video>
-                )}
-                <Box className="flex items-center flex-wrap">
-                  {formData.images.map((each, i) => (
-                    <Box className="relative w-16 h-16 m-3" key={i}>
-                      <img
-                        className="w-full h-full rounded-md"
-                        alt={each.name}
-                        src={each.image}
-                      />
-                      <div
-                        onClick={() => {}}
-                        className="text-[6px] flex items-center justify-center text-white absolute -mt-2 -mr-2 top-0 right-0 w-4 h-4 rounded-full bg-red-500"
-                      >
-                        <IconifyIcon icon="tabler:trash" fontSize={12} />
-                      </div>
-                    </Box>
-                  ))}
+
+                  <Box className="flex items-center flex-wrap">
+                    {formData.images.map((each, i) => (
+                      <Box className="relative w-16 h-16 m-3" key={i}>
+                        <Image
+                          className="w-full h-full rounded-md"
+                          alt={each.name}
+                          src={each.image}
+                          width={400}
+                          height={400}
+                        />
+                        <div
+                          onClick={() => {}}
+                          className="text-[6px] flex items-center justify-center text-white absolute -mt-2 -mr-2 top-0 right-0 w-4 h-4 rounded-full bg-red-500"
+                        >
+                          <IconifyIcon icon="tabler:trash" fontSize={12} />
+                        </div>
+                      </Box>
+                    ))}
+                  </Box>
                 </Box>
-              </Box>
+              )}
               <FileUploader
                 files={files}
                 setFiles={setFiles}
@@ -380,9 +432,13 @@ const AddNewProduct = ({ params }) => {
               </Box>
             </Box>
 
-            {specWithSize?.includes(specInfo?.label) && (
+            {specWithSize?.includes(specInfo?.label) ? (
               <>
-                <Typography className="font-black mb-5">Select Size</Typography>
+                {selectedSizes.length ? (
+                  <Typography className="font-black mb-5">
+                    Select Size
+                  </Typography>
+                ) : null}
                 <Box className="pl-2 md:pl-4 mb-4">
                   <SizeComponent
                     selectedSizes={selectedSizes}
@@ -414,7 +470,7 @@ const AddNewProduct = ({ params }) => {
                   />
                 </Box>
               </>
-            )}
+            ) : null}
             {specInfo && (
               <Box className="mt-4">
                 <Box className="flex justify-center px-2 !mt-3 w-full">
@@ -470,11 +526,11 @@ const AddNewProduct = ({ params }) => {
                               ...formData,
                               specifications: {
                                 ...formData.specifications,
-                                [newSpec.replaceAll(" ", "_")]: specValue,
+                                [newSpec.replaceAll(' ', '_')]: specValue,
                               },
-                            });
-                            setNewSpec("");
-                            setSpecValue("");
+                            })
+                            setNewSpec('')
+                            setSpecValue('')
                           }
                         }}
                       >
@@ -487,9 +543,9 @@ const AddNewProduct = ({ params }) => {
                   {Object.keys(formData.specifications).map((val, i) => {
                     return (
                       <Box key={i}>
-                        {val.replace("_", " ")} : {formData.specifications[val]}{" "}
+                        {val.replace('_', ' ')} : {formData.specifications[val]}{' '}
                       </Box>
-                    );
+                    )
                   })}
                 </Box>
               </Box>
@@ -501,11 +557,10 @@ const AddNewProduct = ({ params }) => {
 
 */}
         </Grid>
-        <Box className="flex items-center justify-center mt-6">
+        <Box className="flex items-center justify-center mt-6 px-3">
           <Button
             variant="contained"
-            sx={{ mx: 0.4, px: brk("md") && 4, py: 0.5 }}
-            className="bg-blue-900 text-xs md:px-6 !py-2 !w-full md:!w-48"
+            className="bg-blue-900 text-xs md:px-6 !py-2 !w-3/5 md:!w-48"
             onClick={() =>
               reduxFuntion(
                 {
@@ -521,23 +576,18 @@ const AddNewProduct = ({ params }) => {
               )
             }
           >
-            {editID ? "Update " : "Add "} Product
+            {editID ? 'Update ' : 'Add '} Product
           </Button>
           {!editID && (
             <>
-              {" "}
+              {' '}
               <Button
                 variant="contained"
-                sx={{ mx: 0.4, px: brk("md") && 4, py: 0.5 }}
-                className="bg-blue-900 mx-1 md:px-6"
+                className="bg-blue-900 !mx-1 !w-1/5 !md:w-32 !py-2 md:px-6"
               >
                 Save
               </Button>
-              <Button
-                variant="contained"
-                sx={{ mx: 0.4, px: brk("md") && 4, py: 0.5 }}
-                className="bg-blue-900 mx-1 md:px-6"
-              >
+              <Button variant="contained" className="bg-blue-900 !w-1/5 !md:w-32 !py-2 md:px-6">
                 Discard
               </Button>
             </>
@@ -545,7 +595,7 @@ const AddNewProduct = ({ params }) => {
         </Box>
       </Box>
     </StoreLeftSideBar>
-  );
-};
+  )
+}
 
-export default AddNewProduct;
+export default AddNewProduct

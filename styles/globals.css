@@ -201,3 +201,11 @@ textarea::placeholder {
 .react-hot-toast, .css-1a0fd8>div{
    z-index: 99999999999999999999 !important;
 }
+
+
+.hidde{
+  display: none !important;
+    background-color: lightblue;
+  border-color: darkblue;
+  box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
+}

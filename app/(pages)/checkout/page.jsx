@@ -25,7 +25,7 @@ import { reshapePrice } from '../store/dashboard/marketing/components'
 const Checkout = () => {
   const dispatch = useDispatch()
   const { cartedProds, userInfo, temp, seletedCartProds } = useUserData()
-  const endPoint = `/user/cart-group?${
+  const endpoint = `/user/cart-group?${
     seletedCartProds.length && `prods=${seletedCartProds.join('.')}`
   }`
   const { data: carts, error } = useSWR(endpoint)
@@ -157,7 +157,7 @@ const Checkout = () => {
                 <Button
                   variant="contained"
                   className="w-full !mt-6 !h-12 !rounded-full !border-none !text-[14px] !text-white"
-                  onClick={() => addNewOrder(payload, dispatch, endPoint)}
+                  onClick={() => addNewOrder(payload, dispatch, endpoint)}
                 >
                   Place Order
                 </Button>

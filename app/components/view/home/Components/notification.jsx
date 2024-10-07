@@ -55,7 +55,10 @@ export const OrderNotif = ({ data, forStore }) => {
         </Typography>
       </Box>
       {data.info.map((each, i) => (
-        <Box key={i} className="flex items-start p-3 w-full border-b border-gray-100">
+        <Box
+          key={i}
+          className="flex items-start p-3 w-full border-b border-gray-100"
+        >
           {data.image && (
             <Box className="w-11 h-11 flex-shrink-0">
               <Image
@@ -96,26 +99,31 @@ export const OrderNotif = ({ data, forStore }) => {
             )}
 
             <Box className="absolute top-0 right-0 pr-2 flex flex-col items-end">
+              {each.unread ? (
+                <Box
+                  className="w-2 h-2 rounded-full bg-orange-400 -mt-1 mb-2"
+                  bgcolor="warning"
+                ></Box>
+              ) : null}
               <Typography variant="caption" className="!text-[10px]">
                 {formatDateToMonthShort(each.date)}
               </Typography>
               <Box className="w-full flex justify-end mt-2 -ml-3">
-                {each.isText || each.note.length > 100 && (
-                  <Box
-                    onClick={() => setOpen((prev) => (prev === i ? 100 : i))}
-                    className="flex justify-center items-center w-4 h-4 cursor-pointer rounded-full border border-black"
-                  >
-                    <IconifyIcon
-                      icon={`${
-                        open === i ? 'tabler:chevron-up' : 'tabler:chevron-down'
-                      }`}
-                    />
-                  </Box>
-                )}
-                {each.unread ? <Box
-                  className="w-2 h-2 rounded-full bg-orange-400"
-                  bgcolor="warning"
-                ></Box> : null}
+                {each.isText ||
+                  (each.note.length > 100 && (
+                    <Box
+                      onClick={() => setOpen((prev) => (prev === i ? 100 : i))}
+                      className="flex justify-center items-center w-4 h-4 cursor-pointer rounded-full border border-black"
+                    >
+                      <IconifyIcon
+                        icon={`${
+                          open === i
+                            ? 'tabler:chevron-up'
+                            : 'tabler:chevron-down'
+                        }`}
+                      />
+                    </Box>
+                  ))}
               </Box>
             </Box>
           </Box>

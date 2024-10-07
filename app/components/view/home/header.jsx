@@ -173,7 +173,7 @@ function Header({}) {
         <Box className="relative hidden mr-4 md:block w-full md:w-auto px-2 md:px-0">
           <input
             type="text"
-            placeholder="Search by keyword"
+            placeholder="Search anything"
             value={search}
             className="w-full md:hidden lg:block lg:w-40 pl-10 text-[13px] !bg-[#F3F5FF] pr-4 h-8 border rounded-xl transition-all outline-none  md:focus:w-64"
             onChange={(e) => setSearch(e.target.value)}
@@ -185,26 +185,28 @@ function Header({}) {
           />
           <IconImage image="search" className="w-4 absolute top-2 ml-4" />
         </Box>
-        <IconImage
-          image="search"
-          onClick={() => router.push('/explore')}
-          className="w-6 md:hidden mx-3"
-        />
         {!isOffline && (
-          <Box className="mx-3 md:!mr-5">
-            <Badge
-              badgeContent={unread}
-              size="small"
-              variant=""
-              color="primary"
-            >
-              <IconImage
-                image="rre"
-                className="w-6 !flex-shrink-0"
-                onClick={showOverlay('notification')}
-              />
-            </Badge>
-          </Box>
+          <>
+            <IconImage
+              image="search"
+              onClick={() => router.push('/explore')}
+              className="w-6 md:hidden mx-3"
+            />
+            <Box className="mx-3 md:!mr-5">
+              <Badge
+                badgeContent={unread}
+                size="small"
+                variant=""
+                color="primary"
+              >
+                <IconImage
+                  image="rre"
+                  className="w-6 !flex-shrink-0"
+                  onClick={showOverlay('notification')}
+                />
+              </Badge>
+            </Box>
+          </>
         )}
         {!isOffline ? (
           <>

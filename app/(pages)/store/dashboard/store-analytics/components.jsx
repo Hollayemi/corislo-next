@@ -325,12 +325,12 @@ export const CategoriesGrowth = ({ interval, queryString, label }) => {
 
   const { data, isLoading } = useSWR(`/store/category-sales?${queryString}`)
   const result = data?.data || {}
-  const myCategories = result.cate?.map((x) => {
+  const myCategories = result.cate?.map((x, index) => {
     const series = Object.values(x.data).map((x, i) => x.sale || x)
 
     return (
       <Box
-        key={i}
+        key={index}
         className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-3 md:border-r !border-gray-100 h-full flex items-start"
       >
         <Box className="w-9/12">

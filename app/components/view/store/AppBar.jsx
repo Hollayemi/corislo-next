@@ -81,7 +81,7 @@ export default function StoreDashboardAppBar({
 
     if (action === 'notification') {
       showOverlay('notification')
-      dispatch(viewAllNotificationsApi())
+      
     }
     if (action === 'inbox') {
       route.push("/store/dashboard/chat")

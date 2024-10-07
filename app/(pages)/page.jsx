@@ -59,6 +59,12 @@ const HomePage = ({ params }) => {
 
   console.log(stores)
 
+  const adImages = {
+    follow: 'followers.png',
+    url: 'discover-product.png',
+    'view-business': 'storeImage.png',
+  }
+
   return (
     <HomeWrapper
       shopMode={params.sm}
@@ -173,6 +179,7 @@ const HomePage = ({ params }) => {
                   key={i}
                   className="!flex !flex-col cursor-pointer flex-shrink-0 w-24 py-5 max-w-24 min-w-24 h-[110px] !items-center !text-center !justify-center p-2 bg-white !m-2 !rounded-xl"
                   bgcolor="custom.bodyLight"
+                  onClick={() => router.push(`/category/${cate._id}`)}
                 >
                   <Image
                     src={cate.icon}
@@ -326,7 +333,7 @@ const HomePage = ({ params }) => {
                     <PopularAds
                       store={ad.store}
                       key={i}
-                      image={`/images/misc/popular-ads${i + 1}.png`}
+                      image={`/images/misc/${adImages[ad.purpose]}`}
                       title={ad.title}
                       brief={ad.brief}
                     />

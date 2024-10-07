@@ -1,13 +1,16 @@
-import { useState } from "react";
-import { Typography, Box, Grid, Button } from "@mui/material";
-import Image from "next/image";
-import { OrderListComponents } from ".";
-import IconifyIcon from "@/app/components/icon";
-import { CircleLoader } from "@/app/components/cards/loader";
-import { MyTextField } from "@/app/(pages)/user/components";
+import { useState } from 'react'
+import { Typography, Box, Grid, Button } from '@mui/material'
+import Image from 'next/image'
+import { OrderListComponents } from '.'
+import IconifyIcon from '@/app/components/icon'
+import { CircleLoader } from '@/app/components/cards/loader'
+import { MyTextField } from '@/app/(pages)/user/components'
+import useSWR from 'swr'
 
 const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
-  const [value, setValue] = useState("all");
+  const { data, isLoading: counterLoading } = useSWR('/branch/order-count')
+  const counter = data?.data || {}
+  const [value, setValue] = useState('all')
   const Epl = ({ title, info }) => (
     <Box className="h-full pl-4 pt-1 border-r w-full min-w-28">
       <Typography
@@ -21,7 +24,7 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
         {info}
       </Typography>
     </Box>
-  );
+  )
   return (
     <Box className="w-full">
       <Box
@@ -87,11 +90,32 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
             Today
           </Typography>
         </Box>
-        <Epl title="Total orders" info={48} />
-        <Epl title="Ordered items over time" info={493} />
-        <Epl title="Returns" info={9} />
-        <Epl title="Fulfilled orders over time" info={359} />
-        <Epl title="Delivered orders over time" info={353} />
+        <Epl
+          title="Total orders"
+          info={counterLoading ? <CircleLoader /> : counter.totalOrder || 0}
+        />
+        <Epl
+          title="Ordered items over time"
+          info={counterLoading ? <CircleLoader /> : counter.totalItems || 0}
+        />
+        <Epl
+          title="Returns"
+          info={counterLoading ? <CircleLoader /> : counter.returned || 0}
+        />
+        <Epl
+          title="Fulfilled orders over time"
+          info={counterLoading ? <CircleLoader /> : counter.completed || 0}
+        />
+        <Epl
+          title="Pickup / Waybilling"
+          info={
+            counterLoading ? (
+              <CircleLoader />
+            ) : (
+              `${counter.pickup || 0} / ${counter.waybilling || 0}`
+            )
+          }
+        />
       </Box>
       <Box className="mt-6">
         {isLoading ? (
@@ -108,14 +132,14 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
         )}
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default OrderTable;
+export default OrderTable
 
 export const ConfirmPicker = () => {
-  const [pickerId, setPickerId] = useState("");
-  const [orderSlug, setOrderId] = useState("");
+  const [pickerId, setPickerId] = useState('')
+  const [orderSlug, setOrderId] = useState('')
   return (
     <Box className="px-5 pt-5">
       <MyTextField
@@ -149,21 +173,13 @@ export const ConfirmPicker = () => {
         </Button>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 const CreateOrder = () => {
   return (
     <Box className="h-full pt-2">
-      <Box>
-        <Typography
-          variant="body2"
-          className="!font-bold px-5 !text-[14px] !text-black"
-        >
-          Create Order
-        </Typography>
-      </Box>
-      <Box className="h-full flex justify-center flex-col items-center -mt-6">
+      <Box className="h-80 flex justify-center flex-col items-center -mt-6">
         <Typography
           variant="body2"
           className="!font-bold !text-[12px] !text-black"
@@ -175,5 +191,5 @@ const CreateOrder = () => {
         </Typography>
       </Box>
     </Box>
-  );
-};
+  )
+}

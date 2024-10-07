@@ -476,13 +476,15 @@ const StoreLeftSideBar = React.memo(
             </DialogContent>
             <DialogActions className="dialog-actions-dense !mb-4">
               <Button onClick={handleCloseDialog}>Close</Button>
-              <Button
-                variant="contained"
-                className="!shadow-none"
-                onClick={dialogInfo.acceptFunction}
-              >
-                {dialogInfo.acceptFunctionText}
-              </Button>
+              {dialogInfo.AvatarGroupacceptFunctionText && (
+                <Button
+                  variant="contained"
+                  className="!shadow-none"
+                  onClick={dialogInfo.acceptFunction}
+                >
+                  {dialogInfo.acceptFunctionText}
+                </Button>
+              )}
             </DialogActions>
           </Dialog>
         )}

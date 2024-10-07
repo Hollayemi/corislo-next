@@ -39,13 +39,14 @@ const productStatusApi = createAsyncThunk(
   }
 );
 
-export const productStatusUpdate = (formData, dispatch) => {
+export const productStatusUpdate = (formData, dispatch, endpoint) => {
   console.log(formData)
     dispatch(productStatusApi(formData))
       .then(unwrapResult)
       .then((res) => {
         toaster({ ...res });
         mutate("/store/get-products")
+endpoint && mutate(endpoint)
       })
       .catch((e) => {
         

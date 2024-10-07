@@ -180,7 +180,7 @@ export const PopularAds = ({ store, title, brief, image, url }) => {
           alt="flyer"
           width={400}
           height={400}
-          className="!w-full h-full flex-shrink-0 mr-6"
+          className="!w-full h-full flex-shrink-0 mr-6 rounded-xl"
         />
       </Box>
     </Box>

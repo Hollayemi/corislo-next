@@ -241,7 +241,7 @@ const MarketingPage = ({ params }) => {
               <GrowthCard
                 title="Next to expire"
                 toExpire={mySubstring(series.nearEndDate?.title, 20)}
-                count={formatDate(series?.nearEndDate?.date)}
+                count={series?.nearEndDate?.date && formatDate(series?.nearEndDate?.date)}
               />
             </Box>
             <Box className="mt-10 relative">

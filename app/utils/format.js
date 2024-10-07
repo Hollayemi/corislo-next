@@ -383,7 +383,7 @@ export const mySubstring = (string = "", num = 15, start = 0) => {
   }
 };
 
-export const ngnPrice = (price) => `NGN ${price?.toLocaleString()}`;
+export const ngnPrice = (price) => `NGN ${parseInt(price)?.toLocaleString()}`;
 
 export const formatBytes = (bytes, decimals = 2) => {
   if (bytes === 0) return '0 Bytes';

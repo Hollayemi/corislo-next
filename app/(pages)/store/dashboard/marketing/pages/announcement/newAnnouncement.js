@@ -66,6 +66,12 @@ const NewAnnouncement = ({ formData, setFormData, formHandler }) => {
     });
   };
 
+  const images = {
+    follow: "followers.png",
+    url: "discover-product.png",
+    "view-business": "storeImage.png"
+  }
+
   return (
     <Grid container spacing={0}>
       <Grid item xs={12} sm={6} className="md:!px-3">
@@ -97,9 +103,9 @@ const NewAnnouncement = ({ formData, setFormData, formHandler }) => {
             value={formData.purpose}
             onChange={formHandler("purpose")}
           >
-            <MenuItem value="view-business">To view your business</MenuItem>
+            <MenuItem value="view-business">Increase Visibility</MenuItem>
             <MenuItem value="follow">Gain Followers</MenuItem>
-            <MenuItem value="url">Make people discover your products</MenuItem>
+            <MenuItem value="url">Promote Special Offers</MenuItem>
           </Select>
         </FormControl>
      
@@ -187,7 +193,7 @@ const NewAnnouncement = ({ formData, setFormData, formHandler }) => {
                   <Box className="flex flex-col items-center border-2 border-dashed justify-center w-full h-full rounded-md absolute top-0 left-0 !text-white">
                     
                     <Image
-                      src={localFile[0] ? URL?.createObjectURL(localFile[0]) : formData.purpose === "view-business" ? "/images/misc/storeImage.png" : "" }
+                      src={localFile[0] ? URL?.createObjectURL(localFile[0]) : `/images/misc/${images[formData.purpose]}` }
                       alt="settings.png"
                       width={250}
                       height={250}

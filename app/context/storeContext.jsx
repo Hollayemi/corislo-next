@@ -1,6 +1,6 @@
 'use client'
 import { usePathname, useRouter } from 'next/navigation'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import jwt_decode from 'jwt-decode'
 import useSWR from 'swr'
 import io from 'socket.io-client'
@@ -8,6 +8,7 @@ import { useUserData } from '../hooks/useData'
 import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
 import { Box } from '@mui/material'
+import { viewAllNotificationsApi } from '../redux/state/slices/shop/others'
 
 const { createContext, useEffect, useState } = require('react')
 
@@ -27,6 +28,7 @@ const StoreDataProvider = ({ children }) => {
   const [hideOverflow, setOverflow] = useState(true)
   const [notifications, setNotifications] = useState([])
   const router = useRouter()
+  const dispatch = useDispatch()
   const pathname = usePathname()
   const [socket, setSocket] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -43,6 +45,9 @@ const StoreDataProvider = ({ children }) => {
     if (overLay) {
       setOverflow(false)
       setOpenOverlay(null)
+       if (overLay === 'notification') {
+         dispatch(viewAllNotificationsApi())
+       }
     } else {
       setOverflow(true)
       setOpenOverlay(pageName)

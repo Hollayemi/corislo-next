@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react'
 import {
   FormControl,
   Typography,
@@ -9,12 +9,13 @@ import {
   Grid,
   TextField,
   Box,
-} from "@mui/material";
-import CustomChip from "@/app/components/chip";
-import { productSizes } from "@/app/data/store/productData";
-import InputAdornment from "@mui/material/InputAdornment";
+  MenuItem,
+} from '@mui/material'
+import CustomChip from '@/app/components/chip'
+import { productSizes } from '@/app/data/store/productData'
+import InputAdornment from '@mui/material/InputAdornment'
 // ** Icon Imports
-import Icon from "@/app/components/icon";
+import Icon from '@/app/components/icon'
 
 export const SimpleDropDown = ({
   label,
@@ -22,6 +23,7 @@ export const SimpleDropDown = ({
   sx,
   render,
   inputProps,
+  placeholder,
   defaultValue,
 }) => {
   return (
@@ -31,10 +33,8 @@ export const SimpleDropDown = ({
       </Typography>
       <Select
         fullWidth
-        
         // label={label}
-        placeholder="hol"
-        value={defaultValue || ""}
+        value={defaultValue || ''}
         id="demo-simple-select-outlined"
         size="small"
         labelId="demo-simple-select-outlined-label"
@@ -44,47 +44,47 @@ export const SimpleDropDown = ({
         {render}
       </Select>
     </FormControl>
-  );
-};
+  )
+}
 
 export const SizeComponent = ({ selectedSizes, setSelectedSizes }) => {
   // ** State
-  const [sizeType, setSizeType] = useState("EU");
-  const [ourSizes, setOurSizes] = useState(productSizes);
+  const [sizeType, setSizeType] = useState('EU')
+  const [ourSizes, setOurSizes] = useState(productSizes)
 
   const handleChange = (event) => {
-    setOurSizes(productSizes);
-    setSizeType(event.target.value);
-  };
+    setOurSizes(productSizes)
+    setSizeType(event.target.value)
+  }
   const filteredSizes = ourSizes.filter(
-    (obj) => obj.size.split("-")[0] === sizeType
-  );
+    (obj) => obj.size.split('-')[0] === sizeType
+  )
 
   const selectSize = (id) => {
-    const removed = filteredSizes.splice(id, 1);
+    const removed = filteredSizes.splice(id, 1)
 
-    setSelectedSizes((old) => [...old, ...removed]);
-    setOurSizes(() => [...filteredSizes]);
-  };
+    setSelectedSizes((old) => [...old, ...removed])
+    setOurSizes(() => [...filteredSizes])
+  }
 
   const unSelectSize = (id) => {
-    const removed = selectedSizes.splice(id, 1);
+    const removed = selectedSizes.splice(id, 1)
 
-    setSelectedSizes((old) => [...selectedSizes]);
-    setOurSizes((old) => [...old, ...removed]);
-  };
+    setSelectedSizes((old) => [...selectedSizes])
+    setOurSizes((old) => [...old, ...removed])
+  }
 
   return (
     <Box>
       <Grid container spacing={6}>
         <Grid item xs={12} sm={12}>
-          {selectedSizes.length && (
+          {selectedSizes.length ? (
             <Box className="p-1 border border-gray-500">
               {selectedSizes.map((each, i) => {
                 return (
                   <CustomChip
                     onClick={() => unSelectSize(i)}
-                    sx={{ margin: 0.5, borderRadius: "5px" }}
+                    sx={{ margin: 0.5, borderRadius: '5px' }}
                     label={
                       <Box className="flex items-center">
                         {each.size}
@@ -95,10 +95,10 @@ export const SizeComponent = ({ selectedSizes, setSelectedSizes }) => {
                     skin="light"
                     color="primary"
                   />
-                );
+                )
               })}
             </Box>
-          )}
+          ) : null}
           <RadioGroup
             row
             aria-label="controlled"
@@ -121,29 +121,29 @@ export const SizeComponent = ({ selectedSizes, setSelectedSizes }) => {
         return (
           <CustomChip
             onClick={() => selectSize(i)}
-            sx={{ margin: 0.3, borderRadius: "5px" }}
+            sx={{ margin: 0.3, borderRadius: '5px' }}
             label={each.size}
             key={i}
             skin="light"
             color="primary"
           />
-        );
+        )
       })}
     </Box>
-  );
-};
+  )
+}
 
 export const QuantityComponent = ({ setSelectedSizes, selectedSizes }) => {
   const handleQualityChange = (size, qty) => {
     const updated = selectedSizes.map((each) => {
       if (each.size === size) {
-        return { ...each, quantity: qty };
+        return { ...each, quantity: qty }
       } else {
-        return each;
+        return each
       }
-    });
-    setSelectedSizes(() => [...updated]);
-  };
+    })
+    setSelectedSizes(() => [...updated])
+  }
   return (
     <Grid container spacing={1}>
       {selectedSizes.map((size, i) => {
@@ -164,29 +164,29 @@ export const QuantityComponent = ({ setSelectedSizes, selectedSizes }) => {
               }}
             />
           </Grid>
-        );
+        )
       })}
     </Grid>
-  );
-};
+  )
+}
 
 export const ColorComponent = ({ setSelectedSizes, selectedSizes }) => {
   const handleQualityChange = (size, color) => {
     const updated = selectedSizes.map((each) => {
       if (each.size === size) {
-        let colorUpdate;
+        let colorUpdate
         if (each.colors.includes(color)) {
-          colorUpdate = each.colors.filter((e) => e !== color);
+          colorUpdate = each.colors.filter((e) => e !== color)
         } else {
-          colorUpdate = [...each.colors, color];
+          colorUpdate = [...each.colors, color]
         }
-        return { ...each, colors: colorUpdate };
+        return { ...each, colors: colorUpdate }
       } else {
-        return each;
+        return each
       }
-    });
-    setSelectedSizes(() => [...updated]);
-  };
+    })
+    setSelectedSizes(() => [...updated])
+  }
   return (
     <Grid container spacing={1}>
       {selectedSizes.map((size, i) => (
@@ -225,5 +225,5 @@ export const ColorComponent = ({ setSelectedSizes, selectedSizes }) => {
         </Grid>
       ))}
     </Grid>
-  );
-};
+  )
+}

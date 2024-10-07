@@ -1,28 +1,33 @@
 /* eslint-disable @next/next/no-img-element */
-"use client";
-import { Box, Button, LinearProgress, Rating, Typography } from "@mui/material";
-import IconifyIcon from "../icon";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
-import useSWR from "swr";
-import Link from "next/link";
-import { useEffect } from "react";
-import { formatCurrency, formatDistance, ngnPrice } from "@/app/utils/format";
-import { Map } from "@mui/icons-material";
-import { useUserData } from "@/app/hooks/useData";
-import ReactSlickSlider from "../wrapper/react-slick";
+'use client'
+import { Box, Button, LinearProgress, Rating, Typography } from '@mui/material'
+import IconifyIcon from '../icon'
+import { useDispatch } from 'react-redux'
+import { useRouter } from 'next/navigation'
+import useSWR from 'swr'
+import Link from 'next/link'
+import { useEffect } from 'react'
+import { formatCurrency, formatDistance, ngnPrice } from '@/app/utils/format'
+import { Map } from '@mui/icons-material'
+import { useUserData } from '@/app/hooks/useData'
+import ReactSlickSlider from '../wrapper/react-slick'
+import useSWRWithCoordinates from '@/app/hooks/fetchWithCoordinates'
+import { addCartHandler } from '@/app/redux/state/slices/home/cart'
 
-export const PopularProduct = ({endpoint, ...props}) => {
-  const router = useRouter();
-  const { data: popularProds } = useSWR(endpoint || "/home/popular-products");
-  const popularProducts = popularProds ? popularProds.data : [];
+export const PopularProduct = ({ endpoint, ...props }) => {
+  const router = useRouter()
+  const { data: popularProds } = useSWRWithCoordinates(
+    endpoint || '/home/popular-products?limit=40'
+  )
+  const popularProducts = popularProds ? popularProds.data : []
+  console.log(popularProducts)
 
   const View = ({ image, prodName, store, price, small, others }) => (
     <Box
       className={`${
         small
-          ? "!w-28 !h-44 m-2 "
-          : "!w-28 !h-44 md:!w-44 md:!h-56 m-1.5 md:m-3 relative"
+          ? '!w-28 !h-44 m-2 '
+          : '!w-28 !h-44 md:!w-44 md:!h-56 m-1.5 md:m-3 relative'
       }`}
     >
       {others?.discount && (
@@ -40,7 +45,7 @@ export const PopularProduct = ({endpoint, ...props}) => {
         <img
           src={image}
           alt="product_image"
-          className={`!w-full ${small ? "!h-28" : "!h-28 md:!h-44"} rounded-md`}
+          className={`!w-full ${small ? '!h-28' : '!h-28 md:!h-44'} rounded-md`}
         />
       </Box>
       <Box className="py-1">
@@ -64,7 +69,7 @@ export const PopularProduct = ({endpoint, ...props}) => {
         </Box>
       </Box>
     </Box>
-  );
+  )
 
   return (
     <Box>
@@ -82,20 +87,20 @@ export const PopularProduct = ({endpoint, ...props}) => {
         ))}
       </ReactSlickSlider>
     </Box>
-  );
-};
+  )
+}
 export const HotDeal = (props) => {
-  const { data } = useSWR("/home/flashsales?deal=hot");
-  const hotDealData = data ? data.data : [];
-  const router = useRouter();
+  const { data } = useSWRWithCoordinates('/home/flashsales?deal=hot')
+  const hotDealData = data ? data.data : []
+  const router = useRouter()
   const View = ({ image, prodName, small, price, store, unit, of, others }) => {
-    const percentage = (unit / of) * 100;
+    const percentage = (unit / of) * 100
     return (
       <Box
         className={`${
           small
-            ? "!w-28 !h-44 m-2 "
-            : "!w-28 !h-44 md:!w-44 md:!h-60 m-1.5 md:m-3 relative"
+            ? '!w-28 !h-44 m-2 '
+            : '!w-28 !h-44 md:!w-44 md:!h-60 m-1.5 md:m-3 relative'
         }`}
       >
         <Box onClick={() => router.push(`/biz/${others?.store}/${prodName}`)}>
@@ -103,7 +108,7 @@ export const HotDeal = (props) => {
             src={image}
             alt="product_image"
             className={`!w-full ${
-              small ? "!h-28" : "!h-28 md:!h-44"
+              small ? '!h-28' : '!h-28 md:!h-44'
             } rounded-md`}
           />
         </Box>
@@ -131,7 +136,7 @@ export const HotDeal = (props) => {
               variant="determinate"
               value={percentage}
               className="!rounded-md"
-              color={"warning"}
+              color={'warning'}
               aria-controls="lkslk"
               sx={{ height: 8 }}
             />
@@ -141,8 +146,8 @@ export const HotDeal = (props) => {
           </h5>
         </Box>
       </Box>
-    );
-  };
+    )
+  }
   return (
     <Box>
       <ReactSlickSlider>
@@ -160,23 +165,23 @@ export const HotDeal = (props) => {
         ))}
       </ReactSlickSlider>
     </Box>
-  );
-};
+  )
+}
 
 export const ProductOnCategory = ({
   product,
   cartProducts,
   handleLocalCartChange,
 }) => {
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const { offline } = {};
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const { offline } = {}
 
   return (
     <Box className="m-1  p-3 py-4 rounded-xl md:!w-76 relative bg-white ProductOnCategory">
       <Box className="!flex items-center relative">
         <Link
-          href={`/shop/${product?.category?.replaceAll(" ", "-")}/${
+          href={`/shop/${product?.category?.replaceAll(' ', '-')}/${
             product._id
           }`}
           className="w-5/12 flex-shrink-0"
@@ -188,7 +193,7 @@ export const ProductOnCategory = ({
           />
         </Link>
         <Link
-          href={`/shop/${product?.category?.replaceAll(" ", "-")}/${
+          href={`/shop/${product?.category?.replaceAll(' ', '-')}/${
             product._id
           }`}
         >
@@ -222,17 +227,17 @@ export const ProductOnCategory = ({
           startIcon={<IconifyIcon icon="tabler:shopping-cart" />}
           onClick={() => {
             // cartHandler({ productId: product?._id }, dispatch, offline);
-            handleLocalCartChange(product?._id);
+            handleLocalCartChange(product?._id)
           }}
         >
           {cartProducts?.includes(product._id)
-            ? "Remove from Cart"
-            : "Add to Cart"}
+            ? 'Remove from Cart'
+            : 'Add to Cart'}
         </Button>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 export const ProductOnShowcase = ({
   others,
@@ -243,11 +248,17 @@ export const ProductOnShowcase = ({
   prodPrice,
   star,
 }) => {
-  const { showMapScreen } = useUserData();
-  const router = useRouter();
-  const reshapedProdName = prodName.split(" ").join("+").toLowerCase();
+  const { showMapScreen, cartedProds } = useUserData()
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const payload = {
+    productId: others._id,
+    store,
+    branch,
+  }
+  const reshapedProdName = prodName.split(' ').join('+').toLowerCase()
   return (
-    <Box className="w-4/12 min-w-[100px] relative max-w-[140px] md:max-w-[170px] md:w-44 h-48 md:!h-64 md:mx-2 my-2.5 ">
+    <Box className="w-4/12 min-w-[100px] relative max-w-[140px] md:max-w-[170px] md:w-44 h-48 md:!h-64 md:mx-2 my-6 ">
       {others?.discount && (
         <Box className="w-9 h-4 bg-red-600 rounded-full absolute right-2 top-2 shadow flex items-center justify-center">
           <Typography
@@ -288,6 +299,14 @@ export const ProductOnShowcase = ({
           >
             {ngnPrice(prodPrice)}
           </Typography>
+          <Box
+            className="border border-black rounded-full h-6 px-2 mt-1 cursor-pointer flex items-center"
+            onClick={() => addCartHandler(payload, dispatch)}
+          >
+            <Typography variant="caption" className="!text-[10px] !leading-5">
+              {cartedProds.includes(others._id) ? 'Remove' : 'Add to Cart'}
+            </Typography>
+          </Box>
         </Box>
 
         <Box className="flex flex-col items-start justify-between w-full">
@@ -326,32 +345,32 @@ export const ProductOnShowcase = ({
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 export const OfflineProductOnCartView = ({
   product,
   handleLocalCartChange,
   sumCartTotal,
 }) => {
-  const { offline } = {};
-  const dispatch = useDispatch();
+  const { offline } = {}
+  const dispatch = useDispatch()
 
-  const { data, loading, error } = useSWR(`/products?prodId=${product}`);
+  const { data, loading, error } = useSWR(`/products?prodId=${product}`)
 
   useEffect(() => {
     if (data && data.data[0]) {
-      sumCartTotal((prev) => prev + data.data[0].prodPrice || 0);
+      sumCartTotal((prev) => prev + data.data[0].prodPrice || 0)
     }
-  }, [data, sumCartTotal]);
+  }, [data, sumCartTotal])
 
   return !loading && !error && data ? (
     <Box className="!flex !w-full md:p-2 m-1 items-center relative">
       <Box
         onClick={() => {
           // cartHandler({ productId: product }, dispatch, offline);
-          handleLocalCartChange(product);
-          sumCartTotal((prev) => prev - data.data[0].prodPrice);
+          handleLocalCartChange(product)
+          sumCartTotal((prev) => prev - data.data[0].prodPrice)
         }}
         className="absolute -top-2 !mt-3 -right-2 bg-pink-500 w-6 h-6 flex items-center justify-center !rounded-full !shadow-xl"
       >
@@ -392,8 +411,8 @@ export const OfflineProductOnCartView = ({
     </Box>
   ) : (
     <h4>loading</h4>
-  );
-};
+  )
+}
 
 export const ProductOnOrderView = ({ product }) => {
   return (
@@ -463,5 +482,5 @@ export const ProductOnOrderView = ({ product }) => {
         </Typography>
       </Box>
     </Box>
-  );
-};
+  )
+}

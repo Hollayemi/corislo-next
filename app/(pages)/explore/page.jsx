@@ -4,7 +4,7 @@ import OptionsMenu from '@/app/components/option-menu'
 import { ProductOnShowcase } from '@/app/components/templates/productTemplates'
 import ReactSlickSlider from '@/app/components/wrapper/react-slick'
 import { mySubstring } from '@/app/utils/format'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, ClickAwayListener, Typography } from '@mui/material'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import useSWR from 'swr'
@@ -15,10 +15,13 @@ import { MagnifyingGlass } from 'react-loader-spinner'
 import MyPagination from '@/app/components/templates/pagination'
 import { useRouter, useSearchParams } from 'next/navigation'
 import HomeWrapper from '@/app/components/view/home'
+import { CustomizeStatus } from '../store/dashboard/order-management/review/components'
+import { formatName } from '@/app/utils/get-initials'
 
 const SearchPage = () => {
   const [triggerSearch, setTriggerSearch] = useState('')
   const [search, setSearch] = useState('')
+  const [focus, setFocus] = useState(false)
   const searchParams = useSearchParams()
   const router = useRouter()
   const currentSearchParams = new URLSearchParams(searchParams)
@@ -31,6 +34,10 @@ const SearchPage = () => {
   } = useSWRWithCoordinates(
     `/products?limit=30&${currentSearchParams.toString()}`
   )
+  const { data: sugg, isLoading: suggLoading } = useSWR('/user/suggestions')
+  const { data: searches, isLoading: searchLoading } = useSWR('/user/searches')
+  const mySearches = searches?.data?.searches || []
+  const suggestions = sugg || []
   const products = prods ? prods.data : null
   const toRemove = ['₦', 'star', 'stars', ',']
   const [filterBy, editFilter] = useState({
@@ -57,7 +64,6 @@ const SearchPage = () => {
     values.map((x, i) => {
       if (x && x !== 'Any') {
         let sanitizedParams = x.toString()
-        console.log(sanitizedParams)
         toRemove.forEach((item) => {
           sanitizedParams = sanitizedParams?.replaceAll(item, '')
         })
@@ -109,7 +115,6 @@ const SearchPage = () => {
   const FilterOptions = ({ name, options }) => {
     const filterName = name.replace(' ', '_').toLowerCase()
     const handleFilterChange = (option) => {
-      console.log(option)
       if (!option) {
         currentSearchParams.delete(filterName)
         router.push(`?${currentSearchParams.toString()}`)
@@ -185,32 +190,52 @@ const SearchPage = () => {
             </div>
           ))}
         </ReactSlickSlider>
-        <Box className="absolute -bottom-5 left-0 w-full flex justify-center z-50">
-          <Box className="w-2/5 min-w-[370px] relative !overflow-hidden shadow-md rounded-full">
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  searchClick()
-                }
-              }}
-              className="h-12 w-full rounded-full pl-12 pr-16 focus outline-none border-blue-800 focus:border"
-            />
-            <IconifyIcon
-              icon="tabler:search"
-              className="absolute top-[14px] left-4"
-            />
-            <Button
-              variant="text"
-              onClick={() => searchClick()}
-              className="!absolute top-[0px] !w-28 !rounded-r-full !h-12 -right-2 !border-l"
-            >
-              Search
-            </Button>
+        <ClickAwayListener onClickAway={() => setFocus(false)}>
+          <Box className="absolute -bottom-5 left-0 w-full flex justify-center z-50 ">
+            <Box className="w-2/5 min-w-[370px] relative !overflow-hidden shadow-md rounded-full focus-within:h">
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onFocus={() => setFocus(true)}
+                // onBlur={() => setFocus(false)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    searchClick()
+                  }
+                }}
+                className="h-12 w-full rounded-full pl-12 pr-16 focus outline-none border-blue-800 focus:border"
+              />
+              <IconifyIcon
+                icon="tabler:search"
+                className="absolute top-[14px] left-4"
+              />
+              <Button
+                variant="text"
+                onClick={() => searchClick()}
+                className="!absolute top-[0px] !w-28 !rounded-r-full !h-12 -right-2 !border-l"
+              >
+                Search
+              </Button>
+            </Box>
+            {focus && (
+              <Box className="absolute w-2/5 min-w-[370px] h-80 bg-white top-14 rounded-xl shadow-2xl p-2">
+                <HistoryComp
+                  array={mySearches}
+                  title="Search History"
+                  setSearch={setSearch}
+                  clear
+                />
+
+                <HistoryComp
+                  array={suggestions}
+                  title="Discovery"
+                  setSearch={setSearch}
+                />
+              </Box>
+            )}
           </Box>
-        </Box>
+        </ClickAwayListener>
       </Box>
       {isLoading ? (
         <Box className="flex flex-col items-center justify-center my-12 mt-20">
@@ -353,3 +378,43 @@ const SearchPage = () => {
 }
 
 export default SearchPage
+
+const HistoryComp = ({ array, title, setSearch, clear }) => {
+  return (
+    <Box>
+      <Box className="flex items-center justify-between">
+        <Typography variant="body2" className="!text-black !my-3 !text-[14px] ">
+          {title}
+        </Typography>
+        {clear && (
+          <Box
+            className="px-3 bg-gray-100 py-1 rounded-2xl w-fit m-1 !text-[11px]"
+            onClick={() => {}}
+          >
+            clear all
+          </Box>
+        )}
+      </Box>
+
+      <Box className="flex flex-wrap mb-3">
+        {array.length ? (
+          array.map((each, i) => (
+            <Box
+              key={i}
+              className="px-3 bg-gray-100 py-1 rounded-md w-fit m-1 cursor-pointer border border-white hover:border-gray-300"
+              onClick={() => setSearch(each)}
+            >
+              <Typography variant="caption" className="!text-[#888]">
+                {formatName(each)}
+              </Typography>
+            </Box>
+          ))
+        ) : (
+          <Typography variant="caption" className="!text-[#888] !text-center">
+            No {title}
+          </Typography>
+        )}
+      </Box>
+    </Box>
+  )
+}

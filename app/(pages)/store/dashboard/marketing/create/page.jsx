@@ -34,9 +34,9 @@ const MarketingPage = ({ params }) => {
       crumb={[
         ...marketingBreadCrumb,
         {
-          text: "Create",
-          link: "marketing/create",
-          icon: "shop",
+          text: 'Create',
+          link: 'marketing/create',
+          icon: 'shop',
         },
       ]}
     >
@@ -44,33 +44,36 @@ const MarketingPage = ({ params }) => {
         <Box className="w-full bg-white flex items-center md:justify-center mb-2 py-2 border-x-4 border-white rounded-xl !overflow-x-auto ">
           <CampaignTab
             title="Campaign"
-            caption="caption here"
+            caption="Special Offers"
             screen={screen}
             setScreen={setScreen}
           />
           <CampaignTab
             title="Anouncement"
-            caption="caption here"
+            caption="Brand Awareness"
             screen={screen}
             setScreen={setScreen}
+            disabled
           />
           <CampaignTab
             title="Banner"
-            caption="caption here"
+            caption="Promote via flyer"
             screen={screen}
             setScreen={setScreen}
+            disabled
           />
           <CampaignTab
             title="Radius Reach"
-            caption="caption here"
+            caption="Increase Visibility"
             screen={screen}
             setScreen={setScreen}
+            disabled
           />
         </Box>
         <Box className="w-full md:p-6 bg-white rounded-xl">{pages[screen]}</Box>
       </Box>
     </StoreLeftSideBar>
-  );
+  )
 };
 
 export default MarketingPage;

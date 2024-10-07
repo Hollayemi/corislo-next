@@ -2,8 +2,8 @@ import { CancelOutlined } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Box, Tab, Typography } from "@mui/material";
 import React, { useState } from "react";
-import CreateCollection from "./collection";
-import CreateSubCollection from "./subCollection";
+import CreateCollection from "../add-new-category/collection";
+import CreateSubCollection from "../add-new-category/subCollection";
 
 const CreateCategory = ({ showOverlay }) => {
   const [value, setTabValue] = useState("1");
@@ -11,8 +11,8 @@ const CreateCategory = ({ showOverlay }) => {
     setTabValue(newValue);
   };
   return (
-    <Box className="flex w-full px-2 justify-center">
-      <Box className="w-full md:w-[550px] h-[520px] mt-20 relative bg-white rounded-xl md:mr-10 flex flex-col">
+    <Box className="flex w-full px-2 justify-center h-[550px] overflowStyle">
+      <Box className="w-full md:w-[750px] h-[550px] overflow-y-auto overflowStyle mt-20 relative bg-white rounded-xl md:mr-10 flex flex-col">
         <Box className="w-full !rounded-md pt-2 px-3">
           <TabContext value={value}>
             <TabList
@@ -51,14 +51,14 @@ const CreateCategory = ({ showOverlay }) => {
             <TabPanel value="1" className="!px-3">
               <CreateCollection />
             </TabPanel>
-            <TabPanel value="2" className="!px-3">
+            <TabPanel value="2" className="!px-3 h-fit">
               <CreateSubCollection />
             </TabPanel>
           </TabContext>
         </Box>
       </Box>
     </Box>
-  );
+  )
 };
 
 export default CreateCategory;

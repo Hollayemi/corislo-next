@@ -89,7 +89,13 @@ export const ProductPrev = ({
   )
 }
 
-export const CustomizeStatus = ({ text, size }) => {
+export const CustomizeStatus = ({
+  text,
+  size,
+  label,
+  disabled,
+  onClick,
+}) => {
   const status = statusObj.filter(
     (e) => e.title === text.replaceAll(' ', '_').toLowerCase()
   )[0]
@@ -102,6 +108,7 @@ export const CustomizeStatus = ({ text, size }) => {
       label={status?.title?.replaceAll('_', ' ')}
       sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
       className="flex-shrink-0 !rounded-sm mx-1.5"
+      onClick={onClick}
     />
   )
 }

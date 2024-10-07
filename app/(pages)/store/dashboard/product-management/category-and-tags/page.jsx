@@ -30,7 +30,7 @@ const CategoryAndTags = ({ params }) => {
           ...productBreadCrumb,
           {
             text: "Category And Tags",
-            link: "product-management/category-and-tags",
+            link: "/category-and-tags",
           },
         ]}
       >
