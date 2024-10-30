@@ -23,6 +23,16 @@ const nextConfig = {
         hostname: 'res.cloudinary.com',
         pathname: '/xmart/image/upload/**',
       },
+      {
+        protocol: "https",
+        hostname: "corislo.vercel.app",
+        pathname: "/images**"
+      },
+       {
+        protocol: "http",
+        hostname: "corislo.vercel.app",
+        pathname: "/images**"
+      }
     ],
   },
 };

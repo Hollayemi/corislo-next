@@ -1,24 +1,19 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
 import { styled, alpha } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
 import MuiAppBar from '@mui/material/AppBar'
 import {
-  Menu,
-  MenuItem,
   Badge,
   Box,
   Toolbar,
   Avatar,
   Typography,
-  Button,
 } from '@mui/material'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import MenuIcon from '@mui/icons-material/Menu'
-import MailIcon from '@mui/icons-material/Mail'
-import NotificationsIcon from '@mui/icons-material/Notifications'
 import MoreIcon from '@mui/icons-material/MoreVert'
 import Iconify from '@/app/components/icon'
 
@@ -31,7 +26,6 @@ import OptionsMenu from '../../option-menu'
 import { updateStaff } from '@/app/redux/state/slices/shop/branches/staffs'
 import { useDispatch } from 'react-redux'
 import { desktopOptions, mobileOptions } from './components/data'
-import { viewAllNotificationsApi } from '@/app/redux/state/slices/shop/others'
 
 const Icons = styled('div')(({ theme }) => ({
   padding: theme.spacing(1),
@@ -74,17 +68,16 @@ export default function StoreDashboardAppBar({
         showSnackbar,
         () =>
           route.push(
-            `/store/login?authorize=changes&for=${staffInfo.store}&by=${staffInfo.username}`
+            `/dashboard/login?authorize=changes&for=${staffInfo.store}&by=${staffInfo.username}`
           )
       )
     }
 
     if (action === 'notification') {
       showOverlay('notification')
-      
     }
     if (action === 'inbox') {
-      route.push("/store/dashboard/chat")
+      route.push('/dashboard/store/chat')
     }
     if (action === 'logout') {
       localStorage.removeItem('store_token')
@@ -195,7 +188,7 @@ export default function StoreDashboardAppBar({
           </Icons>
           <Icons
             className="ml-6 mr-2"
-            onClick={() => route.push('/store/dashboard/chat')}
+            onClick={() => route.push('/dashboard/store/chat')}
           >
             <Badge badgeContent={12} color="error">
               <Iconify

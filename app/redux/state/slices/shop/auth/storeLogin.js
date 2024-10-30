@@ -5,7 +5,7 @@ import { jsonHeader } from "../../api/setAuthHeaders";
 
 const storeLoginApi = createAsyncThunk("post/UserLogin", async (payload) => {
   const { data } = await martApi
-    .post("/store/login", payload)
+    .post("/dashboard/login", payload)
     .then((res) => {
       const { accessToken } = res.data;
       localStorage.setItem("store_token", accessToken);

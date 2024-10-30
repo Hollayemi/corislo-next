@@ -11,7 +11,7 @@ export const dashBoardLogin = createAsyncThunk(
   async (payload) => {
     const userToken = tokens.auth;
     const { data } = await martApi
-      .post("/store/dashboardLogin", payload, jsonHeader(userToken))
+      .post("/dashboard/storeLogin", payload, jsonHeader(userToken))
       .then((res) => res)
       .catch((err) => err.response);
     return data;

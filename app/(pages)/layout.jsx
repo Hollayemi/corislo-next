@@ -50,12 +50,12 @@ export default function RootLayout({ children }) {
         })
     }
   }, [connection])
-  const excludedPaths = ['/store', '/coristen']
+  const excludedPaths = ['/dashboard', '/coristen']
   const pathArr = pathname.split('/')
   const isExcluded = excludedPaths.some((path) => pathname.startsWith(path))
   
   const logos = {
-    store: 'main_store.png',
+    dashboard: 'main_store.png',
     coristen: 'main1.jpg',
   }
   

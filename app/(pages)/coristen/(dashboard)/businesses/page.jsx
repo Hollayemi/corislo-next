@@ -24,7 +24,7 @@ const SuperDashboard = ({ params }) => {
     console.log(row, action)
     if (action === 'edit') {
       router.push(
-        `/store/dashboard/product-management/add-new-product?edit=${row.prodId}`
+        `/dashboard/store/product-management/add-new-product?edit=${row.prodId}`
       )
     }
     if (action === 'changeStatus') {

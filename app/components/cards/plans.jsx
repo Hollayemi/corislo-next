@@ -1,7 +1,7 @@
 import { Box, Button, Switch, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import IconifyIcon from '../icon'
-import { reshapePrice } from '@/app/(pages)/store/dashboard/marketing/components'
+import { reshapePrice } from '@/app/(pages)/dashboard/store/marketing/components'
 import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 

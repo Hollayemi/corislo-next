@@ -2,10 +2,6 @@ import CategoryIcon from "@mui/icons-material/Category";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import ListAltIcon from "@mui/icons-material/ListAlt";
-import ShowChartIcon from "@mui/icons-material/ShowChart";
-import SettingsIcon from "@mui/icons-material/Settings";
-import StoreIcon from "@mui/icons-material/Store";
-import { CheckBox, HouseOutlined, SupervisedUserCircle, UpcomingOutlined, VerifiedUserSharp } from "@mui/icons-material";
 
 export const prodInnerList = {
   title: "Product",
@@ -115,6 +111,13 @@ export const settingsInnerList = {
     path: "/staffs",
     icon: "tabler:users-group",
     short: "Staffs",
+    permission: "view_staff"
+  },
+  {
+    name: "Voucher",
+    path: "/voucher",
+    icon: "tabler:gift-card",
+    short: "voucher",
     permission: "view_staff"
   },
   {

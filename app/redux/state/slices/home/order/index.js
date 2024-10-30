@@ -16,7 +16,10 @@ export const addNewOrder = (payload, dispatch, endpoint) => {
   dispatch(addOrderApi(payload))
     .then(unwrapResult)
     .then((res) => {
-      toaster({ ...res });
+      console.log(res)
+      // toaster({ ...res });
+      // window.location.href = res.checkoutUrl
+       window.open(res?.checkoutUrl?.authorization_url)
       mutate("/user/order");
       mutate(endpoint);
     })

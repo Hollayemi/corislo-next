@@ -41,13 +41,31 @@ const StoreDataProvider = ({ children }) => {
 
   const getPath = pathname.split('/')
 
+  const [screenWidth, setWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 0
+  )
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleResize = () => {
+        setWidth(window.innerWidth)
+      }
+
+      window.addEventListener('resize', handleResize)
+
+      return () => {
+        window.removeEventListener('resize', handleResize)
+      }
+    }
+  }, [])
+
   const showOverlay = (pageName = null) => {
     if (overLay) {
       setOverflow(false)
       setOpenOverlay(null)
-       if (overLay === 'notification') {
-         dispatch(viewAllNotificationsApi())
-       }
+      if (overLay === 'notification') {
+        dispatch(viewAllNotificationsApi())
+      }
     } else {
       setOverflow(true)
       setOpenOverlay(pageName)
@@ -76,9 +94,9 @@ const StoreDataProvider = ({ children }) => {
   //     getPath[1] !== "store" &&
   //     getPath[2] !== "login"
   //   ) {
-  //     router.replace(`/store/login`);
+  //     router.replace(`/dashboard/login`);
   //   }else{
-  //     router.replace(`/store/dashboard`);
+  //     router.replace(`/dashboard/store`);
   //   }
   // }, [getPath, router]);
 
@@ -111,7 +129,6 @@ const StoreDataProvider = ({ children }) => {
       })
 
       newSocket.on('notify', (data) => {
-
         setNotifications(data)
       })
     }
@@ -149,10 +166,10 @@ const StoreDataProvider = ({ children }) => {
     const whiteList = ['login', 'register']
     if (
       !connection() &&
-      getPath[1] === 'store' &&
+      getPath[1] === 'dashboard' &&
       !whiteList.includes(getPath[2])
     ) {
-      router.replace(`/store/login`)
+      router.replace(`/dashboard/login`)
     }
   }, [getPath, router])
 
@@ -203,6 +220,7 @@ const StoreDataProvider = ({ children }) => {
           storeInfo: (!storeErr && !storeIsLoading && storeInfo) || {},
           selectedAddress: {},
           notifications,
+          screenWidth,
           connection: connection(),
           showOverlay,
           setLoading: setLoading,

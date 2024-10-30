@@ -1,12 +1,16 @@
 export const removeOrAddToArray = (item, array, func, itemIsArray) => {
+  
   if (array.includes(item) || isArraySubset(item, array, itemIsArray)) {
     const newItem = array.filter((x) =>
       itemIsArray ? item.includes(x) : x !== item
     );
     func(() => newItem);
   } else {
+    
     if (itemIsArray) {
-      func([...array, ...item]);
+      const rez = [...array, ...item].filter(x => !array.includes(x) || !item.includes(x))
+    
+      func(rez);
     } else {
       func([...array, item]);
     }

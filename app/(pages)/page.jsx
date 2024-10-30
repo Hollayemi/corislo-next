@@ -11,7 +11,6 @@ import {
   SectionTitle,
   TopStores,
 } from '@/app/components/cards/homeCards'
-import { categoryData, topStoresData } from '@/app/data/home/homepage'
 import ReactSlickSlider from '@/app/components/wrapper/react-slick'
 import {
   HotDeal,
@@ -235,7 +234,7 @@ const HomePage = ({ params }) => {
               }
             />
 
-            <ServicesSlider />
+            <ServicesSlider noPopup />
           </Box>
           {/*  */}
           {/*  */}
@@ -450,7 +449,7 @@ const HomePage = ({ params }) => {
 
           <Box className="flex justify-center my-16 w-full px-2">
             <Box
-              className="flex flex-col md:flex-row items-center p-4 py-10 md:w-3/5 !rounded-xl"
+              className="flex flex-col md:flex-row items-center p-4 py-10 md:w-full lg:w-4/5 !rounded-xl"
               bgcolor="custom.pri"
             >
               <Box className="flex-shrink-0 flex justify-center w-full md:w-auto">
@@ -459,7 +458,7 @@ const HomePage = ({ params }) => {
                   alt="flyer"
                   width={400}
                   height={400}
-                  className="w-full md:!w-[500px] md:h-[400px] md:-ml-16 -mb-14 !rounded-full flex-shrink-0 -mt-6"
+                  className="w-full md:!w-[450px] lg:!w-[500px] md:h-[400px] md:-ml-16 -mb-14 !rounded-full flex-shrink-0 -mt-6"
                 />
               </Box>
               <Box className="mt-16 md:mt-0">

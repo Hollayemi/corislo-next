@@ -1,16 +1,16 @@
-import Image from "next/image";
-import { Box, Button, Grid, Typography } from "@mui/material";
-import themeConfig from "@/app/configs/themeConfig";
-import IconifyIcon from "../icon";
-import Link from "next/link";
-import { createStoreHandler } from "@/app/redux/state/slices/shop/addShop";
-import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
+import Image from 'next/image'
+import { Box, Button, Grid, Typography } from '@mui/material'
+import themeConfig from '@/app/configs/themeConfig'
+import IconifyIcon from '../icon'
+import Link from 'next/link'
+import { createStoreHandler } from '@/app/redux/state/slices/shop/addShop'
+import { useRouter } from 'next/navigation'
+import { useDispatch } from 'react-redux'
 
 export const metadata = {
-  title: "auth-corislo",
-  description: "Showcase your store now",
-};
+  title: 'auth-corislo',
+  description: 'Showcase your store now',
+}
 
 export default function StoreAuthLayout({
   children,
@@ -23,32 +23,32 @@ export default function StoreAuthLayout({
   storeValues,
   ...others
 }) {
-  const router = useRouter();
-  const dispatch = useDispatch();
+  const router = useRouter()
+  const dispatch = useDispatch()
 
   const getStatus = (level) => {
-    if (stage === level) return "active";
-    if (stage > level) return "done";
-    if (stage < level) return "waiting";
-    return "sdf";
-  };
+    if (stage === level) return 'active'
+    if (stage > level) return 'done'
+    if (stage < level) return 'waiting'
+    return 'sdf'
+  }
   const StageBox = ({ text, level }) => {
     return (
       <Box
         className="w-1/2 md:w-1/4"
-        onClick={getStatus(level) === "done" ? () => setStage(level) : () => {}}
+        onClick={getStatus(level) === 'done' ? () => setStage(level) : () => {}}
       >
         <CheckList2 text={text} active={getStatus(level)} />
       </Box>
-    );
-  };
+    )
+  }
 
   return (
     <Box className="flex justify-center h-screen bg-black overflow-hidden">
       <Box className="flex w-full max-w-[1500px] h-full min-h-screen">
         <Box className="w-[560px] min-w-[260px] h-full relative bg-slate-500 !overflow-hidden hidden sm:block">
           <Image
-            src={image || "/images/misc/auth-bgd.png"}
+            src={image || '/images/misc/auth-bgd.png'}
             alt="auth-mage"
             width={1500}
             height={1500}
@@ -97,7 +97,7 @@ export default function StoreAuthLayout({
         >
           <Box
             className={`flex flex-col mt-6 md:mt-14 items-center w-full ${
-              stage !== 3 && "md:w-4/5 md:px-4"
+              stage !== 3 && 'md:w-4/5 md:px-4'
             } h-ful`}
           >
             <Box className="flex flex-col items-center mt-14 md:mt-0 ">
@@ -113,7 +113,7 @@ export default function StoreAuthLayout({
                 className="!text-xl !font-bold !mt-3"
                 color="custom.pri"
               >
-                {others.title || "{ Page Title }"}
+                {others.title || '{ Page Title }'}
               </Typography>
             </Box>
             <Box className="w-full flex items-center flex-wrap md:flex-nowrap mb-7 mt-4 md:mt-0 md:mb-0 md:px-6">
@@ -137,7 +137,7 @@ export default function StoreAuthLayout({
                 <Typography className="!text-[13px] !mt-4">
                   Already have an account?{" "}
                   <Link
-                    href="/store/login"
+                    href="/dashboard/login"
                     color="custom.pri"
                     className="!font-semibold"
                   >
@@ -150,13 +150,13 @@ export default function StoreAuthLayout({
         </Box>
       </Box>
     </Box>
-  );
+  )
 }
 
 const color = {
-  done: "custom.pri",
-  active: "custom.sec",
-};
+  done: 'custom.pri',
+  active: 'custom.sec',
+}
 
 const CheckList = ({ title, text }) => (
   <Box className="flex items-start !mt-6 !mb-5">
@@ -178,13 +178,13 @@ const CheckList = ({ title, text }) => (
       </Typography>
     </Box>
   </Box>
-);
+)
 
 const CheckList2 = ({ active, text }) => (
   <Box className="flex items-center mt-1 md:!mt-6 md:!mb-5 border h-10 bg-white px-4 mx-1 cursor-pointer">
     <Box
       className="w-4 h-4 rounded-full flex flex-shrink-0 items-center justify-center !mt-1"
-      bgcolor={color[active] || "gray"}
+      bgcolor={color[active] || 'gray'}
     >
       <IconifyIcon icon="tabler:check" className="!text-[12px] !text-white" />
     </Box>
@@ -192,10 +192,10 @@ const CheckList2 = ({ active, text }) => (
       <Typography
         variant="caption"
         className="!text-[11px]"
-        color={color[active] || "gray"}
+        color={color[active] || 'gray'}
       >
         {text}
       </Typography>
     </Box>
   </Box>
-);
+)

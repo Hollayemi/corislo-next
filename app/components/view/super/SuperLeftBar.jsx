@@ -1,19 +1,19 @@
-"use client";
-import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import MuiDrawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import IconifyIcon from "@/app/components/icon";
-import CssBaseline from "@mui/material/CssBaseline";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import themeConfig from "@/app/configs/themeConfig";
-import Link from "next/link";
+'use client'
+import * as React from 'react'
+import { styled, useTheme } from '@mui/material/styles'
+import Box from '@mui/material/Box'
+import MuiDrawer from '@mui/material/Drawer'
+import List from '@mui/material/List'
+import IconifyIcon from '@/app/components/icon'
+import CssBaseline from '@mui/material/CssBaseline'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import themeConfig from '@/app/configs/themeConfig'
+import Link from 'next/link'
 import {
   Avatar,
   AvatarGroup,
@@ -25,102 +25,102 @@ import {
   DialogContent,
   DialogActions,
   Slide,
-} from "@mui/material";
+} from '@mui/material'
 
-import { useSuperData } from "@/app/hooks/useData";
-import { SuperLeftBarContent } from "@/app/data/super/content";
-import SuperAppBar from "./SuperAppBar";
+import { useSuperData } from '@/app/hooks/useData'
+import { SuperLeftBarContent } from '@/app/data/super/content'
+import SuperAppBar from './SuperAppBar'
 
-const drawerWidth = 260;
+const drawerWidth = 260
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
-  transition: theme.transitions.create("width", {
+  transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
-  overflowX: "hidden",
-});
+  overflowX: 'hidden',
+})
 
 const closedMixin = (theme) => ({
-  transition: theme.transitions.create("width", {
+  transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  overflowX: "hidden",
+  overflowX: 'hidden',
   width: `calc(${theme.spacing(0)} + 0px)`,
-  [theme.breakpoints.up("sm")]: {
+  [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
-});
+})
 export const getStaticPaths = async (context) => {
   return {
     prpos: {
       fallback: false,
       paths: [],
     },
-  };
-};
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-end",
+  }
+}
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
   padding: theme.spacing(0, 2),
-  backgroundColor: "white",
-  position: "sticky",
+  backgroundColor: 'white',
+  position: 'sticky',
   zIndex: theme.zIndex.appBar + 1,
   top: 0,
   left: 0,
   right: 0,
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
-}));
+}))
 
 const StyleList = styled(List)(({ theme }) => ({
-  overflowY: "auto",
-  "&::-webkit-scrollbar": {
-    width: "4px", // Width of the scrollbar
+  overflowY: 'auto',
+  '&::-webkit-scrollbar': {
+    width: '4px', // Width of the scrollbar
   },
-  "&::-webkit-scrollbar-thumb": {
-    backgroundColor: "#f0eeee", // Color of the scrollbar thumb
-    borderRadius: "6px", // Rounded corners of the thumb
-    display: "none !important",
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#f0eeee', // Color of the scrollbar thumb
+    borderRadius: '6px', // Rounded corners of the thumb
+    display: 'none !important',
   },
-  "&::-webkit-scrollbar-thumb:hover": {
-    backgroundColor: "#42496b", // Color of the scrollbar thumb on hover
+  '&::-webkit-scrollbar-thumb:hover': {
+    backgroundColor: '#42496b', // Color of the scrollbar thumb on hover
   },
-  "&::--webkit-scrollbar-track": {
-    backgroundColor: "#fff",
+  '&::--webkit-scrollbar-track': {
+    backgroundColor: '#fff',
   },
-  cursor: "pointer",
-  transition: "all 1.5s",
+  cursor: 'pointer',
+  transition: 'all 1.5s',
   // Firefox
-  scrollbarWidth: "thin", // Width of the scrollbar
-  scrollbarColor: "#bdbdbd #f1f1f1",
-}));
+  scrollbarWidth: 'thin', // Width of the scrollbar
+  scrollbarColor: '#bdbdbd #f1f1f1',
+}))
 
 const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
+  shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
   width: drawerWidth,
   flexShrink: 0,
   zIndex: theme.zIndex.drawer,
-  whiteSpace: "nowrap",
-  boxSizing: "border-box",
+  whiteSpace: 'nowrap',
+  boxSizing: 'border-box',
   ...(open && {
     ...openedMixin(theme),
-    "& .MuiDrawer-paper": openedMixin(theme),
+    '& .MuiDrawer-paper': openedMixin(theme),
   }),
   ...(!open && {
     ...closedMixin(theme),
-    "& .MuiDrawer-paper": closedMixin(theme),
+    '& .MuiDrawer-paper': closedMixin(theme),
   }),
-}));
+}))
 
 // Dialog transition
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+  return <Slide direction="up" ref={ref} {...props} />
+})
 
 const SuperLeftBar = React.memo(
   ({
@@ -137,41 +137,40 @@ const SuperLeftBar = React.memo(
     updateDialogInfo,
     popup,
   }) => {
-    const { staffInfo } = useSuperData();
-    const router = useRouter();
-    const permissions = staffInfo.permissions;
-    const [open, setOpen] = React.useState(false);
+    const { staffInfo } = useSuperData()
+    const router = useRouter()
+    const permissions = staffInfo.permissions
+    const [open, setOpen] = React.useState(false)
 
     React.useLayoutEffect(() => {
       if (permissions) {
-        permissions[permission] === false &&
-          router.push("/store/dashboard/401");
+        permissions[permission] === false && router.push('/dashboard/store/401')
       }
-    }, [permissions]);
+    }, [permissions])
 
     const handleCloseDialog = () =>
       updateDialogInfo((prev) => {
-        return { ...prev, open: false };
-      });
+        return { ...prev, open: false }
+      })
 
-    const onSideBar = !path?.sidebar ? "" : `/${path.sidebar}`;
-    // 
+    const onSideBar = !path?.sidebar ? '' : `/${path.sidebar}`
+    //
     const handleDrawerOpen = () => {
       if (rightOpen) {
-        setRightOpen(false);
+        setRightOpen(false)
       }
-      setOpen(true);
-    };
+      setOpen(true)
+    }
 
     const handleDrawerClose = () => {
-      setOpen(false);
-    };
+      setOpen(false)
+    }
 
     const MyBreadcrumbs = () => {
-      const skip = onSideBar && 0;
+      const skip = onSideBar && 0
       return (
         <Breadcrumbs
-          slotProps={{ collapsedIcon: "." }}
+          slotProps={{ collapsedIcon: '.' }}
           maxItems={3}
           separator={
             <IconifyIcon
@@ -188,7 +187,7 @@ const SuperLeftBar = React.memo(
                   underline="hover"
                   key={index}
                   color="inherit"
-                  href={`/store/dashboard/${item.link}`}
+                  href={`/dashboard/store/${item.link}`}
                 >
                   <Typography
                     className="!text-[12px] md:!text-[14px] !font-[500] !text-black"
@@ -200,13 +199,13 @@ const SuperLeftBar = React.memo(
               )
           )}
         </Breadcrumbs>
-      );
-    };
+      )
+    }
 
     return (
       <React.Fragment>
         <Box
-          sx={{ display: "flex" }}
+          sx={{ display: 'flex' }}
           className="!overflow-hidden"
           bgcolor="custom.bodyGray"
         >
@@ -222,9 +221,9 @@ const SuperLeftBar = React.memo(
             variant="permanent"
             open={open}
             PaperProps={{
-              sx: { backgroundColor: "custom.bodyLight" },
+              sx: { backgroundColor: 'custom.bodyLight' },
               elevation: 0,
-              overflow: "hidden",
+              overflow: 'hidden',
             }}
           >
             <DrawerHeader className="" elevation={0} color="inherit">
@@ -240,31 +239,31 @@ const SuperLeftBar = React.memo(
             <StyleList className="overflow-y-scroll overflowStyle">
               <List
                 className="overflow-hidden shrink-0"
-                sx={{ bgcolor: "custom.bodyLight" }}
+                sx={{ bgcolor: 'custom.bodyLight' }}
               >
                 {SuperLeftBarContent.map((each, index) => (
                   <Link href={`/coristen${each.path}`} key={index}>
                     <ListItem
                       key={index}
                       disablePadding
-                      sx={{ display: "block", color: "gray" }}
+                      sx={{ display: 'block', color: 'gray' }}
                       className="text-xs"
                     >
                       <ListItemButton
                         sx={{
                           minHeight: 48,
-                          justifyContent: open ? "initial" : "center",
-                          fontSize: "13px",
+                          justifyContent: open ? 'initial' : 'center',
+                          fontSize: '13px',
                           my: 0.5,
                           px: 2.5,
-                          color: onSideBar !== each.path ? "#666" : "#fff",
-                          bgcolor: onSideBar !== each.path ? "#fff" : "#2C337C",
+                          color: onSideBar !== each.path ? '#666' : '#fff',
+                          bgcolor: onSideBar !== each.path ? '#fff' : '#2C337C',
                           borderRadius: 2,
                           mx: 1,
-                          transition: "none",
-                          "&:hover": {
-                            color: "white !important",
-                            bgcolor: "#2C337C",
+                          transition: 'none',
+                          '&:hover': {
+                            color: 'white !important',
+                            bgcolor: '#2C337C',
                             borderRadius: 2,
                           },
                         }}
@@ -272,10 +271,10 @@ const SuperLeftBar = React.memo(
                         <ListItemIcon
                           sx={{
                             minWidth: 0,
-                            mr: open ? 3 : "auto",
-                            justifyContent: "center",
-                            color: "inherit",
-                            fontSize: "2px",
+                            mr: open ? 3 : 'auto',
+                            justifyContent: 'center',
+                            color: 'inherit',
+                            fontSize: '2px',
                           }}
                         >
                           {each.icon}
@@ -284,7 +283,7 @@ const SuperLeftBar = React.memo(
                         <ListItemText>
                           <Typography
                             variant="h5"
-                            style={{ fontSize: "13px", opacity: open ? 1 : 0 }}
+                            style={{ fontSize: '13px', opacity: open ? 1 : 0 }}
                           >
                             {each.name}
                           </Typography>
@@ -299,14 +298,13 @@ const SuperLeftBar = React.memo(
           <Box
             className={`top-0 ${
               open
-                ? "left-[270px]"
+                ? 'left-[270px]'
                 : rightOpen
-                ? " -left-[330px] "
-                : " md:left-16 "
+                  ? ' -left-[330px] '
+                  : ' md:left-16 '
             } w-full transition-all duration-300 absolute flex-shrink-0 mt-20 md:pl-4 !pr-3 md:!pr-16 z-50`}
             bgcolor="custom.bodyGray"
           >
-            
             {!hidebreadCrumb && (
               <Box className="flex items-center sticky top-16 md:top-20 justify-between mb-2 px-2 md:px-11">
                 <MyBreadcrumbs />
@@ -325,7 +323,7 @@ const SuperLeftBar = React.memo(
 
           <Box
             className={`transition-all duration-300 ${
-              rightOpen ? "right-0" : "-right-[440px]"
+              rightOpen ? 'right-0' : '-right-[440px]'
             } h-full w-[330px] fixed top-0  z-20 py-6 mt-7 `}
           >
             <Box className="bg-white w-full h-full pt-5 shadow relative">
@@ -371,8 +369,8 @@ const SuperLeftBar = React.memo(
         )}
         {popup}
       </React.Fragment>
-    );
+    )
   }
-);
+)
 
-export default SuperLeftBar;
+export default SuperLeftBar

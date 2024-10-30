@@ -1,23 +1,26 @@
-const { Box, Typography, Rating, Button } = require("@mui/material");
-import IconifyIcon from "@/app/components/icon";
-import ReactSlickSlider from "@/app/components/wrapper/react-slick";
-import { mySubstring } from "@/app/utils/format";
-import Image from "next/image";
+const { Box, Typography, Rating, Button } = require('@mui/material')
+import IconifyIcon from '@/app/components/icon'
+import ReactSlickSlider from '@/app/components/wrapper/react-slick'
+import { mySubstring } from '@/app/utils/format'
+import { htmlToText } from 'html-to-text'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export const ShopImage = ({ image, name, brief, icon, onClick }) => {
   return (
     <Box
       onClick={onClick}
-      className="w-40 md:w-52 h-48 md:h-64 relative overflow-hidden rounded-xl m-1 md:m-3 overflowStyle shrink-0"
+      className="w-40 md:w-52 h-48 md:h-64 bg-gray-100 relative overflow-hidden rounded-xl m-1 md:m-3 overflowStyle shrink-0"
     >
       <Image
         src={image}
-        className="w-full h-full "
+        className=" h-full w-full !object-scale-down"
         width={600}
         height={600}
         alt={name}
       />
-      <Box className="bg-gradient-to-b from-black via-transparent to-transparent absolute w-full flex flex-col justify-between h-full top-0 left-0">
+      <Box className="bg-gradient-to-b from-black via-35%  via-transparent to-transparent absolute w-full flex flex-col justify-between h-full top-0 left-0">
         <Box className="flex items-center p-2">
           <Image
             src={icon}
@@ -43,17 +46,18 @@ export const ShopImage = ({ image, name, brief, icon, onClick }) => {
             </Typography>
           </Box>
         </Box>
-        <Box className="bg-gradient-to-t from-transparent via-black to-transparent p-2">
+        <Box className="bg-gradient-to-t from-gray-800 to-transparent p-2">
           <Typography variant="body2" className="!text-white !text-[12px]">
             {mySubstring(brief, 90)}
           </Typography>
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export const ServiceListing = ({ image, name, brief, icon }) => {
+export const ServiceListing = ({ city, state, name, brief, icon, provider }) => {
+  const router = useRouter()
   return (
     <Box className="w-1/2 md:w-64 p-1 mb-2">
       <Box className="w-full md:h-40 relative border rounded-md overflowStyle shrink-0">
@@ -79,14 +83,14 @@ export const ServiceListing = ({ image, name, brief, icon }) => {
                 noWrap
                 className="!text-gray-500 !text-[10px]"
               >
-                Benin city
+                {state || 'Benin city'}
               </Typography>
             </Box>
           </Box>
 
           <Typography
             variant="body2"
-            className="!text-gray-600 !text-[11px] md:!text-[12px] !mt-3 !mb-1"
+            className="!text-gray-600 !text-[11px] md:!text-[12px] !mt-3 !mb-1 h-9"
           >
             {mySubstring(brief, 70)}
           </Typography>
@@ -109,29 +113,30 @@ export const ServiceListing = ({ image, name, brief, icon }) => {
               noWrap
               className="!text-gray-700 !text-[11px]"
             >
-              Benin City
+              {city}
             </Typography>
           </Box>
           <Button
             className="!text-[11px] !text-blue-900 h-6 !font-bold"
             disableRipple
+            onClick={() => router.push(`services/${provider}`)}
           >
-            <span className="hidden sm:block mr-1 mb-0.5">See</span> Details
+            <span className="hidden sm:block mr-1 ">See</span> Details
           </Button>
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 export const StatusView = ({ close }) => {
   const info = {
-    icon: "/images/misc/shop/6.png",
-    name: "Mamafeeds International",
-    city: "Benin City",
-  };
+    icon: '/images/misc/shop/6.png',
+    name: 'Mamafeeds International',
+    city: 'Benin City',
+  }
 
-  const images = [1, 2, 3, 4, 5];
+  const images = [1, 2, 3, 4, 5]
 
   const StatusMedia = ({ image }) => (
     <Box className="w-full h-auto px-2 mt-4 flex items-center justify-center">
@@ -143,7 +148,7 @@ export const StatusView = ({ close }) => {
         height={1000}
       />
     </Box>
-  );
+  )
   return (
     <Box className="flex items-center justify-center w-full h-full px-4">
       <Box className="w-full max-w-[400px] h-[560px] mt-10 rounded-xl overflow-hidden shadow-xl relative">
@@ -204,5 +209,32 @@ export const StatusView = ({ close }) => {
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}
+
+export const LongServiceListing = ({service_name, description, _id, provider }) => {
+  return (
+    <Link
+      href={`/services/${provider.store}/${`${_id.substring(0, 8)}_${_id.substring(16)}`}`}
+      className="border-t py-1 cursor-pointer group"
+    >
+      <Box className="flex items-center justify-between h-20 hover:bg-gray-50 px-2 md:px-10">
+        <Typography variant="body2" className="!text-[14px] !mr-2 ">
+          {service_name}
+        </Typography>
+        <Typography variant="body2" className=" !text-[11px] !w-64 md:!w-80">
+          {mySubstring(htmlToText(description), 80)}
+        </Typography>
+
+        <Typography variant="body2" className=" !text-[11px] hidden sm:block ">
+          {provider.service_delivery_type === 'Both'
+            ? 'On-site and Home service'
+            : `${provider.service_delivery_type} only`}
+        </Typography>
+        <Box className="w-10 h-10 transition-all duration-300 shrink-0 rounded-full flex justify-center border items-center group-hover:bg-blue-500 group-hover:text-white group-hover:-rotate-45">
+          <IconifyIcon icon="tabler:arrow-narrow-right" />
+        </Box>
+      </Box>
+    </Link>
+  )
+}

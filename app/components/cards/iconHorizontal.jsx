@@ -18,7 +18,7 @@ import { mySubstring } from '@/app/utils/format'
 
 const CardStatsHorizontal = props => {
   // ** Props
-  const { sx, id, icon, category, subCateNum, prodNumb=0, status='in-active', iconSize = 24, avatarSize = 42, avatarColor = 'primary', selectedCate, setSelectedCate } = props
+  const { sx, id, icon, category, subCateNum, prodNumb=0, status='active', iconSize = 24, avatarSize = 42, avatarColor = 'primary', selectedCate, setSelectedCate } = props
 
   const ITEM_HEIGHT = 48
   const randomIndex = Math.floor(Math.random() * lightColors.length);

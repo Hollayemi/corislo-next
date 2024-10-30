@@ -21,7 +21,7 @@ export const passwordResetHandler = (payload, router, dispatch) => {
     .then((res) => {
       toaster({ ...res });
       if (res.type === "success") {
-        router.push("/store/login");
+        router.push("/dashboard/login");
       }
     })
     .catch((err) => {

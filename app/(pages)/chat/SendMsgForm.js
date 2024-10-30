@@ -37,7 +37,7 @@ const SendMsgForm = (props) => {
         branchId: selectedChat?.contact?.branchId,
       };
 
-      socket.emit("sendMessage", messageToEmit, dispatch);
+      socket.emit("sendMessage", messageToEmit);
       setMessageLog((prev) => {
         const log = prev?.log || [];
         const newLog = [

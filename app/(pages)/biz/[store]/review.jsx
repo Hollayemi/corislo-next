@@ -24,11 +24,11 @@ const Review = ({ store, branch, searchParams }) => {
   };
   return (
     <Box>
-      <Box className="!bg-white rounded-xl px-3 py-5 mt-10">
+      <Box className="!bg-white rounded-xl px-3 ">
         <ReviewTab
           store={store}
           branch={branch}
-          summary={summary}
+          summary={summary || {}}
           searchParams={searchParams}
         />
       </Box>

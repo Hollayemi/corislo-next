@@ -4,14 +4,7 @@ import { GroupCartProducts } from '@/app/components/templates/productView'
 import HomeWrapper from '@/app/components/view/home'
 import { useUserData } from '@/app/hooks/useData'
 import { addNewOrder } from '@/app/redux/state/slices/home/order'
-import {
-  Box,
-  Button,
-  FormControlLabel,
-  Grid,
-  Radio,
-  Typography,
-} from '@mui/material'
+import { Box, Button, Grid, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import useSWR from 'swr'
@@ -20,7 +13,7 @@ import CustomOption from '@/app/components/option-menu/option'
 import { detectCardType } from '@/app/utils/format'
 import { CardTemplate } from '../user/billingAndAddress'
 import Link from 'next/link'
-import { reshapePrice } from '../store/dashboard/marketing/components'
+import { reshapePrice } from '../dashboard/store/marketing/components'
 
 const Checkout = () => {
   const dispatch = useDispatch()
@@ -30,15 +23,25 @@ const Checkout = () => {
   }`
   const { data: carts, error } = useSWR(endpoint)
 
-  console.log(seletedCartProds)
+  seletedCartProds.length && `prods=${seletedCartProds.join('.')}`
+  console.log(seletedCartProds,seletedCartProds.length, cartedProds)
 
   const { data: agents } = useSWR('/user/pickers')
   const pickers = agents?.data || []
   const groupedCart = carts ? carts.data.result : []
   const amounts = carts ? carts.data.total : []
 
+
+  const getIds = () => {
+    if(seletedCartProds.length){
+      return cartedProd
+    }else{
+      return selec
+    }
+  }
+
   const [payload, updatePayload] = useState({
-    ids: seletedCartProds.length ? seletedCartProds : cartedProds,
+    ids: seletedCartProds.length  ? seletedCartProds : cartedProds,
     delivery: {},
     picker: {},
     shippingAddress: temp.address || userInfo?.selectedAddress || null,

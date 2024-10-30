@@ -13,6 +13,7 @@ const { createContext, useEffect, useState } = require('react')
 const defaultProvider = {
   cartedProds: [],
   savedProds: [],
+  savedServices: [],
   following: [],
   cartData: {},
   userInfo: {},
@@ -111,7 +112,6 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
       }
     }
   }, [socket])
-
   //  Overlays
   const showOverlay =
     (pageName = null) =>
@@ -155,7 +155,6 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
     setConnection(userInfo?.user?.push_subscription)
   }, [userInfo])
 
-  
   userInfo?.user?.loginActivities &&
     userInfo.user.loginActivities[deviceKey]?.logout &&
     localStorage.removeItem('user_token')
@@ -196,6 +195,13 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
     isLoading: savedIsLoading,
   } = useSWR(!isOffline() && '/user/save-item/prods')
 
+  // saved services
+  const {
+    data: savedServices,
+    error: savedSerr,
+    isLoading: savedServicesIsLoading,
+  } = useSWR(!isOffline() && '/user/saved-services')
+
   // fetch stores you follow
   //
   const {
@@ -209,6 +215,8 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
         cartedProds:
           (!cartErr && !cartIsLoading && cartData?.data?.cartedProds) || [],
         savedProds: (!savedErr && !savedIsLoading && savedData?.data) || [],
+        savedServices:
+          (!savedSerr && !savedServicesIsLoading && savedServices?.data) || [],
         following: (!folErr && !folIsLoading && following?.data) || [],
         cartData: (!cartErr && !cartIsLoading && cartData?.data) || {},
         userInfo: (!userErr && !userIsLoading && userInfo?.user) || {},

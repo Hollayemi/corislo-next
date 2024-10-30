@@ -2,38 +2,12 @@ import { Box, Typography } from '@mui/material'
 
 export const ProdDescription = ({ desc }) => {
   return (
-    // <Box>
-    //   <InfoCaption
-    //     title="Product Title:"
-    //     caption="Flangesio Ultra-Cool Design Men's Sneakers PU Leather Trend Casual
-    //         Shoes EUR Size 39-48 New Arrival Leisure Runway Sneakers Cool
-    //         Jogging Shoes Comfort Male Athletic Tennis Shoes Man Sport Training
-    //         Footwear Black"
-    //   />
-    //   <InfoCaption title="Brand: " caption="Flangesio" />
-    //   <br />
-    //   <InfoCaption
-    //     title="Product Description: "
-    //     br
-    //     caption="Elevate your style with the Flangesio Ultra-Cool Design Men's
-    //         Sneakers. Crafted for those who appreciate the perfect blend of
-    //         fashion and functionality, these sneakers are the epitome of trendy
-    //         footwear. Whether you're stepping out for a casual day with friends,
-    //         hitting the gym, or embracing your inner sports enthusiast, these
-    //         sneakers are designed to provide unmatched comfort and style."
-    //   />
-    //   <InfoCaption
-    //     title="Key Features: "
-    //     br
-    //     caption="Elevate your style with the Flangesio Ultra-Cool Design Men's
-    //         Sneakers. Crafted for those who appreciate the perfect blend of
-    //         fashion and functionality, these sneakers are the epitome of trendy
-    //         footwear. Whether you're stepping out for a casual day with friends,
-    //         hitting the gym, or embracing your inner sports enthusiast, these
-    //         sneakers are designed to provide unmatched comfort and style."
-    //   />
-    // </Box>
-    <Typography>{desc}</Typography>
+    <Box dan>
+      {' '}
+      <Typography variant='caption'>
+        <div dangerouslySetInnerHTML={{ __html: desc }} />
+      </Typography>
+    </Box>
   )
 }
 

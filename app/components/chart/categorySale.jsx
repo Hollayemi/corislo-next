@@ -1,39 +1,39 @@
 // ** MUI Imports
-import { useState } from "react";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import Typography from "@mui/material/Typography";
-import CardContent from "@mui/material/CardContent";
-import LinearProgress from "@mui/material/LinearProgress";
+import { useState } from 'react'
+import Box from '@mui/material/Box'
+import Card from '@mui/material/Card'
+import CardHeader from '@mui/material/CardHeader'
+import Typography from '@mui/material/Typography'
+import CardContent from '@mui/material/CardContent'
+import LinearProgress from '@mui/material/LinearProgress'
 
 // ** Custom Components Imports
-import CustomChip from "@/app/components/chip";
-import OptionsMenu from "@/app/components/option-menu";
-import CustomOption from "../option-menu/option";
-import { Button } from "@mui/material";
-import IconifyIcon from "../icon";
-import useSWR from "swr";
-import { reshapePrice } from "@/app/(pages)/store/dashboard/marketing/components";
-import { calculateDateDiff } from "@/app/utils/format";
+import CustomChip from '@/app/components/chip'
+import OptionsMenu from '@/app/components/option-menu'
+import CustomOption from '../option-menu/option'
+import { Button } from '@mui/material'
+import IconifyIcon from '../icon'
+import useSWR from 'swr'
+import { reshapePrice } from '@/app/(pages)/dashboard/store/marketing/components'
+import { calculateDateDiff } from '@/app/utils/format'
 
 const CategoriesSales = ({ interval, selectedInterval }) => {
   const { data, isLoading } = useSWR(
-    `/dashboard/categorie-count?interval=${interval.split(" ").join("_")}`
-  );
+    `/dashboard/categorie-count?interval=${interval.split(' ').join('_')}`
+  )
 
-  const result = data?.data || [];
+  const result = data?.data || []
 
-  console.log(result);
+  console.log(result)
   const dayInterval = [
-    "3 days",
-    "7 days",
-    "2 weeks",
-    "1 month",
-    "3 months",
-    "6 months",
-    "1 year",
-  ];
+    '3 days',
+    '7 days',
+    '2 weeks',
+    '1 month',
+    '3 months',
+    '6 months',
+    '1 year',
+  ]
 
   const renderData = result?.map((item, index) => (
     <Box
@@ -58,7 +58,7 @@ const CategoriesSales = ({ interval, selectedInterval }) => {
           size="small"
           skin="light"
           className="!rounded-sm !w-14"
-          color={item.growth > 5 ? "success" : "error"}
+          color={item.growth > 5 ? 'success' : 'error'}
           label={
             <div className="flex items-center">
               <IconifyIcon
@@ -66,8 +66,8 @@ const CategoriesSales = ({ interval, selectedInterval }) => {
                 className="shrink-0"
                 icon={
                   item.growth > 0
-                    ? "tabler:arrow-narrow-up"
-                    : "tabler:arrow-narrow-down"
+                    ? 'tabler:arrow-narrow-up'
+                    : 'tabler:arrow-narrow-down'
                 }
               />
               {parseFloat(item?.growth || 0).toFixed(0)}%
@@ -76,7 +76,7 @@ const CategoriesSales = ({ interval, selectedInterval }) => {
         />
       </Box>
     </Box>
-  ));
+  ))
 
   return (
     <Card className="w-full !shadow-none h-full">
@@ -101,7 +101,7 @@ const CategoriesSales = ({ interval, selectedInterval }) => {
       </Box>
       <CardContent>{renderData}</CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default CategoriesSales;
+export default CategoriesSales

@@ -209,3 +209,15 @@ textarea::placeholder {
   border-color: darkblue;
   box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
 }
+
+
+/* service rendering dashboard */
+
+.serviceDashbord .MuiDrawer-root.MuiDrawer-docked{
+  background: #000 !important;
+  max-width: 270px !important;
+}
+
+.serviceDashbord .MuiDrawer-root.MuiDrawer-docked .MuiPaper-root.MuiPaper-elevation.MuiDrawer-paperAnchorLeft{
+  max-width: 270px !important;
+}

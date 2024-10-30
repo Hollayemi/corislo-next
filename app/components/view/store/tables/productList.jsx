@@ -17,10 +17,10 @@ import QuickSearchToolbar from '@/app/components/quickTool/QuickSearchToolbar'
 import { getInitials } from '@/app/utils/get-initials'
 import { formatDate } from '@/app/utils/format'
 
-import { reshapePrice } from '@/app/(pages)/store/dashboard/marketing/components'
+import { reshapePrice } from '@/app/(pages)/dashboard/store/marketing/components'
 import { productStatusUpdate } from '@/app/redux/state/slices/shop/products/updateProduct'
 import { useDispatch } from 'react-redux'
-import { UpdateStock } from '@/app/(pages)/store/dashboard/product-management/out-of-stock/page'
+import { UpdateStock } from '@/app/(pages)/dashboard/store/product-management/out-of-stock/page'
 
 // ** renders client column
 
@@ -244,7 +244,7 @@ const ProductList = ({ rows, updateDialogInfo, outofstock }) => {
     console.log(row, action)
     if (action === 'edit') {
       router.push(
-        `/store/dashboard/product-management/add-new-product?edit=${row.prodId}`
+        `/dashboard/store/product-management/add-new-product?edit=${row.prodId}`
       )
     }
     if (action === 'hide') {

@@ -1,23 +1,22 @@
-"use client";
-import { useState } from "react";
-import { CancelOutlined } from "@mui/icons-material";
-import { Box, TextField, Typography } from "@mui/material";
-import React from "react";
-import { searchNavigations } from "../screens";
-import Link from "next/link";
-import { clockNumberClasses } from "@mui/x-date-pickers-pro";
-import IconifyIcon from "@/app/components/icon";
+'use client'
+import { useState } from 'react'
+import { CancelOutlined } from '@mui/icons-material'
+import { Box, TextField, Typography } from '@mui/material'
+import React from 'react'
+import { searchNavigations } from '../screens'
+import Link from 'next/link'
+import IconifyIcon from '@/app/components/icon'
 
 function deepFilter(data, searchTerm) {
   function search(nodes) {
-    console.log(nodes);
-    let results = [];
+    console.log(nodes)
+    let results = []
 
     for (const node of nodes) {
       // Recursively search in children
-      let filteredChildren = [];
+      let filteredChildren = []
       if (node.children && node.children.length > 0) {
-        filteredChildren = search(node.children);
+        filteredChildren = search(node.children)
       }
 
       // Check if the current node or any of its children match the search term
@@ -29,19 +28,19 @@ function deepFilter(data, searchTerm) {
         results.push({
           ...node,
           children: filteredChildren,
-        });
+        })
       }
     }
 
-    return results;
+    return results
   }
 
-  return search(data);
+  return search(data)
 }
 
 const AppSearch = ({ showOverlay }) => {
-  const [search, setSearch] = useState("");
-  const result = deepFilter([searchNavigations], search);
+  const [search, setSearch] = useState('')
+  const result = deepFilter([searchNavigations], search)
   return (
     <Box className="flex w-full px-1 justify-center">
       <Box className="w-full md:w-[550px] h-[600px] md:h-[500px] mt-20 relative bg-white rounded-xl md:mr-10 flex flex-col">
@@ -62,7 +61,7 @@ const AppSearch = ({ showOverlay }) => {
               focused
               id="outlined-basic"
               onChange={(e) => setSearch(e.target.value)}
-              inputProps={{ className: "h-10" }}
+              inputProps={{ className: 'h-10' }}
               placeholder="Search."
             />
           </Box>
@@ -86,10 +85,10 @@ const AppSearch = ({ showOverlay }) => {
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default AppSearch;
+export default AppSearch
 
 const LinkComponent = ({ each, showOverlay }) => {
   return (
@@ -98,31 +97,34 @@ const LinkComponent = ({ each, showOverlay }) => {
       <Box
         key={xx}
         className={`!pl-8 ${
-          item.topLevel ? " mb-6 border-b rounded-md" : "mt-1"
+          item.topLevel ? ' mb-6 border-b rounded-md' : 'mt-1'
         }`}
         onClick={showOverlay}
       >
         <Link
-          href={`/store/dashboard${item.path}`}
+          href={`/dashboard/store${item.path}`}
           className="hover:!text-blue-400"
         >
           <Box className="flex items-center h-12 w-full">
             {!item.topLevel && (
-              <IconifyIcon icon="tabler:arrow-badge-right-filled" className="mr-3" />
+              <IconifyIcon
+                icon="tabler:arrow-badge-right-filled"
+                className="mr-3"
+              />
             )}
             <Box
               sx={{
                 minWidth: 0,
-                mr: open ? 3 : "auto",
-                justifyContent: "center",
-                color: "inherit",
-                fontSize: "2px",
+                mr: open ? 3 : 'auto',
+                justifyContent: 'center',
+                color: 'inherit',
+                fontSize: '2px',
               }}
             >
               {item.icon}
             </Box>
 
-            <Typography variant="h5" className="" style={{ fontSize: "13px" }}>
+            <Typography variant="h5" className="" style={{ fontSize: '13px' }}>
               {item.name}
             </Typography>
           </Box>
@@ -130,8 +132,8 @@ const LinkComponent = ({ each, showOverlay }) => {
         <LinkComponent each={item} />
       </Box>
     ))
-  );
-};
+  )
+}
 
 const FirstBatch = ({ each, showOverlay }) => {
   return (
@@ -139,7 +141,7 @@ const FirstBatch = ({ each, showOverlay }) => {
       {each.map((item, xx) => {
         return (
           <Link
-            href={`/store/dashboard${item.path}`}
+            href={`/dashboard/store${item.path}`}
             className="w-5/12 px-2 md:w-3/12 border border-gray-400 rounded-md m-2  hover:!text-blue-700 hover:border-blue-600 transition-all duration-300 "
             key={xx}
             onClick={showOverlay}
@@ -154,9 +156,9 @@ const FirstBatch = ({ each, showOverlay }) => {
               </Typography>
             </Box>
           </Link>
-        );
+        )
       })}
       ;
     </Box>
-  );
-};
+  )
+}

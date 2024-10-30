@@ -88,6 +88,7 @@ const StoreProducts = ({ store, branch, searchParams }) => {
               image={`/images/more/${i + 1}.png`}
               star={prod.star}
               store={prod.store}
+              others={prod}
             />
           ))}
         </Box>

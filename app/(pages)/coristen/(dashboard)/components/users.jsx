@@ -1,21 +1,21 @@
-import { reshapePrice } from "@/app/(pages)/store/dashboard/marketing/components";
-import { CustomizeStatus } from "@/app/(pages)/store/dashboard/order-management/review/components";
-import IconifyIcon from "@/app/components/icon";
-import OptionsMenu from "@/app/components/option-menu";
-import { useStoreData } from "@/app/hooks/useData";
-import { updateStaff } from "@/app/redux/state/slices/shop/branches/staffs";
-import { Colors } from "@/app/utils/Colors";
-import { formatDate, formatSegmentation } from "@/app/utils/format";
-import { hexToRGBA } from "@/app/utils/hex-to-rgba";
-import { rgbaToHex } from "@/app/utils/rgba-to-hex";
-import { Box, Button, Divider, Typography } from "@mui/material";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { reshapePrice } from '@/app/(pages)/dashboard/store/marketing/components'
+import { CustomizeStatus } from '@/app/(pages)/dashboard/store/order-management/review/components'
+import IconifyIcon from '@/app/components/icon'
+import OptionsMenu from '@/app/components/option-menu'
+import { useStoreData } from '@/app/hooks/useData'
+import { updateStaff } from '@/app/redux/state/slices/shop/branches/staffs'
+import { Colors } from '@/app/utils/Colors'
+import { formatDate, formatSegmentation } from '@/app/utils/format'
+import { hexToRGBA } from '@/app/utils/hex-to-rgba'
+import { rgbaToHex } from '@/app/utils/rgba-to-hex'
+import { Box, Button, Divider, Typography } from '@mui/material'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 export const UserCard = (props) => {
-  const { showSnackbar } = useStoreData();
-  const dispatch = useDispatch();
+  const { showSnackbar } = useStoreData()
+  const dispatch = useDispatch()
 
   const FlexContent = ({ tag, info }) => (
     <Box className="flex items-center justify-betwen py-1">
@@ -26,11 +26,11 @@ export const UserCard = (props) => {
         {info}
       </Typography>
     </Box>
-  );
+  )
 
   const IconBtn = ({ icon, middle }) => {
-    const randomIndex = Math.floor(Math.random() * Colors.length);
-    let bgColor = rgbaToHex(hexToRGBA(Colors[randomIndex], 0.1));
+    const randomIndex = Math.floor(Math.random() * Colors.length)
+    let bgColor = rgbaToHex(hexToRGBA(Colors[randomIndex], 0.1))
     return (
       <Box
         className="w-8 h-8 rounded-full flex justify-center items-center cursor-pointer transition-all duration-300 hover:-mt-3"
@@ -38,8 +38,8 @@ export const UserCard = (props) => {
       >
         <IconifyIcon icon={icon} className="text-[17px]" />
       </Box>
-    );
-  };
+    )
+  }
   return (
     <Box className="w-full py-2 ">
       <Box className="flex justify-between items-center">
@@ -58,9 +58,9 @@ export const UserCard = (props) => {
           <OptionsMenu
             icon={<IconifyIcon icon="tabler:dots" className="!text-[17px]" />}
             options={[
-              "Edit info",
-              { text: "Revoke Access", rest: "deactivated" },
-              { text: "Give Access", rest: "activated" },
+              'Edit info',
+              { text: 'Revoke Access', rest: 'deactivated' },
+              { text: 'Give Access', rest: 'activated' },
             ]}
             setOption={(e) =>
               updateStaff(
@@ -70,14 +70,14 @@ export const UserCard = (props) => {
               )
             }
             iconButtonProps={{
-              size: "small",
-              sx: { color: "text.disabled", cursor: "pointer" },
+              size: 'small',
+              sx: { color: 'text.disabled', cursor: 'pointer' },
             }}
           />
         </Box>
         <Box className="mt-5 mb-2 px-4">
           <img
-            src={props.picture || "/images/misc/no-profile.png"}
+            src={props.picture || '/images/misc/no-profile.png'}
             alt="img"
             width={100}
             height={100}
@@ -98,7 +98,7 @@ export const UserCard = (props) => {
                 {props.email}
               </Typography>
             </Box>
-            <CustomizeStatus text={props.isActive ? "Active" : "Inactive"} />
+            <CustomizeStatus text={props.isActive ? 'Active' : 'Inactive'} />
           </Box>
           {/* <IconBtn icon="tabler:phone" /> */}
           <Box className="flex items-center mb-3">
@@ -155,9 +155,9 @@ export const UserCard = (props) => {
           variant="contained"
           onClick={props.setRightOpen}
         >
-          {props.isActive ? "Deactivate" : "Activate"}
+          {props.isActive ? 'Deactivate' : 'Activate'}
         </Button>
       </Box>
     </Box>
-  );
-};
+  )
+}

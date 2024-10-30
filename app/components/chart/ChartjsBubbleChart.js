@@ -15,7 +15,7 @@ import { useTheme } from "@mui/material/styles";
 import CustomChip from "@/app/components/chip";
 import useSWR from "swr";
 import { calculateDateDiff } from "@/app/utils/format";
-import { reshapePrice } from "@/app/(pages)/store/dashboard/marketing/components";
+import { reshapePrice } from "@/app/(pages)/dashboard/store/marketing/components";
 import { useEffect, useState } from "react";
 
 const DashboardBubbleChart = ({ interval }) => {

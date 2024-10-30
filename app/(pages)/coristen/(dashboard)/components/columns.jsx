@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { reshapePrice } from '@/app/(pages)/store/dashboard/marketing/components'
-import { CustomizeStatus } from '@/app/(pages)/store/dashboard/order-management/review/components'
+import { reshapePrice } from '@/app/(pages)/dashboard/store/marketing/components'
+import { CustomizeStatus } from '@/app/(pages)/dashboard/store/order-management/review/components'
 import CustomAvatar from '@/app/components/avatar'
 import IconifyIcon from '@/app/components/icon'
 import OptionsMenu from '@/app/components/option-menu'

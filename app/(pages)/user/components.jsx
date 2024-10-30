@@ -17,6 +17,7 @@ export const MyTextField = ({
   others,
   minRows,
   type = "text",
+  gray=true
 }) => {
   const [newType, changeType] = useState(type);
   return (
@@ -25,7 +26,7 @@ export const MyTextField = ({
       <div className="relative w-full">
         <TextField
           type={newType}
-          className="h-8 w-full px- rounded-md bg-gray-50 border-1"
+          className={`h-8 w-full px- rounded-md ${gray && "bg-gray-50"} border-1`}
           style={{ height: 40 }}
           size="small"
           value={value}

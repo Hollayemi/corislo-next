@@ -9,8 +9,8 @@ import {
   formatCVC,
   formatExpirationDate,
 } from '@/app/utils/format'
-import { OrderSummary } from '../store/dashboard/order-management/review/components'
-import { reshapePrice } from '../store/dashboard/marketing/components'
+import { OrderSummary } from '../dashboard/store/order-management/review/components'
+import { reshapePrice } from '../dashboard/store/marketing/components'
 import { useUserData } from '@/app/hooks/useData'
 import OptionsMenu from '@/app/components/option-menu'
 import { CardTemplate } from '../user/billingAndAddress'

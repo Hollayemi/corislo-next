@@ -79,16 +79,45 @@ export const SidebarContent = [
   },
 ];
 
+
+
+export const serviceNavigation = {
+  dashboard: "",
+  business: "/business",
+  services: "/",
+  customers: "/customer-management",
+  chat: "/chat",
+  settings: "/settings",
+  pricing: "/pricing",
+};
 export const ServicesSidebarContent = [
   {
     name: "Dashboard",
-    path: navigation.dashboard,
+    path: serviceNavigation.dashboard,
     icon: <ViewQuiltIcon />,
     key: "ele_1",
   },
   {
-    name: "Workshop",
-    path: navigation.store,
+    name: "Business",
+    path: serviceNavigation.business,
+    icon: <WorkspacesSharp />,
+    key: "ele_2",
+  },
+  {
+    name: "Services",
+    path: serviceNavigation.services,
+    icon: <WorkspacesSharp />,
+    key: "ele_2",
+  },
+  {
+    name: "Chat",
+    path: serviceNavigation.chat,
+    icon: <WorkspacesSharp />,
+    key: "ele_2",
+  },
+  {
+    name: "Customer Management",
+    path: serviceNavigation.customers,
     icon: <WorkspacesSharp />,
     key: "ele_2",
   },

@@ -1,13 +1,13 @@
-"use client";
-import { SectionTitle } from "@/app/components/cards/homeCards";
-import IconifyIcon from "@/app/components/icon";
+'use client'
+import { SectionTitle } from '@/app/components/cards/homeCards'
+import IconifyIcon from '@/app/components/icon'
 import {
   HotDeal,
   PopularProduct,
-} from "@/app/components/templates/productTemplates";
-import { CartProductView } from "@/app/components/templates/productView";
-import HomeWrapper from "@/app/components/view/home";
-import { useRouter } from "next/navigation";
+} from '@/app/components/templates/productTemplates'
+import { CartProductView } from '@/app/components/templates/productView'
+import HomeWrapper from '@/app/components/view/home'
+import { useRouter } from 'next/navigation'
 import {
   Box,
   Button,
@@ -15,20 +15,20 @@ import {
   FormControlLabel,
   Grid,
   Typography,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useUserData } from "@/app/hooks/useData";
-import { deleteBulkCart } from "@/app/redux/state/slices/home/cart";
-import { useDispatch } from "react-redux";
-import CustomOption from "@/app/components/option-menu/option";
-import Link from "next/link";
-import useSWR from "swr";
-import { reshapePrice } from "../store/dashboard/marketing/components";
+} from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { useUserData } from '@/app/hooks/useData'
+import { deleteBulkCart } from '@/app/redux/state/slices/home/cart'
+import { useDispatch } from 'react-redux'
+import CustomOption from '@/app/components/option-menu/option'
+import Link from 'next/link'
+import useSWR from 'swr'
+import { reshapePrice } from '../dashboard/store/marketing/components'
 
 const UserCart = () => {
-  const dispatch = useDispatch();
-  const { data: addrs } = useSWR("/user/addresses");
-  const addresses = addrs?.data || [];
+  const dispatch = useDispatch()
+  const { data: addrs } = useSWR('/user/addresses')
+  const addresses = addrs?.data || []
   const {
     cartData,
     cartedProds,
@@ -36,12 +36,12 @@ const UserCart = () => {
     temp,
     addTemp,
     selectCartProd: cartForCheckout,
-  } = useUserData();
-  const [selected, selectCart] = useState([]);
-  const router = useRouter();
-  const address = temp.address || userInfo?.selectedAddress || null;
+  } = useUserData()
+  const [selected, selectCart] = useState([])
+  const router = useRouter()
+  const address = temp.address || userInfo?.selectedAddress || null
 
-  useEffect(() => cartForCheckout(selected), [selected]);
+  useEffect(() => cartForCheckout(selected), [selected])
 
   return (
     <HomeWrapper>
@@ -67,8 +67,8 @@ const UserCart = () => {
                       <Checkbox
                         checked={selected.length === cartedProds.length}
                         onChange={(e) => {
-                          const checked = e.target.checked;
-                          selectCart(() => (checked ? cartedProds : []));
+                          const checked = e.target.checked
+                          selectCart(() => (checked ? cartedProds : []))
                         }}
                         disabled={false}
                         name="basic-checked"
@@ -78,7 +78,7 @@ const UserCart = () => {
                   <Button
                     variant="text"
                     className={`!text-[12px] !text-blue-700 !mt-1 ${
-                      !selected.length > 0 && "cursor-cancel"
+                      !selected.length > 0 && 'cursor-cancel'
                     }`}
                     disabled={!selected.length > 0}
                     onClick={() => deleteBulkCart(selected, dispatch)}
@@ -148,7 +148,7 @@ const UserCart = () => {
                       variant="body2"
                       className="!text-[12px] !text-red-500"
                     >
-                     - {reshapePrice(cartData?.discountAmount)}
+                      - {reshapePrice(cartData?.discountAmount)}
                     </Typography>
                   </Box>
                 ) : null}
@@ -177,7 +177,7 @@ const UserCart = () => {
                   <Typography variant="body2" className="!text-[11px] w-8/12">
                     {(address &&
                       `${address.address}, ${address.state}, ${address.city} (${address.postal_code})`) ||
-                      "No address selected"}
+                      'No address selected'}
                   </Typography>
                   <CustomOption
                     addBtn={
@@ -196,7 +196,7 @@ const UserCart = () => {
                         variant="outlined"
                         className="w-20 h-6 !rounded-full !border !border-blue-500 !text-[12px] !text-blue-600"
                       >
-                        {address ? "Change" : "Select"}
+                        {address ? 'Change' : 'Select'}
                       </Button>
                     }
                     options={addresses.map(
@@ -206,7 +206,7 @@ const UserCart = () => {
                     butPush={addresses.map((e) => e)}
                     clickFunction={(e) =>
                       addTemp((prev) => {
-                        return { ...prev, address: e };
+                        return { ...prev, address: e }
                       })
                     }
                   />
@@ -247,7 +247,7 @@ const UserCart = () => {
               </Box>
               <Button
                 variant="contained"
-                onClick={() => router.push("/checkout")}
+                onClick={() => router.push('/checkout')}
                 className="w-full !mt-6 h-12 !rounded-full !border-none !text-[14px] !text-white"
               >
                 Checkout ({selected.length || cartData?.products?.length})
@@ -265,7 +265,7 @@ const UserCart = () => {
         </Box>
       </Box>
     </HomeWrapper>
-  );
-};
+  )
+}
 
-export default UserCart;
+export default UserCart

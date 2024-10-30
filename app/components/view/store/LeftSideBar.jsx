@@ -157,7 +157,7 @@ const StoreLeftSideBar = React.memo(
 
     React.useLayoutEffect(() => {
       if (permissions) {
-        permissions[permission] === false && router.push('/store/dashboard/401')
+        permissions[permission] === false && router.push('/dashboard/store/401')
       }
     }, [permissions])
 
@@ -199,7 +199,7 @@ const StoreLeftSideBar = React.memo(
                   underline="hover"
                   key={index}
                   color="inherit"
-                  href={`/store/dashboard/${item.link}`}
+                  href={`/dashboard/store/${item.link}`}
                 >
                   <Typography
                     className="!text-[12px] md:!text-[14px] !font-[500] !text-black"
@@ -255,7 +255,7 @@ const StoreLeftSideBar = React.memo(
                 sx={{ bgcolor: 'custom.bodyLight' }}
               >
                 {SidebarContent.map((each, index) => (
-                  <Link href={`/store/dashboard${each.path}`} key={index}>
+                  <Link href={`/dashboard/store${each.path}`} key={index}>
                     <ListItem
                       key={index}
                       disablePadding
@@ -379,8 +379,8 @@ const StoreLeftSideBar = React.memo(
               open
                 ? 'left-[270px]'
                 : rightOpen
-                ? ' -left-[330px] '
-                : ' md:left-16 '
+                  ? ' -left-[330px] '
+                  : ' md:left-16 '
             } w-full transition-all duration-300 absolute flex-shrink-0 h-full md:pl-4 !pr-3 md:!pr-16 z-30`}
             bgcolor="custom.bodyGray"
           >

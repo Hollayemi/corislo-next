@@ -110,7 +110,7 @@ const ProductDisplay = ({ params, searchParams }) => {
                       alt=""
                       width={700}
                       height={700}
-                      className="md:m-0 flex-shrink-0 w-full h-[400px]"
+                      className="md:m-0 flex-shrink-0 w-full h-[400px] !object-scale-down"
                     />
                   ) : (
                     <Box className="md:m-0 flex-shrink-0 w-full h-[400px] flex justify-center items-center">
@@ -130,7 +130,7 @@ const ProductDisplay = ({ params, searchParams }) => {
                               alt=""
                               width={150}
                               height={150}
-                              className="m-1 md:mb-0 !w-16 !h-16 !rounded-md"
+                              className="m-1 md:mb-0 !w-16 !h-16 !rounded-md !object-scale-down"
                             />
                           ))
                         : null}
@@ -150,22 +150,13 @@ const ProductDisplay = ({ params, searchParams }) => {
               </Typography>
 
               <Box className="w-full mt-5 flex flex-wrap">
-                <TitleValue
-                  title="Collection"
-                  value={product.collectionName}
-                />
-                <TitleValue
-                  title="Category"
-                  value={product.category }
-                />
+                <TitleValue title="Collection" value={product.collectionName} />
+                <TitleValue title="Category" value={product.category} />
                 <TitleValue
                   title="Sub-Category"
-                  value={product.subCollectionName }
+                  value={product.subCollectionName}
                 />
-                <TitleValue
-                  title="Classes"
-                  value={product.group}
-                />
+                <TitleValue title="Classes" value={product.group} />
                 <Box className="w-1/2 mt-1 flex items-center">
                   <Box className="w-20">
                     <Typography variant="caption" className="!text-gray-400">
@@ -447,7 +438,12 @@ const ProductDisplay = ({ params, searchParams }) => {
 
         <Box className="mt-16">
           <SectionTitle black="More items from this seller" />
-          {product && <PopularProduct endpoint={`/home/popular-products?store=${product.store}&branch=${product.branch}`} small />}
+          {product && (
+            <PopularProduct
+              endpoint={`/home/popular-products?store=${product.store}&branch=${product.branch}`}
+              small
+            />
+          )}
         </Box>
         <Box className="mt-8">
           <SectionTitle black="You may also like" />
