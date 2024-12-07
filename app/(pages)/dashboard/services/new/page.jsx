@@ -3,13 +3,22 @@ import { Box, TextField, Button, MenuItem, Typography } from '@mui/material'
 import useSWR from 'swr'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import QuillTextEditor from '@/app/components/text-editor/quill'
+// import QuillTextEditor from '@/app/components/text-editor/quill'
 import { GridLayout } from '@/app/(pages)/dashboard/store/product-management/add-new-category/components'
 import { SimpleDropDown } from '@/app/(pages)/dashboard/store/product-management/add-new-product/components'
-import ServiceRenderWrapper from '@/app/components/view/services/header'
+// import ServiceRenderWrapper from '@/app/components/view/services/header'
 import { FileUploader } from '@/app/(pages)/dashboard/store/stores/component'
 import { CreateService } from '@/app/redux/state/slices/spb'
 import MyAutocomplete from '@/app/components/myAutoComplete'
+import dynamic from 'next/dynamic'
+const ServiceRenderWrapper = dynamic(
+  () => import('@/app/components/view/services/header'),
+  { ssr: false }
+)
+const QuillTextEditor = dynamic(
+  () => import('@/app/components/text-editor/quill'),
+  { ssr: false }
+)
 
 const NewService = () => {
   const { data: cats, error } = useSWR('/corisio/service-categories')
@@ -73,7 +82,6 @@ const NewService = () => {
                   onChange={(e) => setSearch(e.target.value)}
                   value={search}
                   onFocus={() => setOpen(true)}
-                  autoComplete={false}
                   fullWidth
                   id="outlined-basic"
                   inputProps={{ className: '!h-2' }}

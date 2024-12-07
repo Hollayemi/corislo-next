@@ -1,45 +1,28 @@
-"use client";
-import IconifyIcon from "@/app/components/icon";
-import HomeWrapper from "@/app/components/view/home";
-// ** MUI Imports
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import Collapse from "@mui/material/Collapse";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemButton from "@mui/material/ListItemButton";
-import { Box, Button, Typography } from "@mui/material";
-import Image from "next/image";
-import Link from "next/link";
-import StoreProducts from "./products";
-import Review from "./review";
-import { mySubstring, summarizeFollowers } from "../../../utils/format";
-import Policies from "./policies";
-import { followStore } from "@/app/redux/state/slices/users/following";
-import { useDispatch } from "react-redux";
-import { useUserData } from "@/app/hooks/useData";
-import { Fragment, useState } from "react";
-import useSWR from "swr";
-import { useRouter } from "next/navigation";
-import StoreTabs from "./tabs";
+import HomeWrapper from '@/app/components/view/home'
+import { Box } from '@mui/material'
+import Image from 'next/image'
+import martApi, { server } from '@/app/redux/state/slices/api/baseApi'
+import StoreProducts from './products'
+import Review from './review'
+import Policies from './policies'
+import StoreTabs from './tabs'
+import FollowStore from './followStore'
+import { BasicModal } from '@/app/components/cards/popup'
+import Share from '@/app/components/cards/share'
+import Head from 'next/head'
+import React from 'react'
 
-const BusinessPage = ({ params, searchParams }) => {
-  const router = useRouter();
-  const { following, socket, isOffline } = useUserData();
-  const getStore = params.store.split("-");
-  const { data, error } = useSWR(
-    `/branch/info?store=${getStore[0]}&branch=${getStore[1]}`
-  )
-  const branchInfo = data ? data?.data : {};
-  // ** State
-  const [open, setOpen] = useState(true);
+// export const metadata = {
+//   title:
+//     'Corislo-NG | Your One-Stop Ecommerce Hub for Next-Generation Solutions',
+//   description:
+//     'Your ultimate destination for top-quality products and unparalleled shopping experiences. Explore a captivating assortment of fashion, electronics, home essentials, and more. Immerse yourself in a seamless and secure shopping journey with our user-friendly platform. Indulge your senses, find inspiration, and redefine convenience with every visit. Embrace the joy of discovering something extraordinary as you navigate through our meticulously curated selection. Elevate your online shopping experience with Corislo – where dreams become reality.',
+// }
 
-  const handleClick = () => {
-    setOpen(!open);
-  };
-  const isIncluded = following.includes(branchInfo?.branchId);
-
+const BusinessPage = ({ params, searchParams, data, error }) => {
+  const getStore = params.store.split('-')
+  const share = searchParams.share
+  // Page content based on tab selection
   const page = {
     0: (
       <StoreProducts
@@ -57,116 +40,148 @@ const BusinessPage = ({ params, searchParams }) => {
     ),
     2: <Policies store={getStore[0]} branch={getStore[1]} />,
   }
-  const followers = 12432000;
-  const dispatch = useDispatch();
+
+  // Handle possible error gracefully
+  if (error) {
+    return <div>Error loading data: {error}</div>
+  }
+
   return (
-    <HomeWrapper customersReview={false}>
-      <Box className="relative">
-        <Image
-          src="/images/misc/biz-header.png"
-          alt="header"
-          width={1900}
-          height={1400}
-          className="w-full"
+    <React.Fragment>
+      <Head>
+        <title>Home Page | Your Website Name</title>
+        <meta
+          name="description"
+          content="This is the home page of Your Website."
         />
-
-        <Image
-          src="/images/misc/shop/1.png"
-          alt="flyer"
-          width={400}
-          height={400}
-          className=" w-14 h-14  md:w-36 md:h-36 absolute -bottom-6 left-6 md:-bottom-12 md:left-28 !rounded-full md:-m-8 border border-blue-800 float-right mr-10"
-        />
-      </Box>
-      <Box className="flex justify-center sticky top-0">
-        <Box className="w-full mt-3 md:mt-0">
-          <Box className="w-full flex justify-end relative">
-            <Box className="flex items-start justify-between mt-5 px-4 md:px-5 w-full md:w-9/12">
-              <Box className="w-6/12">
-                <Typography
-                  variant="body2"
-                  noWrap
-                  className=" !text-lg md:!text-2xl !font-bold !-mb-2"
-                  color="custom.pri"
-                >
-                  {branchInfo?.businessName}
-                </Typography>
-                <Typography
-                  variant="caption"
-                  className="!font-bold !text[11px]"
-                  color="custom.sec"
-                >
-                  @{getStore[0]} @{getStore[1]}
-                </Typography>
-
-                <Box className="flex items-center mt-1">
-                  <IconifyIcon
-                    icon="tabler:link"
-                    className="!mr-2 !text-[14px]"
-                  />
-
-                  <Link
-                    href={`www.corisio.com/biz/${params.store}`}
-                    className="!text-[12px]"
-                    color="custom.pri"
-                  >
-                    {mySubstring(`www.corisio.com/biz/${params.store}`, 25)}
-                  </Link>
-                </Box>
-                <Box className="flex items-center">
-                  <Typography noWrap className="!font-bold !text-[13px]">
-                    {summarizeFollowers(branchInfo.followers || 0)} Followers
-                  </Typography>
+        <meta name="keywords" content="nextjs, homepage, website" />
+      </Head>
+      <HomeWrapper
+        customersReview={false}
+        popup={
+          <BasicModal
+            openModal={Boolean(share)}
+            content={
+              <Share
+                message=""
+                searchParams={searchParams}
+              />
+            }
+          />
+        }
+      >
+        <Box className="relative">
+          <Image
+            src="/images/misc/biz-header.png"
+            alt="header"
+            width={1900}
+            height={1400}
+            className="w-full"
+          />
+          <Image
+            src="/images/misc/shop/1.png"
+            alt="flyer"
+            width={400}
+            height={400}
+            className="w-14 h-14 md:w-36 md:h-36 absolute -bottom-6 left-6 md:-bottom-12 md:left-28 !rounded-full md:-m-8 border border-blue-800 float-right mr-10"
+          />
+        </Box>
+        <Box className="flex justify-center sticky top-0">
+          <Box className="w-full mt-3 md:mt-0">
+            <FollowStore getStore={getStore} />
+            <Box className="h-full mt-2 flex flex-col md:flex-row relative">
+              <Box className="px-1 md:px-4 md:w-3/12 mt-10 sticky top-20">
+                <Box className="bg-white md:py-4 rounded-md">
+                  <StoreTabs currTab={searchParams.tab} />
                 </Box>
               </Box>
-              <Box className="flex items-center">
-                <Box
-                  onClick={() =>
-                    router.push(`/chat?new=${branchInfo?.branchId}`)
-                  }
-                  variant="outlined"
-                  className="!rounded-full h-8 cursor-pointer !w-9 border border-blue-900 !bg-white mr-2 flex items-center justify-center"
-                >
-                  <IconifyIcon
-                    icon="tabler:message-2-plus"
-                    className="!text-blue-800 text-[16px]"
-                  />
-                </Box>
-                <Button
-                  onClick={() =>
-                    followStore(branchInfo, dispatch, socket, isIncluded)
-                  }
-                  variant="outlined"
-                  className="!rounded-full h-8 !w-28 !bg-white"
-                  startIcon={
-                    <IconifyIcon
-                      icon={
-                        isIncluded ? 'tabler:user-minus' : 'tabler:user-plus'
-                      }
-                      className="!text-blue-800 !text-[16px]"
-                    />
-                  }
-                >
-                  {isIncluded ? 'Following' : 'Follow'}
-                </Button>
+              <Box className="w-full md:w-9/12 relative">
+                <Box className="w-full">{page[searchParams.tab || 0]}</Box>
               </Box>
-            </Box>
-          </Box>
-
-          <Box className="h-full mt-2 flex flex-col md:flex-row relative">
-            <Box className="px-1 md:px-4 md:w-3/12 mt-10 sticky top-20">
-              <Box className="bg-white md:py-4 rounded-md">
-                <StoreTabs currTab={searchParams.tab} />
-              </Box>
-            </Box>
-            <Box className="w-full md:w-9/12 relative">
-              <Box className="w-full">{page[searchParams.tab || 0]}</Box>
             </Box>
           </Box>
         </Box>
-      </Box>
-    </HomeWrapper>
+      </HomeWrapper>
+    </React.Fragment>
   )
-};
+}
 
-export default BusinessPage;
+export default BusinessPage
+
+// export async function getServerSideProps() {
+//   console.log('Entering getServerSideProps') // This should log in your terminal
+
+//   try {
+//     // Test with a simple fetch to ensure server-side fetching is working
+//     const response = await fetch(
+//       `http://localhost:5001/api/v1/branch/info?store=mamafeeds&branch=eSlOTN`
+//     )
+
+//     if (!response.ok) {
+//       throw new Error(`Failed to fetch data: ${response.status}`)
+//     }
+
+//     const data = await response.json()
+//     console.log('Data fetched successfully:', data) // Logs fetched data in terminal
+
+//     return {
+//       props: {
+//         data,
+//       },
+//     }
+//   } catch (error) {
+//     console.error('Error in getServerSideProps:', error) // Error logging
+
+//     return {
+//       props: {
+//         data: null,
+//         error: 'Failed to fetch data',
+//       },
+//     }
+//   }
+// }
+
+export async function generateMetadata({ params }) {
+  const getStore = params.store.split('-')
+  try {
+    const response = await fetch(
+      `${server}/branch/info?store=${getStore[0]}&branch=${getStore[1]}&type=meta`
+    )
+
+    const res = await response.json()
+    const branchInfo = res?.data || {}
+
+    console.log(res, branchInfo, 'branchInfo')
+
+    return {
+      title: `${branchInfo.businessName}`,
+      description: branchInfo.about_store,
+      openGraph: {
+        title: branchInfo.businessName,
+        description: branchInfo.about_store,
+        url: `https://corislo.vercel.app/biz/${branchInfo.store}-${branchInfo.store}`,
+        images: branchInfo.gallery,
+        logo: branchInfo.profile_image,
+        image: branchInfo.profile_image,
+        type: 'website',
+        keywords: `${getStore} ${branchInfo.businessName} ${branchInfo.address} ${getStore[1]} ${branchInfo?.payment_settings?.account_name}`,
+        logo: 'https://corislo.vercel.app/images/logo.png',
+        contact_email: branchInfo.email,
+        contact_phone: branchInfo.phone,
+        location: {
+          latitude: branchInfo?.coordinates?.coordinates[0],
+          longitude: branchInfo?.coordinates?.coordinates[0],
+        },
+      },
+      other: {
+        // canonical: `https://www.example.com/${params.slug}`,
+      },
+    }
+  } catch (error) {
+    console.error('Error fetching metadata:', error)
+    return {
+      title: 'Fallback Title',
+      description: 'Fallback description',
+    }
+  }
+}

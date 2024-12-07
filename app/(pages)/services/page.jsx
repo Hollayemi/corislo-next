@@ -315,7 +315,7 @@ const FilterComp = ({ filter, formData, handleChange, setFormData }) => {
 export const ServicesSlider = ({ setOpenModal, noPopup }) => {
   const { data: renders, error } = useSWR('/spb/services-renders')
   const spbs = renders?.data || []
-  
+
   return (
     <Box className="flex items-center overflow-hidden">
       <ReactSlickSlider>

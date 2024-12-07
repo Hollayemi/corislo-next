@@ -1,7 +1,14 @@
 'use client'
 import { useState } from 'react'
 import { prodInnerList } from '@/app/data/store/innerList'
-import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
 import { Box, Button, TextField, Typography } from '@mui/material'
 import ProductList from '@/app/components/view/store/tables/productList'
 import useSWR from 'swr'

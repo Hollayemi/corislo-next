@@ -8,16 +8,16 @@ import { usePathname } from "next/navigation";
 // };
 
 const config = {
-  login: { title: "Sign In to Account", center: true },
-  refresh: { title: "Authenticating", center: true, noLogo: true },
-  logout: { title: "User Logout" },
-  register: { title: "Create Account" },
-  forgot_password: { title: "Forgot your Password?" },
-  reset_password: { title: "Reset Account Password", center: true },
-  verify_account: { title: "Email Verification" },
-  send_mail: { title: "Verify your Email Address" },
-  otp_verification: { title: "Verify your Email Address", center: true },
-};
+  login: { title: 'Sign In to Account', center: true },
+  refresh: { title: 'Authenticating', center: true, noLogo: true },
+  logout: { title: 'User Logout', center: true },
+  register: { title: 'Create Account', center: true },
+  forgot_password: { title: 'Forgot your Password?', center: true },
+  reset_password: { title: 'Reset Account Password', center: true },
+  verify_account: { title: 'Email Verification', center: true },
+  send_mail: { title: 'Verify your Email Address', center: true },
+  otp_verification: { title: 'Verify your Email Address', center: true },
+}
 
 export default function MyAuthLayout({ children }) {
    const pathname = usePathname();

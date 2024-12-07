@@ -4,9 +4,9 @@ import themeConfig from "@/app/configs/themeConfig";
 import IconifyIcon from "../icon";
 
 export const metadata = {
-  title: "auth-corislo",
-  description: "Showcase your store now",
-};
+  title: 'auth-corislo',
+  description: 'Showcase your store now',
+}
 
 export default function AuthLayout({ children, reverse, image, ...others }) {
   return (

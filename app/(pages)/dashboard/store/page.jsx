@@ -4,7 +4,14 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import { Grid, Box, Typography } from '@mui/material'
-import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
 import { BranchesSales, TopCards, DashboardCrumb } from './components'
 import DashboardLineChart from '@/app/components/chart/ChartjsLineChart'
 import DashboardBubbleChart from '@/app/components/chart/ChartjsBubbleChart'

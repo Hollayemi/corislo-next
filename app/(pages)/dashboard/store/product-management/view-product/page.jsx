@@ -2,7 +2,14 @@
 import { useEffect, useState } from 'react'
 import { prodInnerList } from '@/app/data/store/innerList'
 import { useSearchParams, useRouter } from 'next/navigation'
-import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
 import { Box, Typography, Grid, Button } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import {

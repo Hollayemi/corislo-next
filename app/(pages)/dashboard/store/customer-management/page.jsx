@@ -1,18 +1,25 @@
-"use client";
-import { Typography, Box } from "@mui/material";
-import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
-import { customerBreadCrumb } from "./components/columns";
-import { AllCustomers } from "./components/allCustomers";
-import OverViewCard from "./components/overview";
+'use client'
+import { Typography, Box } from '@mui/material'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
+import { customerBreadCrumb } from './components/columns'
+import { AllCustomers } from './components/allCustomers'
+import OverViewCard from './components/overview'
 
 const CustomerManagement = ({ params }) => {
-  const path = { ...params, sidebar: "customer-management" };
+  const path = { ...params, sidebar: 'customer-management' }
   return (
     <StoreLeftSideBar
       path={path}
       crumb={[
         ...customerBreadCrumb,
-        { text: "Customer listing", link: "customer-management" },
+        { text: 'Customer listing', link: 'customer-management' },
       ]}
     >
       <Box className="w-full">
@@ -27,7 +34,7 @@ const CustomerManagement = ({ params }) => {
         </Box>
       </Box>
     </StoreLeftSideBar>
-  );
-};
+  )
+}
 
-export default CustomerManagement;
+export default CustomerManagement

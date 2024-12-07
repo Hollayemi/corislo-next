@@ -379,8 +379,8 @@ const StoreLeftSideBar = React.memo(
               open
                 ? 'left-[270px]'
                 : rightOpen
-                  ? ' -left-[330px] '
-                  : ' md:left-16 '
+                ? ' -left-[330px] '
+                : ' md:left-16 '
             } w-full transition-all duration-300 absolute flex-shrink-0 h-full md:pl-4 !pr-3 md:!pr-16 z-30`}
             bgcolor="custom.bodyGray"
           >
@@ -476,7 +476,7 @@ const StoreLeftSideBar = React.memo(
             </DialogContent>
             <DialogActions className="dialog-actions-dense !mb-4">
               <Button onClick={handleCloseDialog}>Close</Button>
-              {dialogInfo.AvatarGroupacceptFunctionText && (
+              {dialogInfo.acceptFunction && (
                 <Button
                   variant="contained"
                   className="!shadow-none"

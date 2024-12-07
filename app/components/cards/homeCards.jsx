@@ -1,11 +1,12 @@
-import { Box, Button, Grid, Rating, Typography } from "@mui/material";
-import Image from "next/image";
-import IconifyIcon from "../icon";
-import { useRouter } from "next/navigation"
-import { mySubstring } from "@/app/utils/format";
-import { hexToRGBA } from "@/app/utils/hex-to-rgba";
-import { rgbaToHex } from "@/app/utils/rgba-to-hex";
-import Link from "next/link";
+'use client'
+import { Box, Button, Grid, Rating, Typography } from '@mui/material'
+import Image from 'next/image'
+import IconifyIcon from '../icon'
+import { useRouter } from 'next/navigation'
+import { mySubstring } from '@/app/utils/format'
+import { hexToRGBA } from '@/app/utils/hex-to-rgba'
+import { rgbaToHex } from '@/app/utils/rgba-to-hex'
+import Link from 'next/link'
 
 export const SectionTitle = ({ black, blue, right }) => {
   return (
@@ -32,8 +33,8 @@ export const SectionTitle = ({ black, blue, right }) => {
       </Box>
       {right}
     </Box>
-  );
-};
+  )
+}
 
 export const SectionMiddleTitle = ({ black, blue }) => {
   return (
@@ -72,8 +73,8 @@ export const SectionMiddleTitle = ({ black, blue }) => {
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 export const FlashSale = () => {
   return (
@@ -144,8 +145,8 @@ export const FlashSale = () => {
         </Grid>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 export const PopularAds = ({ store, title, brief, image, url }) => {
   const router = useRouter()
@@ -184,10 +185,17 @@ export const PopularAds = ({ store, title, brief, image, url }) => {
         />
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export const TopStores = ({ image, name,store, branch, rating, followers = 0 }) => {
+export const TopStores = ({
+  image,
+  name,
+  store,
+  branch,
+  rating,
+  followers = 0,
+}) => {
   return (
     <Box className="flex flex-col items-center justify-center px-2">
       <Image
@@ -215,7 +223,7 @@ export const TopStores = ({ image, name,store, branch, rating, followers = 0 }) 
       />
     </Box>
   )
-};
+}
 
 export const SecurityTypeCard = ({ image, title, caption }) => {
   return (
@@ -233,12 +241,12 @@ export const SecurityTypeCard = ({ image, title, caption }) => {
         {caption}
       </Typography>
     </Box>
-  );
-};
+  )
+}
 
 export const OrderBoxes = ({ image, title, value, color }) => {
-  let bgColor = rgbaToHex(hexToRGBA(color, 0.1));
-  let IconBgColor = rgbaToHex(hexToRGBA(color, 0.4));
+  let bgColor = rgbaToHex(hexToRGBA(color, 0.1))
+  let IconBgColor = rgbaToHex(hexToRGBA(color, 0.4))
   return (
     <Box className="w-1/2 md:w-1/4 p-0.5 md:p-2">
       <Box
@@ -274,5 +282,5 @@ export const OrderBoxes = ({ image, title, value, color }) => {
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}

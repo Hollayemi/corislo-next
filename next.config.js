@@ -11,7 +11,7 @@ const nextConfig = {
 
     return config;
   },
-   images: {
+  images: {
     remotePatterns: [
       {
         protocol: 'https',
@@ -32,6 +32,10 @@ const nextConfig = {
         protocol: "http",
         hostname: "corislo.vercel.app",
         pathname: "/images**"
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
       }
     ],
   },

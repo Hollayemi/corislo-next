@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://corislo.vercel.app/api/sitemap.xml

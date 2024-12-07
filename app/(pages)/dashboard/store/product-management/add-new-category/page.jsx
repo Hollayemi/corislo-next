@@ -1,11 +1,22 @@
 'use client'
 import { useState } from 'react'
 import { prodInnerList } from '@/app/data/store/innerList'
-import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
+// import CreateCollection from './collection'
+const CreateCollection = dynamic(() => import('./collection'), { ssr: false })
+// import CreateSubCollection from './subCollection'
+const CreateSubCollection = dynamic(() => import('./subCollection'), {
+  ssr: false,
+})
 import { Box, Tab, Typography } from '@mui/material'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
-import CreateCollection from './collection'
-import CreateSubCollection from './subCollection'
 
 const AddNewCategory = ({ params }) => {
   const [selectedSizes, setSelectedSizes] = useState([])
@@ -18,12 +29,7 @@ const AddNewCategory = ({ params }) => {
   }
 
   return (
-    <StoreLeftSideBar
-      path={path}
-      subListBar={true}
-      InnerList={prodInnerList}
-      
-    >
+    <StoreLeftSideBar path={path} subListBar={true} InnerList={prodInnerList}>
       <Box className="bg-white rounded-md px-3 md:px-5 pt-3 pb-8 w-full grow">
         <TabContext value={value} className="w-full md:w-5/6">
           <TabList

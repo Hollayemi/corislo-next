@@ -4,7 +4,7 @@ import { useState } from "react";
 const { Box, Typography } = require("@mui/material");
 
 const inputType = {};
-
+    
 const TextInput = ({ inputProps, id, onChange, multiline }) =>
   !multiline ? (
     <input

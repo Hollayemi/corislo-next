@@ -14,7 +14,14 @@ import {
   Button,
 } from '@mui/material'
 import Link from 'next/link'
-import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
 import Image from 'next/image'
 import themeConfig from '@/app/configs/themeConfig'
 

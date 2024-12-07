@@ -1,10 +1,17 @@
 'use client'
-import ServiceRenderWrapper from '@/app/components/view/services/header'
+// import ServiceRenderWrapper from '@/app/components/view/services/header'
 import ReactSlickSlider from '@/app/components/wrapper/react-slick'
 import { useStoreData } from '@/app/hooks/useData'
 import { CardsExplain, DashboardSlider } from './components'
 import AppCalendar from '@/app/components/calendar'
+import dynamic from 'next/dynamic'
 const { Box, Typography, Button, Avatar } = require('@mui/material')
+const ServiceRenderWrapper = dynamic(
+  () => import('@/app/components/view/services/header'),
+  {
+    ssr: false,
+  }
+)
 
 const ServiceDashboard = () => {
   const { staffInfo, screenWidth = 0 } = useStoreData()

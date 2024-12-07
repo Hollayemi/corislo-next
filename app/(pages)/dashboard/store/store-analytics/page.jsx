@@ -1,9 +1,16 @@
-"use client";
-import { forwardRef, useEffect, useState } from "react";
-import { Typography, Box, Button } from "@mui/material";
-import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
-import Icon from "@/app/components/icon";
-import OptionsMenu from "@/app/components/option-menu";
+'use client'
+import { forwardRef, useEffect, useState } from 'react'
+import { Typography, Box, Button } from '@mui/material'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
+import Icon from '@/app/components/icon'
+import OptionsMenu from '@/app/components/option-menu'
 import {
   analyticsBreadCrumb,
   TotalSaleGrowth,
@@ -11,21 +18,21 @@ import {
   CategoriesGrowth,
   StoreGrowth,
   GrowthCard,
-} from "./components";
-import DatePickerWrapper from "@/app/styles/react-datepicker";
+} from './components'
+import DatePickerWrapper from '@/app/styles/react-datepicker'
 import {
   calculateDateDiff,
   dateNumericOption,
   formatDate,
   generateDateRange,
-} from "@/app/utils/format";
-import DatePicker from "react-datepicker";
-import { useStoreData } from "@/app/hooks/useData";
+} from '@/app/utils/format'
+import DatePicker from 'react-datepicker'
+import { useStoreData } from '@/app/hooks/useData'
 
 const CustomInput = forwardRef((props, ref) => {
-  const startDate = props.start !== null ? formatDate(props.start) : null;
-  const endDate = props.end !== null ? ` - ${formatDate(props.end)}` : null;
-  const value = `${startDate}${endDate !== null ? endDate : ""}`;
+  const startDate = props.start !== null ? formatDate(props.start) : null
+  const endDate = props.end !== null ? ` - ${formatDate(props.end)}` : null
+  const value = `${startDate}${endDate !== null ? endDate : ''}`
 
   return (
     <Box className="flex items-center !w-fit !w-52 bg-white leading-8 h-8 px-3 rounded-md border">
@@ -37,29 +44,29 @@ const CustomInput = forwardRef((props, ref) => {
       </Box>
       <Icon icon="tabler:chevron-down" className="!text-[17px] ml-2" />
     </Box>
-  );
-});
+  )
+})
 
 const StoreAnalysisPage = ({ params }) => {
-  const path = { ...params, sidebar: "store-analytics" };
-  const { staffInfo } = useStoreData();
+  const path = { ...params, sidebar: 'store-analytics' }
+  const { staffInfo } = useStoreData()
   const defaultInterval = {
-    Daily: "10_days",
-    Weekly: "5_weeks",
-    Monthly: "5_months",
-    Yearly: "4_years",
-  };
+    Daily: '10_days',
+    Weekly: '5_weeks',
+    Monthly: '5_months',
+    Yearly: '4_years',
+  }
   // states
-  const [interval, setInterval] = useState("Monthly");
+  const [interval, setInterval] = useState('Monthly')
   const [dates, setDate] = useState({
     startDate: calculateDateDiff(
       defaultInterval[interval],
       new Date(),
-      "-",
+      '-',
       true
     ),
     endDate: new Date(),
-  });
+  })
 
   useEffect(
     () =>
@@ -69,31 +76,31 @@ const StoreAnalysisPage = ({ params }) => {
           startDate: calculateDateDiff(
             defaultInterval[interval],
             new Date(),
-            "-",
+            '-',
             true
           ),
-        };
+        }
       }),
     [interval]
-  );
+  )
 
-  const label = generateDateRange(dates.startDate, dates.endDate, interval);
+  const label = generateDateRange(dates.startDate, dates.endDate, interval)
 
   const query = {
     startDate: formatDate(dates.startDate, dateNumericOption),
     endDate: formatDate(dates.endDate, dateNumericOption),
-  };
+  }
 
-  const queryString = new URLSearchParams(query).toString();
+  const queryString = new URLSearchParams(query).toString()
 
   const handleDateChange = (dates) => {
     if (dates) {
-      const [start, end] = dates;
+      const [start, end] = dates
       setDate((prev) => {
-        return { ...prev, startDate: start, endDate: end };
-      });
+        return { ...prev, startDate: start, endDate: end }
+      })
     }
-  };
+  }
 
   return (
     <StoreLeftSideBar
@@ -107,8 +114,8 @@ const StoreAnalysisPage = ({ params }) => {
             <DatePickerWrapper>
               <DatePicker
                 selectsRange
-                startDate={dates.startDate || ""}
-                endDate={dates.endDate || ""}
+                startDate={dates.startDate || ''}
+                endDate={dates.endDate || ''}
                 selected={new Date()}
                 maxDate={new Date()}
                 id="date-range-picker"
@@ -142,8 +149,8 @@ const StoreAnalysisPage = ({ params }) => {
             options={Object.keys(defaultInterval)}
             setOption={setInterval}
             iconButtonProps={{
-              size: "small",
-              sx: { color: "text.disabled", cursor: "pointer" },
+              size: 'small',
+              sx: { color: 'text.disabled', cursor: 'pointer' },
             }}
           />
         </Box>
@@ -204,8 +211,8 @@ const StoreAnalysisPage = ({ params }) => {
                 options={Object.keys(defaultInterval)}
                 setOption={setInterval}
                 iconButtonProps={{
-                  size: "small",
-                  sx: { color: "text.disabled", cursor: "pointer" },
+                  size: 'small',
+                  sx: { color: 'text.disabled', cursor: 'pointer' },
                 }}
               />
             </Box>
@@ -246,8 +253,8 @@ const StoreAnalysisPage = ({ params }) => {
               options={Object.keys(defaultInterval)}
               setOption={setInterval}
               iconButtonProps={{
-                size: "small",
-                sx: { color: "text.disabled", cursor: "pointer" },
+                size: 'small',
+                sx: { color: 'text.disabled', cursor: 'pointer' },
               }}
             />
           </Box>
@@ -262,7 +269,7 @@ const StoreAnalysisPage = ({ params }) => {
         </Box>
       </Box>
     </StoreLeftSideBar>
-  );
-};
+  )
+}
 
-export default StoreAnalysisPage;
+export default StoreAnalysisPage

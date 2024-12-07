@@ -1,52 +1,50 @@
-import { formatName } from "@/app/utils/get-initials";
-import { Box, Typography } from "@mui/material";
-import React from "react";
-import useSWR from "swr";
-
+'use client'
+import { formatName } from '@/app/utils/get-initials'
+import { Box, Typography } from '@mui/material'
+import React from 'react'
+import useSWR from 'swr'
 
 // ****
 
 // .
 
-// ****  
-// 
+// ****
+//
 
-// **Contact Us**  
-// 
+// **Contact Us**
+//
 
-// **About Us**  
+// **About Us**
 // At [BusinessName], we believe in quality and customer satisfaction. Whether you’re visiting for the first time or a returning customer, we want you to feel at home in our store.
 
-// **Social Media**  
+// **Social Media**
 // Stay connected with us on social media! Follow us on Facebook, Instagram, Twitter, and TikTok to get the latest updates, promotions, and more.
 
-
-// **Payments and Refunds**  
+// **Payments and Refunds**
 // We offer secure payment options. If you need to make a payment, please have your account details ready. We also have a clear refund policy in place, ensuring that if you are not satisfied with your purchase, you have the option for a refund or exchange as per our terms.
 
-// **Notifications**  
+// **Notifications**
 // We’ll keep you informed with notifications about your order status, including order confirmation, shipping updates, and more. If any item is low on stock or out of stock, we’ll notify you promptly to ensure you can plan your purchases accordingly.
 
-// **Pre-orders**  
-// 
+// **Pre-orders**
+//
 
-// **Gallery and Profile**  
+// **Gallery and Profile**
 // Check out our gallery to see the latest products and store updates. Our profile image represents our commitment to quality and customer satisfaction.
 
 // Thank you for choosing [BusinessName]. We look forward to serving you!
 
 const Policies = ({ store, branch }) => {
-  const { data, error } = useSWR(
-    `/branch/info?store=${store}&branch=${branch}`
-  )
+  const { data, error } = useSWR(`/branch/info?store=${store}&branch=${branch}`)
   const info = data ? data?.data : {}
   console.log(info)
   const days = Object.keys(info?.opening_hours || {})
   const opening_hours = days.map(
     (x) =>
-      info.opening_hours[x].isset && `${formatName(x)}: from ${
-        info.opening_hours[x].from
-      } to ${info.opening_hours[x].to},`
+      info.opening_hours[x].isset &&
+      `${formatName(x)}: from ${info.opening_hours[x].from} to ${
+        info.opening_hours[x].to
+      },`
   )
   return (
     <Box className="!bg-white rounded-xl px-8 py-8 mt-10 !text-black">
@@ -150,7 +148,7 @@ const Policies = ({ store, branch }) => {
   )
 }
 
-export default Policies;
+export default Policies
 
 const EachExpression = ({ title, body }) => {
   return (
@@ -170,5 +168,5 @@ const EachExpression = ({ title, body }) => {
         ))}
       </ul>
     </Box>
-  );
-};
+  )
+}

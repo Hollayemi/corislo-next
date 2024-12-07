@@ -70,7 +70,13 @@ const ServiceDisplay = ({ params }) => {
         <BasicModal
           openModal={openModal}
           toggleModal={() => setOpenModal(false)}
-          content={<Share message={share}  close={() => setOpenModal(false)} />}
+          content={
+            <Share
+              // shareUrl="http://localhost:4001/biz/mamafeeds-eSlOTN"
+              message={share}
+              close={() => setOpenModal(false)}
+            />
+          }
         />
       }
     >
@@ -334,7 +340,11 @@ const ServiceDisplay = ({ params }) => {
                     ([day, info], i) =>
                       allHours ? (
                         <Box
-                          className={`flex items-center justify-between ${currentDay.toLowerCase() === day ? '!text-black' : '!text-gray-500'}`}
+                          className={`flex items-center justify-between ${
+                            currentDay.toLowerCase() === day
+                              ? '!text-black'
+                              : '!text-gray-500'
+                          }`}
                           key={i}
                         >
                           <Typography

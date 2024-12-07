@@ -1,16 +1,23 @@
-"use client";
-import { useState } from "react";
-import { Typography, Box } from "@mui/material";
-import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
-import { marketingBreadCrumb, CampaignTab } from "../components";
-import DiscountWizard from "../pages/discount";
-import AnnouncementWizard from "../pages/announcement";
-import Banner from "../pages/banner";
-import DatePickerWrapper from "@/app/styles/react-datepicker";
+'use client'
+import { useState } from 'react'
+import { Typography, Box } from '@mui/material'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
+import { marketingBreadCrumb, CampaignTab } from '../components'
+import DiscountWizard from '../pages/discount'
+import AnnouncementWizard from '../pages/announcement'
+import Banner from '../pages/banner'
+import DatePickerWrapper from '@/app/styles/react-datepicker'
 
 const MarketingPage = ({ params }) => {
-  const [screen, setScreen] = useState("campaign");
-  const path = { ...params, sidebar: "marketing" };
+  const [screen, setScreen] = useState('campaign')
+  const path = { ...params, sidebar: 'marketing' }
   const pages = {
     campaign: (
       <DatePickerWrapper>
@@ -27,7 +34,7 @@ const MarketingPage = ({ params }) => {
         <Banner />
       </DatePickerWrapper>
     ),
-  };
+  }
   return (
     <StoreLeftSideBar
       path={path}
@@ -74,6 +81,6 @@ const MarketingPage = ({ params }) => {
       </Box>
     </StoreLeftSideBar>
   )
-};
+}
 
-export default MarketingPage;
+export default MarketingPage

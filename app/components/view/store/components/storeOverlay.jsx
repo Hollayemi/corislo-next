@@ -1,3 +1,4 @@
+"use client"
 import { useStoreData } from '@/app/hooks/useData'
 import Notification from './notification'
 import AppSearch from './searchFilter'

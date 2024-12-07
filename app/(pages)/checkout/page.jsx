@@ -14,42 +14,51 @@ import { detectCardType } from '@/app/utils/format'
 import { CardTemplate } from '../user/billingAndAddress'
 import Link from 'next/link'
 import { reshapePrice } from '../dashboard/store/marketing/components'
+import { MySwitch } from '../dashboard/store/stores/component'
 
 const Checkout = () => {
   const dispatch = useDispatch()
-  const { cartedProds, userInfo, temp, seletedCartProds } = useUserData()
+  const { cartedProds, userInfo, temp, seletedCartProds, agentInfo } =
+    useUserData()
+  const [usingPoint, usPoint] = useState(false)
+  console.log(usingPoint)
   const endpoint = `/user/cart-group?${
     seletedCartProds.length && `prods=${seletedCartProds.join('.')}`
   }`
   const { data: carts, error } = useSWR(endpoint)
 
   seletedCartProds.length && `prods=${seletedCartProds.join('.')}`
-  console.log(seletedCartProds,seletedCartProds.length, cartedProds)
+  console.log(agentInfo)
 
   const { data: agents } = useSWR('/user/pickers')
   const pickers = agents?.data || []
   const groupedCart = carts ? carts.data.result : []
   const amounts = carts ? carts.data.total : []
 
-
   const getIds = () => {
-    if(seletedCartProds.length){
+    if (seletedCartProds.length) {
       return cartedProd
-    }else{
+    } else {
       return selec
     }
   }
 
   const [payload, updatePayload] = useState({
-    ids: seletedCartProds.length  ? seletedCartProds : cartedProds,
+    ids: seletedCartProds.length ? seletedCartProds : cartedProds,
     delivery: {},
     picker: {},
+    usingPoint,
     shippingAddress: temp.address || userInfo?.selectedAddress || null,
     billingCard: userInfo?.selectedBilling || null,
   })
   console.log(payload)
   const address = payload.shippingAddress
   const card = payload.billingCard
+
+  const myPoints = usingPoint ? agentInfo?.coin : 0
+  const totPrice =
+    (amounts?.discountedPrice || amounts?.originalPrice) - myPoints
+
   return (
     <HomeWrapper>
       <Box>
@@ -92,6 +101,19 @@ const Checkout = () => {
                       {reshapePrice(amounts?.originalPrice)}
                     </Typography>
                   </Box>
+                  {usingPoint && (
+                    <Box className="w-full flex justify-between items-center !mt-5">
+                      <Typography variant="body2" className="!text-[12px]">
+                        Points
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        className="!text-[12px] !text-red-500"
+                      >
+                        - {reshapePrice(agentInfo.coin || 0)}
+                      </Typography>
+                    </Box>
+                  )}
                   {amounts?.discountedPrice ? (
                     <Box className="w-full flex justify-between items-center !mt-2">
                       <Typography variant="body2" className="!text-[12px]">
@@ -126,9 +148,7 @@ const Checkout = () => {
                       variant="body2"
                       className="!text-[13px] !font-bold"
                     >
-                      {reshapePrice(
-                        amounts?.discountedPrice || amounts?.originalPrice
-                      )}
+                      {reshapePrice(totPrice)}
                     </Typography>
                   </Box>
                 </Box>
@@ -156,11 +176,18 @@ const Checkout = () => {
                     </Box>
                   </Box>
                 </Box>
-                <PaymentOptions card={card} updatePayload={updatePayload} />
+                <PaymentOptions
+                  card={card}
+                  updatePayload={updatePayload}
+                  usPoint={usPoint}
+                  usingPoint={usingPoint}
+                />
                 <Button
                   variant="contained"
                   className="w-full !mt-6 !h-12 !rounded-full !border-none !text-[14px] !text-white"
-                  onClick={() => addNewOrder(payload, dispatch, endpoint)}
+                  onClick={() =>
+                    addNewOrder({ ...payload, usingPoint }, dispatch, endpoint)
+                  }
                 >
                   Place Order
                 </Button>
@@ -231,7 +258,12 @@ export const ChangeAddress = ({ address, updatePayload }) => {
   )
 }
 
-export const PaymentOptions = ({ card, updatePayload }) => {
+export const PaymentOptions = ({
+  card,
+  updatePayload,
+  usPoint,
+  usingPoint,
+}) => {
   const { data: cards } = useSWR('/user/billings')
   const billings = cards?.data || []
   return (
@@ -239,7 +271,30 @@ export const PaymentOptions = ({ card, updatePayload }) => {
       <Typography variant="body2" className="!font-bold !text-[15px]">
         Payment Option
       </Typography>
-      <Box className="w-full flex justify-between items-center !my-5">
+      <Box className="flex justify-between items-center mt-5">
+        <Typography
+          variant="body2"
+          className="!text-[12px] !text-black !w-full"
+        >
+          Points ({reshapePrice(100)})
+        </Typography>
+        <Box className="flex items-center">
+          <Typography
+            variant="body2"
+            noWrap
+            className="!text-[12px] !text-black !mr-2 !w-full"
+          >
+            - {reshapePrice(100)}
+          </Typography>
+        </Box>
+        <MySwitch
+          edge="end"
+          checked={usingPoint}
+          className="!md:mr-2"
+          onChange={(e) => usPoint(!usingPoint)}
+        />
+      </Box>
+      <Box className="w-full flex justify-between items-center mb-5">
         <Box className="flex items-center">
           {card ? (
             <CardTemplate
@@ -253,13 +308,14 @@ export const PaymentOptions = ({ card, updatePayload }) => {
           ) : (
             <Typography
               variant="body2"
-              className="!text-[14px] !text-black !mb-5 !text-center !w-full"
+              className="!text-[14px] !text-black !text-center !w-full"
             >
               No card selected
             </Typography>
           )}
         </Box>
       </Box>
+
       {/* <Link href="/user">
                     <Typography
                       variant="body2"

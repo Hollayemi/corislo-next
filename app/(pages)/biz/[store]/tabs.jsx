@@ -1,6 +1,7 @@
-import IconifyIcon from "@/app/components/icon";
+'use client' 
+import IconifyIcon from '@/app/components/icon'
 import { Box, Typography } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation'
 
 const StoreTabs = ({ currTab }) => {
   const router = useRouter();

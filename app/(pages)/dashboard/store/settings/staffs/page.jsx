@@ -1,62 +1,69 @@
-"use client";
-import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
-import { settingsInnerList } from "@/app/data/store/innerList";
-import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
-import { settingsBreadCrumb } from "../components";
-import { TitleSubtitle } from "@/app/(pages)/user/components";
-import { OrderBoxes } from "@/app/components/cards/homeCards";
-import { SimpleDropDown } from "../../product-management/add-new-product/components";
-import { StaffCard } from "./staff.component";
-import IconifyIcon from "@/app/components/icon";
-import { useEffect, useState } from "react";
-import { InputBoxWithSideLabel } from "../../stores/component";
-import useSWR from "swr";
-import { addStaff } from "@/app/redux/state/slices/shop/branches/staffs";
-import { useDispatch } from "react-redux";
-import { useStoreData } from "@/app/hooks/useData";
+'use client'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
+import { settingsInnerList } from '@/app/data/store/innerList'
+import { Box, Button, MenuItem, TextField, Typography } from '@mui/material'
+import { settingsBreadCrumb } from '../components'
+import { TitleSubtitle } from '@/app/(pages)/user/components'
+import { OrderBoxes } from '@/app/components/cards/homeCards'
+import { SimpleDropDown } from '../../product-management/add-new-product/components'
+import { StaffCard } from './staff.component'
+import IconifyIcon from '@/app/components/icon'
+import { useEffect, useState } from 'react'
+import { InputBoxWithSideLabel } from '../../stores/component'
+import useSWR from 'swr'
+import { addStaff } from '@/app/redux/state/slices/shop/branches/staffs'
+import { useDispatch } from 'react-redux'
+import { useStoreData } from '@/app/hooks/useData'
 
 const Staffs = ({ params }) => {
   const path = {
     ...params,
-    sidebar: "settings",
-    sublist: "staffs",
-  };
+    sidebar: 'settings',
+    sublist: 'staffs',
+  }
   const {
     showSnackbar,
     staffInfo: { permissions },
   } = useStoreData()
-  const dispatch = useDispatch();
-  const { data, isLoading } = useSWR("/branch/staffs");
-  const myStaffs = (data && data.data) || [];
+  const dispatch = useDispatch()
+  const { data, isLoading } = useSWR('/branch/staffs')
+  const myStaffs = (data && data.data) || []
   const [dialogInfo, updateDialogInfo] = useState({
     open: false,
-    title: "Add Employee",
-    acceptFunctionText: "Go ahead, create",
+    title: 'Add Employee',
+    acceptFunctionText: 'Go ahead, create',
     acceptFunction: () => {
-      addStaff(adminValues, dispatch, showSnackbar);
+      addStaff(adminValues, dispatch, showSnackbar)
     },
-  });
+  })
   const [adminValues, setAdminValues] = useState({
-    fullname: "",
-    phoneNumber: "",
-    email: "",
-    username: "",
-  });
+    fullname: '',
+    phoneNumber: '',
+    email: '',
+    username: '',
+  })
   const handleAdminChange = (prop) => (event) => {
     setAdminValues((prevValues) => ({
       ...prevValues,
       [prop]: event.target.value,
-    }));
-  };
+    }))
+  }
 
-    useEffect(() => {
-      updateDialogInfo((prevDialogInfo) => ({
-        ...prevDialogInfo,
-        acceptFunction: () => {
-          addStaff(adminValues, dispatch, showSnackbar);
-        },
-      }));
-    }, [adminValues, addStaff, dispatch, showSnackbar]);
+  useEffect(() => {
+    updateDialogInfo((prevDialogInfo) => ({
+      ...prevDialogInfo,
+      acceptFunction: () => {
+        addStaff(adminValues, dispatch, showSnackbar)
+      },
+    }))
+  }, [adminValues, addStaff, dispatch, showSnackbar])
 
   return (
     <StoreLeftSideBar
@@ -64,7 +71,7 @@ const Staffs = ({ params }) => {
       permission="view_staff"
       subListBar={false}
       InnerList={settingsInnerList}
-      crumb={[...settingsBreadCrumb, { text: "Staffs", link: "staff" }]}
+      crumb={[...settingsBreadCrumb, { text: 'Staffs', link: 'staff' }]}
       dialogInfo={dialogInfo}
       updateDialogInfo={updateDialogInfo}
       dialogComponent={
@@ -133,8 +140,8 @@ const Staffs = ({ params }) => {
             <Box className="flex items-center w-full md:w-2/5">
               <Box className="w-1/2 !mx-1">
                 <SimpleDropDown
-                  inputProps={{ defaultValue: "All " }}
-                  render={["All", "Active", "Inactive"].map((res, i) => (
+                  inputProps={{ defaultValue: 'All ' }}
+                  render={['All', 'Active', 'Inactive'].map((res, i) => (
                     <MenuItem key={i} value={res}>
                       {res}
                     </MenuItem>
@@ -143,8 +150,8 @@ const Staffs = ({ params }) => {
               </Box>
               <Box className="w-1/2 !mx-1">
                 <SimpleDropDown
-                  inputProps={{ defaultValue: "All" }}
-                  render={["All", "Aaua branch"].map((res, i) => (
+                  inputProps={{ defaultValue: 'All' }}
+                  render={['All', 'Aaua branch'].map((res, i) => (
                     <MenuItem key={i} value={res} selected={i == 1}>
                       {res}
                     </MenuItem>
@@ -181,32 +188,32 @@ const Staffs = ({ params }) => {
         </Box>
       </Box>
     </StoreLeftSideBar>
-  );
-};
+  )
+}
 
-export default Staffs;
+export default Staffs
 
 const NewStaff = ({ adminValues, handleAdminChange }) => (
   <Box>
     <InputBoxWithSideLabel
       value={adminValues.fullname}
-      onChange={handleAdminChange("fullname", adminValues)}
+      onChange={handleAdminChange('fullname', adminValues)}
       label="Fullname"
     />
     <InputBoxWithSideLabel
       value={adminValues.username}
-      onChange={handleAdminChange("username", adminValues)}
+      onChange={handleAdminChange('username', adminValues)}
       label="Username"
     />
     <InputBoxWithSideLabel
       value={adminValues.email}
-      onChange={handleAdminChange("email", adminValues)}
+      onChange={handleAdminChange('email', adminValues)}
       label="Email"
     />
     <InputBoxWithSideLabel
       value={adminValues.phoneNumber}
-      onChange={handleAdminChange("phoneNumber", adminValues)}
+      onChange={handleAdminChange('phoneNumber', adminValues)}
       label="Phone Number"
     />
   </Box>
-);
+)

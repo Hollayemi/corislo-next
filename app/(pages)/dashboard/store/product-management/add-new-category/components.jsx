@@ -1,3 +1,4 @@
+"use client"
 const { Box, Typography } = require('@mui/material')
 
 export const GridLayout = ({ title, subtitle, comp, className="md:mb-8", alignStart }) => {

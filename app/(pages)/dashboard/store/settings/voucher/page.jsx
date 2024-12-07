@@ -1,6 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
-import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
 import { settingsInnerList } from '@/app/data/store/innerList'
 import { Box, Button } from '@mui/material'
 import { useEffect, useState } from 'react'
@@ -25,7 +32,7 @@ const VoucherPage = ({ params }) => {
     title: 'Add Employee',
     acceptFunctionText: 'Go ahead, create',
     acceptFunction: () => {
-    //   addStaff(newVoucher, dispatch, showSnackbar)
+      //   addStaff(newVoucher, dispatch, showSnackbar)
     },
   })
   const [newVoucher, setNewVoucher] = useState({
@@ -49,11 +56,7 @@ const VoucherPage = ({ params }) => {
     }))
   }
   const VoucherCard = () => {
-    return (
-        <Box >
-
-        </Box>
-    )
+    return <Box></Box>
   }
   return (
     <StoreLeftSideBar

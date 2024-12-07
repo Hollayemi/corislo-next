@@ -5,15 +5,16 @@
 * {
   padding: 0px;
   margin: 0px;
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .ref {
-  font-family: "Franklin Gothic Medium !important";
+  font-family: 'Franklin Gothic Medium !important';
 }
 
 .slick-slide {
   margin: 0 0px;
+  border-bottom: 68px;
 }
 
 .slick-list {
@@ -156,7 +157,7 @@ textarea::placeholder {
 .tooltipItems {
   display: flex !important;
   padding: 0px 10px;
-  
+
   align-items: center;
   justify-content: space-between;
   margin-bottom: -8px;
@@ -198,26 +199,27 @@ textarea::placeholder {
   animation: slideOutToRight 0.5s ease forwards;
 }
 
-.react-hot-toast, .css-1a0fd8>div{
-   z-index: 99999999999999999999 !important;
+.react-hot-toast,
+.css-1a0fd8 > div {
+  z-index: 99999999999999999999 !important;
 }
 
-
-.hidde{
+.hidde {
   display: none !important;
-    background-color: lightblue;
+  background-color: lightblue;
   border-color: darkblue;
   box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
 }
 
-
 /* service rendering dashboard */
 
-.serviceDashbord .MuiDrawer-root.MuiDrawer-docked{
+.serviceDashbord .MuiDrawer-root.MuiDrawer-docked {
   background: #000 !important;
   max-width: 270px !important;
 }
 
-.serviceDashbord .MuiDrawer-root.MuiDrawer-docked .MuiPaper-root.MuiPaper-elevation.MuiDrawer-paperAnchorLeft{
+.serviceDashbord
+  .MuiDrawer-root.MuiDrawer-docked
+  .MuiPaper-root.MuiPaper-elevation.MuiDrawer-paperAnchorLeft {
   max-width: 270px !important;
 }

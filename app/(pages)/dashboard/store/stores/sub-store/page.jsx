@@ -1,10 +1,17 @@
-"use client";
-import { useState } from "react";
-import { Typography, Box, Grid, Paper, TextField, Button } from "@mui/material";
-import Link from "next/link";
-import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
-import Image from "next/image";
-import themeConfig from "@/app/configs/themeConfig";
+'use client'
+import { useState } from 'react'
+import { Typography, Box, Grid, Paper, TextField, Button } from '@mui/material'
+import Link from 'next/link'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
+import Image from 'next/image'
+import themeConfig from '@/app/configs/themeConfig'
 
 import {
   InputBoxWithSideLabel,
@@ -13,55 +20,55 @@ import {
   SocialMediaConponent,
   StoreBreadCrumb,
   BreadcrumbRightEle,
-} from "../component";
-import Icon from "@/app/components/icon";
-import { storeBottomBar, storeInnerList } from "@/app/data/store/innerList";
-import { useStoreData } from "@/app/hooks/useData";
-import { useDispatch } from "react-redux";
-import useSWR from "swr";
-import { addSubStore } from "@/app/redux/state/slices/shop/settings/editShop";
-import MapGraph from "@/app/components/view/home/Map/map";
+} from '../component'
+import Icon from '@/app/components/icon'
+import { storeBottomBar, storeInnerList } from '@/app/data/store/innerList'
+import { useStoreData } from '@/app/hooks/useData'
+import { useDispatch } from 'react-redux'
+import useSWR from 'swr'
+import { addSubStore } from '@/app/redux/state/slices/shop/settings/editShop'
+import MapGraph from '@/app/components/view/home/Map/map'
 
 const StorePage = ({ params }) => {
   const { storeInfo } = useStoreData()
-  const dispatch = useDispatch();
-  const { data } = useSWR("/branch/all?sidelist=true");
-  const InnerList = data?.data ? data.data : [];
-  const path = { ...params, sidebar: "stores" };
+  const dispatch = useDispatch()
+  const { data } = useSWR('/branch/all?sidelist=true')
+  const InnerList = data?.data ? data.data : []
+  const path = { ...params, sidebar: 'stores' }
 
   const [inputValues, setValues] = useState({
-    branchName: "",
-    branchEmail: "",
-    address: "",
-    city: "",
-    state: "",
-    landmark: "",
-    about_store: "",
-  });
+    branchName: '',
+    branchEmail: '',
+    address: '',
+    city: '',
+    state: '',
+    landmark: '',
+    about_store: '',
+  })
 
   const [adminValues, setAdminValues] = useState({
-    fullname: "",
-    phoneNumber: "",
-    email: "",
-    username: "",
-  });
+    fullname: '',
+    phoneNumber: '',
+    email: '',
+    username: '',
+  })
 
   const handleChange = (prop) => (event) => {
-    setValues({ ...inputValues, [prop]: event.target.value });
-  };
+    setValues({ ...inputValues, [prop]: event.target.value })
+  }
 
   const handleAdminChange = (prop) => (event) => {
-    setAdminValues({ ...adminValues, [prop]: event.target.value });
-  };
+    setAdminValues({ ...adminValues, [prop]: event.target.value })
+  }
 
   return (
     <StoreLeftSideBar
       path={path}
       subListBar={false}
-      InnerList={{ title: "Store List", content: InnerList }}
+      InnerList={{ title: 'Store List', content: InnerList }}
       BottomList={storeBottomBar}
       breadCrumbRIghtChildren={<BreadcrumbRightEle />}
-      crumb={[...StoreBreadCrumb, { text: "New Sub-Stores", link: "" }]}
+      crumb={[...StoreBreadCrumb, { text: 'New Sub-Stores', link: '' }]}
     >
       <Box className="w-full bg-white !rounded-md !px-4 !md:px-5 mt-3 !pb-8 relative">
         <Grid container spacing={2}>
@@ -110,7 +117,7 @@ const StorePage = ({ params }) => {
             </Box>
             <Box className="!mt-8 !border-b !pb-3">
               <InputBoxWithSideLabel
-                value={storeInfo?.profile?.store || ""}
+                value={storeInfo?.profile?.store || ''}
                 inputProps={{
                   disabled: true,
                 }}
@@ -120,7 +127,7 @@ const StorePage = ({ params }) => {
 
               <InputBoxWithSideLabel
                 value={inputValues.branchName}
-                onChange={handleChange("branchName")}
+                onChange={handleChange('branchName')}
                 label="Branch Name"
               />
             </Box>
@@ -136,22 +143,22 @@ const StorePage = ({ params }) => {
               <br />
               <InputBoxWithSideLabel
                 value={inputValues.city}
-                onChange={handleChange("city")}
+                onChange={handleChange('city')}
                 label="City"
               />
               <InputBoxWithSideLabel
                 value={inputValues.state}
-                onChange={handleChange("state")}
+                onChange={handleChange('state')}
                 label="State"
               />
               <InputBoxWithSideLabel
                 value={inputValues.address}
-                onChange={handleChange("address")}
+                onChange={handleChange('address')}
                 label="Address"
               />
               <InputBoxWithSideLabel
                 value={inputValues.landmark}
-                onChange={handleChange("landmark")}
+                onChange={handleChange('landmark')}
                 label="Closest Bus Stop or Landmark"
               />
             </Box>
@@ -167,7 +174,7 @@ const StorePage = ({ params }) => {
               <br />
               <InputBoxWithSideLabel
                 value={inputValues.branchEmail}
-                onChange={handleChange("branchEmail")}
+                onChange={handleChange('branchEmail')}
                 label="Branch Email"
               />
               <TextField
@@ -175,7 +182,7 @@ const StorePage = ({ params }) => {
                 fullWidth
                 multiline
                 value={inputValues.about_store}
-                onChange={handleChange("about_store")}
+                onChange={handleChange('about_store')}
                 // defaultValue="About Store: Welcome to Sport Zone, your ultimate destination for all things sports and fitness. We are dedicated to providing athletes and fitness enthusiasts with top-notch sports equipment, apparel, and accessories to help you excel in your game and achieve your fitness goals. At Sport Zone, we understand the importance of having the right gear to enhance your performance. Our extensive collection features top brands and high-quality products that cater to a wide range of sports, including basketball, soccer, tennis, running, and more. Whether you're a professional athlete, a weekend warrior, or a fitness enthusiast, we have everything you need to unleash your full potential."
                 id="textarea-outlined"
                 maxRows={12}
@@ -194,22 +201,22 @@ const StorePage = ({ params }) => {
               <br />
               <InputBoxWithSideLabel
                 value={adminValues.fullname}
-                onChange={handleAdminChange("fullname")}
+                onChange={handleAdminChange('fullname')}
                 label="Fullname"
               />
               <InputBoxWithSideLabel
                 value={adminValues.username}
-                onChange={handleAdminChange("username")}
+                onChange={handleAdminChange('username')}
                 label="Username"
               />
               <InputBoxWithSideLabel
                 value={adminValues.email}
-                onChange={handleAdminChange("email")}
+                onChange={handleAdminChange('email')}
                 label="Email"
               />
               <InputBoxWithSideLabel
                 value={adminValues.phoneNumber}
-                onChange={handleAdminChange("phoneNumber")}
+                onChange={handleAdminChange('phoneNumber')}
                 label="Phone Number"
               />
             </Box>
@@ -255,7 +262,7 @@ const StorePage = ({ params }) => {
         </Button>
       </Box>
     </StoreLeftSideBar>
-  );
-};
+  )
+}
 
-export default StorePage;
+export default StorePage

@@ -1,7 +1,6 @@
 'use client'
 import ThemeComponent from '@/theme'
 import persistStore from 'redux-persist/es/persistStore'
-import NextProgress from 'nextjs-progressbar'
 import { store } from '@/app/redux/state/store'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
@@ -16,17 +15,16 @@ import handleSubscribeToNotification from '../redux/state/slices/api/webpush'
 import { useEffect, useState } from 'react'
 import LineLoading from './loading'
 import '@/styles/globals.css'
-import { isMobile, deviceType, osName } from 'react-device-detect'
+import { osName } from 'react-device-detect'
 
-import UAParser from 'ua-parser-js'
 import { usePathname } from 'next/navigation'
 
-const metadata = {
-  title:
-    'Corislo-NG | Your One-Stop Ecommerce Hub for Next-Generation Solutions',
-  description:
-    'Your ultimate destination for top-quality products and unparalleled shopping experiences. Explore a captivating assortment of fashion, electronics, home essentials, and more. Immerse yourself in a seamless and secure shopping journey with our user-friendly platform. Indulge your senses, find inspiration, and redefine convenience with every visit. Embrace the joy of discovering something extraordinary as you navigate through our meticulously curated selection. Elevate your online shopping experience with Corislo – where dreams become reality.',
-}
+// export const metadata = {
+//   title:
+//     'Corislo-NG | Your One-Stop Ecommerce Hub for Next-Generation Solutions',
+//   description:
+//     'Your ultimate destination for top-quality products and unparalleled shopping experiences. Explore a captivating assortment of fashion, electronics, home essentials, and more. Immerse yourself in a seamless and secure shopping journey with our user-friendly platform. Indulge your senses, find inspiration, and redefine convenience with every visit. Embrace the joy of discovering something extraordinary as you navigate through our meticulously curated selection. Elevate your online shopping experience with Corislo – where dreams become reality.',
+// }
 
 const persistor = persistStore(store)
 
@@ -53,16 +51,20 @@ export default function RootLayout({ children }) {
   const excludedPaths = ['/dashboard', '/coristen']
   const pathArr = pathname.split('/')
   const isExcluded = excludedPaths.some((path) => pathname.startsWith(path))
-  
+
   const logos = {
     dashboard: 'main_store.png',
     coristen: 'main1.jpg',
   }
-  
+
   const icon = logos[pathArr[1]] || 'main.jpg'
   return (
     <html lang="en">
       <head>
+        <meta property="og:site_name" content="Corisio Nigeria" />
+        <meta property="og:type" content="product" />
+        <meta property="og:locale" content="en_NG" />
+        <meta name="application-name" content="Corisio" />
         <link
           rel="apple-touch-icon"
           sizes="180x180"
@@ -80,16 +82,19 @@ export default function RootLayout({ children }) {
           content="HTML, CSS, JavaScriptOnline Shopping, Fashion, Electronics, Home Essentials, Quality Products, User-Friendly Platform, Secure Shopping, Curated Selection, Convenience, Seamless Experience, Trendy, High-Quality, Best Deals, Affordable Prices, Customer Satisfaction, Fast Delivery, Gift Ideas, Gadgets, Accessories, New Arrivals, Business Showcase, Store Registration, Business Promotion, Shop Owners, Local Businesses, Empowering Entrepreneurs, Shop Local, Online Marketplace, Small Businesses, Showcasing Talent, Shopkeepers, Independent Retailers, Supporting Local Economy, Discover Unique Businesses, Connecting Buyers and Sellers."
         />
         <meta name="author" content="Corislo - stephanyemmitty" />
-        {/* Open Graph (OG) */}
+        {/* Open Graph */}
         <meta
           property="og:title"
-          content="Corislo-NG | Your One-Stop Ecommerce Hub for Next-Generation Solutions"
+          content="Corislo-NG | Your Hub for Next-Generation Solutions"
         />
         <meta
           property="og:description"
           content="Your ultimate destination for top-quality products and unparalleled shopping experiences. Explore a captivating assortment of fashion, electronics, home essentials, and more. Immerse yourself in a seamless and secure shopping journey with our user-friendly platform. Indulge your senses, find inspiration, and redefine convenience with every visit. Embrace the joy of discovering something extraordinary as you navigate through our meticulously curated selection. Elevate your online shopping experience with Corislo – where dreams become reality."
         />
-        <meta property="og:image" content="/images/logo/horizontal/1.png" />
+        <meta
+          property="og:image"
+          content={`https://res.cloudinary.com/xmart/image/upload/v1722210044/corisio/email/front_c5s5ps.png`}
+        />
         <meta property="og:url" content="https:corislo.vercel.app" />
         <meta property="og:type" content="product" />
       </head>

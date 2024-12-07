@@ -1,5 +1,12 @@
 'use client'
-import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
 import { settingsInnerList } from '@/app/data/store/innerList'
 import { useRouter } from 'next/navigation'
 import { Box, Button } from '@mui/material'

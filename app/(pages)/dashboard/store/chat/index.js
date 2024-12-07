@@ -21,7 +21,14 @@ import SidebarLeft from "@/app/(pages)/chat/SidebarLeft";
 import ChatContent from "@/app/(pages)/chat/ChatContent";
 import useSWR from "swr";
 import { useStoreData } from "@/app/hooks/useData";
-import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+import dynamic from "next/dynamic";
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+);
 
 const BusinessChat = () => {
   // ** States

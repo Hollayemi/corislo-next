@@ -71,8 +71,14 @@ const UserSlice = createSlice({
   },
 });
 
-export const { setUsers, userLogout } = UserSlice.actions;
+export const { setUsers,  } = UserSlice.actions;
 
+export const userLogout = () => {
+      localStorage.removeItem("user_token");
+      localStorage.removeItem("store_token");
+      window && window.location.replace("/");
+      return initialState;
+    }
 // export states
 export default UserSlice.reducer;
 

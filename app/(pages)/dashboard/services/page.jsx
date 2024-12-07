@@ -1,6 +1,13 @@
-import ServiceRenderWrapper from '@/app/components/view/services/header'
+// import ServiceRenderWrapper from '@/app/components/view/services/header'
 import { Box, Typography } from '@mui/material'
 import { EachService } from './components'
+import dynamic from 'next/dynamic'
+const ServiceRenderWrapper = dynamic(
+  () => import('@/app/components/view/services/header'),
+  {
+    ssr: false,
+  }
+)
 
 const Services = () => {
   return (

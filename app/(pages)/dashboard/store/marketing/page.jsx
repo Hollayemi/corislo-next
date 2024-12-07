@@ -1,7 +1,14 @@
 'use client'
 import { useState, useEffect, forwardRef } from 'react'
 import { Box, Button } from '@mui/material'
-import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
 import OptionsMenu from '@/app/components/option-menu'
 import {
   marketingBreadCrumb,
@@ -241,7 +248,10 @@ const MarketingPage = ({ params }) => {
               <GrowthCard
                 title="Next to expire"
                 toExpire={mySubstring(series.nearEndDate?.title, 20)}
-                count={series?.nearEndDate?.date && formatDate(series?.nearEndDate?.date)}
+                count={
+                  series?.nearEndDate?.date &&
+                  formatDate(series?.nearEndDate?.date)
+                }
               />
             </Box>
             <Box className="mt-10 relative">

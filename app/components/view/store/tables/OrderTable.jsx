@@ -1,13 +1,6 @@
 "use client";
-// ** React Imports
 import { useState } from "react";
-
-// ** MUI Imports
 import { DataGrid } from "@mui/x-data-grid";
-
-// ** Custom Components
-import QuickSearchToolbar from "@/app/components/quickTool/QuickSearchToolbar";
-
 const escapeRegExp = (value) => {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 };

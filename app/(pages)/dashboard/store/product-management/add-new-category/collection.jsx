@@ -1,3 +1,4 @@
+"use client"
 import { Box, TextField, Button, MenuItem } from '@mui/material'
 import { SimpleDropDown } from '../add-new-product/components'
 import useSWR from 'swr'

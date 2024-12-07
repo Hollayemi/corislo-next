@@ -1,6 +1,6 @@
-"use client";
-import { forwardRef, Fragment, useState } from "react";
-import { useDispatch } from "react-redux";
+'use client'
+import { forwardRef, Fragment, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import {
   Box,
   Typography,
@@ -12,39 +12,83 @@ import {
   Slide,
   CardContent,
   Card,
-} from "@mui/material";
-import HomeWrapper from "@/app/components/view/home";
-import { agentUpdateHandle } from "@/app/redux/state/slices/agents/agentInfo";
-import Icon from "@/app/components/icon";
-import CustomAvatar from "@/app/components/avatar";
-import Image from "next/image";
-import { MyTextField } from "../../user/components";
-import { copyToClipboard } from "@/app/utils/clipboard";
-import useSWR from "swr";
+} from '@mui/material'
+import HomeWrapper from '@/app/components/view/home'
+import { agentUpdateHandle } from '@/app/redux/state/slices/agents/agentInfo'
+import Icon from '@/app/components/icon'
+import CustomAvatar from '@/app/components/avatar'
+import Image from 'next/image'
+import { MyTextField } from '../../user/components'
+import { copyToClipboard } from '@/app/utils/clipboard'
+import useSWR from 'swr'
+import {
+  FacebookShareButton,
+  LinkedinShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+  XIcon,
+} from 'react-share'
 
 const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+  return <Slide direction="up" ref={ref} {...props} />
+})
 
-const ShareIcon = ({ icon }) => {
+export const ShareIcon = ({ icon, url }) => {
+  console.log(icon)
+  const Socials = {
+    facebook: FacebookShareButton,
+    whatsapp: WhatsappShareButton,
+    x: TwitterShareButton,
+    linkedin: LinkedinShareButton,
+  }
+  const Sharer = Socials[icon]
+  console.log(Sharer)
+
+  const message = `
+🌟 Calling All Business Owners! 🌟  
+
+Are you ready to take your business to the next level? Join Corisio, the platform designed to connect local businesses with customers in real-time. Here's why you should register today:  
+
+✅ Boost Visibility – Let customers discover your products effortlessly.  
+✅ Grow Sales – Reach more buyers looking for what you offer.  
+✅ Seamless Management – Easily update your store, products, and promotions.  
+
+📢 Don’t miss out on the opportunity to stand out in your community and beyond!  
+
+👉 Register your business now at ${url}.  
+Let’s grow together! 🌱  
+
+#Corisio #BusinessRegistration #SupportLocalBusinesses #GrowYourBrand`
+
+  const xMessage = `
+  ${url}
+🌟 Calling All Business Owners! 🌟  
+
+Take your business to the next level? Join Corisio, the platform designed to connect local businesses with customers in real-time. Why register:  
+
+✅ Boost Visibility  
+✅ Grow Sales`
+
   return (
-    <Box className="w-8 h-8 mx-1 bg-gray-100 rounded-md flex justify-center items-center cursor-pointer text-gray-400 hover:!text-blue-800">
-      <Icon
-        icon={icon}
-        className="!text-[22px]  transition-all duration-300 text-inherit"
-      />
-    </Box>
-  );
-};
+    <Sharer url={url} title={icon === 'x' ? xMessage : message}>
+      <Box className="w-8 h-8 mx-1 bg-gray-100 rounded-md flex justify-center items-center cursor-pointer text-gray-500 hover:!text-blue-800">
+        <Icon
+          icon={`tabler:brand-${icon}`}
+          className="!text-[22px]  transition-all duration-300 text-inherit"
+        />
+      </Box>
+    </Sharer>
+  )
+}
 
 const ReferralDashboard = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   // ** State
-  const [open, setOpen] = useState(false);
-  const [isCopied, setIsCopied] = useState(false);
+  const [open, setOpen] = useState(false)
+  const [isCopied, setIsCopied] = useState(false)
 
-  const { data, isLoading } = useSWR("/agent");
-  const agentData = data?.data[0] || {};
+  const { data, isLoading } = useSWR('/agent')
+  const agentData = data?.data[0] || {}
 
   const reshapePrice = (price) => {
     if (typeof parseInt(price) === 'number') {
@@ -52,29 +96,29 @@ const ReferralDashboard = () => {
     }
   }
 
-  const handleClickOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClickOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
   const [accountDetails, setAccountName] = useState({
-    account_number: agentData.account_number || "",
-    bank_name: agentData.account_number || "",
-    account_name: agentData.account_number || "",
-  });
+    account_number: agentData.account_number || '',
+    bank_name: agentData.account_number || '',
+    account_name: agentData.account_number || '',
+  })
 
   const handleUpdateBank = () => {
-    agentUpdateHandle(dispatch, accountDetails);
-    handleClose();
-  };
+    agentUpdateHandle(dispatch, accountDetails)
+    handleClose()
+  }
 
   const handleAccountInputs =
     (prop) =>
     ({ target }) => {
       setAccountName((data) => {
-        return { ...data, [prop]: target.value };
-      });
-    };
+        return { ...data, [prop]: target.value }
+      })
+    }
 
-  const price = 8000;
+  const price = 8000
   console.log(agentData)
   return (
     <HomeWrapper noFooter>
@@ -191,14 +235,14 @@ const ReferralDashboard = () => {
                     <input
                       type="text"
                       className="border-none h-10 px-4 grow outline-none"
-                      value={`https://corisio.vercel.app/store/register?ref=${agentData.ref_id}`}
+                      value={`https://corislo.vercel.app/dashboard/register?ref=${agentData.ref_id}`}
                     />
                     <Button
                       variant="contained"
                       className="!shadow-none"
                       onClick={() =>
                         copyToClipboard(
-                          `https://corisio.vercel.app/store/register?ref=${agentData.ref_id}`,
+                          `https://corislo.vercel.app/dashboard/register?ref=${agentData.ref_id}`,
                           setIsCopied
                         )
                       }
@@ -213,11 +257,22 @@ const ReferralDashboard = () => {
                     >
                       Share on:
                     </Typography>
-                    <ShareIcon icon="tabler:brand-facebook" />
-                    <ShareIcon icon="tabler:brand-x" />
-                    <ShareIcon icon="tabler:brand-instagram" />
-                    <ShareIcon icon="tabler:brand-linkedin" />
-                    <ShareIcon icon="tabler:brand-whatsapp" />
+                    <ShareIcon
+                      icon="facebook"
+                      url={`https://corislo.vercel.app/dashboard/register?ref=${agentData.ref_id}`}
+                    />
+                    <ShareIcon
+                      icon="x"
+                      url={`https://corislo.vercel.app/dashboard/register?ref=${agentData.ref_id}`}
+                    />
+                    <ShareIcon
+                      icon="linkedin"
+                      url={`https://corislo.vercel.app/dashboard/register?ref=${agentData.ref_id}`}
+                    />
+                    <ShareIcon
+                      icon="whatsapp"
+                      url={`https://corislo.vercel.app/dashboard/register?ref=${agentData.ref_id}`}
+                    />
                   </Box>
                 </Box>
               </Box>
@@ -361,9 +416,9 @@ const ReferralDashboard = () => {
       </Dialog>
     </HomeWrapper>
   )
-};
+}
 
-export default ReferralDashboard;
+export default ReferralDashboard
 
 const EarningsBoxes = ({ color, price, title, about }) => (
   <Box
@@ -387,62 +442,62 @@ const EarningsBoxes = ({ color, price, title, about }) => (
       </Typography>
     </Box>
   </Box>
-);
+)
 
 const data = [
   {
-    title: "You registered a store (Starbucks)",
-    subtitle: "Starbucks was registered today",
+    title: 'You registered a store (Starbucks)',
+    subtitle: 'Starbucks was registered today',
     amount: 75,
-    amountDiff: "negative",
-    avatarColor: "primary",
-    avatarIcon: "tabler:wallet",
+    amountDiff: 'negative',
+    avatarColor: 'primary',
+    avatarIcon: 'tabler:wallet',
   },
   {
-    title: "You added money via Bank Transfer",
-    subtitle: "Money added via Bank Transfer",
+    title: 'You added money via Bank Transfer',
+    subtitle: 'Money added via Bank Transfer',
     amount: 480,
-    avatarColor: "success",
-    avatarIcon: "tabler:browser-check",
+    avatarColor: 'success',
+    avatarIcon: 'tabler:browser-check',
   },
   {
-    title: "You received a client payment via PayPal",
-    subtitle: "Client payment received via PayPal",
+    title: 'You received a client payment via PayPal',
+    subtitle: 'Client payment received via PayPal',
     amount: 268,
-    avatarColor: "error",
-    avatarIcon: "tabler:brand-paypal",
+    avatarColor: 'error',
+    avatarIcon: 'tabler:brand-paypal',
   },
   {
-    title: "You ordered an iPhone 13",
-    subtitle: "iPhone 13 ordered",
+    title: 'You ordered an iPhone 13',
+    subtitle: 'iPhone 13 ordered',
     amount: 699,
-    amountDiff: "negative",
-    avatarColor: "secondary",
-    avatarIcon: "tabler:credit-card",
+    amountDiff: 'negative',
+    avatarColor: 'secondary',
+    avatarIcon: 'tabler:credit-card',
   },
   {
-    title: "You received a refund via Bank Transaction",
-    subtitle: "Refund received via Bank Transaction",
+    title: 'You received a refund via Bank Transaction',
+    subtitle: 'Refund received via Bank Transaction',
     amount: 98,
-    avatarColor: "info",
-    avatarIcon: "tabler:currency-dollar",
+    avatarColor: 'info',
+    avatarIcon: 'tabler:currency-dollar',
   },
   {
-    title: "You received a client payment via PayPal",
-    subtitle: "Client payment received via PayPal",
+    title: 'You received a client payment via PayPal',
+    subtitle: 'Client payment received via PayPal',
     amount: 126,
-    avatarColor: "error",
-    avatarIcon: "tabler:brand-paypal",
+    avatarColor: 'error',
+    avatarIcon: 'tabler:brand-paypal',
   },
   {
-    title: "You paid office rent via Bank Transfer",
-    subtitle: "Office rent paid via Bank Transfer",
+    title: 'You paid office rent via Bank Transfer',
+    subtitle: 'Office rent paid via Bank Transfer',
     amount: 1290,
-    amountDiff: "negative",
-    avatarColor: "success",
-    avatarIcon: "tabler:browser-check",
+    amountDiff: 'negative',
+    avatarColor: 'success',
+    avatarIcon: 'tabler:browser-check',
   },
-];
+]
 
 const ActivityTable = () => {
   return (
@@ -456,8 +511,8 @@ const ActivityTable = () => {
             <Box
               key={index}
               sx={{
-                display: "flex",
-                alignItems: "center",
+                display: 'flex',
+                alignItems: 'center',
                 mb: index !== data.length - 1 ? 3.75 : undefined,
               }}
             >
@@ -473,22 +528,22 @@ const ActivityTable = () => {
                 sx={{
                   rowGap: 1,
                   columnGap: 4,
-                  width: "100%",
-                  display: "flex",
-                  flexWrap: "wrap",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  width: '100%',
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                 }}
               >
                 <Box
                   sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
                   }}
                 >
                   <Typography sx={{ fontWeight: 500 }}>{item.title}</Typography>
-                  <Typography variant="body2" sx={{ color: "text.disabled" }}>
+                  <Typography variant="body2" sx={{ color: 'text.disabled' }}>
                     {item.subtitle}
                   </Typography>
                 </Box>
@@ -496,20 +551,20 @@ const ActivityTable = () => {
                   sx={{
                     fontWeight: 500,
                     color:
-                      item.amountDiff === "negative"
-                        ? "error.main"
-                        : "success.main",
+                      item.amountDiff === 'negative'
+                        ? 'error.main'
+                        : 'success.main',
                   }}
                 >
-                  {`${item.amountDiff === "negative" ? "-" : "+"}₦${
+                  {`${item.amountDiff === 'negative' ? '-' : '+'}₦${
                     item.amount
                   }`}
                 </Typography>
               </Box>
             </Box>
-          );
+          )
         })}
       </CardContent>
     </Card>
-  );
-};
+  )
+}

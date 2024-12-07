@@ -1,7 +1,14 @@
 'use client'
 import useSWR from 'swr'
 import { Typography, Box, Select, MenuItem } from '@mui/material'
-import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
 import ProductList from '@/app/components/view/store/tables/productList'
 import OverViewCard from './overview'
 import { prodInnerList } from '@/app/data/store/innerList'

@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
+import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import { Typography, Box, Grid, Paper, TextField, Button } from '@mui/material'
 import Link from 'next/link'
@@ -9,7 +10,6 @@ import {
   FileUploader,
   OpeningHours,
   SocialMediaConponent,
-  StoreBreadCrumb,
   BreadcrumbRightEle,
 } from '../../store/stores/component'
 import Icon from '@/app/components/icon'
@@ -20,7 +20,13 @@ import useSWR from 'swr'
 import { updateStoreProfile } from '@/app/redux/state/slices/shop/settings/editShop'
 import ProfilePictureUploader from '@/app/components/cards/fileUpload'
 import { updateBranchImages } from '@/app/redux/state/slices/shop/branches'
-import ServiceRenderWrapper from '@/app/components/view/services/header'
+// import ServiceRenderWrapper from '@/app/components/view/services/header'
+const ServiceRenderWrapper = dynamic(
+  () => import('@/app/components/view/services/header'),
+  {
+    ssr: false,
+  }
+)
 import Image from 'next/image'
 import { WorkshopBreadCrumb } from '../components'
 

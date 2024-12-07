@@ -2,7 +2,6 @@
 import { Box, Button, Divider, Typography } from '@mui/material'
 import { ProgressBar } from 'react-loader-spinner'
 import { useState } from 'react'
-import ServiceDashboardWrapper from '@/app/components/view/services'
 import ProfilePictureUploader from '@/app/components/cards/fileUpload'
 import IconifyIcon from '@/app/components/icon'
 import Image from 'next/image'

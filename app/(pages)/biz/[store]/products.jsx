@@ -1,27 +1,26 @@
-import React, { Fragment } from "react";
-import CountdownTimer from "@/app/components/cards/newCountDown";
-import { SectionTitle } from "@/app/components/cards/homeCards";
-import { Box, Typography } from "@mui/material";
-import {
-  ProductOnShowcase,
-} from "@/app/components/templates/productTemplates";
-import useSWR from "swr";
-import MyPagination from "@/app/components/templates/pagination";
+'use client'
+import React, { Fragment } from 'react'
+import CountdownTimer from '@/app/components/cards/newCountDown'
+import { SectionTitle } from '@/app/components/cards/homeCards'
+import { Box, Typography } from '@mui/material'
+import { ProductOnShowcase } from '@/app/components/templates/productTemplates'
+import useSWR from 'swr'
+import MyPagination from '@/app/components/templates/pagination'
 
 const StoreProducts = ({ store, branch, searchParams }) => {
   const { data, isLoading } = useSWR(
     `/store/products-campaign?store=${store}&branch=${branch}&type=discounted&page=${
       searchParams?.dp || 1
     }`
-  );
-  const result = data ? data.data : {};
+  )
+  const result = data ? data.data : {}
 
   const { data: myProduct, isLoading: otherLoading } = useSWR(
     `/store/products-campaign?store=${store}&branch=${branch}&page=${
       searchParams?.p || 1
     }`
-  );
-  const myProducts = myProduct ? myProduct.data : {};
+  )
+  const myProducts = myProduct ? myProduct.data : {}
 
   return (
     <Box className="!bg-white rounded-xl px-3 py-5 mt-10">
@@ -104,7 +103,7 @@ const StoreProducts = ({ store, branch, searchParams }) => {
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default StoreProducts;
+export default StoreProducts

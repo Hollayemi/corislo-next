@@ -1,10 +1,16 @@
 // import "@/styles/globals.css";
 // import StoreDashboardAppBar from "@/app/components/store/AppBar";
-// import StoreLeftSideBar from "@/app/components/store/LeftSideBar";
+// import dynamic from "next/dynamic";
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+// const StoreLeftSideBar = dynamic(
+//   () => import('@/app/components/view/store/LeftSideBar'),
+//   {
+//     ssr: false,
+//   }
+// )
 // import { usePathname } from "next/navigation";
 // import { Box } from "@mui/material";
 // import { useTheme } from "@emotion/react";
-
 
 // export const metadata = {
 //   title: "admin-corislo",

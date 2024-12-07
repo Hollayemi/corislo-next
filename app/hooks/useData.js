@@ -1,4 +1,5 @@
-const { useContext } = require("react");
+"use client"
+import { useContext } from "react";
 import { StoreDataContext } from "../context/storeContext";
 import { SuperDataContext } from "../context/superContex";
 import { DataContext } from"../context/userContext";

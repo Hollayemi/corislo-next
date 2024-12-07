@@ -1,5 +1,12 @@
 "use client";
-import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+import dynamic from "next/dynamic";
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+);
 import BusinessChat from ".";
 
 const AppChat = () => {

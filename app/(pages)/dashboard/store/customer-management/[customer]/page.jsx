@@ -1,44 +1,49 @@
-"use client";
+'use client'
 
-import { Typography, Box, Grid, MenuItem } from "@mui/material";
-import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
-import { Summarize } from "../components";
-import useSWR from "swr";
-import Table from "@/app/components/view/store/tables/OrderTable";
-import { customerBreadCrumb, customerColumns } from "../components/columns";
+import { Typography, Box, Grid, MenuItem } from '@mui/material'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
+import { Summarize } from '../components'
+import useSWR from 'swr'
+import Table from '@/app/components/view/store/tables/OrderTable'
+import { customerBreadCrumb, customerColumns } from '../components/columns'
 import {
   formatShippingAddress,
   formatSegmentation,
   formatDate,
   formatCurrency,
-} from "@/app/utils/format";
+} from '@/app/utils/format'
 // import LineLoading from "@/app/(pages)/loading";
 
 const CustomerDetails = ({ params }) => {
-  const customer = params.customer;
+  const customer = params.customer
   const {
     data: customerInfo,
     error: customerErr,
     isLoading: customerLoading,
-  } = useSWR(`/branch/customers?customer=${customer}`);
+  } = useSWR(`/branch/customers?customer=${customer}`)
 
   const {
     data: historyInfo,
     error: historyErr,
     isLoading: historyLoading,
-  } = useSWR(`/branch/customers/history?customer=${customer}`);
-  const info = customerInfo?.data[0] || {};
+  } = useSWR(`/branch/customers/history?customer=${customer}`)
+  const info = customerInfo?.data[0] || {}
 
-  const path = { ...params, sidebar: "customer-management" };
-
-
+  const path = { ...params, sidebar: 'customer-management' }
 
   return (
     <StoreLeftSideBar
       path={path}
       crumb={[
         ...customerBreadCrumb,
-        { text: info.customer, link: "customer-management" },
+        { text: info.customer, link: 'customer-management' },
       ]}
     >
       <Box className="w-full">
@@ -58,13 +63,13 @@ const CustomerDetails = ({ params }) => {
                     </Box>
                     <Summarize
                       info={[
-                        { key: "Name", value: info.customer },
-                        { key: "Email Address", value: info.email },
+                        { key: 'Name', value: info.customer },
+                        { key: 'Email Address', value: info.email },
                         // {
                         //   key: "Billing Address",
                         //   value: formatShippingAddress(info.address),
                         // },
-                        { key: "Phone Number", value: info.phone },
+                        { key: 'Phone Number', value: info.phone },
                       ]}
                     />
                   </Box>
@@ -75,17 +80,17 @@ const CustomerDetails = ({ params }) => {
                 {!customerErr && !customerLoading && (
                   <Summarize
                     info={[
-                      { key: "Total Orders Made", value: info.no_of_orders },
+                      { key: 'Total Orders Made', value: info.no_of_orders },
                       {
-                        key: "Total Amount Spent",
+                        key: 'Total Amount Spent',
                         value: formatCurrency(info.totalAmountSpent),
                       },
                       {
-                        key: "Last Order Date",
+                        key: 'Last Order Date',
                         value: formatDate(info.lastPurchase),
                       },
                       {
-                        key: "Segmentation",
+                        key: 'Segmentation',
                         value: formatSegmentation(
                           info.no_of_orders,
                           info.totalAmount,
@@ -110,7 +115,7 @@ const CustomerDetails = ({ params }) => {
         </Box>
       </Box>
     </StoreLeftSideBar>
-  );
-};
+  )
+}
 
-export default CustomerDetails;
+export default CustomerDetails

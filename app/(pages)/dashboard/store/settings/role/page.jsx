@@ -1,19 +1,21 @@
 'use client'
-import {
-  Box,
-  TextField,
-} from '@mui/material'
+import { Box, TextField } from '@mui/material'
 
-import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
 import { settingsInnerList } from '@/app/data/store/innerList'
 import { settingsBreadCrumb } from '../components'
 import { useEffect, useState } from 'react'
 import { defaultCol } from './role.components'
 import useSWR from 'swr'
 import { useDispatch } from 'react-redux'
-import {
-  createRole,
-} from '@/app/redux/state/slices/shop/permission'
+import { createRole } from '@/app/redux/state/slices/shop/permission'
 import RolesComponent from '.'
 
 const RoleInput = ({ setRoleTitle, roleTitle }) => {

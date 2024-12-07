@@ -1,15 +1,8 @@
 'use client'
 import * as React from 'react'
-import { styled, useTheme } from '@mui/material/styles'
-import Box from '@mui/material/Box'
+import { styled } from '@mui/material/styles'
 import MuiDrawer from '@mui/material/Drawer'
-import List from '@mui/material/List'
 import IconifyIcon from '@/app/components/icon'
-import CssBaseline from '@mui/material/CssBaseline'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
 import StoreDashboardAppBar from './AppBar'
 import { ServicesSidebarContent } from '@/app/data/store/sidebarContents'
 import Image from 'next/image'
@@ -17,6 +10,9 @@ import { useRouter } from 'next/navigation'
 import themeConfig from '@/app/configs/themeConfig'
 import Link from 'next/link'
 import {
+  Box,
+  CssBaseline,
+  List,
   Avatar,
   AvatarGroup,
   Button,
@@ -27,6 +23,10 @@ import {
   DialogContent,
   DialogActions,
   Slide,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
 } from '@mui/material'
 
 import InnerBar from './InnerBar'
@@ -56,7 +56,7 @@ const closedMixin = (theme) => ({
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
 })
-export const getStaticPaths = async (context) => {
+export const getStaticPaths = async () => {
   return {
     prpos: {
       fallback: false,
@@ -79,7 +79,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }))
 
-const StyleList = styled(List)(({ theme }) => ({
+const StyleList = styled(List)(() => ({
   overflowY: 'auto',
   '&::-webkit-scrollbar': {
     width: '4px', // Width of the scrollbar
@@ -125,7 +125,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 })
 
-const ServiceDashboardNavigations = React.memo(
+const ServiceRenderWrapper = React.memo(
   ({
     children,
     path,
@@ -138,19 +138,13 @@ const ServiceDashboardNavigations = React.memo(
     breadCrumbRIghtChildren,
     crumb,
     dialogInfo,
-    dialogComponent,
     updateDialogInfo,
     popup,
   }) => {
-    const {
-      staffInfo,
-      storeInfo: { business },
-      overLay,
-    } = useStoreData()
+    const { staffInfo, overLay } = useStoreData()
     const router = useRouter()
     const permissions = staffInfo.permissions
     const [open, setOpen] = React.useState(false)
-    const theme = useTheme()
 
     React.useLayoutEffect(() => {
       if (permissions) {
@@ -253,7 +247,9 @@ const ServiceDashboardNavigations = React.memo(
               >
                 {ServicesSidebarContent.map((each, index) => (
                   <Link
-                    href={`/dashboard/${!each.path ? '' : 'services'}${each.path}`}
+                    href={`/dashboard/${!each.path ? '' : 'services'}${
+                      each.path
+                    }`}
                     key={index}
                   >
                     <ListItem
@@ -379,8 +375,8 @@ const ServiceDashboardNavigations = React.memo(
               open
                 ? 'left-[270px]'
                 : rightOpen
-                  ? ' -left-[330px] '
-                  : ' md:left-16 '
+                ? ' -left-[330px] '
+                : ' md:left-16 '
             } w-full transition-all duration-300 absolute flex-shrink-0 h-full md:pl-4 !pr-3 md:!pr-16 z-30 pt-16 md:pt-20`}
             bgcolor="custom.bodyGray"
           >
@@ -484,4 +480,4 @@ const ServiceDashboardNavigations = React.memo(
   }
 )
 
-export default ServiceDashboardNavigations
+export default ServiceRenderWrapper

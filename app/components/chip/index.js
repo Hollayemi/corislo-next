@@ -18,6 +18,7 @@ const Chip = props => {
     primary: { ...bgColors.deepblue },
     secondary: { ...bgColors.yellow },
     success: { ...bgColors.successLight },
+    active: { ...bgColors.successLight },
     error: { ...bgColors.errorLight },
     warning: { ...bgColors.warningLight },
     info: { ...bgColors.infoLight },

@@ -3,7 +3,14 @@
 import { useEffect, useState } from 'react'
 import { prodInnerList } from '@/app/data/store/innerList'
 import { useSearchParams } from 'next/navigation'
-import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
 import {
   Box,
   Typography,
@@ -13,7 +20,6 @@ import {
   Checkbox,
   Button,
   MenuItem,
-  Select,
   Autocomplete,
 } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
@@ -31,7 +37,13 @@ import { useDispatch } from 'react-redux'
 import { productBreadCrumb } from '../components'
 import { editProductHandler } from '@/app/redux/state/slices/shop/products/updateProduct'
 import IconifyIcon from '@/app/components/icon'
-import QuillTextEditor from '@/app/components/text-editor/quill'
+// import QuillTextEditor from '@/app/components/text-editor/quill'
+const QuillTextEditor = dynamic(
+  () => import('@/app/components/text-editor/quill'),
+  {
+    ssr: false,
+  }
+)
 import Image from 'next/image'
 import { generateDescApiHandler } from '@/app/redux/state/slices/shop/products/generateDesc'
 import { useStoreData } from '@/app/hooks/useData'
@@ -49,7 +61,7 @@ const AddNewProduct = ({ params }) => {
   const [files, setFiles] = useState([])
   const [localFiles, setLocalFiles] = useState([])
   const [delivery, selectDelivery] = useState(['pickup'])
-  const { data: getData, error } = useSWR('/store/collections/thread')
+  const { data: getData } = useSWR('/store/collections/thread')
   const { data: toEdit } = useSWR(editID && `/products?productId=${editID}`)
   const { data: specData } = useSWR(
     specId && `/corisio/get-spec?specId=${specId}`
@@ -228,8 +240,8 @@ const AddNewProduct = ({ params }) => {
                       className="absolute -ml-0.5 -mt-0.5"
                     >
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M7 0.714966C6.57172 0.714966 6.19841 1.00644 6.09453 1.42193C5.64458 3.22175 5.11525 4.31311 4.3567 5.07167C3.59815 5.83022 2.50678 6.35955 0.706966 6.8095C0.291477 6.91337 -3.32794e-07 7.28669 -3.32794e-07 7.71497C-3.32794e-07 8.14324 0.291477 8.51656 0.706966 8.62043C2.50678 9.07039 3.59815 9.59971 4.3567 10.3583C5.11525 11.1168 5.64458 12.2082 6.09453 14.008C6.19841 14.4235 6.57172 14.715 7 14.715C7.42828 14.715 7.80159 14.4235 7.90547 14.008C8.35542 12.2082 8.88475 11.1168 9.6433 10.3583C10.4019 9.59971 11.4932 9.07039 13.293 8.62043C13.7085 8.51656 14 8.14324 14 7.71497C14 7.28669 13.7085 6.91337 13.293 6.8095C11.4932 6.35955 10.4019 5.83022 9.6433 5.07167C8.88475 4.31311 8.35542 3.22175 7.90547 1.42193C7.80159 1.00644 7.42828 0.714966 7 0.714966Z"
                       ></path>
                     </svg>
@@ -242,8 +254,8 @@ const AddNewProduct = ({ params }) => {
                       className=""
                     >
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M7 0.714966C6.57172 0.714966 6.19841 1.00644 6.09453 1.42193C5.64458 3.22175 5.11525 4.31311 4.3567 5.07167C3.59815 5.83022 2.50678 6.35955 0.706966 6.8095C0.291477 6.91337 -3.32794e-07 7.28669 -3.32794e-07 7.71497C-3.32794e-07 8.14324 0.291477 8.51656 0.706966 8.62043C2.50678 9.07039 3.59815 9.59971 4.3567 10.3583C5.11525 11.1168 5.64458 12.2082 6.09453 14.008C6.19841 14.4235 6.57172 14.715 7 14.715C7.42828 14.715 7.80159 14.4235 7.90547 14.008C8.35542 12.2082 8.88475 11.1168 9.6433 10.3583C10.4019 9.59971 11.4932 9.07039 13.293 8.62043C13.7085 8.51656 14 8.14324 14 7.71497C14 7.28669 13.7085 6.91337 13.293 6.8095C11.4932 6.35955 10.4019 5.83022 9.6433 5.07167C8.88475 4.31311 8.35542 3.22175 7.90547 1.42193C7.80159 1.00644 7.42828 0.714966 7 0.714966Z"
                       ></path>
                     </svg>

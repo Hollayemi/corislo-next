@@ -132,13 +132,13 @@ const Referral = () => {
 
           <Button
             variant="contained"
-            onClick={() => route.push("/store/register?ref=stephenyemmitty")}
+            onClick={() => route.push('/dashboard/register?ref=stephenyemmitty')}
             className="!mt-6 !shadow-none !text-white !h-10 w-full !text-[12px]"
           >
             Register Store
           </Button>
           <Button
-            onClick={() => route.push("/referral/dashboard")}
+            onClick={() => route.push('/referral/dashboard')}
             className="!mt-2 !shadow-none !h-10 w-full !text-[11px]"
           >
             Go to Dashboard
@@ -176,6 +176,6 @@ const Referral = () => {
         />
       </Box>
     </HomeWrapper>
-  );
+  )
 };
 export default Referral;

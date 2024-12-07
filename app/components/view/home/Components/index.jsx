@@ -11,7 +11,7 @@ export const UserPages = {
     { name: 'Order', link: 'order' },
     { name: 'Inbox', link: 'chat' },
     { name: 'Earn', link: 'referral' },
-    { name: 'Sell', link: 'store/login' },
+    { name: 'Sell', link: 'dashboard/login' },
     { name: 'Account', link: 'user' },
     { name: 'Saved Items', link: 'saved-items' },
   ],

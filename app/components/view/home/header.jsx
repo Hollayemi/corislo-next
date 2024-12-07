@@ -19,6 +19,8 @@ import { useRouter, usePathname } from 'next/navigation'
 import { userLogout } from '@/app/redux/state/slices/auth/Login'
 import OptionsMenu from '../../option-menu'
 import { UserPages } from './Components'
+import { desktopOptions } from './Components/data'
+import { useDispatch } from 'react-redux'
 
 export const IconImage = ({ image, className, onClick }) => (
   <Image
@@ -43,6 +45,7 @@ const menuToHide = (menu = []) => {
 function Header({}) {
   const router = useRouter()
   const pathname = usePathname()
+  const dispatch = useDispatch()
   const {
     isOffline,
     userInfo,
@@ -243,30 +246,46 @@ function Header({}) {
               noWrap
               variant="body2"
               title={userInfo?.username}
-              className="!font-bold hidden md:block !text-[14px] w-20 sm:!max-w-16 md:!max-w-28 !ml-4"
+              className="!font-bold hidden md:block !text-[14px] !mr-2 w-fit sm:!max-w-16 md:!max-w-28 !ml-4"
             >
               {userInfo?.username}
             </Typography>
-            {userInfo.picture ? (
-              <CustomAvatar
-                src={userInfo.picture}
-                alt={getInitials(userInfo?.fullname || 'New User').substring(
-                  0,
-                  2
-                )}
-                className="!w-10 !hidden md:!block !h-10 !ml-2 flex-shrink-0"
-              />
-            ) : (
-              <CustomAvatar
-                skin="light"
-                color="primary"
-                className="!w-10 !hidden md:!flex !h-10 !font-black !text-[15px] !ml-2 flex-shrink-0"
-                onClick={() => userLogout()}
-                // sx={{ ml: 3, width: 30, height: 30, fontSize: "0.85rem" }}
-              >
-                {getInitials(userInfo?.fullname || 'New User').substring(0, 2)}
-              </CustomAvatar>
-            )}
+            <OptionsMenu
+              icon={
+                <Box className="flex items-center">
+                  {userInfo.picture ? (
+                    <CustomAvatar
+                      src={userInfo.picture}
+                      alt={getInitials(
+                        userInfo?.fullname || 'New User'
+                      ).substring(0, 2)}
+                      className="!w-10 !hidden md:!block !h-10 !ml flex-shrink-0"
+                    />
+                  ) : (
+                    <CustomAvatar
+                      skin="light"
+                      color="primary"
+                      className="!w-10 !hidden md:!flex !h-10 !font-black !text-[15px] !ml-2 flex-shrink-0"
+                      onClick={() => dispatch(userLogout())}
+                      // sx={{ ml: 3, width: 30, height: 30, fontSize: "0.85rem" }}
+                    >
+                      {getInitials(userInfo?.fullname || 'New User').substring(
+                        0,
+                        2
+                      )}
+                    </CustomAvatar>
+                  )}
+                  <IconifyIcon icon="tabler:chevron-down" className="ml-3" />
+                </Box>
+              }
+              options={desktopOptions(dispatch)}
+              setOption={(e) => {}}
+              iconButtonProps={{
+                size: 'small',
+                sx: { cursor: 'pointer' },
+              }}
+              itemsClassName="!bg-transparent hover:!bg-gray-50"
+            />
           </>
         ) : (
           <>

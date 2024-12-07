@@ -1,3 +1,4 @@
+"use client"
 import { Box, Button } from '@mui/material'
 import Icon from '@/app/components/icon'
 import { useRouter } from 'next/navigation'

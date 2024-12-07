@@ -8,12 +8,13 @@ import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
+import IconifyIcon from "@/app/components/icon";
 
 export const navigation = {
   dashboard: "",
   users: "/users",
   businesses: "/businesses",
-  order_management: "/order-management",
+  referrals: "/referrals",
   pending_products: "/pending-products",
   store_analytics: "/store-analytics",
   marketing: "/marketing",
@@ -40,10 +41,11 @@ export const SuperLeftBarContent = [
     icon: <StorefrontIcon />,
     key: "ele_3",
   },
+  
   {
-    name: "Agents",
-    path: navigation.order_management,
-    icon: <ViewStreamIcon />,
+    name: "Referrals",
+    path: navigation.referrals,
+    icon: <IconifyIcon icon="tabler:users-plus" />,
     key: "ele_4",
   },
   {

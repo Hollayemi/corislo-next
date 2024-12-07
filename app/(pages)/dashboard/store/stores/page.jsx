@@ -2,7 +2,14 @@
 import { useEffect, useState } from 'react'
 import { Typography, Box, Grid, Paper, TextField, Button } from '@mui/material'
 import Link from 'next/link'
-import StoreLeftSideBar from '@/app/components/view/store/LeftSideBar'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
 
 import {
   InputBoxWithSideLabel,

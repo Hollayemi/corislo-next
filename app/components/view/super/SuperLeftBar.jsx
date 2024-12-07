@@ -236,7 +236,7 @@ const SuperLeftBar = React.memo(
                 />
               </Box>
             </DrawerHeader>
-            <StyleList className="overflow-y-scroll overflowStyle">
+            <StyleList className="overflow-y-auto overflowStyle border-t">
               <List
                 className="overflow-hidden shrink-0"
                 sx={{ bgcolor: 'custom.bodyLight' }}

@@ -1,3 +1,4 @@
+"use client"
 import {
   Box,
   List,
@@ -31,33 +32,6 @@ const StyledBox = styled(Box)(({ theme }) => ({
   scrollbarColor: '#888 #f1f1f1',
 }))
 
-const ele_2 = [
-  {
-    title: 'Store Lists',
-    contents: [
-      {
-        name: 'Store 1',
-        path: '/store-1',
-      },
-      {
-        name: 'Store 2',
-        path: '/store-2',
-      },
-      {
-        name: 'Store 2',
-        path: '/store-2',
-      },
-      {
-        name: 'Store 3',
-        path: '/store-3',
-      },
-      {
-        name: 'Store 4',
-        path: '/store-4',
-      },
-    ],
-  },
-]
 
 const OnlyContents = ({ each, path }) => {
   const { storeInfo } = useStoreData()

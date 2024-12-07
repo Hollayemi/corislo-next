@@ -1,3 +1,4 @@
+"use client"
 import CategoryIcon from "@mui/icons-material/Category";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";

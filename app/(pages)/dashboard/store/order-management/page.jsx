@@ -1,20 +1,27 @@
-"use client";
-import { useState } from "react";
-import useSWR from "swr";
-import { Box } from "@mui/material";
-import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
-import OrderTable from "./components/orderTable";
-import { useRouter, useSearchParams } from "next/navigation";
+'use client'
+import { useState } from 'react'
+import useSWR from 'swr'
+import { Box } from '@mui/material'
+import dynamic from 'next/dynamic'
+// import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
+const StoreLeftSideBar = dynamic(
+  () => import('@/app/components/view/store/LeftSideBar'),
+  {
+    ssr: false,
+  }
+)
+import OrderTable from './components/orderTable'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const OrderManagement = ({ params }) => {
-  const [rightOpen, setRightOpen] = useState(false);
-  const { data, error, isLoading } = useSWR("/branch/order-request");
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const [rightOpen, setRightOpen] = useState(false)
+  const { data, error, isLoading } = useSWR('/branch/order-request')
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
-  const orderId = searchParams.get("order");
+  const orderId = searchParams.get('order')
 
-  const path = { ...params, sidebar: "order-management" };
+  const path = { ...params, sidebar: 'order-management' }
 
   return (
     <StoreLeftSideBar
@@ -31,7 +38,7 @@ const OrderManagement = ({ params }) => {
         />
       </Box>
     </StoreLeftSideBar>
-  );
-};
+  )
+}
 
-export default OrderManagement;
+export default OrderManagement

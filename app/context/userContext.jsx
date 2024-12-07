@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import { usePathname, useRouter } from 'next/navigation'
 import jwt_decode from 'jwt-decode'
@@ -67,8 +68,8 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
 
   useEffect(() => {
     const offlinePages = UserPages.isOffline.map((x) => x.link)
-    const whiteList = ['login', 'register', 'biz', ...offlinePages]
-    if (isOffline() && !whiteList.includes(getPath[getPath.length - 1])) {
+    const whiteList = ['auth', 'biz', ...offlinePages]
+    if (isOffline() && !whiteList.includes(getPath[getPath.length - 2])) {
       router.replace(`/auth/login?returnurl=${pathname.substring(1)}`)
     }
   }, [getPath, router])
@@ -164,6 +165,10 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
   // fetch userInfo
   //
   //
+  // F
+
+  const { data: agent, agentIsLoading } = useSWR(!isOffline() && '/agent')
+  const agentData = agent?.data[0] || {}
 
   const {
     data: notif,
@@ -220,6 +225,7 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
         following: (!folErr && !folIsLoading && following?.data) || [],
         cartData: (!cartErr && !cartIsLoading && cartData?.data) || {},
         userInfo: (!userErr && !userIsLoading && userInfo?.user) || {},
+        agentInfo: (!agentIsLoading ? agentData : {}),
         notifications,
         selectedAddress: {},
         coordinates,

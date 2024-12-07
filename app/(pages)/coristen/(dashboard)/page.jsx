@@ -44,6 +44,7 @@ const SuperDashboard = ({ params }) => {
             className=" -ml-12 md:ml-0 -mt-8"
             width={400}
             height={400}
+            alt="Image"
           />
         </Box>
         <br />

@@ -1,4 +1,5 @@
 'use client'
+import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import {
   Typography,
@@ -23,10 +24,17 @@ import { useStoreData } from '@/app/hooks/useData'
 import { useDispatch } from 'react-redux'
 import useSWR from 'swr'
 import { updateStoreProfile } from '@/app/redux/state/slices/shop/settings/editShop'
-import ServiceRenderWrapper from '@/app/components/view/services/header'
+// import ServiceRenderWrapper from '@/app/components/view/services/header'
 import { SimpleDropDown } from '@/app/(pages)/dashboard/store/product-management/add-new-product/components'
 import { removeOrAddToArray } from '@/app/utils/arrayFunctions'
 import { WorkshopBreadCrumb } from '../../components'
+
+const ServiceRenderWrapper = dynamic(
+  () => import('@/app/components/view/services/header'),
+  {
+    ssr: false,
+  }
+)
 
 const StorePage = ({ params }) => {
   const {
