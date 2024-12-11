@@ -300,12 +300,13 @@ export const ProductOnShowcase = ({
             {ngnPrice(prodPrice)}
           </Typography>
           <Box
-            className="border border-black rounded-full h-6 px-2 mt-1 cursor-pointer flex items-center"
+            className="md:border border-black rounded-full h-6 px-2 mt-1 cursor-pointer flex items-center"
             onClick={() => addCartHandler(payload, dispatch)}
           >
-            <Typography variant="caption" className="!text-[10px] !leading-5">
+            <Typography variant="caption" className="!text-[10px] !leading-5 hidden md:block">
               {cartedProds.includes(others._id) ? 'Remove' : 'Add to Cart'}
             </Typography>
+            <IconifyIcon icon="tabler:shopping-cart" className={`md:hidden ml-1 ${cartedProds.includes(others._id)? "text-yellow-500": "text-gray-800"}`} /> 
           </Box>
         </Box>
 

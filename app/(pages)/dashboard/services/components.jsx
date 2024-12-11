@@ -228,3 +228,23 @@ export const EachService = ({ id = 0 }) => {
     </Box>
   )
 }
+
+export const Like = ({ icon = 'heart', count = 50, color = '#E32227' }) => {
+  let bgColor = rgbaToHex(hexToRGBA(color, 0.1))
+  let IconColor = rgbaToHex(hexToRGBA(color, 0.9))
+  return (
+    <Box
+      bgcolor={bgColor}
+      color={IconColor}
+      className="w-16 h-6 m-1 rounded  flex items-center justify-center"
+    >
+      <IconifyIcon
+        icon={`tabler:${icon}`}
+        className={`text-[14px]`}
+      />
+      <Typography variant="caption" className="!text-[12px] ml-3">
+        50
+      </Typography>
+    </Box>
+  )
+}

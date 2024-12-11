@@ -275,7 +275,7 @@ function Header({}) {
                       )}
                     </CustomAvatar>
                   )}
-                  <IconifyIcon icon="tabler:chevron-down" className="ml-3" />
+                  <IconifyIcon icon="tabler:chevron-down" className="ml-3 hidden md:block" />
                 </Box>
               }
               options={desktopOptions(dispatch)}

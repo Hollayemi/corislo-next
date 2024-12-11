@@ -57,17 +57,14 @@ const AddNewProduct = ({ params }) => {
   const [selectedSizes, setSelectedSizes] = useState([])
   const [newSpec, setNewSpec] = useState('')
   const [specValue, setSpecValue] = useState('')
-  const [specId, setspecId] = useState(null)
+  const [specInfo, setProdSpecs] = useState("")
+  const [productGroups, setGroups] = useState([])
   const [files, setFiles] = useState([])
   const [localFiles, setLocalFiles] = useState([])
   const [delivery, selectDelivery] = useState(['pickup'])
-  const { data: getData } = useSWR('/store/collections/thread')
+  const { data: getData } = useSWR('/corisio/category/thread')
   const { data: toEdit } = useSWR(editID && `/products?productId=${editID}`)
-  const { data: specData } = useSWR(
-    specId && `/corisio/get-spec?specId=${specId}`
-  )
-  let specInfo = specData && specData?.data
-  const collections = getData ? getData?.data : [{}]
+  const categories = getData ? getData?.data : [{}]
   const prodToEdit = toEdit ? toEdit.data?.result : []
   const specWithSize = ['cloth_spec', 'shoe_spec']
   const [genPayload, getGenPayload] = useState(null)
@@ -90,10 +87,7 @@ const AddNewProduct = ({ params }) => {
     productGroup: '',
     delivery,
   })
-  console.log(formData)
-  let fromCollection = collections.filter(
-    (x) => x.collectionId === formData.collectionId
-  )[0]
+  let fromCollection = categories.filter((x) => x._id === formData.category)[0]
 
   useEffect(() => {
     if (toEdit) {
@@ -120,8 +114,8 @@ const AddNewProduct = ({ params }) => {
         }
       })
       selectDelivery(toEditData.delivery)
-      fromCollection = collections.filter(
-        (x) => x.collectionId === toEditData.collectionId
+      fromCollection = categories.filter(
+        (x) => x.category === toEditData.category
       )[0]
     }
   }, [toEdit])
@@ -143,7 +137,7 @@ const AddNewProduct = ({ params }) => {
   }
 
   const handleSubCateSelection = (event) => {
-    const { _id, collectionName, ...others } = event.target.value
+    const { _id, collectionName, groups, ...others } = event.target.value
     getGenPayload((prev) => ({
       ...prev,
       category: collectionName,
@@ -155,20 +149,18 @@ const AddNewProduct = ({ params }) => {
       subCollection: _id,
       collectionName: fromCollection.collectionName,
     })
-    setspecId(null)
+
+    setGroups(groups)
   }
 
   const handleProductGroupSelection = (event) => {
-    const det = event.target.value.split('&&&&& ')
-
+    const { spec, _id } = event.target.value
     setFormData({
       ...formData,
-      productGroup: det[0],
+      productGroup: _id,
     })
-    setspecId(det[1])
+    setProdSpecs(spec)
   }
-
-  console.log(genPayload)
   return (
     <StoreLeftSideBar
       path={path}
@@ -202,86 +194,6 @@ const AddNewProduct = ({ params }) => {
                 onChange={handleChange('prodName')}
                 // label="Product Name"
               />
-              <Box className="flex justify-between items-center">
-                <Typography variant="caption" className="!mb-1">
-                  Product Description
-                </Typography>
-                {/* <IconifyIcon
-                  icon="tabler:grain"
-                  className="text-[14px]"
-                  title="s"
-                /> */}
-                <Box
-                  className="flex items-center cursor-pointer hover:bg-gray-50 p-0.5 px-2 rounded"
-                  onClick={() =>
-                    generateDescApiHandler(
-                      {
-                        ...genPayload,
-                        prodPrice: formData.prodPrice,
-                        specification: formData.specifications,
-                        deliveryMethod: formData.delivery,
-                      },
-                      dispatch,
-                      showSnackbar,
-                      (e) => setFormData((prev) => ({ ...prev, prodInfo: e }))
-                    )
-                  }
-                >
-                  <Typography variant="caption" className="!mr-1">
-                    Generate
-                  </Typography>
-                  <span className="relative" data-animate="false">
-                    <svg
-                      width="6"
-                      height="6"
-                      viewBox="0 0 14 15"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="absolute -ml-0.5 -mt-0.5"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M7 0.714966C6.57172 0.714966 6.19841 1.00644 6.09453 1.42193C5.64458 3.22175 5.11525 4.31311 4.3567 5.07167C3.59815 5.83022 2.50678 6.35955 0.706966 6.8095C0.291477 6.91337 -3.32794e-07 7.28669 -3.32794e-07 7.71497C-3.32794e-07 8.14324 0.291477 8.51656 0.706966 8.62043C2.50678 9.07039 3.59815 9.59971 4.3567 10.3583C5.11525 11.1168 5.64458 12.2082 6.09453 14.008C6.19841 14.4235 6.57172 14.715 7 14.715C7.42828 14.715 7.80159 14.4235 7.90547 14.008C8.35542 12.2082 8.88475 11.1168 9.6433 10.3583C10.4019 9.59971 11.4932 9.07039 13.293 8.62043C13.7085 8.51656 14 8.14324 14 7.71497C14 7.28669 13.7085 6.91337 13.293 6.8095C11.4932 6.35955 10.4019 5.83022 9.6433 5.07167C8.88475 4.31311 8.35542 3.22175 7.90547 1.42193C7.80159 1.00644 7.42828 0.714966 7 0.714966Z"
-                      ></path>
-                    </svg>
-                    <svg
-                      width="14"
-                      height="15"
-                      viewBox="0 0 14 15"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className=""
-                    >
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M7 0.714966C6.57172 0.714966 6.19841 1.00644 6.09453 1.42193C5.64458 3.22175 5.11525 4.31311 4.3567 5.07167C3.59815 5.83022 2.50678 6.35955 0.706966 6.8095C0.291477 6.91337 -3.32794e-07 7.28669 -3.32794e-07 7.71497C-3.32794e-07 8.14324 0.291477 8.51656 0.706966 8.62043C2.50678 9.07039 3.59815 9.59971 4.3567 10.3583C5.11525 11.1168 5.64458 12.2082 6.09453 14.008C6.19841 14.4235 6.57172 14.715 7 14.715C7.42828 14.715 7.80159 14.4235 7.90547 14.008C8.35542 12.2082 8.88475 11.1168 9.6433 10.3583C10.4019 9.59971 11.4932 9.07039 13.293 8.62043C13.7085 8.51656 14 8.14324 14 7.71497C14 7.28669 13.7085 6.91337 13.293 6.8095C11.4932 6.35955 10.4019 5.83022 9.6433 5.07167C8.88475 4.31311 8.35542 3.22175 7.90547 1.42193C7.80159 1.00644 7.42828 0.714966 7 0.714966Z"
-                      ></path>
-                    </svg>
-                    <span className=""></span>
-                  </span>
-                </Box>
-              </Box>
-              {/* <TextField
-                sx={{ mb: 0.5 }}
-                fullWidth
-                multiline
-                id="textarea-outlined"
-                onChange={handleChange('prodInfo')}
-                maxRows={7}
-                value={formData.prodInfo}
-                // placeholder="Product Description"
-                minRows={6}
-                // label="Product Description"
-              /> */}
-              <QuillTextEditor
-                value={formData.prodInfo}
-                className="h-52 mt-1 mb-10"
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, prodInfo: e }))
-                }
-              />
             </Box>
 
             <Typography sx={{ fontWeight: 'bold', my: 2.5 }}>
@@ -289,25 +201,25 @@ const AddNewProduct = ({ params }) => {
             </Typography>
             <Box sx={{ pl: 0.2, pl: brk('md') && '0.5', mb: 1.5 }}>
               <SimpleDropDown
-                render={collections?.map((res, i) => (
-                  <MenuItem key={i} value={res.collectionId}>
-                    {res.collectionName}
+                render={categories?.map((res, i) => (
+                  <MenuItem key={i} value={res._id}>
+                    {res.category}
                   </MenuItem>
                 ))}
-                defaultValue={fromCollection?.collectionId}
-                onChange={handleChange('collectionId')}
+                defaultValue={fromCollection?._id}
+                onChange={handleChange('category')}
                 label="Product Category"
                 sx={{ mb: 2 }}
               />
               <SimpleDropDown
-                render={fromCollection?.sub_collections?.map((res, i) => (
+                render={fromCollection?.sub_category?.map((res, i) => (
                   <MenuItem key={i} value={res}>
-                    {res.subCollectionName}
+                    {res.label}
                   </MenuItem>
                 ))}
                 defaultValue={
-                  fromCollection?.sub_collections?.filter(
-                    (x) => x.subCollectionName == formData.subCollectionName
+                  fromCollection?.sub_category?.filter(
+                    (x) => x.label == formData.label
                   )[0]
                 }
                 onChange={handleSubCateSelection}
@@ -315,12 +227,14 @@ const AddNewProduct = ({ params }) => {
                 sx={{ mb: 2 }}
               />
               <SimpleDropDown
-                render={fromCollection?.group?.map((res, i) => (
-                  <MenuItem key={i} value={`${res?._id}&&&&& ${res?.spec}`}>
+                render={productGroups?.map((res, i) => (
+                  <MenuItem key={i} value={res}>
                     {res.label}
                   </MenuItem>
                 ))}
-                defaultValue={`${formData?.productGroup}&&&&& ${specId}`}
+                defaultValue={
+                  productGroups.filter((x) => x._id == formData.productGroup)[0]
+                }
                 onChange={handleProductGroupSelection}
                 label="Product Class"
                 sx={{ mb: 2 }}
@@ -514,7 +428,9 @@ const AddNewProduct = ({ params }) => {
                 <Box className="flex justify-center px-2 !mt-3 w-full">
                   <Box className="flex flex-col w-full">
                     <Autocomplete
-                      options={Object.keys(specInfo?.spec)}
+                      options={Object.keys(specInfo?.spec).map((x) =>
+                        x?.replaceAll('_', ' ')
+                      )}
                       onChange={(e, newValue) => setNewSpec(newValue)}
                       value={newSpec}
                       onInputChange={(e, newValue) =>
@@ -535,7 +451,9 @@ const AddNewProduct = ({ params }) => {
                     />
                     <Box className="flex items-center w-full">
                       <Autocomplete
-                        options={specInfo.spec[newSpec] || []}
+                        options={
+                          specInfo.spec[newSpec?.replaceAll(' ', '_')] || []
+                        }
                         className="!w-8/12 mr-3 mt-1 md:mt-0 outline-0 !mb-2"
                         value={specValue}
                         onChange={(e, newValue) => setSpecValue(newValue)}
@@ -588,6 +506,86 @@ const AddNewProduct = ({ params }) => {
                 </Box>
               </Box>
             )}
+            <Box className="flex justify-between items-center">
+              <Typography variant="caption" className="!mb-1">
+                Product Description
+              </Typography>
+              {/* <IconifyIcon
+                  icon="tabler:grain"
+                  className="text-[14px]"
+                  title="s"
+                /> */}
+              <Box
+                className="flex items-center cursor-pointer hover:bg-gray-50 p-0.5 px-2 rounded"
+                onClick={() =>
+                  generateDescApiHandler(
+                    {
+                      ...genPayload,
+                      prodPrice: formData.prodPrice,
+                      specification: formData.specifications,
+                      deliveryMethod: formData.delivery,
+                    },
+                    dispatch,
+                    showSnackbar,
+                    (e) => setFormData((prev) => ({ ...prev, prodInfo: e }))
+                  )
+                }
+              >
+                <Typography variant="caption" className="!mr-1">
+                  Generate with AI
+                </Typography>
+                <span className="relative" data-animate="false">
+                  <svg
+                    width="6"
+                    height="6"
+                    viewBox="0 0 14 15"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="absolute -ml-0.5 -mt-0.5"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M7 0.714966C6.57172 0.714966 6.19841 1.00644 6.09453 1.42193C5.64458 3.22175 5.11525 4.31311 4.3567 5.07167C3.59815 5.83022 2.50678 6.35955 0.706966 6.8095C0.291477 6.91337 -3.32794e-07 7.28669 -3.32794e-07 7.71497C-3.32794e-07 8.14324 0.291477 8.51656 0.706966 8.62043C2.50678 9.07039 3.59815 9.59971 4.3567 10.3583C5.11525 11.1168 5.64458 12.2082 6.09453 14.008C6.19841 14.4235 6.57172 14.715 7 14.715C7.42828 14.715 7.80159 14.4235 7.90547 14.008C8.35542 12.2082 8.88475 11.1168 9.6433 10.3583C10.4019 9.59971 11.4932 9.07039 13.293 8.62043C13.7085 8.51656 14 8.14324 14 7.71497C14 7.28669 13.7085 6.91337 13.293 6.8095C11.4932 6.35955 10.4019 5.83022 9.6433 5.07167C8.88475 4.31311 8.35542 3.22175 7.90547 1.42193C7.80159 1.00644 7.42828 0.714966 7 0.714966Z"
+                    ></path>
+                  </svg>
+                  <svg
+                    width="14"
+                    height="15"
+                    viewBox="0 0 14 15"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className=""
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M7 0.714966C6.57172 0.714966 6.19841 1.00644 6.09453 1.42193C5.64458 3.22175 5.11525 4.31311 4.3567 5.07167C3.59815 5.83022 2.50678 6.35955 0.706966 6.8095C0.291477 6.91337 -3.32794e-07 7.28669 -3.32794e-07 7.71497C-3.32794e-07 8.14324 0.291477 8.51656 0.706966 8.62043C2.50678 9.07039 3.59815 9.59971 4.3567 10.3583C5.11525 11.1168 5.64458 12.2082 6.09453 14.008C6.19841 14.4235 6.57172 14.715 7 14.715C7.42828 14.715 7.80159 14.4235 7.90547 14.008C8.35542 12.2082 8.88475 11.1168 9.6433 10.3583C10.4019 9.59971 11.4932 9.07039 13.293 8.62043C13.7085 8.51656 14 8.14324 14 7.71497C14 7.28669 13.7085 6.91337 13.293 6.8095C11.4932 6.35955 10.4019 5.83022 9.6433 5.07167C8.88475 4.31311 8.35542 3.22175 7.90547 1.42193C7.80159 1.00644 7.42828 0.714966 7 0.714966Z"
+                    ></path>
+                  </svg>
+                  <span className=""></span>
+                </span>
+              </Box>
+            </Box>
+            {/* <TextField
+                sx={{ mb: 0.5 }}
+                fullWidth
+                multiline
+                id="textarea-outlined"
+                onChange={handleChange('prodInfo')}
+                maxRows={7}
+                value={formData.prodInfo}
+                // placeholder="Product Description"
+                minRows={6}
+                // label="Product Description"
+              /> */}
+            <QuillTextEditor
+              value={formData.prodInfo}
+              className="h-52 mt-1 mb-10"
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, prodInfo: e }))
+              }
+            />
           </Grid>
           {/* 
 

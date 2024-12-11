@@ -81,7 +81,7 @@ const StoreLogin = () => {
           <Typography className="!text-[13px] !mt-5">
             Don’t have an account?{" "}
             <Link
-              href="/store/register"
+              href="/dashboard/register"
               color="custom.pri"
               className="!font-semibold"
             >

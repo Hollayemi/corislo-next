@@ -190,7 +190,7 @@ export default function StoreDashboardAppBar({
             className="ml-6 mr-2"
             onClick={() => route.push('/dashboard/store/chat')}
           >
-            <Badge badgeContent={12} color="error">
+            <Badge badgeContent={0} color="error">
               <Iconify
                 icon="tabler:message"
                 className="!text-[30px] text-gray-700 hover:text-blue-900"

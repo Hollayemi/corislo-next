@@ -29,16 +29,16 @@ const ServiceDisplay = ({ params }) => {
   const [search, setSearch] = useState('')
   const [openModal, setOpenModal] = useState(false)
   const daysOfWeek = [
+    'Sunday',
     'Monday',
     'Tuesday',
     'Wednesday',
     'Thursday',
     'Friday',
     'Saturday',
-    'Sunday',
   ]
   const [allHours, seeAllHours] = useState(false)
-  const currentDay = daysOfWeek[new Date().getDay() - 1]
+  const currentDay = daysOfWeek[new Date().getDay()]
   console.log(services)
 
   const theService =
@@ -363,7 +363,7 @@ const ServiceDisplay = ({ params }) => {
                           </Typography>
                         </Box>
                       ) : (
-                        currentDay.toLowerCase() === day && (
+                        currentDay?.toLowerCase() === day && (
                           <>
                             <Box
                               className="flex items-center justify-between"

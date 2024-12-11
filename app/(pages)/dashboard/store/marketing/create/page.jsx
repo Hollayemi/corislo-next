@@ -56,7 +56,7 @@ const MarketingPage = ({ params }) => {
             setScreen={setScreen}
           />
           <CampaignTab
-            title="Anouncement"
+            title="Advertisment"
             caption="Brand Awareness"
             screen={screen}
             setScreen={setScreen}

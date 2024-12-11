@@ -15,7 +15,7 @@ const BusinessProfile = ({ handleStoreChange, errors, values, userValues, setSta
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <CustomInput
-            title="Bussname Name"
+            title="Business Name"
             onChange={handleStoreChange("businessName")}
             error={values.businessName && errors.businessName}
             hideCheck={!values.businessName}
