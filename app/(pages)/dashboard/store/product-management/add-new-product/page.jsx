@@ -57,7 +57,7 @@ const AddNewProduct = ({ params }) => {
   const [selectedSizes, setSelectedSizes] = useState([])
   const [newSpec, setNewSpec] = useState('')
   const [specValue, setSpecValue] = useState('')
-  const [specInfo, setProdSpecs] = useState("")
+  const [specInfo, setProdSpecs] = useState('')
   const [productGroups, setGroups] = useState([])
   const [files, setFiles] = useState([])
   const [localFiles, setLocalFiles] = useState([])
@@ -78,8 +78,8 @@ const AddNewProduct = ({ params }) => {
     specifications: { sizes: selectedSizes },
     images: [],
     totInStock: '',
-    collectionId: '',
-    subCollection: '',
+    // collectionId: '',
+    // subCollection: '',
     subCollectionName: '',
     collectionName: '',
     category: '',
@@ -136,18 +136,26 @@ const AddNewProduct = ({ params }) => {
     sublist: 'add-new-product',
   }
 
+  const handleChangeCategory = (event) => {
+    const { category, _id } = event.target.value
+    setFormData({
+      ...formData,
+      category: _id,
+      collectionName: category,
+    })
+  }
+
   const handleSubCateSelection = (event) => {
     const { _id, collectionName, groups, ...others } = event.target.value
     getGenPayload((prev) => ({
       ...prev,
       category: collectionName,
-      subcategory: others.subCollectionName,
+      subcategory: others.label,
     }))
     setFormData({
       ...formData,
-      ...others,
-      subCollection: _id,
-      collectionName: fromCollection.collectionName,
+      subcategory: _id,
+      subCollectionName: others.label,
     })
 
     setGroups(groups)
@@ -161,6 +169,8 @@ const AddNewProduct = ({ params }) => {
     })
     setProdSpecs(spec)
   }
+
+  console.log(formData, categories)
   return (
     <StoreLeftSideBar
       path={path}
@@ -202,12 +212,14 @@ const AddNewProduct = ({ params }) => {
             <Box sx={{ pl: 0.2, pl: brk('md') && '0.5', mb: 1.5 }}>
               <SimpleDropDown
                 render={categories?.map((res, i) => (
-                  <MenuItem key={i} value={res._id}>
+                  <MenuItem key={i} value={res}>
                     {res.category}
                   </MenuItem>
                 ))}
-                defaultValue={fromCollection?._id}
-                onChange={handleChange('category')}
+                defaultValue={
+                  categories.filter((x) => x._id === formData.category)[0]
+                }
+                onChange={handleChangeCategory}
                 label="Product Category"
                 sx={{ mb: 2 }}
               />
@@ -219,7 +231,7 @@ const AddNewProduct = ({ params }) => {
                 ))}
                 defaultValue={
                   fromCollection?.sub_category?.filter(
-                    (x) => x.label == formData.label
+                    (x) => x.label == formData.subCollectionName
                   )[0]
                 }
                 onChange={handleSubCateSelection}

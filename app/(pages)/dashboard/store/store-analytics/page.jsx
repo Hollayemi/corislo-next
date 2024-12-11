@@ -35,7 +35,7 @@ const CustomInput = forwardRef((props, ref) => {
   const value = `${startDate}${endDate !== null ? endDate : ''}`
 
   return (
-    <Box className="flex items-center !w-fit !w-52 bg-white leading-8 h-8 px-3 rounded-md border">
+    <Box className="flex items-center !w-fit  bg-white leading-8 h-8 px-3 rounded-md border">
       <Box
         {...props}
         className=" w-full  !text-[12px] md:!text-[13px] !font-bold !text-gray-800"
