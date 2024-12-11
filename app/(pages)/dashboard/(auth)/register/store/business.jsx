@@ -10,34 +10,35 @@ import { useDispatch } from "react-redux";
 const BusinessProfile = ({ handleStoreChange, errors, values, userValues, setStage }) => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const propStore = values.businessName.split(" ")[0]?.toLowerCase()
   return (
     <Box className="px-2">
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <CustomInput
             title="Business Name"
-            onChange={handleStoreChange("businessName")}
+            onChange={handleStoreChange('businessName')}
             error={values.businessName && errors.businessName}
             hideCheck={!values.businessName}
             id="bussname"
             inputProps={{
-              value: values?.businessName || "",
-              type: "text",
-              placeholder: "Enter your business name",
+              value: values?.businessName || '',
+              type: 'text',
+              placeholder: `Enter your business name`,
             }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <CustomInput
             title="Store"
-            onChange={handleStoreChange("store")}
+            onChange={handleStoreChange('store')}
             error={values.store && errors.store}
             hideCheck={!values.store}
             id="store"
             inputProps={{
-              value: values?.store || "",
-              type: "text",
-              placeholder: "Set your store a name",
+              value: values?.store || propStore,
+              type: 'text',
+              placeholder: `Set your store a name e.g ${propStore}`,
             }}
           />
         </Grid>
@@ -86,71 +87,71 @@ const BusinessProfile = ({ handleStoreChange, errors, values, userValues, setSta
         <Grid item xs={12} md={6}>
           <CustomInput
             title="Business email address"
-            onChange={handleStoreChange("businessEmail")}
+            onChange={handleStoreChange('businessEmail')}
             error={values.businessEmail && errors.businessEmail}
             hideCheck={!values.businessEmail}
             id="emailAddress"
             inputProps={{
-              value: values?.businessEmail || "",
-              type: "email",
-              placeholder: "email address",
+              value: values?.businessEmail || '',
+              type: 'email',
+              placeholder: 'email address',
             }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <CustomInput
             title="Businesss Address"
-            onChange={handleStoreChange("address")}
+            onChange={handleStoreChange('address')}
             error={values.address && errors.address}
             hideCheck={!values.address}
             id="buzzAddress"
             inputProps={{
-              value: values?.address || "",
-              type: "text",
-              placeholder: "Business location",
+              value: values?.address || '',
+              type: 'text',
+              placeholder: 'Business location',
             }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <CustomInput
             title="city"
-            onChange={handleStoreChange("city")}
+            onChange={handleStoreChange('city')}
             error={values.city && errors.city}
             hideCheck={!values.city}
             id="city"
             inputProps={{
-              value: values?.city || "",
-              type: "text",
-              placeholder: "City",
+              value: values?.city || '',
+              type: 'text',
+              placeholder: 'City',
             }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <CustomInput
             title="State/ Region"
-            onChange={handleStoreChange("state")}
+            onChange={handleStoreChange('state')}
             error={values.state && errors.state}
             hideCheck={!values.state}
             id="state"
             inputProps={{
-              value: values?.state || "",
-              type: "text",
-              placeholder: "State/Region",
+              value: values?.state || '',
+              type: 'text',
+              placeholder: 'State/Region',
             }}
           />
         </Grid>
         <Grid item xs={12}>
           <CustomInput
             title="About"
-            onChange={handleStoreChange("about_store")}
+            onChange={handleStoreChange('about_store')}
             error={values.about_store && errors.about_store}
             hideCheck={!values.about_store}
             id="state"
             multiline
             inputProps={{
-              value: values?.about_store || "",
-              type: "text",
-              placeholder: "About your business",
+              value: values?.about_store || '',
+              type: 'text',
+              placeholder: 'About your business',
             }}
           />
         </Grid>
@@ -172,7 +173,7 @@ const BusinessProfile = ({ handleStoreChange, errors, values, userValues, setSta
         </Button>
       </Box>
     </Box>
-  );
+  )
 };
 
 export default BusinessProfile;
