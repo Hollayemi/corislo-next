@@ -68,7 +68,7 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
 
   useEffect(() => {
     const offlinePages = UserPages.isOffline.map((x) => x.link)
-    const whiteList = ['auth', 'biz', ...offlinePages]
+    const whiteList = ['auth', 'biz', "category", ...offlinePages]
     if (isOffline() && !whiteList.includes(getPath[getPath.length - 2])) {
       router.replace(`/auth/login?returnurl=${pathname.substring(1)}`)
     }

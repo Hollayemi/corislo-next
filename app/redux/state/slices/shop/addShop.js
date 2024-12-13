@@ -22,9 +22,9 @@ export const createStoreHandler = (payload, dispatch, router, setStage) => {
       toaster({ ...res });
       console.log(res)
       setStage(res.stage > -1 ? res.stage : 2)
-      if (res.type === "success") {
-        router.push(res.navigateTo);
-      }
+      // if (res.type === "success") {
+      //   router.push(res.navigateTo);
+      // }
     })
     .catch((e) => {});
 };

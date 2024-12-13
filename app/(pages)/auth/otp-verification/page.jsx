@@ -1,59 +1,63 @@
-"use client";
+'use client'
 // ** React Imports
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react'
 
 // ** MUI Components
-import Box from "@mui/material/Box";
-import { Button, Typography } from "@mui/material";
-import OtpInput from "./component";
-import { useUserData } from "@/app/hooks/useData";
-import { verifyOtp, resendOtp } from "@/app/redux/state/slices/auth/otp";
-import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
+import Box from '@mui/material/Box'
+import { Button, Typography } from '@mui/material'
+import OtpInput from './component'
+import { useUserData } from '@/app/hooks/useData'
+import { verifyOtp, resendOtp } from '@/app/redux/state/slices/auth/otp'
+import { useRouter } from 'next/navigation'
+import { useDispatch } from 'react-redux'
 
 const OtpVerification = ({ searchParams, email, account, callback }) => {
-  console.log(searchParams, email, account);
-  const dispatch = useDispatch();
+  console.log(searchParams, email, account)
+  const { userInfo } = useUserData()
+  const dispatch = useDispatch()
+  const router = useRouter()
+  console.log(userInfo)
+  const theEmail = email || userInfo.email
 
   // usestate hooks
-  const [openInput, setOpenInput] = useState(false);
-  const [countdown, setCountdown] = useState(60); // Initial countdown value in seconds
-  const [resendDisabled, setResendDisabled] = useState(false);
-  const [inputValues, setInputValues] = useState(["", "", "", "", "", ""]);
-  console.log(searchParams);
-  const otpValues = inputValues.join("");
+  const [openInput, setOpenInput] = useState(false)
+  const [countdown, setCountdown] = useState(60) // Initial countdown value in seconds
+  const [resendDisabled, setResendDisabled] = useState(false)
+  const [inputValues, setInputValues] = useState(['', '', '', '', '', ''])
+  console.log(searchParams)
+  const otpValues = inputValues.join('')
 
   useEffect(() => {
-    let intervalId;
+    let intervalId
 
     if (countdown > 0) {
       intervalId = setInterval(() => {
-        setCountdown((prevCountdown) => prevCountdown - 1);
-      }, 1000);
+        setCountdown((prevCountdown) => prevCountdown - 1)
+      }, 1000)
     } else {
-      setResendDisabled(false);
-      clearInterval(intervalId);
+      setResendDisabled(false)
+      clearInterval(intervalId)
     }
 
-    return () => clearInterval(intervalId);
-  }, [countdown]);
+    return () => clearInterval(intervalId)
+  }, [countdown])
 
   const buttonFunc = () => {
-    verifyOtp({ email, otp: otpValues }, dispatch, callback);
+    verifyOtp({ email, otp: otpValues }, dispatch, callback, router)
     if (!openInput) {
-      setOpenInput(true);
+      setOpenInput(true)
     }
-  };
+  }
 
   const handleResend = () => {
     resendOtp(
-      { email, action: { to: "email-verification", account } },
+      { email: theEmail, action: { to: 'email-verification', account } },
       dispatch
-    );
-    setInputValues(["", "", "", "", "", ""]);
-    setCountdown(60);
-    setResendDisabled(true);
-  };
+    )
+    setInputValues(['', '', '', '', '', ''])
+    setCountdown(60)
+    setResendDisabled(true)
+  }
 
   return (
     <Box className="w-full max-w-[380px] md:w-[480px] !mt-10 flex flex-col items-center">
@@ -95,7 +99,7 @@ const OtpVerification = ({ searchParams, email, account, callback }) => {
         Verify
       </Button>
     </Box>
-  );
-};
+  )
+}
 
-export default OtpVerification;
+export default OtpVerification

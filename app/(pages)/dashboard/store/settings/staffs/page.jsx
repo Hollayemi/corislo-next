@@ -11,7 +11,6 @@ import { settingsInnerList } from '@/app/data/store/innerList'
 import { Box, Button, MenuItem, TextField, Typography } from '@mui/material'
 import { settingsBreadCrumb } from '../components'
 import { TitleSubtitle } from '@/app/(pages)/user/components'
-import { OrderBoxes } from '@/app/components/cards/homeCards'
 import { SimpleDropDown } from '../../product-management/add-new-product/components'
 import { StaffCard } from './staff.component'
 import IconifyIcon from '@/app/components/icon'
@@ -179,7 +178,7 @@ const Staffs = ({ params }) => {
                     role={staff.role}
                     status={staff.staffStatus}
                     id={staff._id}
-                    image={`/images/avatar/${i + 1}.png`}
+                    image={staff.picture || `/images/misc/no_profile.png`}
                   />
                 ))}
               </Box>

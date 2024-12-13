@@ -16,7 +16,6 @@ const HomeWrapper = ({
   noFooter,
   className,
   popup,
-  updateDialogInfo,
 }) => {
   const [pinSearch, setPinSearch] = useState(false);
   const { overLay, popMap, shopNow, showOverlay } = useUserData();

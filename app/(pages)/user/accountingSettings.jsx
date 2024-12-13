@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Box, Button, Typography } from "@mui/material";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -15,7 +16,7 @@ const AccountingSettings = () => {
   const [files, setFiles] = useState([]);
   const [localFile, setLocalFiles] = useState("");
   console.log(localFile);
-  const splitFullname = userInfo?.fullname?.split(" ");
+  const splitFullname = userInfo?.fullname?.split(" ") || [];
   const updateBtn = () => {
     updateUserPicture(
       { picture: files[0], state: "add" },
@@ -43,7 +44,7 @@ const AccountingSettings = () => {
                   src={
                     localFile
                       ? URL?.createObjectURL(localFile[0])
-                      : userInfo.picture || "/images/avatar/1.png"
+                      : userInfo.picture || "/images/misc/no_profile.png"
                   }
                   alt="settings.png"
                   width={250}

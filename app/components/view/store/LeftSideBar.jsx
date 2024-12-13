@@ -37,6 +37,7 @@ import BottomBar from './BottomBar'
 import { useStoreData, useUserData } from '@/app/hooks/useData'
 import StoreOverlay from './components/storeOverlay'
 import { MyTooltip } from '../../cards/tooltip'
+import { formatName } from '@/app/utils/get-initials'
 
 const drawerWidth = 260
 
@@ -399,7 +400,8 @@ const StoreLeftSideBar = React.memo(
                   color="primary"
                   className="!mb-5 !font-bold !text-2xl"
                 >
-                  Welcome back, {staffInfo.fullname || 'Staff Name'} 👋🏻
+                  Welcome back, {formatName(staffInfo.fullname) || 'Staff Name'}{' '}
+                  👋🏻
                 </Typography>
               )}
             </Box>

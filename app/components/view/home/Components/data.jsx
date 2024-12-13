@@ -20,7 +20,7 @@ export const desktopOptions = (dispatch) => [
     rest: 'logout',
     component: (
       <Button
-        onClick={() =>userLogout()}
+        onClick={() => userLogout()}
         fullWidth
         className="!w-60 !h-8"
         variant="outlined"

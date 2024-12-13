@@ -10,23 +10,16 @@ const MapSelection = ({ setStage, userValues, storeValues }) => {
   const dispatch = useDispatch()
   const router = useRouter()
   return (
-    <Box className="w-full">
+    <Box className="w-full flex flex-col justify-center items-center">
       <Box className="w-full md:w-[600px] h-[400px]">
         <SetLocation close={() => {}} />
       </Box>
       <br />
-      <Box className="w-full  mb-8 md:pb-0 flex justify-center mt-6 px-4">
+      <Box className="w-80  mb-8 md:pb-0 flex justify-center mt-6 px-4">
         <Button
           variant="contained"
           className="w-full !h-10 !rounded-md !text-gray-100 !text-[17px] !mt-3 !shadow-none"
-          onClick={() =>
-            createStoreHandler(
-              { user: userValues, store: storeValues },
-              dispatch,
-              router,
-              setStage
-            )
-          }
+          onClick={() => router.push('/dashboard')}
         >
           Finish Setup
         </Button>

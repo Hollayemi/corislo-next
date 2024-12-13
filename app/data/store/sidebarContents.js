@@ -14,7 +14,7 @@ import { WorkspacesSharp } from "@mui/icons-material";
 export const navigation = {
   dashboard: "",
   store: "/stores",
-  product_management: "/product-management",
+  product_management: "/product-management/add-new-product",
   order_management: "/order-management",
   customer_management: "/customer-management",
   store_analytics: "/store-analytics",

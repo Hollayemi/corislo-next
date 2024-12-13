@@ -33,7 +33,7 @@ const Notification = () => {
           {notifications.map((data, i) => (
             <OrderNotif key={i} data={data} />
           ))}
-        </Box>
+        </Box> 
         <Box className="h-14 flex items-center justify-center absolute bottom-0 !text-[12px] w-full text-center ">
           See all notifications
         </Box>
@@ -45,7 +45,6 @@ const Notification = () => {
 export default Notification
 
 export const OrderNotif = ({ data, forStore }) => {
-  console.log(data)
   const [open, setOpen] = useState(0)
   return (
     <Box className="w-full border-b-2">
@@ -110,7 +109,7 @@ export const OrderNotif = ({ data, forStore }) => {
               </Typography>
               <Box className="w-full flex justify-end mt-2 -ml-3">
                 {each.isText ||
-                  (each.note.length > 100 && (
+                  (each?.note?.length > 100 && (
                     <Box
                       onClick={() => setOpen((prev) => (prev === i ? 100 : i))}
                       className="flex justify-center items-center w-4 h-4 cursor-pointer rounded-full border border-black"

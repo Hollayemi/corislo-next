@@ -23,7 +23,7 @@ export const otpVerificationApi = createAsyncThunk(
   }
 );
 
-export const verifyOtp = (payload, dispatch, callBack) => {
+export const verifyOtp = (payload, dispatch, callBack, router) => {
   dispatch(otpVerificationApi(payload))
     .then(unwrapResult)
     .then((res) => {
@@ -31,7 +31,7 @@ export const verifyOtp = (payload, dispatch, callBack) => {
       toaster({ ...res });
       console.log("here");
       if (res.type === "success") {
-        callBack()
+        callBack ? callBack(res) : router.push("/")
       }
     })
     .catch((err) => {

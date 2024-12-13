@@ -33,37 +33,36 @@ const NotificationPref = () => {
   return (
     <Box>
       <TitleSubtitle title="Notifications" />
-
       <Box className="flex flex-col mt-5">
         <TitleSubtitle title="Notify me for..." titleClass="!text-[14px]" />
         <MyCheckBox
           label="Order Updates"
-          checked={formData.order_updates}
+          checked={formData?.order_updates}
           onChange={() => updateFormData("order_updates")}
         />
         <MyCheckBox
           label="Promotions and Discounts"
-          checked={formData.promotion_discounts}
+          checked={formData?.promotion_discounts}
           onChange={() => updateFormData("promotion_discounts")}
         />
         <MyCheckBox
           label="New Messages"
-          checked={formData.new_messages}
+          checked={formData?.new_messages}
           onChange={() => updateFormData("new_messages")}
         />
         <MyCheckBox
           label="Product Restocks"
-          checked={formData.product_restock}
+          checked={formData?.product_restock}
           onChange={() => updateFormData("product_restock")}
         />
         <MyCheckBox
           label="Sales and Events"
-          checked={formData.sales_events}
+          checked={formData?.sales_events}
           onChange={() => updateFormData("sales_events")}
         />
         <MyCheckBox
           label="Account Activities"
-          checked={formData.account_activities}
+          checked={formData?.account_activities}
           onChange={() => updateFormData("account_activities")}
         />
       </Box>
@@ -79,7 +78,7 @@ const NotificationPref = () => {
           />
           <Switch
             edge="end"
-            checked={formData.push_notification}
+            checked={formData?.push_notification}
             className="!absolute !right-0 !top-4"
             onChange={() => updateFormData("push_notification")}
           />
@@ -94,7 +93,7 @@ const NotificationPref = () => {
           />
           <Switch
             edge="end"
-            checked={formData.email_notification}
+            checked={formData?.email_notification}
             className="!absolute !right-0 !top-4"
             onChange={() => updateFormData("email_notification")}
           />
@@ -109,7 +108,7 @@ const NotificationPref = () => {
           />
           <Switch
             edge="end"
-            checked={formData.sms_notification}
+            checked={formData?.sms_notification}
             className="!absolute !right-0 !top-4"
             onChange={(e) => updateFormData("sms_notification")}
           />

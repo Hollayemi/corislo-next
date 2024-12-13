@@ -266,7 +266,7 @@ function Header({}) {
                       skin="light"
                       color="primary"
                       className="!w-10 !hidden md:!flex !h-10 !font-black !text-[15px] !ml-2 flex-shrink-0"
-                      onClick={() => dispatch(userLogout())}
+                      // onClick={() => dispatch(userLogout())}
                       // sx={{ ml: 3, width: 30, height: 30, fontSize: "0.85rem" }}
                     >
                       {getInitials(userInfo?.fullname || 'New User').substring(
@@ -275,7 +275,10 @@ function Header({}) {
                       )}
                     </CustomAvatar>
                   )}
-                  <IconifyIcon icon="tabler:chevron-down" className="ml-3 hidden md:block" />
+                  <IconifyIcon
+                    icon="tabler:chevron-down"
+                    className="ml-3 hidden md:block"
+                  />
                 </Box>
               }
               options={desktopOptions(dispatch)}
@@ -298,6 +301,7 @@ function Header({}) {
               Login
             </Button>
             <Button
+              onClick={() => router.push('/auth/register')}
               variant="text"
               className="!rounded-2xl h-8 !w-fit md:!w-20 !text-xs !ml-1 md:!ml-5"
               size="small"

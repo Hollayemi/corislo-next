@@ -21,7 +21,6 @@ import ListItemButton from "@mui/material/ListItemButton";
 import InputAdornment from "@mui/material/InputAdornment";
 
 // ** Third Party Components
-import PerfectScrollbar from "react-perfect-scrollbar";
 
 // ** Icon Imports
 import Icon from "@/app/components/icon";

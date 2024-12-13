@@ -3,7 +3,7 @@ import { Box, styled, Tooltip, Typography } from '@mui/material'
 import IconifyIcon from '../icon'
 import { useState } from 'react'
 
-export const MyTooltip = ({ message, children, placement="right-start" }) => {
+export const MyTooltip = ({ message, children, placement="right" }) => {
  
   const WhiteTooltip = styled(({ className, ...props }) => (
     <Tooltip {...props} classes={{ popper: className }} />

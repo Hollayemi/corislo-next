@@ -26,6 +26,7 @@ import OptionsMenu from '../../option-menu'
 import { updateStaff } from '@/app/redux/state/slices/shop/branches/staffs'
 import { useDispatch } from 'react-redux'
 import { desktopOptions, mobileOptions } from './components/data'
+import { formatName } from '@/app/utils/get-initials'
 
 const Icons = styled('div')(({ theme }) => ({
   padding: theme.spacing(1),
@@ -221,7 +222,7 @@ export default function StoreDashboardAppBar({
                     variant="body2"
                     className="!font-bold text-ellipsis text-sm !ml-4 !text-black"
                   >
-                    {staffInfo.username}
+                    {formatName(staffInfo.username)}
                   </Typography>
                   <ArrowDropDownIcon />
                 </Box>

@@ -131,7 +131,7 @@ const ChatLog = (props) => {
 
   // ** Renders user chat
   const renderChats = () => {
-    return formattedChatData().map((item, index) => {
+    return formattedChatData()?.map((item, index) => {
       const isSender = item.by === userProfile.role;
       const isNotif = item.by === "notification";
       return (
@@ -183,7 +183,7 @@ const ChatLog = (props) => {
             className="chat-body"
             sx={{ maxWidth: ["calc(100% - 5.75rem)", "75%", "65%"] }}
           >
-            {item.messages.map((chat, index, { length }) => {
+            {item.messages?.map((chat, index, { length }) => {
               const time = new Date(chat.time);
 
               return (
