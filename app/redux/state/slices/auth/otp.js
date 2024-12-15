@@ -40,7 +40,7 @@ export const verifyOtp = (payload, dispatch, callBack, router) => {
 
 const resendOtpApi = createAsyncThunk("post/resendOtp", async (payload) => {
   const { data } = await martApi
-    .post("/new/otp", payload)
+    .post("/new/otp", payload, jsonHeader(payload.by))
     .then((e) => {
       return e;
     })

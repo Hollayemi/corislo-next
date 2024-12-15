@@ -25,7 +25,7 @@ import { IconImage } from '../home/header'
 import OptionsMenu from '../../option-menu'
 import { updateStaff } from '@/app/redux/state/slices/shop/branches/staffs'
 import { useDispatch } from 'react-redux'
-import { desktopOptions, mobileOptions } from './components/data'
+import { desktopOptions, mobileOptions } from '../components/data'
 import { formatName } from '@/app/utils/get-initials'
 
 const Icons = styled('div')(({ theme }) => ({

@@ -7,6 +7,10 @@ import { jsonHeader } from '@/app/redux/state/slices/api/setAuthHeaders'
 import martApi from '@/app/redux/state/slices/api/baseApi'
 import { store } from '@/app/redux/state/store'
 import { Provider } from 'react-redux'
+import { useEffect, useState } from 'react';
+import handleSubscribeToNotification from '@/app/redux/state/slices/api/webpush';
+
+import { osName } from 'react-device-detect'
 
 // export const metadata = {
 //   title: "Store - corislo",
@@ -14,6 +18,21 @@ import { Provider } from 'react-redux'
 // };
 
 export default function MyStoreDashboardLayout({ children }) {
+   const [connection, setConnection] = useState([])
+  useEffect(() => {
+    if ('serviceWorker' in navigator && connection) {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((registration) => {
+          if (!connection.includes(osName))
+            handleSubscribeToNotification(connection, "store")
+          // console.log("Service Worker registered: ", registration);
+        })
+        .catch((error) => {
+          console.error('Service Worker registration failed:', error)
+        })
+    }
+  }, [connection])
   return (
     <SWRConfig
       value={{
@@ -28,7 +47,7 @@ export default function MyStoreDashboardLayout({ children }) {
       }}
     >
       <Provider store={store}>
-        <StoreDataProvider>
+        <StoreDataProvider setConnection={setConnection}>
           <Box
             className="h-full !w-full absolute min-h-scren !overflow-x-hidden"
             bgcolor="custom.bodyGray"

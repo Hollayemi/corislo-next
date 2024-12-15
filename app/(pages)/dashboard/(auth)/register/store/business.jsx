@@ -1,11 +1,10 @@
-"use client";
-import React, { useState } from "react";
-import { CustomInput } from "@/app/components/cards/auth/components";
-import { Box, Button, Grid, Typography } from "@mui/material";
-import { createStoreHandler } from "@/app/redux/state/slices/shop/addShop";
-import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-
+'use client'
+import React, { useState } from 'react'
+import { CustomInput } from '@/app/components/cards/auth/components'
+import { Box, Button, Grid, Typography } from '@mui/material'
+import { createStoreHandler } from '@/app/redux/state/slices/shop/addShop'
+import { useRouter } from 'next/navigation'
+import { useDispatch } from 'react-redux'
 
 const BusinessProfile = ({
   handleStoreChange,
@@ -25,6 +24,9 @@ const BusinessProfile = ({
           <CustomInput
             title="Business Name"
             onChange={handleStoreChange('businessName')}
+            onCancel={() =>
+              setStoreValues((prev) => ({ ...prev, ['businessName']: '' }))
+            }
             error={values.businessName && errors.businessName}
             hideCheck={!values.businessName}
             id="bussname"
@@ -44,6 +46,9 @@ const BusinessProfile = ({
           <CustomInput
             title="Store"
             onChange={handleStoreChange('store')}
+            onCancel={() =>
+              setStoreValues((prev) => ({ ...prev, ['store']: '' }))
+            }
             error={values.store && errors.store}
             hideCheck={!values.store}
             id="store"
@@ -58,6 +63,7 @@ const BusinessProfile = ({
           <CustomInput
             title="Bussname Rendering Type"
             onChange={handleStoreChange("businessType")}
+            onCancel={() => setStoreValues((prev) => ({...prev, ["businessType"]: ""}))}
             error={values.businessType && errors.businessType}
             hideCheck={!values.businessType}
             id="busstype"
@@ -86,6 +92,7 @@ const BusinessProfile = ({
           <CustomInput
             title="Business registration Number"
             onChange={handleStoreChange("businessRegNum")}
+            onCancel={() => setStoreValues((prev) => ({...prev, ["businessRegNum"]: ""}))}
             error={values.businessRegNum && errors.businessRegNum}
             hideCheck={!values.businessRegNum}
             id="bussRegNumber"
@@ -100,6 +107,9 @@ const BusinessProfile = ({
           <CustomInput
             title="Business email address"
             onChange={handleStoreChange('businessEmail')}
+            onCancel={() =>
+              setStoreValues((prev) => ({ ...prev, ['businessEmail']: '' }))
+            }
             error={values.businessEmail && errors.businessEmail}
             hideCheck={!values.businessEmail}
             id="emailAddress"
@@ -114,6 +124,9 @@ const BusinessProfile = ({
           <CustomInput
             title="Businesss Address"
             onChange={handleStoreChange('address')}
+            onCancel={() =>
+              setStoreValues((prev) => ({ ...prev, ['address']: '' }))
+            }
             error={values.address && errors.address}
             hideCheck={!values.address}
             id="buzzAddress"
@@ -128,6 +141,9 @@ const BusinessProfile = ({
           <CustomInput
             title="city"
             onChange={handleStoreChange('city')}
+            onCancel={() =>
+              setStoreValues((prev) => ({ ...prev, ['city']: '' }))
+            }
             error={values.city && errors.city}
             hideCheck={!values.city}
             id="city"
@@ -142,6 +158,9 @@ const BusinessProfile = ({
           <CustomInput
             title="State/ Region"
             onChange={handleStoreChange('state')}
+            onCancel={() =>
+              setStoreValues((prev) => ({ ...prev, ['state']: '' }))
+            }
             error={values.state && errors.state}
             hideCheck={!values.state}
             id="state"
@@ -156,6 +175,9 @@ const BusinessProfile = ({
           <CustomInput
             title="About"
             onChange={handleStoreChange('about_store')}
+            onCancel={() =>
+              setStoreValues((prev) => ({ ...prev, ['about_store']: '' }))
+            }
             error={values.about_store && errors.about_store}
             hideCheck={!values.about_store}
             id="state"
@@ -188,4 +210,4 @@ const BusinessProfile = ({
   )
 }
 
-export default BusinessProfile;
+export default BusinessProfile

@@ -1,10 +1,10 @@
-"use client";
-import IconifyIcon from "../../icon";
-import { useState } from "react";
-const { Box, Typography } = require("@mui/material");
+'use client'
+import IconifyIcon from '../../icon'
+import { useState } from 'react'
+const { Box, Typography } = require('@mui/material')
 
-const inputType = {};
-    
+const inputType = {}
+
 const TextInput = ({ inputProps, id, onChange, multiline }) =>
   !multiline ? (
     <input
@@ -20,7 +20,7 @@ const TextInput = ({ inputProps, id, onChange, multiline }) =>
       onChange={onChange}
       className="outline-none border-none w-full h-28 pr-5 !bg-white autofill:!px-4"
     ></textarea>
-  );
+  )
 
 const SelectInput = ({ onChange, id, values }) => {
   return (
@@ -37,8 +37,8 @@ const SelectInput = ({ onChange, id, values }) => {
         ))}
       </select>
     </Box>
-  );
-};
+  )
+}
 export const CustomInput = ({
   title,
   inputProps,
@@ -47,15 +47,16 @@ export const CustomInput = ({
   id,
   error,
   onChange,
+  onCancel,
 }) => {
-  const [newType, changeType] = useState(inputProps.type);
+  const [newType, changeType] = useState(inputProps.type)
   return (
     <Box>
       <Box className="px-4 relative py-px pb-1.5 flex flex-col w-full bg-white rounded-md border-2 border-white focus-within:border-blue-800 overflow-hidden">
         <label htmlFor={id} className="!text-[11px]">
           {title}
         </label>
-        {inputProps.type !== "select" ? (
+        {inputProps.type !== 'select' ? (
           <TextInput
             multiline={multiline}
             id={id}
@@ -65,24 +66,29 @@ export const CustomInput = ({
         ) : (
           <SelectInput onChange={onChange} id={id} values={inputProps.values} />
         )}
-        {!hideCheck && (
-          <Box
-            className="w-4 h-4 rounded-full flex flex-shrink-0 items-center justify-center absolute right-0 mr-4 bottom-0 mb-2"
-            bgcolor={!error ? "custom.pri" : "red"}
-          >
-            <IconifyIcon
-              icon={!error ? "tabler:check" : "tabler:x"}
-              className="!text-[12px] !text-white"
-            />
-          </Box>
-        )}
-        {inputProps.type === "password" && (
+
+        <Box
+          className={`w-4 h-4 rounded-full flex flex-shrink-0 items-center transition-all justify-center absolute ${
+            hideCheck ? '-right-10' : 'right-0'
+          } mr-4 bottom-0.5 mb-2 cursor-pointer`}
+          bgcolor={!error ? 'custom.pri' : 'red'}
+        >
           <IconifyIcon
-            className="!absolute right-0 mr-5 bottom-0 mb-2 !z-50 !text-gray-400 !text-[20px]"
+            icon={!error ? 'tabler:check' : 'tabler:x'}
+            onClick={error ? onCancel : () => {}}
+            className="!text-[10px] !text-white"
+          />
+        </Box>
+
+        {inputProps.type === 'password' && (
+          <IconifyIcon
+            className={`!absolute ${
+              error || !hideCheck ? 'right-4' : 'right-0'
+            } mr-5 bottom-0 mb-2 transition-all !z-50 !text-gray-400 !text-[20px]`}
             onClick={() =>
-              changeType(newType === "password" ? "text" : "password")
+              changeType(newType === 'password' ? 'text' : 'password')
             }
-            icon={newType === "password" ? "tabler:eye" : "tabler:eye-off"}
+            icon={newType === 'password' ? 'tabler:eye' : 'tabler:eye-off'}
           />
         )}
       </Box>
@@ -92,5 +98,5 @@ export const CustomInput = ({
         </Typography>
       )}
     </Box>
-  );
-};
+  )
+}

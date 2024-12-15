@@ -120,6 +120,7 @@ const RegisterStore = () => {
         handleUserChange={handleUserChange}
         setStage={setStage}
         values={userValues}
+        setUserValues={setUserValues}
         confPas={confPass}
         setConfPass={setConfPass}
         readyToNext={readyToNext}

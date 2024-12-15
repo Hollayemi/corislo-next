@@ -8,7 +8,7 @@ import { isMobile, deviceType, osName } from "react-device-detect";
 const PUBLIC_VAPID_KEY2 =
   "BCttWS18Th1RaDR7gVIVtlXOw_P-nE7qJVkXZxEOW2a1yHOS4vKEuEWtRN-A5lX9_lmDjM3nPivWeF3rZoCi8Rk";
 
-const handleSubscribeToNotification = async (connections) => {
+const handleSubscribeToNotification = async (connections, subFor = "user") => {
   function urlBase64ToUint8Array(base64String) {
     const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
     const base64 = (base64String + padding)
@@ -34,14 +34,13 @@ const handleSubscribeToNotification = async (connections) => {
         applicationServerKey: serverKey,
       });
 
-  
       if(!connections[osName]){
       const sendSubscription = async (payload) => {
         const { data } = await martApi
           .post(
             `/notifications/subscription`,
             { subscription: payload, device: osName },
-            jsonHeader()
+            jsonHeader(subFor)
           )
           .then((res) => res)
           .catch((e) => e);

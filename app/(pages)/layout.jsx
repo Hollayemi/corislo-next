@@ -18,7 +18,10 @@ import '@/styles/globals.css'
 import { osName } from 'react-device-detect'
 
 import { usePathname } from 'next/navigation'
-// import { onMessageListener, requestNotificationPermission } from '../configs/firebase'
+import {
+  onMessageListener,
+  requestNotificationPermission,
+} from '../configs/firebase'
 
 // export const metadata = {
 //   title:
@@ -34,20 +37,25 @@ export default function RootLayout({ children }) {
   const [connection, setConnection] = useState([])
   const [hideOverflow, setOverflow] = useState(false)
   const pathname = usePathname()
-//  useEffect(() => {
-//    requestNotificationPermission()
-//  }, [])
 
-//  onMessageListener()
-//    .then((payload) => {
-//      console.log('Message received: ', payload)
-//      // Show custom UI for notifications
-//    })
-//    .catch((err) => console.log('Failed to receive message: ', err))
+  const forAdmins = ['/dashboard', '/coristen']
+  const pathArr = pathname.split('/')
+  const adminPaths = forAdmins.some((path) => pathname.startsWith(path))
 
+  
+  useEffect(() => {
+    requestNotificationPermission()
+  }, [])
+
+  onMessageListener()
+    .then((payload) => {
+      console.log('Message received: ', payload)
+      // Show custom UI for notifications
+    })
+    .catch((err) => console.log('Failed to receive message: ', err))
 
   useEffect(() => {
-    if ('serviceWorker' in navigator && connection) {
+    if ('serviceWorker' in navigator && connection && !adminPaths) {
       navigator.serviceWorker
         .register('/sw.js')
         .then((registration) => {
@@ -59,10 +67,7 @@ export default function RootLayout({ children }) {
           console.error('Service Worker registration failed:', error)
         })
     }
-  }, [connection])
-  const excludedPaths = ['/dashboard', '/coristen']
-  const pathArr = pathname.split('/')
-  const isExcluded = excludedPaths.some((path) => pathname.startsWith(path))
+  }, [connection, adminPaths])
 
   const logos = {
     dashboard: 'main_store.png',
@@ -111,7 +116,7 @@ export default function RootLayout({ children }) {
         <meta property="og:type" content="product" />
       </head>
 
-      {!isExcluded ? (
+      {!adminPaths ? (
         <body className={`${hideOverflow && '!overflow-hidden'}`}>
           <SWRConfig
             value={{
@@ -142,7 +147,6 @@ export default function RootLayout({ children }) {
               <UserDataProvider
                 setOverflow={setOverflow}
                 setConnection={setConnection}
-
               >
                 <LineLoading />
                 <PersistGate loading={null} persistor={persistor}>

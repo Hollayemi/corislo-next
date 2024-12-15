@@ -1,7 +1,7 @@
-"use client";
-import React from "react";
-import { CustomInput } from "@/app/components/cards/auth/components";
-import { Box, Button, Grid } from "@mui/material";
+'use client'
+import React from 'react'
+import { CustomInput } from '@/app/components/cards/auth/components'
+import { Box, Button, Grid } from '@mui/material'
 const PersonalProfile = ({
   handleUserChange,
   errors,
@@ -10,6 +10,7 @@ const PersonalProfile = ({
   setConfPass,
   readyToNext,
   setStage,
+  setUserValues,
 }) => {
   return (
     <Box className="px-2">
@@ -23,11 +24,14 @@ const PersonalProfile = ({
             }
             name="fullname"
             hideCheck={!values.fullname}
-            onChange={handleUserChange("fullname")}
+            onChange={handleUserChange('fullname')}
+            onCancel={() =>
+              setUserValues((prev) => ({ ...prev, ['fullname']: '' }))
+            }
             inputProps={{
-              value: values.fullname || "",
-              type: "text",
-              placeholder: "Enter your staff name",
+              value: values.fullname || '',
+              type: 'text',
+              placeholder: 'Enter your staff name',
             }}
           />
         </Grid>
@@ -37,14 +41,17 @@ const PersonalProfile = ({
             error={
               readyToNext ? errors.username : values.username && errors.username
             }
-            onChange={handleUserChange("username")}
+            onChange={handleUserChange('username')}
+            onCancel={() =>
+              setUserValues((prev) => ({ ...prev, ['username']: '' }))
+            }
             id="username"
             hideCheck={!values.username}
             name="username"
             inputProps={{
-              value: values.username || "",
-              type: "text",
-              placeholder: "Enter your username",
+              value: values.username || '',
+              type: 'text',
+              placeholder: 'Enter your username',
             }}
           />
         </Grid>
@@ -52,21 +59,27 @@ const PersonalProfile = ({
           <CustomInput
             title="Email Address"
             error={readyToNext ? errors.email : values.email && errors.email}
-            onChange={handleUserChange("email")}
+            onChange={handleUserChange('email')}
+            onCancel={() =>
+              setUserValues((prev) => ({ ...prev, ['email']: '' }))
+            }
             id="email"
             name="email"
             hideCheck={!values.email}
             inputProps={{
-              value: values.email || "",
-              type: "email",
-              placeholder: "Enter staff email address",
+              value: values.email || '',
+              type: 'email',
+              placeholder: 'Enter staff email address',
             }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <CustomInput
             title="Phone Number"
-            onChange={handleUserChange("phoneNumber")}
+            onChange={handleUserChange('phoneNumber')}
+            onCancel={() =>
+              setUserValues((prev) => ({ ...prev, ['phoneNumber']: '' }))
+            }
             id="phoneNumber"
             name="phoneNumber"
             hideCheck={!values.phoneNumber}
@@ -76,9 +89,9 @@ const PersonalProfile = ({
                 : values.phoneNumber && errors.phoneNumber
             }
             inputProps={{
-              value: values.phoneNumber || "",
-              type: "number",
-              placeholder: "Enter your phone number",
+              value: values.phoneNumber || '',
+              type: 'number',
+              placeholder: 'Enter your phone number',
             }}
           />
         </Grid>
@@ -88,18 +101,24 @@ const PersonalProfile = ({
             id="state"
             name="state"
             hideCheck={!values.state}
-            onChange={handleUserChange("state")}
+            onChange={handleUserChange('state')}
+            onCancel={() =>
+              setUserValues((prev) => ({ ...prev, ['state']: '' }))
+            }
             inputProps={{
               value: values.state,
-              type: "text",
-              placeholder: "Enter your state",
+              type: 'text',
+              placeholder: 'Enter your state',
             }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <CustomInput
             title="Password"
-            onChange={handleUserChange("password")}
+            onChange={handleUserChange('password')}
+            onCancel={() =>
+              setUserValues((prev) => ({ ...prev, ['password']: '' }))
+            }
             error={
               readyToNext ? errors.password : values.password && errors.password
             }
@@ -107,9 +126,9 @@ const PersonalProfile = ({
             hideCheck={!values.password}
             name="password"
             inputProps={{
-              value: values.password || "",
-              type: "password",
-              placeholder: ".......",
+              value: values.password || '',
+              type: 'password',
+              placeholder: '.......',
             }}
           />
         </Grid>
@@ -117,14 +136,15 @@ const PersonalProfile = ({
           <CustomInput
             title="Confirm Password"
             id="confPass"
-            error={values.password !== confPas ? "Password not match" : false}
+            error={values.password !== confPas ? 'Password not match' : false}
             name="confPass"
             onChange={(e) => setConfPass(e.target.value)}
+            onCancel={() => setConfPass('')}
             hideCheck={!confPas}
             inputProps={{
-              value: confPas || "",
-              type: "password",
-              placeholder: ".......",
+              value: confPas || '',
+              type: 'password',
+              placeholder: '.......',
             }}
           />
         </Grid>
@@ -134,13 +154,13 @@ const PersonalProfile = ({
           variant="contained"
           disabled={confPas !== values.password || !values.password}
           className="w-full !h-12 !rounded-full !text-gray-100 !text-[17px] !mt-3 !shadow-none"
-          onClick={() => setStage("type")}
+          onClick={() => setStage('type')}
         >
           Next
         </Button>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default PersonalProfile;
+export default PersonalProfile
