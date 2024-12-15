@@ -2,7 +2,7 @@ import { useStoreData } from "@/app/hooks/useData";
 import { CancelOutlined } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 import React from "react";
-import { OrderNotif } from "../../home/Components/notification";
+import { OrderNotif } from "../home/Components/notification";
 
 const Notification = ({  }) => {
   const { showOverlay, notifications} = useStoreData()

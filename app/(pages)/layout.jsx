@@ -18,6 +18,7 @@ import '@/styles/globals.css'
 import { osName } from 'react-device-detect'
 
 import { usePathname } from 'next/navigation'
+// import { onMessageListener, requestNotificationPermission } from '../configs/firebase'
 
 // export const metadata = {
 //   title:
@@ -33,6 +34,17 @@ export default function RootLayout({ children }) {
   const [connection, setConnection] = useState([])
   const [hideOverflow, setOverflow] = useState(false)
   const pathname = usePathname()
+//  useEffect(() => {
+//    requestNotificationPermission()
+//  }, [])
+
+//  onMessageListener()
+//    .then((payload) => {
+//      console.log('Message received: ', payload)
+//      // Show custom UI for notifications
+//    })
+//    .catch((err) => console.log('Failed to receive message: ', err))
+
 
   useEffect(() => {
     if ('serviceWorker' in navigator && connection) {
@@ -130,6 +142,7 @@ export default function RootLayout({ children }) {
               <UserDataProvider
                 setOverflow={setOverflow}
                 setConnection={setConnection}
+
               >
                 <LineLoading />
                 <PersistGate loading={null} persistor={persistor}>

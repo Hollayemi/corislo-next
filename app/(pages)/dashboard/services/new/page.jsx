@@ -60,11 +60,11 @@ const NewService = () => {
 
   const subCategories = servCats.filter((x) => x._id === values.category)
   return (
-    <ServiceRenderWrapper>
-      <Box className="flex-grow-1 w-full !overflow-auto overflowStyle p-4 rounded-sm bg-white">
+    <Box className="flex w-full px-2 justify-center h-[550px] overflowStyle">
+      <Box className="w-full md:w-[750px] h-[85vh] md:h-[550px] overflow-y-auto overflowStyle mt-20 p-3 relative border-8 border-white bg-white rounded-xl md:mr-10 flex flex-col">
         <Typography
           variant="body2"
-          className="!font-bold !text-[16px] !mb-6 !text-black "
+          className="!font-bold !text-[16px] !mb-6 !text-black sticky -top-3 border-b z-50 py-3 -mt-2 bg-white"
         >
           Create New Service
         </Typography>
@@ -77,14 +77,13 @@ const NewService = () => {
             <MyAutocomplete
               searchComponents={
                 <TextField
-                  sx={{ mb: 1.5 }}
-                  className="w-5/6 bg-gray-50"
+                  className=" bg-gray-50 mb-2 md:mb-0"
                   onChange={(e) => setSearch(e.target.value)}
                   value={search}
                   onFocus={() => setOpen(true)}
                   fullWidth
                   id="outlined-basic"
-                  inputProps={{ className: '!h-2' }}
+                  inputProps={{ className: '!h-2 ' }}
                   placeholder="Category"
                 />
               }
@@ -111,10 +110,9 @@ const NewService = () => {
                   {res}
                 </MenuItem>
               ))}
-              sx={{ mb: 1.5 }}
               defaultValue={values.subcategory}
               onChange={handleChange('subcategory')}
-              inputProps={{ className: 'bg-gray-50' }}
+              inputProps={{ className: 'bg-gray-50 mb-2 md:mb-0' }}
             />
           }
         />
@@ -124,8 +122,7 @@ const NewService = () => {
           subtitle="Give your service a clear and catchy name."
           comp={
             <TextField
-              sx={{ mb: 1.5 }}
-              className="w-5/6 bg-gray-50"
+              className="w-full bg-gray-50 mb-2 md:mb-0"
               onChange={handleChange('service_name')}
               // size="small"
               fullWidth
@@ -216,7 +213,7 @@ const NewService = () => {
           }
         />
       </Box>
-    </ServiceRenderWrapper>
+    </Box>
   )
 }
 

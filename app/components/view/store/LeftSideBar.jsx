@@ -35,7 +35,7 @@ import {
 import InnerBar from './InnerBar'
 import BottomBar from './BottomBar'
 import { useStoreData, useUserData } from '@/app/hooks/useData'
-import StoreOverlay from './components/storeOverlay'
+import DashboardOverlay from '../components/dashboardOverlay'
 import { MyTooltip } from '../../cards/tooltip'
 import { formatName } from '@/app/utils/get-initials'
 
@@ -231,7 +231,7 @@ const StoreLeftSideBar = React.memo(
             drawerWidth={drawerWidth}
             staffInfo={staffInfo}
           />
-          {overLay && <StoreOverlay />}
+          {overLay && <DashboardOverlay />}
           <Drawer
             variant="permanent"
             open={open}

@@ -7,10 +7,17 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 
 
-const BusinessProfile = ({ handleStoreChange, errors, values, userValues, setStage }) => {
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const propStore = values.businessName.split(" ")[0]?.toLowerCase()
+const BusinessProfile = ({
+  handleStoreChange,
+  errors,
+  values,
+  userValues,
+  setStage,
+  setStoreValues,
+}) => {
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const propStore = values.businessName.split(' ')[0]?.toLowerCase()
   return (
     <Box className="px-2">
       <Grid container spacing={2}>
@@ -24,6 +31,11 @@ const BusinessProfile = ({ handleStoreChange, errors, values, userValues, setSta
             inputProps={{
               value: values?.businessName || '',
               type: 'text',
+              onBlur: () =>
+                setStoreValues((storeValues) => ({
+                  ...storeValues,
+                  store: propStore,
+                })),
               placeholder: `Enter your business name`,
             }}
           />
@@ -36,7 +48,7 @@ const BusinessProfile = ({ handleStoreChange, errors, values, userValues, setSta
             hideCheck={!values.store}
             id="store"
             inputProps={{
-              value: values?.store || propStore,
+              value: values?.store,
               type: 'text',
               placeholder: `Set your store a name e.g ${propStore}`,
             }}
@@ -174,6 +186,6 @@ const BusinessProfile = ({ handleStoreChange, errors, values, userValues, setSta
       </Box>
     </Box>
   )
-};
+}
 
 export default BusinessProfile;

@@ -259,12 +259,14 @@ export const UserProfileRightComponent = ({
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  {result &&
+                  {result && fetchedOrder ?
                     fetchedOrder.map((res, i) => (
                       <NotifOrderDisplay key={i} orderId={res._id} />
-                    ))}
+                    )): <Box className="flex items-center justify-center h-20">
+                      <Typography variant="caption">No order to preview</Typography>
+                      </Box>}
                 </AccordionDetails>
-                <Box className="flex justify-center items-center border-t pt-3"><Link href={`/order?store=${contact.store}&branch=${contact.store}`} className="!text-[12px] text-center w-full">See More</Link></Box>
+                { fetchedOrder&&<Box className="flex justify-center items-center border-t pt-3"><Link href={`/order?store=${contact.store}&branch=${contact.store}`} className="!text-[12px] text-center w-full">See More</Link></Box>}
               </Accordion>
             </Box>
           </Box>

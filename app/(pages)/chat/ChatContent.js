@@ -249,7 +249,7 @@ const ChatContent = (props) => {
                 ) : null}
 
                 <OptionsMenu
-                  menuProps={{ sx: { mt: 1 } }}
+                  menuProps={{ sx: { mt: 1, display: "none" } }}
                   icon={<Icon icon="tabler:dots-vertical" />}
                   iconButtonProps={{
                     size: "small",

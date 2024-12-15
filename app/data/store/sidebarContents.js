@@ -83,12 +83,12 @@ export const SidebarContent = [
 
 export const serviceNavigation = {
   dashboard: "",
-  business: "/business",
-  services: "/",
-  customers: "/customer-management",
-  chat: "/chat",
-  settings: "/settings",
-  pricing: "/pricing",
+  business: "/services/business",
+  services: "/services/",
+  customers: "/services/customer-management",
+  chat: "/services/chat",
+  settings: "/services/settings",
+  pricing: "/services/pricing",
 };
 export const ServicesSidebarContent = [
   {
@@ -100,25 +100,28 @@ export const ServicesSidebarContent = [
   {
     name: "Business",
     path: serviceNavigation.business,
-    icon: <WorkspacesSharp />,
+    icon: <StorefrontIcon />,
     key: "ele_2",
   },
   {
     name: "Services",
     path: serviceNavigation.services,
     icon: <WorkspacesSharp />,
+    tabler: "assembly",
     key: "ele_2",
   },
   {
     name: "Chat",
     path: serviceNavigation.chat,
     icon: <WorkspacesSharp />,
+    tabler: "message",
     key: "ele_2",
   },
   {
     name: "Customer Management",
     path: serviceNavigation.customers,
     icon: <WorkspacesSharp />,
+    tabler: "users-group",
     key: "ele_2",
   },
   {

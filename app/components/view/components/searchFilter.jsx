@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { CancelOutlined } from '@mui/icons-material'
 import { Box, TextField, Typography } from '@mui/material'
 import React from 'react'
-import { searchNavigations } from '../screens'
+import { searchNavigations } from '../store/screens'
 import Link from 'next/link'
 import IconifyIcon from '@/app/components/icon'
 

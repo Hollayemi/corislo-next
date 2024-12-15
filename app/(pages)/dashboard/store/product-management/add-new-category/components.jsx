@@ -8,7 +8,7 @@ export const GridLayout = ({ title, subtitle, comp, className="md:mb-8", alignSt
         <Typography variant="body2" className={`!text-[14px] !font-bold ${ !alignStart && "!mt-3"}`}>
           {title}
         </Typography>
-        {subtitle && <Typography variant="caption" className="!text-[12px] !pb-3 md:!mb-0">
+        {subtitle && <Typography variant="body2" className="!text-[11px] !pb-3 md:!mb-0 !leading-4">
           {subtitle}
         </Typography>}
       </Box>

@@ -34,7 +34,10 @@ export const registerHandler = (payload, router, dispatch) => {
       toaster({ ...res });
       console.log("here");
       if (res.type === "success") {
-        if (mutate("/user/get-account")) router.push("/auth/otp-verification");
+        if (mutate("/user/get-account")){
+        alert(res.otp)
+        router.push("/auth/otp-verification");
+        }
       }
     })
     .catch((err) => {

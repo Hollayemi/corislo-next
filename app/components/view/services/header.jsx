@@ -32,7 +32,8 @@ import {
 import InnerBar from './InnerBar'
 import BottomBar from './BottomBar'
 import { useStoreData } from '@/app/hooks/useData'
-import StoreOverlay from '../store/components/storeOverlay'
+import DashboardOverlay from '../components/dashboardOverlay'
+import { MyTooltip } from '../../cards/tooltip'
 
 const drawerWidth = 260
 
@@ -134,7 +135,7 @@ const ServiceRenderWrapper = React.memo(
     setRightOpen,
     permission,
     BottomList,
-    hidebreadCrumb = true,
+    hidebreadCrumb,
     breadCrumbRIghtChildren,
     crumb,
     dialogInfo,
@@ -157,7 +158,7 @@ const ServiceRenderWrapper = React.memo(
         return { ...prev, open: false }
       })
 
-    const onSideBar = !path?.sidebar ? '' : `/${path.sidebar}`
+    const onSideBar = !path?.sidebar ? '' : `/services${path.sidebar}`
     const handleDrawerOpen = () => {
       if (rightOpen) {
         setRightOpen(false)
@@ -220,7 +221,7 @@ const ServiceRenderWrapper = React.memo(
             drawerWidth={drawerWidth}
             staffInfo={staffInfo}
           />
-          {overLay && <StoreOverlay />}
+          {overLay && <DashboardOverlay />}
           <Drawer
             variant="permanent"
             open={open}
@@ -246,60 +247,65 @@ const ServiceRenderWrapper = React.memo(
                 sx={{ bgcolor: 'custom.bodyLight' }}
               >
                 {ServicesSidebarContent.map((each, index) => (
-                  <Link
-                    href={`/dashboard/${!each.path ? '' : 'services'}${
-                      each.path
-                    }`}
-                    key={index}
-                  >
-                    <ListItem
-                      key={index}
-                      disablePadding
-                      sx={{ display: 'block', color: 'gray' }}
-                      className="text-xs"
-                    >
-                      <ListItemButton
-                        sx={{
-                          minHeight: 48,
-                          justifyContent: open ? 'initial' : 'center',
-                          fontSize: '13px',
-                          my: 0.5,
-                          px: 2.5,
-                          color: onSideBar !== each.path ? '#666' : '#fff',
-                          bgcolor: onSideBar !== each.path ? '#fff' : '#2C337C',
-                          borderRadius: 2,
-                          mx: 1,
-                          transition: 'none',
-                          '&:hover': {
-                            color: 'white !important',
-                            bgcolor: '#2C337C',
-                            borderRadius: 2,
-                          },
-                        }}
+                  <MyTooltip key={index} message={each.name}>
+                    <Link href={`/dashboard${each.path}`}>
+                      <ListItem
+                        key={index}
+                        disablePadding
+                        sx={{ display: 'block', color: 'gray' }}
+                        className="text-xs"
                       >
-                        <ListItemIcon
+                        <ListItemButton
                           sx={{
-                            minWidth: 0,
-                            mr: open ? 3 : 'auto',
-                            justifyContent: 'center',
-                            color: 'inherit',
-                            fontSize: '2px',
+                            minHeight: 48,
+                            justifyContent: open ? 'initial' : 'center',
+                            fontSize: '13px',
+                            my: 0.5,
+                            px: 2.5,
+                            color: onSideBar !== each.path ? '#666' : '#fff',
+                            bgcolor:
+                              onSideBar !== each.path ? '#fff' : '#2C337C',
+                            borderRadius: 2,
+                            mx: 1,
+                            transition: 'none',
+                            '&:hover': {
+                              color: 'white !important',
+                              bgcolor: '#2C337C',
+                              borderRadius: 2,
+                            },
                           }}
                         >
-                          {each.icon}
-                        </ListItemIcon>
-                        {/* <ListItemText primary={each.name} sx={{ opacity: open ? 1 : 0, fontSize: "10px", }} /> */}
-                        <ListItemText>
-                          <Typography
-                            variant="h5"
-                            style={{ fontSize: '13px', opacity: open ? 1 : 0 }}
+                          <ListItemIcon
+                            sx={{
+                              minWidth: 0,
+                              mr: open ? 3 : 'auto',
+                              justifyContent: 'center',
+                              color: 'inherit',
+                              fontSize: '2px',
+                            }}
                           >
-                            {each.name}
-                          </Typography>
-                        </ListItemText>
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
+                            {each.tabler ? (
+                              <IconifyIcon icon={`tabler:${each.tabler}`} />
+                            ) : (
+                              each.icon
+                            )}
+                          </ListItemIcon>
+                          {/* <ListItemText primary={each.name} sx={{ opacity: open ? 1 : 0, fontSize: "10px", }} /> */}
+                          <ListItemText>
+                            <Typography
+                              variant="h5"
+                              style={{
+                                fontSize: '13px',
+                                opacity: open ? 1 : 0,
+                              }}
+                            >
+                              {each.name}
+                            </Typography>
+                          </ListItemText>
+                        </ListItemButton>
+                      </ListItem>
+                    </Link>
+                  </MyTooltip>
                 ))}
               </List>
 

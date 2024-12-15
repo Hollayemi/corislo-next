@@ -1,7 +1,10 @@
 // import ServiceRenderWrapper from '@/app/components/view/services/header'
-import { Box, Typography } from '@mui/material'
+"use client"
+import { Box, Button, Typography } from '@mui/material'
 import { EachService } from './components'
 import dynamic from 'next/dynamic'
+import IconifyIcon from '@/app/components/icon'
+import { useStoreData } from '@/app/hooks/useData'
 const ServiceRenderWrapper = dynamic(
   () => import('@/app/components/view/services/header'),
   {
@@ -9,9 +12,13 @@ const ServiceRenderWrapper = dynamic(
   }
 )
 
-const Services = () => {
+const Services = ({ params }) => {
+  const path = { ...params, sidebar: '/' }
   return (
-    <ServiceRenderWrapper >
+    <ServiceRenderWrapper
+      path={path}
+      breadCrumbRIghtChildren={<BreadcrumbRightEle />}
+    >
       <Box className="w-full bg-white !rounded-md !px-4 md:!px-8 !py-4 relative">
         <Box className=" !mb-3">
           <Typography
@@ -42,3 +49,20 @@ const Services = () => {
   )
 }
 export default Services
+
+
+const BreadcrumbRightEle = () => {
+  const { showOverlay } = useStoreData()
+  return (
+    <Box className="flex items-center -mr-6 md:mr-0">
+      <Button
+        variant="contained"
+        className="!mr-4 !bg-blue-900 !shadow-none !text-[12px] !rounded-full"
+        startIcon={<IconifyIcon icon="tabler:plus" />}
+        onClick={() => showOverlay('newService')}
+      >
+        <span className="hidden md:block mr-2">Create New </span> Service
+      </Button>
+    </Box>
+  )
+}

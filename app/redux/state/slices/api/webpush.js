@@ -39,7 +39,7 @@ const handleSubscribeToNotification = async (connections) => {
       const sendSubscription = async (payload) => {
         const { data } = await martApi
           .post(
-            `/user/notifications/subscription`,
+            `/notifications/subscription`,
             { subscription: payload, device: osName },
             jsonHeader()
           )

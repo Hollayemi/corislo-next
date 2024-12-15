@@ -64,8 +64,9 @@ const RegisterStore = () => {
     storeValues.businessType === 'services' ? Sevices : StoreProfile
 
   const handleStoreChange = (prop) => (event) => {
-    console.log(event)
+    console.log(event, event?.target?.value)
     setStoreValues({ ...storeValues, [prop]: event?.target?.value })
+   
   }
   const [userValues, setUserValues] = useState({
     fullname: '',
@@ -138,6 +139,7 @@ const RegisterStore = () => {
         handleStoreChange={handleStoreChange}
         values={storeValues}
         userValues={userValues}
+        setStoreValues={setStoreValues}
       />
     ),
     2: (

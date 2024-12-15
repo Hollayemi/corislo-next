@@ -9,9 +9,10 @@ const ServiceRenderWrapper = dynamic(
     ssr: false,
   }
 )
-const ServiceChat = () => {
+const ServiceChat = ({ params }) => {
+  const path = { ...params, sidebar: '/chat' }
   return (
-    <ServiceRenderWrapper>
+    <ServiceRenderWrapper path={path}>
       <BusinessChat />
     </ServiceRenderWrapper>
   )

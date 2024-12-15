@@ -52,7 +52,7 @@ const StorePage = ({ params }) => {
 
   const [profile, setProfile] = useState([])
   const [localProfile, setLocalProfile] = useState('')
-  const path = { ...params, sidebar: 'business' }
+  const path = { ...params, sidebar: '/business' }
 
   const [inputValues, setValues] = useState({
     address: '',
@@ -73,12 +73,13 @@ const StorePage = ({ params }) => {
 
   const handleChange = (prop) => (event) => {
     setValues({ ...inputValues, [prop]: event.target.value })
+    
   }
   return (
     <ServiceRenderWrapper
       path={path}
       BottomList={storeBottomBar}
-      breadCrumbRIghtChildren={<BreadcrumbRightEle />}
+      hidebreadCrumb
       crumb={[...WorkshopBreadCrumb]}
     >
       <Box className="px-10 !hidden sm:!flex z-50">
