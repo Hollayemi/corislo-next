@@ -18,10 +18,10 @@ import '@/styles/globals.css'
 import { osName } from 'react-device-detect'
 
 import { usePathname } from 'next/navigation'
-import {
-  onMessageListener,
-  requestNotificationPermission,
-} from '../configs/firebase'
+// import {
+//   onMessageListener,
+//   requestNotificationPermission,
+// } from '../configs/firebase'
 
 // export const metadata = {
 //   title:
@@ -43,16 +43,16 @@ export default function RootLayout({ children }) {
   const adminPaths = forAdmins.some((path) => pathname.startsWith(path))
 
   
-  useEffect(() => {
-    requestNotificationPermission()
-  }, [])
+  // useEffect(() => {
+  //   requestNotificationPermission()
+  // }, [])
 
-  onMessageListener()
-    .then((payload) => {
-      console.log('Message received: ', payload)
-      // Show custom UI for notifications
-    })
-    .catch((err) => console.log('Failed to receive message: ', err))
+  // onMessageListener()
+  //   .then((payload) => {
+  //     console.log('Message received: ', payload)
+  //     // Show custom UI for notifications
+  //   })
+  //   .catch((err) => console.log('Failed to receive message: ', err))
 
   useEffect(() => {
     if ('serviceWorker' in navigator && connection && !adminPaths) {

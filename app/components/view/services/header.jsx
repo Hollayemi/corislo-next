@@ -139,6 +139,7 @@ const ServiceRenderWrapper = React.memo(
     breadCrumbRIghtChildren,
     crumb,
     dialogInfo,
+    closeDialog,
     updateDialogInfo,
     popup,
   }) => {
@@ -153,11 +154,13 @@ const ServiceRenderWrapper = React.memo(
       }
     }, [permissions])
 
-    const handleCloseDialog = () =>
+    const handleCloseDialog = () =>{
       updateDialogInfo((prev) => {
         return { ...prev, open: false }
       })
 
+      closeDialog()
+    }
     const onSideBar = !path?.sidebar ? '' : `/services${path.sidebar}`
     const handleDrawerOpen = () => {
       if (rightOpen) {
@@ -381,7 +384,7 @@ const ServiceRenderWrapper = React.memo(
               open
                 ? 'left-[270px]'
                 : rightOpen
-                ? ' -left-[330px] '
+                ? '-left-[360px] md:-left-[500px] '
                 : ' md:left-16 '
             } w-full transition-all duration-300 absolute flex-shrink-0 h-full md:pl-4 !pr-3 md:!pr-16 z-30 pt-16 md:pt-20`}
             bgcolor="custom.bodyGray"
@@ -422,8 +425,8 @@ const ServiceRenderWrapper = React.memo(
 
           <Box
             className={`transition-all duration-300 ${
-              rightOpen ? 'right-0' : '-right-[440px]'
-            } h-full w-[330px] fixed top-0  z-20 py-6 mt-7 `}
+              rightOpen ? 'right-0' : '-right-[440px] md:-right-[540px]'
+            } h-full w-[360px] md:w-[500px]  fixed top-0  z-20 py-6 mt-7 `}
           >
             <Box className="bg-white w-full h-full pt-5 shadow relative">
               <Box
@@ -459,7 +462,7 @@ const ServiceRenderWrapper = React.memo(
           >
             <DialogTitle
               id="custom-confirmation"
-              className="!text-[16px] !mt-4"
+              className="!text-[16px] !mt-4 !font-bold"
             >
               {dialogInfo.title}
             </DialogTitle>
@@ -468,10 +471,10 @@ const ServiceRenderWrapper = React.memo(
             </DialogContent>
             <DialogActions className="dialog-actions-dense !mb-4">
               <Button onClick={handleCloseDialog}>Close</Button>
-              {dialogInfo.AvatarGroupacceptFunctionText && (
+              {dialogInfo.acceptFunctionText && (
                 <Button
                   variant="contained"
-                  className="!shadow-none"
+                  className={`!shadow-none ${dialogInfo.acceptButtonClass}`}
                   onClick={dialogInfo.acceptFunction}
                 >
                   {dialogInfo.acceptFunctionText}

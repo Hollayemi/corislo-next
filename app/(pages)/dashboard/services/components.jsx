@@ -7,6 +7,8 @@ import IconifyIcon from '@/app/components/icon'
 import { lightColors } from '@/app/utils/Colors'
 import { hexToRGBA } from '@/app/utils/hex-to-rgba'
 import { rgbaToHex } from '@/app/utils/rgba-to-hex'
+import { reshapePrice } from '../store/marketing/components'
+import { timeSince } from '@/app/utils/format'
 
 export const DigitWord = () => (
   <Box className="flex items-center ">
@@ -27,6 +29,63 @@ export const DigitWord = () => (
     </Typography>
   </Box>
 )
+
+export const Service = ({ data, edit, del }) => {
+  const TimeDur = ({ title, info }) => (
+    <Box className="border-l-4 pl-4  border-blue-300">
+      <Typography
+        variant="body2"
+        className="!text-[13px] md:!w-full !font- !text-blue-400 !text-left !mb-1"
+      >
+        {title}
+      </Typography>
+      <Typography
+        variant="body2"
+        className="!text-[13px] md:!w-full !font-bold !text-left"
+      >
+        {info}
+      </Typography>
+    </Box>
+  )
+  return (
+    <Box className="flex border p-3 rounded-md items-center justify-between py-5 mb-6">
+      <Box className="w-6/12 pr-12 flex items-start">
+        <Image
+          src={data?.images[0] || '/images/misc/no-image.png'}
+          alt="Img"
+          width={300}
+          height={300}
+          className="w-10 h-10 mr-3 rounded-full"
+        />
+        <Box>
+          <Typography
+            variant="body2"
+            className="!text-[15px] md:!w-full !font-bold !text-left mb-2"
+          >
+            {data.service_name}
+          </Typography>
+          <Typography
+            variant="body2"
+            className="!text-[12px] !text-blue-400 md:!w-full !font-[400] !text-left"
+          >
+            {data.description}
+          </Typography>
+        </Box>
+      </Box>
+      <Box className="flex justify-between w-3/12 items-start">
+        <TimeDur title="Price" info={reshapePrice(data.priceFrom)} />
+        <TimeDur
+          title="Duration"
+          info={`${data.hours} Hours ${data.minutes} Minutes`}
+        />
+      </Box>
+      <Box className="flex items-center justify-end w-3/12  text-slate-400">
+        <IconifyIcon icon="tabler:edit" className="mx-3 hover:text-slate-600 transition-all cursor-pointer" onClick={edit} />
+        <IconifyIcon icon="tabler:trash" className="mx-3 hover:text-slate-600 transition-all cursor-pointer" onClick={del} />
+      </Box>
+    </Box>
+  )
+}
 
 export const DashboardSlider = () => {
   return (
@@ -238,10 +297,7 @@ export const Like = ({ icon = 'heart', count = 50, color = '#E32227' }) => {
       color={IconColor}
       className="w-16 h-6 m-1 rounded  flex items-center justify-center"
     >
-      <IconifyIcon
-        icon={`tabler:${icon}`}
-        className={`text-[14px]`}
-      />
+      <IconifyIcon icon={`tabler:${icon}`} className={`text-[14px]`} />
       <Typography variant="caption" className="!text-[12px] ml-3">
         50
       </Typography>

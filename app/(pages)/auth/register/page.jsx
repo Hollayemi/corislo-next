@@ -1,67 +1,67 @@
-"use client";
+'use client'
 // ** React Imports
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 
 // ** Next Import
-import Link from "next/link";
+import Link from 'next/link'
 
 // ** MUI Components
-import Box from "@mui/material/Box";
+import Box from '@mui/material/Box'
 
-import { CustomInput } from "@/app/components/cards/auth/components";
-import { Button, Grid, Typography } from "@mui/material";
-import Image from "next/image";
-import validationRegisterSchema from "./validation";
-import { registerHandler } from "@/app/redux/state/slices/auth/Signup";
-import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
+import { CustomInput } from '@/app/components/cards/auth/components'
+import { Button, Grid, Typography } from '@mui/material'
+import Image from 'next/image'
+import validationRegisterSchema from './validation'
+import { registerHandler } from '@/app/redux/state/slices/auth/Signup'
+import { useRouter } from 'next/navigation'
+import { useDispatch } from 'react-redux'
 
 const RegisterAccount = ({ fromSuper }) => {
   // hooks
-  const router = useRouter();
-  const dispatch = useDispatch();
+  const router = useRouter()
+  const dispatch = useDispatch()
   const [values, setValues] = useState({
-    fullname: "",
-    email: "",
-    username: "",
-    password: "",
-    state: "",
-    phoneNumber: "",
-  });
+    fullname: '',
+    email: '',
+    username: '',
+    password: '',
+    state: '',
+    phoneNumber: '',
+  })
 
-  const [confPass, setConfPass] = useState("");
+  const [confPass, setConfPass] = useState('')
 
   const [errors, setErrors] = useState({
-    fullname: "",
-    email: "",
-    username: "",
-    password: "",
-    state: "",
-    phoneNumber: "",
-  });
+    fullname: '',
+    email: '',
+    username: '',
+    password: '',
+    state: '',
+    phoneNumber: '',
+  })
 
   const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
+    setValues({ ...values, [prop]: event.target.value })
+  }
 
   useEffect(() => {
     validationRegisterSchema
       .validate(values, { abortEarly: false })
       .then(() => {
-        setErrors({});
+        setErrors({})
       })
       .catch((validationErrors) => {
         const newErrors = validationErrors.inner.reduce((acc, error) => {
-          acc[error.path] = error.message;
-          return acc;
-        }, {});
-        setErrors(newErrors);
-      });
-  }, [values]);
+          acc[error.path] = error.message
+          return acc
+        }, {})
+        setErrors(newErrors)
+      })
+  }, [values])
 
   return (
     <Box
-      className={` ${fromSuper ? "f-full" : "w-[360px] md:w-[550px]"} !my-10"`}
+      className={` ${fromSuper ? 'f-full' : 'w-[360px] md:w-[550px]'} !my-10"`}
     >
       <Grid container spacing={2}>
         <Grid item xs={12} md={fromSuper ? 12 : 6}>
@@ -71,11 +71,12 @@ const RegisterAccount = ({ fromSuper }) => {
             hideCheck={!values.fullname}
             error={values.fullname && errors.fullname}
             name="fullname"
-            onChange={handleChange("fullname")}
+            onChange={handleChange('fullname')}
+            onCancel={() => setValues((prev) => ({ prev, ['fullname']: '' }))}
             inputProps={{
-              type: "text",
+              type: 'text',
               value: values.fullname,
-              placeholder: "Enter your full name",
+              placeholder: 'Enter your full name',
             }}
           />
         </Grid>
@@ -83,14 +84,15 @@ const RegisterAccount = ({ fromSuper }) => {
           <CustomInput
             title="Username"
             error={values.username && errors.username}
-            onChange={handleChange("username")}
+            onChange={handleChange('username')}
+            onCancel={() => setValues((prev) => ({ prev, ['username']: '' }))}
             id="username"
             hideCheck={!values.username}
             name="username"
             inputProps={{
-              type: "text",
+              type: 'text',
               value: values.username,
-              placeholder: "Enter your username",
+              placeholder: 'Enter your username',
             }}
           />
         </Grid>
@@ -99,28 +101,32 @@ const RegisterAccount = ({ fromSuper }) => {
             title="Email Address"
             error={values.email && errors.email}
             hideCheck={!values.email}
-            onChange={handleChange("email")}
+            onChange={handleChange('email')}
+            onCancel={() => setValues((prev) => ({ prev, ['email']: '' }))}
             id="email"
             name="email"
             inputProps={{
-              type: "email",
+              type: 'email',
               value: values.email,
-              placeholder: "Enter your email address",
+              placeholder: 'Enter your email address',
             }}
           />
         </Grid>
         <Grid item xs={12} md={fromSuper ? 12 : 6}>
           <CustomInput
             title="Phone Number"
-            onChange={handleChange("phoneNumber")}
+            onChange={handleChange('phoneNumber')}
+            onCancel={() =>
+              setValues((prev) => ({ prev, ['phoneNumber']: '' }))
+            }
             id="phoneNumber"
             hideCheck={!values.phoneNumber}
             name="phoneNumber"
             error={values.phoneNumber && errors.phoneNumber}
             inputProps={{
-              type: "number",
+              type: 'number',
               value: values.phoneNumber,
-              placeholder: "Enter your phone number",
+              placeholder: 'Enter your phone number',
             }}
           />
         </Grid>
@@ -130,26 +136,28 @@ const RegisterAccount = ({ fromSuper }) => {
             id="state"
             name="state"
             hideCheck={!values.state}
-            onChange={handleChange("state")}
+            onChange={handleChange('state')}
+            onCancel={() => setValues((prev) => ({ prev, ['state']: '' }))}
             inputProps={{
-              type: "text",
+              type: 'text',
               value: values.state,
-              placeholder: "Enter your state",
+              placeholder: 'Enter your state',
             }}
           />
         </Grid>
         <Grid item xs={12} md={fromSuper ? 12 : 6}>
           <CustomInput
             title="Password"
-            onChange={handleChange("password")}
+            onChange={handleChange('password')}
+            onCancel={() => setValues((prev) => ({ prev, ['password']: '' }))}
             error={values.password && errors.password}
             hideCheck={!values.password}
             id="password"
             name="password"
             inputProps={{
-              type: "password",
+              type: 'password',
               value: values.password,
-              placeholder: ".......",
+              placeholder: '.......',
             }}
           />
           {/* <ul className="list-disc !text-[13px] mb-5 ml-8 mt-2">
@@ -166,9 +174,10 @@ const RegisterAccount = ({ fromSuper }) => {
             name="confPass"
             hideCheck={!confPass}
             onChange={(e) => setConfPass(e.target.value)}
+            onCancel={(e) => setConfPass('')}
             inputProps={{
-              type: "password",
-              placeholder: ".......",
+              type: 'password',
+              placeholder: '.......',
             }}
           />
         </Grid>
@@ -177,7 +186,7 @@ const RegisterAccount = ({ fromSuper }) => {
       <Box className="flex items-center !mt-6">
         <input type="radio" id="tandc" name="tandc" />
         <label htmlFor="tandc" className="ml-4">
-          I agree with the{" "}
+          I agree with the{' '}
           <Link href="/terms" color="custom.pri" className="!font-semibold">
             terms and conditions
           </Link>
@@ -208,7 +217,7 @@ const RegisterAccount = ({ fromSuper }) => {
           </Button>
           <Box className="flex justify-center">
             <Typography className="!text-[13px] !mt-2 !mb-10">
-              Already have an account?{" "}
+              Already have an account?{' '}
               <Link
                 href="/auth/login"
                 color="custom.pri"
@@ -221,7 +230,7 @@ const RegisterAccount = ({ fromSuper }) => {
         </>
       )}
     </Box>
-  );
-};
+  )
+}
 
-export default RegisterAccount;
+export default RegisterAccount

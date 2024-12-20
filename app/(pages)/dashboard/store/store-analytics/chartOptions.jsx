@@ -63,7 +63,7 @@ export const generatedLeadOptions = (theme, series) => {
     legend: { show: false },
     tooltip: { enabled: false },
     dataLabels: { enabled: false },
-    labels: ["Electronic", "Sports", "Decor", "Fashion"],
+    labels: [],
     states: {
       hover: {
         filter: { type: "none" },

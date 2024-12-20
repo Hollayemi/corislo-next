@@ -19,7 +19,47 @@ export const CreateService = (values, dispatch) => {
       toaster({ ...res });
       if (res.type === "success") {
       }
-      mutate("/spb/service/all");
+      mutate("/spb/service/grouped");
+    })
+    .catch((e) => {});
+};
+
+const updateServiceApi = createAsyncThunk("post/createService", async (payload) => {
+  const { data } = await martApi
+    .post(`/spb/service/update`, payload, jsonHeader("store"))
+    .then((res) => res)
+    .catch((e) => e.response);
+  return data;
+});
+
+export const UpdateService = (values, dispatch) => {
+  dispatch(updateServiceApi(values))
+    .then(unwrapResult)
+    .then((res) => {
+      toaster({ ...res });
+      if (res.type === "success") {
+      }
+      mutate("/spb/service/grouped");
+    })
+    .catch((e) => {});
+};
+
+const deleteServiceApi = createAsyncThunk("post/createService", async (payload) => {
+  const { data } = await martApi
+    .put(`/spb/service/delete`, payload, jsonHeader("store"))
+    .then((res) => res)
+    .catch((e) => e.response);
+  return data;
+});
+
+export const DeleteService = (id, dispatch) => {
+  dispatch(deleteServiceApi(id))
+    .then(unwrapResult)
+    .then((res) => {
+      toaster({ ...res });
+      if (res.type === "success") {
+      }
+      mutate("/spb/service/grouped");
     })
     .catch((e) => {});
 };
