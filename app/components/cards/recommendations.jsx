@@ -45,7 +45,7 @@ export const Promoted = () => {
         className="!text-gray-700 !text-[12px] !leading-5 !mr-1"
       >
         This partner's profile ranks higher in search results because they have
-        purchased an additional paid service from Booksy to assist in acquiring
+        purchased an additional paid service from Corisio to assist in acquiring
         new clients.
       </Typography>
     </Box>
@@ -114,9 +114,9 @@ export const Recommend = () => {
         variant="body2"
         className="!text-gray-700 !text-[12px] !leading-5 !mr-1"
       >
-        The Booksy Recommended badge is available to partners who have:
+        The Corisio Recommended badge is available to partners who have:
         <p className='!-mt-4'>
-          <br />i. purchased an additional paid service from Booksy to assist in
+          <br />i. purchased an additional paid service from Corisio to assist in
         </p>
         acquiring new clients.
         <p className='!-mt-4'><br />ii. met certain requirements such as having a high average rating.</p>

@@ -136,7 +136,7 @@ const StorePage = ({ params }) => {
       ...newValue,
     })
   }
-  const path = { ...params, sidebar: 'business' }
+  const path = { ...params, sidebar: '/business' }
 
   const disableNotif = !formData.service_notifications.isset
 
@@ -184,8 +184,8 @@ const StorePage = ({ params }) => {
                   variant="caption"
                   className="!text-[12px] !text-gray-500 w-4/6"
                 >
-                  Indicate whether they are willing to visit the client’s
-                  location or require the client to visit their office/shop.
+                  Indicate whether you are willing to visit the customer’s
+                  location or require the customer to visit your office/shop.
                 </Typography>
 
                 <SimpleDropDown
@@ -252,7 +252,7 @@ const StorePage = ({ params }) => {
                 variant="caption"
                 className="!text-[13px] !text-gray-700"
               >
-                This is the account with which the payment for the purchase is
+                This is the account with which the payment for the services is
                 paid into.
               </Typography>
               <br />
@@ -299,7 +299,7 @@ const StorePage = ({ params }) => {
                     variant="caption"
                     className="!text-[13px] !text-gray-700"
                   >
-                    Input some policies for your store
+                    Input some policies for your services
                   </Typography>
                 </Box>
                 <MySwitch

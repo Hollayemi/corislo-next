@@ -8,6 +8,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import bootstrap5Plugin from '@fullcalendar/bootstrap5'
 import interactionPlugin from '@fullcalendar/interaction'
+import { events } from './data'
 
 // ** Third Party Style Import
 // import 'bootstrap-icons/font/bootstrap-icons.css'
@@ -38,7 +39,7 @@ const Calendar = props => {
     setCalendarApi,
     handleSelectEvent,
     handleLeftSidebarToggle,
-    handleAddEventSidebarToggle
+    handleAddEventToggle
   } = props
 
   // ** Refs
@@ -52,7 +53,7 @@ const Calendar = props => {
   if (store) {
     // ** calendarOptions(Props)
     const calendarOptions = {
-      events: store.events?.length ? store.events : [],
+      events: events,
       plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin, bootstrap5Plugin],
       initialView: 'dayGridMonth',
       headerToolbar: {
@@ -104,8 +105,8 @@ const Calendar = props => {
         ]
       },
       eventClick({ event: clickedEvent }) {
-        dispatch(handleSelectEvent(clickedEvent))
-        handleAddEventSidebarToggle()
+        handleSelectEvent(clickedEvent)
+        handleAddEventToggle()
 
         // * Only grab required field otherwise it goes in infinity loop
         // ! Always grab all fields rendered by form (even if it get `undefined`) otherwise due to Vue3/Composition API you might get: "object is not extensible"
@@ -127,8 +128,8 @@ const Calendar = props => {
         ev.allDay = true
 
         // @ts-ignore
-        dispatch(handleSelectEvent(ev))
-        handleAddEventSidebarToggle()
+        handleSelectEvent(ev)
+        handleAddEventToggle()
       },
 
       /*

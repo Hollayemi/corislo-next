@@ -19,6 +19,7 @@ import DatePicker from 'react-datepicker'
 // import { useForm, Controller } from 'react-hook-form'
 import Icon from '../icon'
 import DatePickerWrapper from '@/app/styles/react-datepicker'
+import { Controller, useForm } from 'react-hook-form'
 
 const capitalize = string => string && string[0].toUpperCase() + string.slice(1)
 
@@ -57,7 +58,7 @@ const AddEventSidebar = props => {
     clearErrors,
     handleSubmit,
     formState: { errors }
-  } = {formState: {}}
+  } = useForm({ defaultValues: { title: '' } })
 
   const handleSidebarClose = async () => {
     setValues(defaultState)
@@ -210,15 +211,15 @@ const AddEventSidebar = props => {
         <DatePickerWrapper>
           <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
             <FormControl fullWidth sx={{ mb: 4 }}>
-              {/* <Controller
+              <Controller
                 name='title'
                 control={control}
                 rules={{ required: true }}
                 render={({ field: { value, onChange } }) => (
                   <TextField label='Title' value={value} onChange={onChange} error={Boolean(errors.title)} />
                 )}
-              /> */}
-              {errors.title && (
+              />
+              {errors?.title && (
                 <FormHelperText sx={{ color: 'error.main' }} id='event-title-error'>
                   This field is required
                 </FormHelperText>

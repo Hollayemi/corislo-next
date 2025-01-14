@@ -1,94 +1,180 @@
-"use client";
-import { OrderBoxes } from "@/app/components/cards/homeCards";
-import SuperLeftBar from "@/app/components/view/super/SuperLeftBar";
-import { Box, Button, Typography } from "@mui/material";
-import Image from "next/image";
-import useSWR from "swr";
+'use client'
+import IconifyIcon from '@/app/components/icon'
+import { IconImage } from '@/app/components/view/home/header'
+import SuperLeftBar from '@/app/components/view/super/SuperLeftBar'
+import { Box, Button, Typography } from '@mui/material'
+import { useState } from 'react'
+import { useTheme } from '@emotion/react'
+import DashboardLineChart from './components/ChartjsLineChart'
+import ApexDonutChart from './components/ApexDonutChart'
+import ApexColumnChart from './components/ApexColumnChart'
+import AnalyticsSalesByCountries from './components/AnalyticsSalesByCountries'
+import useSWR from 'swr'
 
-const SuperDashboard = ({ params }) => {
-  const { data } = useSWR("/super/dashboard-cards");
-  const cards = data ? data.data : {}
-  console.log(data);
+const Dashboard = () => {
+  const theme = useTheme()
+  const [search, setSearch] = useState('')
+ const { data } = useSWR('/super/dashboard-cards')
+ const cards = data ? data.data : {}
+ console.log(data)
   return (
-    <SuperLeftBar path={{ ...params }}>
-      <Box>
-        <Box
-          className="w-full h-48 md:px-10 flex items-center justify-between rounded-2xl p-5 py-7"
-          bgcolor="custom.pri"
+    <SuperLeftBar>
+      <Box className="flex justify-between items-center">
+        <Typography
+          variant="body2"
+          className="!text-black !font-bold !text-[18px]"
         >
-          <Box className="w-7/12">
-            <Typography
-              variant="body1"
-              className="!font-black !text-white !text-[15px] sm:!text-xl md:!text-3xl"
-            >
-              Fetch Order for Pickers
-            </Typography>
-            <Typography
-              variant="body1"
-              className="!text-[11px] md:!text-[12px]  !text-gray-300 !leading-4"
-            >
-              Access a comprehensive overview of orders, including picker's
-              details, dates, and status.
-            </Typography>
-            <br />
-            <Button
-              className="!shadow-none w-36 md:!mt-4 !px-0 !bg-white !text-blue-900 !rounded-md"
-              variant="contained"
-              onClick={() => {}}
-            >
-              Check By Picker
-            </Button>
+          Overview
+        </Typography>
+        <Box className="flex items-center">
+          <Box className="relative md:mr-4 w-full md:w-44 px-2 md:px-0">
+            <input
+              type="text"
+              placeholder="Search "
+              value={search}
+              className="w-full pl-8 md:pl-10 text-[13px] bg-transparent pr-2 h-9 md:h-9 border border-gray-300 rounded-xl transition-all outline-none"
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <IconImage
+              image="search"
+              className="w-4 md:w-5 absolute top-3 -mt-0.5 left-2 ml-1 cursor-pointer"
+            />
           </Box>
-          <Image
-            src="/images/misc/store-picker.png"
-            className=" -ml-12 md:ml-0 -mt-8"
-            width={400}
-            height={400}
-            alt="Image"
-          />
+          <Button
+            variant="outlined"
+            startIcon={<IconifyIcon icon="tabler:filter" />}
+            endIcon={<IconifyIcon icon="tabler:chevron-down" />}
+            className="!h-9 !shadow-none !rounded-xl !text-gray-600 !text-[13px] border border-gray-300 w-28"
+          >
+            Filter
+          </Button>
         </Box>
-        <br />
-        <Box className="flex items-center flex-wrap">
-          <OrderBoxes
-            image="/images/misc/all-orders.png"
-            title="Users"
-            value={cards.user?.sum || 0}
-            color="#D65C48"
-          />
-          <OrderBoxes
-            image="/images/misc/cancel-orders.png"
-            title="Agents"
-            value={cards.agent?.sum || 0}
-            color="#9736BE"
-          />
-          <OrderBoxes
-            image="/images/misc/ongoing-orders.png"
-            title="Businesses"
-            value={cards.business?.sum || 0}
-            color="#2FA794"
-          />
-          <OrderBoxes
-            image="/images/misc/completed-orders.png"
-            title="Orders"
-            value={cards.order?.sum || 0}
-            color="#3B47AF"
-          />
-          <OrderBoxes
-            image="/images/misc/ongoing-orders.png"
-            title="Views"
-            value={cards.views?.sum || 0}
-            color="#2FA794"
-          />
-          <OrderBoxes
-            image="/images/misc/completed-orders.png"
-            title="Cart"
-            value={cards.cartAndSaved?.sum || 0}
-            color="#3B47AF"
-          />
+      </Box>
+
+      <Box className="bg-white flex justify-evenly px-4 py-5 rounded-md mt-4 ">
+        <Stats title="Users" stat={cards.user?.sum || 0} />
+        <Stats title="Ambassadors" stat="4000" />
+        <Stats title="Agents" stat={cards.agent?.sum || 0} />
+        <Stats title="Stores" stat={cards.sellers?.sum || 0} />
+        <Stats
+          title="Service Providers"
+          stat={cards.sevicesProviders?.sum || 0}
+        />
+        <Stats title="Services" stat={cards.services?.sum || 0} />
+        <Stats title="Products" stat={cards.services?.sum || 0} />
+        <Stats
+          title="Total Transactions"
+          className="border-none"
+          stat={cards.transactions?.sum || 0}
+        />
+      </Box>
+
+      <Box className="flex items-start mt-4">
+        <Box className="w-8/12 pr-2">
+          <Box className="h-full bg-white rounded-md p-3">
+            <Typography
+              variant="body2"
+              className="!text-black !font-bold !text-[14px]"
+            >
+              Users
+            </Typography>
+            <DashboardLineChart />
+          </Box>
+        </Box>
+        <Box className="w-4/12 pl-2">
+          <Box className="h-full bg-white rounded-md p-3">
+            <Typography
+              variant="body2"
+              className="!text-black !font-bold !text-[14px]"
+            >
+              Order Fulfilments
+            </Typography>
+            <ApexDonutChart />
+          </Box>
+        </Box>
+      </Box>
+
+      <Box className="flex items-start mt-4">
+        <Box className="w-8/12 pr-2">
+          <Box className="h-full bg-white rounded-md p-3">
+            <Typography
+              variant="body2"
+              className="!text-black !font-bold !text-[14px]"
+            >
+              Transaction Overview
+            </Typography>
+            <ApexColumnChart />
+          </Box>
+        </Box>
+        <Box className="w-4/12 pl-2">
+          <Box className="h-full bg-white rounded-md p-3">
+            <Typography
+              variant="body2"
+              className="!text-black !font-bold !text-[14px]"
+            >
+              Service Bookings
+            </Typography>
+            <ApexDonutChart />
+          </Box>
+        </Box>
+      </Box>
+      <Box className="flex items-start mt-4">
+        <Box className="w-1/3">
+          <Box className="h-full bg-white rounded-md p-3">
+            <Typography
+              variant="body2"
+              className="!text-black !font-bold !text-[14px]"
+            >
+              Top 10 active user
+            </Typography>
+            <AnalyticsSalesByCountries />
+          </Box>
+        </Box>
+        <Box className="w-1/3 px-2">
+          <Box className="h-full bg-white rounded-md p-3">
+            <Typography
+              variant="body2"
+              className="!text-black !font-bold !text-[14px]"
+            >
+              Top requested service
+            </Typography>
+            <AnalyticsSalesByCountries />
+          </Box>
+        </Box>
+        <Box className="w-1/3">
+          <Box className="h-full bg-white rounded-md p-3">
+            <Typography
+              variant="body2"
+              className="!text-black !font-bold !text-[14px]"
+            >
+              Ratings
+            </Typography>
+            <AnalyticsSalesByCountries />
+          </Box>
         </Box>
       </Box>
     </SuperLeftBar>
-  );
-};
+  )
+}
 
-export default SuperDashboard;
+export default Dashboard
+
+const Stats = ({ title, stat = 244, br, className }) => (
+  <Box className={`w-1/6 border-r pl-2 ${className}`}>
+    <Typography
+      noWrap
+      variant="body2"
+      className="!text-gray-400 text-[13px] mb-1"
+    >
+      {title}
+    </Typography>
+
+    <Typography
+      noWrap
+      variant="body2"
+      className="!text-gray-700 text-[15px] !font-bold"
+    >
+      {parseInt(stat).toLocaleString()}
+    </Typography>
+  </Box>
+)

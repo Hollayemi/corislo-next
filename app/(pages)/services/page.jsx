@@ -1,7 +1,7 @@
 'use client'
 import HomeWrapper from '@/app/components/view/home'
-import { Box, MenuItem, TextField, Typography } from '@mui/material'
-import { ServiceListing, ShopImage, StatusView } from './components'
+import { Box, Button, MenuItem, TextField, Typography } from '@mui/material'
+import { ServiceListing, ServiceListing2, ShopImage, StatusView } from './components'
 import { IconImage } from '@/app/components/view/home/header'
 import { useEffect, useState } from 'react'
 import { SimpleDropDown } from '../dashboard/store/product-management/add-new-product/components'
@@ -29,24 +29,27 @@ const filter = {
 const ServicePage = ({ searchParams }) => {
   const [search, setSearch] = useState('')
   const [showFilter, setFilter] = useState(false)
-  const [formData, setFormData] = useState({
-    category: '',
-    sub_categories: '',
-    rating: '',
-    distance: '',
-    experience: '',
-  })
-  const [openModal, setOpenModal] = useState()
+  const [filtered, setFiltered] = useState(false)
 
-  const handleChange = (prop) => (event) => {
-    setFormData({ ...formData, [prop]: event?.target?.value || '' })
-  }
+  const [openModal, setOpenModal] = useState()
 
   const { data, isLoading } = useSWR('/services')
   const services = data?.data || []
 
-  console.log(services)
+  const handleFilter = (input) => {
+    setSearch(input)
+    if (services.length) {
+      const searchFilterFunction = (serv) =>
+        serv.provider.store.toLowerCase().includes(input.toLowerCase()) ||
+        serv.service_name.toLowerCase().includes(input.toLowerCase()) ||
+        serv.collectionName.toLowerCase().includes(input.toLowerCase()) ||
+        serv.subcategory.toLowerCase().includes(input.toLowerCase())
 
+      const filteredArr = services.filter(searchFilterFunction)
+      setFiltered(filteredArr)
+    }
+  }
+  const showServices = filtered ? filtered : services
   return (
     <HomeWrapper
       popup={
@@ -61,9 +64,8 @@ const ServicePage = ({ searchParams }) => {
         <Box className="hidden md:block w-3/12 p-2 sticky h-80 top-0">
           <FilterComp
             filter={filter}
-            formData={formData}
-            setFormData={setFormData}
-            handleChange={handleChange}
+            services={services}
+            setFiltered={setFiltered}
           />
         </Box>
         <Box className="w-full md:w-9/12 p-1">
@@ -86,8 +88,8 @@ const ServicePage = ({ searchParams }) => {
             >
               <FilterComp
                 filter={filter}
-                formData={formData}
-                handleChange={handleChange}
+                services={services}
+                setFiltered={setFiltered}
               />
             </Box>
           </Box>
@@ -111,7 +113,7 @@ const ServicePage = ({ searchParams }) => {
                   placeholder="Search for professional services"
                   value={search}
                   className="w-full pr-8 md:pr-12 text-[13px] pl-3 md:pl-5 h-9 md:h-11 border border-black rounded-full transition-all outline-none"
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={(e) => handleFilter(e.target.value)}
                 />
                 <IconImage
                   image="search"
@@ -121,82 +123,30 @@ const ServicePage = ({ searchParams }) => {
             </Box>
 
             <Box className="flex flex-wrap justify-center">
-              {services.map(({ provider, service_name, ...others }, i) => (
-                <ServiceListing
-                  key={i}
-                  image="/images/more/service1.png"
-                  icon={provider.profile_image || '/images/misc/shop/1.png'}
-                  name={service_name}
-                  state={provider.state}
-                  city={provider.city}
-                  brief={htmlToText(others.description)}
-                  provider={provider.store}
-                />
-              ))}
-              <ServiceListing
-                image="/images/more/service1.png"
-                icon="/images/misc/shop/1.png"
-                name="Mamafeeds International"
-                brief="Mamafeeds International is a premier destination that combines luxury
-          spa services with high-end fashion. Catering to clients who seek
-          relaxa....."
-              />
-              <ServiceListing
-                image="/images/more/service1.png"
-                icon="/images/misc/shop/1.png"
-                name="Mamafeeds International"
-                brief="Mamafeeds International is a premier destination that combines luxury
-          spa services with high-end fashion. Catering to clients who seek
-          relaxa....."
-              />
-              <ServiceListing
-                image="/images/more/service1.png"
-                icon="/images/misc/shop/1.png"
-                name="Mamafeeds International"
-                brief="Mamafeeds International is a premier destination that combines luxury
-          spa services with high-end fashion. Catering to clients who seek
-          relaxa....."
-              />
-              <ServiceListing
-                image="/images/more/service1.png"
-                icon="/images/misc/shop/1.png"
-                name="Mamafeeds International"
-                brief="Mamafeeds International is a premier destination that combines luxury
-          spa services with high-end fashion. Catering to clients who seek
-          relaxa....."
-              />
-              <ServiceListing
-                image="/images/more/service1.png"
-                icon="/images/misc/shop/1.png"
-                name="Mamafeeds International"
-                brief="Mamafeeds International is a premier destination that combines luxury
-          spa services with high-end fashion. Catering to clients who seek
-          relaxa....."
-              />
-              <ServiceListing
-                image="/images/more/service1.png"
-                icon="/images/misc/shop/1.png"
-                name="Mamafeeds International"
-                brief="Mamafeeds International is a premier destination that combines luxury
-          spa services with high-end fashion. Catering to clients who seek
-          relaxa....."
-              />
-              <ServiceListing
-                image="/images/more/service1.png"
-                icon="/images/misc/shop/1.png"
-                name="Mamafeeds International"
-                brief="Mamafeeds International is a premier destination that combines luxury
-          spa services with high-end fashion. Catering to clients who seek
-          relaxa....."
-              />
-              <ServiceListing
-                image="/images/more/service1.png"
-                icon="/images/misc/shop/1.png"
-                name="Mamafeeds International"
-                brief="Mamafeeds International is a premier destination that combines luxury
-          spa services with high-end fashion. Catering to clients who seek
-          relaxa....."
-              />
+              {showServices.length ? (
+                showServices.map(({ provider, ...others }, i) => (
+                  <ServiceListing2
+                    key={i}
+                    image="/images/more/service1.png"
+                    icon={others.images[0] || '/images/misc/no-image.png'}
+                    others={others}
+                    state={provider.state}
+                    city={provider.city}
+                    brief={htmlToText(others.description)}
+                    provider={provider.store}
+                  />
+                ))
+              ) : (
+                <Box className="flex justify-center items-center h-60">
+                  <IconifyIcon icon="tabler:history" />
+                  <Typography
+                    variant="body2"
+                    className="hidden md:block !text-black !text-[13px] !ml-4"
+                  >
+                    No record found
+                  </Typography>
+                </Box>
+              )}
             </Box>
             <Box className="flex justify-center mt-6">
               <MyPagination
@@ -216,7 +166,18 @@ const ServicePage = ({ searchParams }) => {
 
 export default ServicePage
 
-const FilterComp = ({ filter, formData, handleChange, setFormData }) => {
+const FilterComp = ({ filter, setFiltered, services }) => {
+  const [formData, setFormData] = useState({
+    category: '',
+    subcategory: '',
+    rating: '',
+    distance: '',
+  })
+  const handleChange = (prop) => (event) => {
+    setFormData({ ...formData, [prop]: event?.target?.value || '' })
+  }
+
+  console.log(formData)
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState('')
   const searchTerm = search.toLowerCase()
@@ -224,15 +185,32 @@ const FilterComp = ({ filter, formData, handleChange, setFormData }) => {
   const { data: cats, error } = useSWR('/corisio/service-categories')
   const servCats = cats?.data || []
 
-  const filtered = servCats.filter(
+  const filteredCate = servCats.filter(
     (x) =>
       x.label.toLowerCase().includes(searchTerm) ||
       x.sub_categories.some((item) => item.toLowerCase().includes(searchTerm))
   )
-
   const subCategories = servCats.filter((x) => x._id === formData.category)
+
+  const handleFilter = () => {
+    if (services.length) {
+      const searchFilterFunction = (each) => {
+        console.log(each)
+        return each.category._id === formData.category || formData.subcategory
+          ? each.subcategory
+              .toLowerCase()
+              .includes(formData.subcategory.toLowerCase())
+          : false
+      }
+
+      const filteredArr = services.filter(searchFilterFunction)
+      console.log(filteredArr)
+      setFiltered(filteredArr)
+    }
+  }
+
   return (
-    <Box className="bg-white rounded-lg w-full h-[400px] p-4">
+    <Box className="bg-white rounded-lg w-full h-[450px] p-4">
       <Typography
         variant="body2"
         className="!text-black !font-bold !text-[15px] !mb-4"
@@ -250,17 +228,22 @@ const FilterComp = ({ filter, formData, handleChange, setFormData }) => {
             autoComplete={false}
             fullWidth
             id="outlined-basic"
-            inputProps={{ className: '!h-2' }}
+            inputProps={{ className: '!h-2', autoComplete: 'off' }}
             placeholder="Search category"
           />
         }
-        label="Search by Category"
+        label="Filter by category"
         closeFunc={() => setOpen(false)}
-        options={filtered}
+        options={filteredCate}
         viewOption={(e) => e.label}
         open={open}
         onClick={(value) => {
-          setFormData((prev) => ({ ...prev, category: value._id }))
+          setFormData((prev) => ({
+            ...prev,
+            category: value._id,
+            subcategory: '',
+          }))
+          handleFilter()
           setSearch(value.label)
         }}
       />
@@ -273,7 +256,7 @@ const FilterComp = ({ filter, formData, handleChange, setFormData }) => {
         sx={{ mb: 2 }}
         defaultValue={formData.subcategory}
         onChange={handleChange('subcategory')}
-        label="Search by subcategory"
+        label="Filter by sub-category"
       />
       <SimpleDropDown
         render={filter.rating.map((res, i) => (
@@ -283,7 +266,7 @@ const FilterComp = ({ filter, formData, handleChange, setFormData }) => {
         ))}
         defaultValue={formData.rating || filter.rating[0]}
         onChange={handleChange('rating')}
-        label="Rating"
+        label="Filter Rating"
         sx={{ mb: 2 }}
       />
       <SimpleDropDown
@@ -294,20 +277,17 @@ const FilterComp = ({ filter, formData, handleChange, setFormData }) => {
         ))}
         defaultValue={formData.distance || filter.distance[0]}
         onChange={handleChange('distance')}
-        label="Search by distance"
+        label="Filter by distance"
         sx={{ mb: 2 }}
       />
-      {/* <SimpleDropDown
-        render={filter.experience.map((res, i) => (
-          <MenuItem key={i} value={res}>
-            {res}
-          </MenuItem>
-        ))}
-        defaultValue={formData.experience || filter.experience[0]}
-        onChange={handleChange('experience')}
-        label="Search by Experience"
-        sx={{ mb: 2 }}
-      /> */}
+      <Button
+        variant="contained"
+        fullWidth
+        onClick={handleFilter}
+        className="!mt-4 !shadow-none  !text-[13px]"
+      >
+        Filter
+      </Button>
     </Box>
   )
 }
@@ -319,6 +299,16 @@ export const ServicesSlider = ({ setOpenModal, noPopup }) => {
   return (
     <Box className="flex items-center overflow-hidden">
       <ReactSlickSlider>
+        {spbs.map(({ details }, i) => (
+          <ShopImage
+            key={i}
+            image={details.gallery[1] || '/images/more/service1.png'}
+            icon={details?.profile_image || '/images/misc/shop/1.png'}
+            name={details.businessName || 'Mamafeeds International'}
+            brief={details.about_store}
+            onClick={() => !noPopup && setOpenModal(true)}
+          />
+        ))}
         {spbs.map(({ details }, i) => (
           <ShopImage
             key={i}

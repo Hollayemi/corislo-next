@@ -2,7 +2,6 @@ export const UserPages = {
   isOffline: [
     { name: 'Home', link: '' },
     { name: 'About', link: 'about' },
-    { name: 'Sell', link: 'seller' },
     { name: 'Explore', link: 'explore' },
     { name: 'Support', link: 'support' },
   ],

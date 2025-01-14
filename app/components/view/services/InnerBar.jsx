@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import {
   Box,
   List,
@@ -32,11 +32,10 @@ const StyledBox = styled(Box)(({ theme }) => ({
   scrollbarColor: '#888 #f1f1f1',
 }))
 
-
 const OnlyContents = ({ each, path }) => {
   const { storeInfo } = useStoreData()
   const onSubList = !path.sublist ? '' : `/${path.sublist}`
-  const listPath = `/dashboard/store/${path.sidebar}${each.path}`
+  const listPath = `/dashboard/services${path.sidebar}${each.path}`
   return (
     <Link href={listPath}>
       <ListItem
@@ -54,8 +53,16 @@ const OnlyContents = ({ each, path }) => {
               my: 0.5,
               px: 2.5,
               textDecoration: 'none',
-              color: onSubList !== each.path ? '#666' : '#fff',
-              bgcolor: onSubList !== each.path ? '#fff' : '#2C337C',
+              color: each.on
+                ? '#fff'
+                : onSubList !== each.path
+                ? '#666'
+                : '#fff',
+              bgcolor: each.on
+                ? '#2C337C'
+                : onSubList !== each.path
+                ? '#fff'
+                : '#2C337C',
               borderRadius: 2,
               // mx: 1,
               transition: 'none',
@@ -89,7 +96,7 @@ const InnerBar = ({ path, InnerList }) => {
           <Box className="p-3">
             <Typography
               variant="h5"
-              className="!text-[12px] text-gray-500 !mb-3"
+              className="!text-[14px] !text-gray-700 !font-bold !mb-3 flex items-center"
             >
               {InnerList.title}
             </Typography>

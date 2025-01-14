@@ -1,11 +1,15 @@
 const { Box, Typography, Rating, Button } = require('@mui/material')
 import IconifyIcon from '@/app/components/icon'
 import ReactSlickSlider from '@/app/components/wrapper/react-slick'
-import { mySubstring } from '@/app/utils/format'
+import { idShorter, mySubstring } from '@/app/utils/format'
 import { htmlToText } from 'html-to-text'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { reshapePrice } from '../dashboard/store/marketing/components'
+import { useUserData } from '@/app/hooks/useData'
+import { saveService } from '@/app/redux/state/slices/spb'
+import { useDispatch } from 'react-redux'
 
 export const ShopImage = ({ image, name, brief, icon, onClick }) => {
   return (
@@ -56,7 +60,15 @@ export const ShopImage = ({ image, name, brief, icon, onClick }) => {
   )
 }
 
-export const ServiceListing = ({ city, state, name, brief, icon, provider }) => {
+export const ServiceListing = ({
+  city,
+  state,
+  others,
+  name,
+  brief,
+  icon,
+  provider,
+}) => {
   const router = useRouter()
   return (
     <Box className="w-1/2 md:w-64 p-1 mb-2">
@@ -119,10 +131,96 @@ export const ServiceListing = ({ city, state, name, brief, icon, provider }) => 
           <Button
             className="!text-[11px] !text-blue-900 h-6 !font-bold"
             disableRipple
-            onClick={() => router.push(`services/${provider}`)}
+            onClick={() =>
+              router.push(`services/${provider}/${idShorter(others._id)}`)
+            }
           >
             <span className="hidden sm:block mr-1 ">See</span> Details
           </Button>
+        </Box>
+      </Box>
+    </Box>
+  )
+}
+
+export const ServiceListing2 = ({ icon, provider, fixedSize, others }) => {
+  const dispatch = useDispatch()
+  const { savedServices } = useUserData()
+  const saved = savedServices.includes(others?._id)
+  const savePayload = {
+    serviceId: others._id,
+    provider,
+    branch: others.branch,
+  }
+  return (
+    <Box className={`${fixedSize ? 'w-52' : 'w-1/2'} md:w-52 p-2`}>
+      <Box className="w-full h-full bg-gray-50 relative rounded-xl overflow-hidden">
+        <Image
+          src={icon}
+          className="w-full h-full min-h-48 object-cover relative"
+          width={600}
+          height={600}
+          alt="name"
+        />
+        <Box
+          onClick={() => saveService(savePayload, dispatch)}
+          className="w-8 h-8 rounded-full bg-white absolute cursor-pointer right-2 top-2 flex items-center justify-center shadow"
+        >
+          <IconifyIcon
+            icon={`tabler:${saved ? 'heart-filled' : 'heart'}`}
+            className={` hover:text-red-500 ${saved && '!text-red-500'}`}
+          />
+        </Box>
+        <Box className="bg-white absolute bottom-0 border-x border-b rounded-b-xl w-full p-3">
+          <Box>
+            <Link href={`/services/${provider}/${idShorter(others._id)} `}>
+              <Typography
+                variant="body2"
+                noWrap
+                className="!text-gray-700 text-ellipsis cursor-pointer !font-bold !text-[15px]"
+              >
+                {others.service_name}
+              </Typography>
+            </Link>
+            <Box className="flex items-center justify-between">
+              <Typography
+                variant="body2"
+                noWrap
+                className="!text-gray-500  !font-bold !text-[12px]"
+              >
+                {others.category.label}
+              </Typography>
+              <Typography
+                variant="body2"
+                noWrap
+                className="!text-gray-500 !text-[11px]"
+              >
+                {`${others.hours}h ${others.minutes}mins`}
+              </Typography>
+            </Box>
+          </Box>
+          <Box className="flex items-center justify-between mt-2">
+            <Typography
+              variant="body2"
+              noWrap
+              className="!text-blue-700 !font-bold !text-[12px]"
+            >
+              {reshapePrice(others.priceFrom)}
+            </Typography>
+            <Box className="flex items-center">
+              <IconifyIcon
+                icon="tabler:map-pin"
+                className="!text-[16px] mr-1 -mt-1"
+              />
+              <Typography
+                variant="body2"
+                noWrap
+                className="!text-gray-700 !text-[11px]"
+              >
+                24km
+              </Typography>
+            </Box>
+          </Box>
         </Box>
       </Box>
     </Box>
@@ -212,10 +310,15 @@ export const StatusView = ({ close }) => {
   )
 }
 
-export const LongServiceListing = ({service_name, description, _id, provider }) => {
+export const LongServiceListing = ({
+  service_name,
+  description,
+  _id,
+  provider,
+}) => {
   return (
     <Link
-      href={`/services/${provider.store}/${`${_id.substring(0, 8)}_${_id.substring(16)}`}`}
+      href={`/services/${provider.store}/${idShorter(_id)}`}
       className="border-t py-1 cursor-pointer group"
     >
       <Box className="flex items-center justify-between h-20 hover:bg-gray-50 px-2 md:px-10">

@@ -61,13 +61,13 @@ const CalendarWrapper = styled(Box)(({ theme }) => {
           '& .fc-button': {
             textTransform: 'capitalize',
             '&:focus': {
-              boxShadow: 'none'
+              boxShadow: 'none',
             }
           },
           '& .fc-button-primary': {
             '&:not(.fc-prev-button):not(.fc-next-button):not(.fc-sidebarToggle-button)': {
               padding: theme.spacing(0.5, 2.08),
-             
+             borderRadius: "0px",
               color: theme.palette.primary.main,
               borderColor: hexToRGBA(theme.palette.primary.main, 0.24),
               backgroundColor: hexToRGBA(theme.palette.primary.main, 0.16),

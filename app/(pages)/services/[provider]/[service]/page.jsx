@@ -3,7 +3,7 @@ import HomeWrapper from '@/app/components/view/home'
 import { Box, Button, Divider, Tab, Typography } from '@mui/material'
 import Image from 'next/image'
 import useSWR from 'swr'
-import { LongServiceListing } from '../../components'
+import { LongServiceListing, ServiceListing2 } from '../../components'
 import { useState } from 'react'
 import ReactSlickSlider from '@/app/components/wrapper/react-slick'
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
@@ -20,7 +20,7 @@ import { useUserData } from '@/app/hooks/useData'
 import { BasicModal } from '@/app/components/cards/popup'
 import Share from '@/app/components/cards/share'
 
-const ServiceDisplay = ({ params }) => {
+const ServiceDisplay = ({ params, searchParams }) => {
   const dispatch = useDispatch('')
   const { savedServices } = useUserData()
   const { provider: prov, service } = params
@@ -48,7 +48,7 @@ const ServiceDisplay = ({ params }) => {
 
   const otherServices =
     services?.filter(
-      (x) => `${x._id.substring(0, 8)}_${x._id.substring(16)}` === service
+      (x) => `${x._id.substring(0, 8)}_${x._id.substring(16)}` !== service
     ) || []
   const provider = theService.provider || {}
   const category = theService.category || {}
@@ -63,6 +63,8 @@ const ServiceDisplay = ({ params }) => {
   }
   const share = `Discover ${theService.service_name} on Corisio! Easily schedule and access products and services near you. Join Corisio today and start exploring what's available in your area!
 `
+
+  const saved = savedServices.includes(theService?._id)
   return (
     <HomeWrapper
       bg="white"
@@ -72,7 +74,7 @@ const ServiceDisplay = ({ params }) => {
           toggleModal={() => setOpenModal(false)}
           content={
             <Share
-              // shareUrl="http://localhost:4001/biz/mamafeeds-eSlOTN"
+              searchParams={searchParams}
               message={share}
               close={() => setOpenModal(false)}
             />
@@ -85,7 +87,7 @@ const ServiceDisplay = ({ params }) => {
           <Box className="w-full shrink md:w-7/12 lg:w-4/6 md:pr-8">
             <Box className="bg-white  p-2 overflow-hidden">
               <ReactSlickSlider config={3}>
-                {provider.gallery?.map((each, i) => (
+                {theService?.images?.map((each, i) => (
                   <Image
                     key={i}
                     src={each}
@@ -119,10 +121,9 @@ const ServiceDisplay = ({ params }) => {
                   <Box className="flex items-center">
                     <IconifyIcon
                       onClick={() => saveService(savePayload, dispatch)}
-                      icon="tabler:heart"
+                      icon={`tabler:${saved ? 'heart-filled' : 'heart'}`}
                       className={` ${
-                        savedServices.includes(theService?._id) &&
-                        '!text-red-500'
+                        saved && '!text-red-500'
                       } hover:text-red-500 !text-[30px] mr-2 cursor-pointer`}
                     />
                     <IconifyIcon
@@ -132,6 +133,13 @@ const ServiceDisplay = ({ params }) => {
                     />
                   </Box>
                 </Box>
+                <Button
+                  variant="contained"
+                  className="text-white !mt-2 !mb-4 !shadow-none !rounded-md !text-md"
+                  startIcon={<IconifyIcon icon="tabler:calendar" />}
+                >
+                  Book Service
+                </Button>
                 <Typography
                   variant="body2"
                   className="!text-gray-500 !text-[12px] !leading-6 !mb-1.5"
@@ -149,68 +157,6 @@ const ServiceDisplay = ({ params }) => {
                     Entrepreneur
                   </Typography>
                 </Box>
-              </Box>
-
-              <Box className="mt-5">
-                <Box className="flex items-center">
-                  <Typography
-                    variant="body2"
-                    className="!font-bold font-sans !text-[14px] md:!text-xl  !text-slate-900 !text-pretty !w-full"
-                  >
-                    Other Services
-                  </Typography>
-                  <Box className="relative md:mr-4 w-full md:w-80 px-2 md:px-0">
-                    <input
-                      type="text"
-                      placeholder="Our Services"
-                      value={search}
-                      className="w-full pr-8 md:pr-12 text-[13px] pl-3 md:pl-5 h-9 md:h-8 border border-black rounded-full transition-all outline-none"
-                      onChange={(e) => setSearch(e.target.value)}
-                    />
-                    <IconImage
-                      image="search"
-                      className="w-4 absolute top-0 mt-2 right-2 mr-3 cursor-pointer"
-                    />
-                  </Box>
-                </Box>
-
-                {otherServices.map((each, i) => (
-                  <Box key={i} className="mt-3">
-                    <Typography
-                      variant="body2"
-                      className="!text-gray-800 !text-[14px] !leading-6 "
-                    >
-                      {each.service_name}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      className="!text-gray-500 !text-[11px] !leading-6 !mb-1 w-80"
-                    >
-                      {mySubstring(htmlToText(each.description), 80)}
-                    </Typography>
-
-                    <Typography
-                      variant="body2"
-                      className="!text-gray-500 !text-[11px] !leading-6 !mb-1"
-                    >
-                      Lowest price is {reshapePrice(each.priceFrom)} ranging to{' '}
-                      {reshapePrice(each.priceTo)}
-                    </Typography>
-                    {each.images?.length > 1
-                      ? eavh.images.map((item, i) => (
-                          <Image
-                            src={item}
-                            key={i}
-                            onClick={() => showImage(item)}
-                            alt=""
-                            width={150}
-                            height={150}
-                            className="m-1 md:mb-0 !w-16 !h-16 !rounded-md !object-scale-down"
-                          />
-                        ))
-                      : null}
-                  </Box>
-                ))}
               </Box>
             </Box>
           </Box>
@@ -420,6 +366,42 @@ const ServiceDisplay = ({ params }) => {
               </Box>
             </Box>
           </Box>
+        </Box>
+        <Box className="mt-5">
+          <Box className="flex !justify-start itms-center">
+            <Typography
+              variant="body2"
+              className="!font-bold font-sans !text-[14px] md:!text-xl  !text-slate-900 !text-pretty !w-full"
+            >
+              Other Services
+            </Typography>
+            <Box className="relative md:mr-4 w-full md:w-80 px-2 md:px-0">
+              <input
+                type="text"
+                placeholder="Our Services"
+                value={search}
+                className="w-full pr-8 md:pr-12 text-[13px] pl-3 md:pl-5 h-9 md:h-8 border border-black rounded-full transition-all outline-none"
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <IconImage
+                image="search"
+                className="w-4 absolute top-0 mt-2 right-2 mr-3 cursor-pointer"
+              />
+            </Box>
+          </Box>
+        </Box>
+        <Box className="mt-12">
+          <ReactSlickSlider>
+            {otherServices.map((each, i) => (
+              <ServiceListing2
+                others={each}
+                fixedSize
+                key={i}
+                icon={each.images[0]}
+                provider={each.provider.store}
+              />
+            ))}
+          </ReactSlickSlider>
         </Box>
       </Box>
     </HomeWrapper>

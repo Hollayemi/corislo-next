@@ -408,3 +408,5 @@ export const formatDistance = (distance) => {
     return `${Mm} Mm`;
   }
 }
+
+export const idShorter = (_id) =>`${_id.substring(0, 8)}_${_id.substring(16)}`

@@ -202,7 +202,7 @@ const NewService = ({ close, toEdit }) => {
                   fullWidth
                   id="outlined-basic"
                   inputProps={{}}
-                  placeholder="Category"
+                  placeholder="description"
                 />
               }
             />
@@ -242,7 +242,7 @@ const NewService = ({ close, toEdit }) => {
               inputProps={{ className: 'w-11/12' }}
             />
             <SimpleDropDown
-              label="Max for a day *"
+              label="Max order for a day *"
               render={Array.from({ length: 40 }, (_, i) => i + 1)?.map(
                 (res, i) => (
                   <MenuItem key={i} value={res.toString()}>
@@ -309,7 +309,7 @@ const NewService = ({ close, toEdit }) => {
             Upload some images / tools you use for this service
           </Typography>
           <Box className="flex items-center flex-wrap">
-            {toEdit?.images.map((each, i) => (
+            {toEdit?.images?.map((each, i) => (
               <Box className="relative w-16 h-16 m-3" key={i}>
                 <Image
                   className={`w-full h-full rounded-md ${

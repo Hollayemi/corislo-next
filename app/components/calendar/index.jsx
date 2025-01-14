@@ -9,9 +9,6 @@ import CalendarWrapper from './wrapper'
 import AddEventSidebar from './AddEventSidebar'
 
 const {
-  addEvent = () => {},
-  fetchEvents = () => {},
-  deleteEvent = () => {},
   updateEvent = () => {},
   handleSelectEvent = () => {},
   handleAllCalendars = () => {},
@@ -26,23 +23,20 @@ const calendarsColor = {
   ETC: 'info',
 }
 
-const AppCalendar = () => {
+const AppCalendar = ({ handleAddEventToggle, addEventOpen }) => {
   const [calendarApi, setCalendarApi] = useState(null)
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false)
-  const [addEventSidebarOpen, setAddEventSidebarOpen] = useState(false)
 
   const dispatch = useDispatch()
-  const store = {}
+  const store = { selectedEvent: null }
 
   const leftSidebarWidth = 320
   const addEventSidebarWidth = 400
   const mdAbove = useMediaQuery((theme) => theme.breakpoints.up('md'))
-//   useEffect(() => {
-//     dispatch(fetchEvents(store.selectedCalendars))
-//   }, [dispatch, store.selectedCalendars])
+  //   useEffect(() => {
+  //     dispatch(fetchEvents(store.selectedCalendars))
+  //   }, [dispatch, store.selectedCalendars])
   const handleLeftSidebarToggle = () => setLeftSidebarOpen(!leftSidebarOpen)
-  const handleAddEventSidebarToggle = () =>
-    setAddEventSidebarOpen(!addEventSidebarOpen)
 
   return (
     <CalendarWrapper className="app-calendar">
@@ -58,7 +52,7 @@ const AppCalendar = () => {
         handleAllCalendars={handleAllCalendars}
         handleCalendarsUpdate={handleCalendarsUpdate}
         handleLeftSidebarToggle={handleLeftSidebarToggle}
-        handleAddEventSidebarToggle={handleAddEventSidebarToggle}
+        handleAddEventToggle={handleAddEventToggle}
       />
       <Box
         sx={{
@@ -82,21 +76,9 @@ const AppCalendar = () => {
           setCalendarApi={setCalendarApi}
           handleSelectEvent={handleSelectEvent}
           handleLeftSidebarToggle={handleLeftSidebarToggle}
-          handleAddEventSidebarToggle={handleAddEventSidebarToggle}
+          handleAddEventToggle={handleAddEventToggle}
         />
       </Box>
-      {/* <AddEventSidebar
-        store={store}
-        dispatch={dispatch}
-        addEvent={addEvent}
-        updateEvent={updateEvent}
-        deleteEvent={deleteEvent}
-        calendarApi={calendarApi}
-        drawerWidth={addEventSidebarWidth}
-        handleSelectEvent={handleSelectEvent}
-        addEventSidebarOpen={addEventSidebarOpen}
-        handleAddEventSidebarToggle={handleAddEventSidebarToggle}
-      /> */}
     </CalendarWrapper>
   )
 }

@@ -11,6 +11,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab'
 import NewService from './new/page'
 import { BasicModal } from '@/app/components/cards/popup'
 import useSWR from 'swr'
+import Link from 'next/link'
 const ServiceRenderWrapper = dynamic(
   () => import('@/app/components/view/services/header'),
   {
@@ -56,8 +57,18 @@ const Services = ({ params }) => {
       popup={
         <BasicModal
           openModal={open === 'service'}
-          toggleModal={() => setOpen(false)}
-          content={<NewService close={() => setOpen(false)} toEdit={toEdit} />}
+          toggleModal={() => {
+            setOpen(false)
+          }}
+          content={
+            <NewService
+              close={() => {
+                setOpen(false)
+                setEdit(false)
+              }}
+              toEdit={toEdit}
+            />
+          }
         />
       }
       closeDialog={() => setOpen(false)}
@@ -153,12 +164,16 @@ const Services = ({ params }) => {
             <TabPanel value="1" className="!px-3">
               {grouped.map((res, i) => (
                 <Box key={i}>
-                  <Typography
-                    variant="body2"
-                    className="!text-[18px] md:!w-full !font-bold !text-left my-5"
+                  <Link
+                    href={`/dashboard/services/${res.services[0].category}`}
                   >
-                    {res._id}
-                  </Typography>
+                    <Typography
+                      variant="body2"
+                      className="!text-[18px] md:!w-full !font-bold !text-left my-5"
+                    >
+                      {res._id}
+                    </Typography>
+                  </Link>
                   <Box>
                     {res.services.map((service, i) => (
                       <Service

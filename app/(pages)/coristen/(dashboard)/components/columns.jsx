@@ -16,7 +16,7 @@ import {
   Rating,
   Typography,
 } from '@mui/material'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 export const allCustomers = [
   {

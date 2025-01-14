@@ -125,6 +125,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const SuperLeftBar = React.memo(
   ({
     children,
+    bg,
     path,
     rightOpen,
     setRightOpen,
@@ -300,10 +301,10 @@ const SuperLeftBar = React.memo(
               open
                 ? 'left-[270px]'
                 : rightOpen
-                  ? ' -left-[330px] '
-                  : ' md:left-16 '
+                ? ' -left-[330px] '
+                : ' md:left-16 '
             } w-full transition-all duration-300 absolute flex-shrink-0 mt-20 md:pl-4 !pr-3 md:!pr-16 z-50`}
-            bgcolor="custom.bodyGray"
+            bgcolor={bg && bg}
           >
             {!hidebreadCrumb && (
               <Box className="flex items-center sticky top-16 md:top-20 justify-between mb-2 px-2 md:px-11">
@@ -314,7 +315,7 @@ const SuperLeftBar = React.memo(
             <Box className="flex flex-col relative md:flex-row items-start md:px-1.5">
               <Box
                 className="!w-full pl-2 md:pl-3 md:pr-6 rounded-md pb-14"
-                bgcolor="custom.bodyGray"
+                bgcolor={bg}
               >
                 {children}
               </Box>

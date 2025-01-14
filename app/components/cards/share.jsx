@@ -101,7 +101,7 @@ export default function Share({
                 title={message}
                 className="flex items-center h-10 !bg-gray-50 w-full px-2 relative group"
               >
-                <ShareIcon icon="tabler:brand-whatsapp" />
+                <ShareIcon icon="whatsapp" />
                 <Typography
                   variant="body2"
                   className="!text-gray-500 !text-[12px] !leading-5 !ml-2"
@@ -121,7 +121,7 @@ export default function Share({
                 quote={message}
                 className="flex items-center h-10 !bg-gray-50 w-full px-2 relative group"
               >
-                <ShareIcon icon="tabler:brand-facebook" />
+                <ShareIcon icon="facebook" />
                 <Typography
                   variant="body2"
                   className="!text-gray-500 !text-[12px] !leading-5 !ml-2"
@@ -141,7 +141,7 @@ export default function Share({
                 title={message}
                 className="flex items-center h-10 !bg-gray-50 w-full px-2 relative group"
               >
-                <ShareIcon icon="tabler:brand-x" />
+                <ShareIcon icon="x" />
                 <Typography
                   variant="body2"
                   className="!text-gray-500 !text-[12px] !leading-5 !ml-2"

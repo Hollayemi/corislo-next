@@ -30,7 +30,7 @@ export default function MySuperDashboardLayout({ children }) {
         <SuperDataProvider>
           <Box
             className="h-full !w-full absolute min-h-scren !overflow-x-hidden"
-            bgcolor="custom.bodyGray"
+            bgcolor="grey.50"
           >
             {children}
           </Box>

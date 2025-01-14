@@ -54,7 +54,7 @@ const ServiceDashboard = () => {
             <Box className="bg-white rounded-2xl p-6 h-40 flex items-center">
               <Box>
                 <Typography className="!mb-1 !font-bold !text-md">
-                  Invite fellow service render of store owner to Corisio
+                  Invite fellow service render or store owner to Corisio
                 </Typography>
                 <Typography variant="caption" className="!mb-5 !text-[12px]">
                   Reward yourself and join our Corisio community! Get coins for
