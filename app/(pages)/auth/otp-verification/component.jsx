@@ -1,32 +1,25 @@
-"use client";
-import React, { useState, useRef } from "react";
+'use client'
+import React, { useState, useRef } from 'react'
 
 const OtpInput = ({ inputValues, setInputValues }) => {
-  const inputRefs = [
-    useRef(),
-    useRef(),
-    useRef(),
-    useRef(),
-    useRef(),
-    useRef(),
-  ];
+  const inputRefs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef()]
 
   const handleInput = (e, index) => {
-    const newValue = e.target.value;
+    const newValue = e.target.value
 
     // Update the corresponding input value in the state
     setInputValues((prevValues) => {
-      const newValues = [...prevValues];
-      newValues[index] = newValue;
-      return newValues;
-    });
+      const newValues = [...prevValues]
+      newValues[index] = newValue
+      return newValues
+    })
 
     if (newValue.length === 1 && index < 5) {
-      inputRefs[index + 1].current.focus();
+      inputRefs[index + 1].current.focus()
     } else if (newValue.length === 0 && index < 0) {
-      inputRefs[index - 1].current.focus();
+      inputRefs[index - 1].current.focus()
     }
-  };
+  }
 
   return (
     <div className="flex justify-center items-center">
@@ -34,7 +27,7 @@ const OtpInput = ({ inputValues, setInputValues }) => {
         <div key={index}>
           <input
             ref={inputRefs[index]}
-            type="text"
+            type="number"
             className="w-10 h-10 text-center border rounded-md m-1.5"
             maxLength={1}
             value={inputValues[index]}
@@ -45,7 +38,7 @@ const OtpInput = ({ inputValues, setInputValues }) => {
         </div>
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default OtpInput;
+export default OtpInput

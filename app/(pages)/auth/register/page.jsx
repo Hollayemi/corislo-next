@@ -61,7 +61,7 @@ const RegisterAccount = ({ fromSuper }) => {
 
   return (
     <Box
-      className={` ${fromSuper ? 'f-full' : 'w-[360px] md:w-[550px]'} !my-10"`}
+      className={` ${fromSuper ? 'w-full' : 'w-full md:w-[550px]'} !my-10 !mt-14 md:!mt-10 px-1`}
     >
       <Grid container spacing={2}>
         <Grid item xs={12} md={fromSuper ? 12 : 6}>
@@ -72,7 +72,9 @@ const RegisterAccount = ({ fromSuper }) => {
             error={values.fullname && errors.fullname}
             name="fullname"
             onChange={handleChange('fullname')}
-            onCancel={() => setValues((prev) => ({ prev, ['fullname']: '' }))}
+            onCancel={() =>
+              setValues((prev) => ({ ...prev, ['fullname']: '' }))
+            }
             inputProps={{
               type: 'text',
               value: values.fullname,
@@ -85,7 +87,9 @@ const RegisterAccount = ({ fromSuper }) => {
             title="Username"
             error={values.username && errors.username}
             onChange={handleChange('username')}
-            onCancel={() => setValues((prev) => ({ prev, ['username']: '' }))}
+            onCancel={() =>
+              setValues((prev) => ({ ...prev, ['username']: '' }))
+            }
             id="username"
             hideCheck={!values.username}
             name="username"
@@ -102,7 +106,7 @@ const RegisterAccount = ({ fromSuper }) => {
             error={values.email && errors.email}
             hideCheck={!values.email}
             onChange={handleChange('email')}
-            onCancel={() => setValues((prev) => ({ prev, ['email']: '' }))}
+            onCancel={() => setValues((prev) => ({ ...prev, ['email']: '' }))}
             id="email"
             name="email"
             inputProps={{
@@ -117,7 +121,7 @@ const RegisterAccount = ({ fromSuper }) => {
             title="Phone Number"
             onChange={handleChange('phoneNumber')}
             onCancel={() =>
-              setValues((prev) => ({ prev, ['phoneNumber']: '' }))
+              setValues((prev) => ({ ...prev, ['phoneNumber']: '' }))
             }
             id="phoneNumber"
             hideCheck={!values.phoneNumber}
@@ -137,7 +141,7 @@ const RegisterAccount = ({ fromSuper }) => {
             name="state"
             hideCheck={!values.state}
             onChange={handleChange('state')}
-            onCancel={() => setValues((prev) => ({ prev, ['state']: '' }))}
+            onCancel={() => setValues((prev) => ({ ...prev, ['state']: '' }))}
             inputProps={{
               type: 'text',
               value: values.state,
@@ -149,7 +153,9 @@ const RegisterAccount = ({ fromSuper }) => {
           <CustomInput
             title="Password"
             onChange={handleChange('password')}
-            onCancel={() => setValues((prev) => ({ prev, ['password']: '' }))}
+            onCancel={() =>
+              setValues((prev) => ({ ...prev, ['password']: '' }))
+            }
             error={values.password && errors.password}
             hideCheck={!values.password}
             id="password"
