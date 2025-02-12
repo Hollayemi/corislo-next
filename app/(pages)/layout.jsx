@@ -114,6 +114,7 @@ export default function RootLayout({ children }) {
         />
         <meta property="og:url" content="https:corislo.vercel.app" />
         <meta property="og:type" content="product" />
+        <script src="http://localhost:5002/api/v1/websites/GoBm5cyPq7PpfM0pvq1l/session-witness.js"></script>
       </head>
 
       {!adminPaths ? (
