@@ -3,6 +3,7 @@ export const UserPages = {
     { name: 'Home', link: '' },
     { name: 'About', link: 'about' },
     { name: 'Explore', link: 'explore' },
+    { name: 'Seller', link: 'seller' },
     { name: 'Support', link: 'support' },
   ],
   isOnline: [
@@ -10,7 +11,6 @@ export const UserPages = {
     { name: 'Order', link: 'order' },
     { name: 'Inbox', link: 'chat' },
     { name: 'Earn', link: 'referral' },
-    { name: 'Sell', link: 'dashboard/login' },
     { name: 'Account', link: 'user' },
     { name: 'Saved Items', link: 'saved-items' },
   ],

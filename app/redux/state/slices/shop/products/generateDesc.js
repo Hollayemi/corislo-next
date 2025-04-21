@@ -4,6 +4,7 @@ import axios from "axios";
 const generateDescApi = createAsyncThunk(
   "post/genDesc",
   async (payload) => {
+    console.log(payload)
     const { data } = await axios.post("https://corisio-desc-generator.onrender.com/generate-description", payload)
       .then((res) => res)
       .catch((e) => e.response);
@@ -22,20 +23,27 @@ const validate = (payload) => {
 
 }
 
-export const generateDescApiHandler = (payload, dispatch,showSnackbar, callback) => {
-  console.log(payload)
+export const generateDescApiHandler = (payload, dispatch,showSnackbar, setLoading, callback) => {
+  setLoading(true)
   if(validate(payload)){
     dispatch(generateDescApi(payload))
       .then(unwrapResult)
       .then((res) => {
         console.log(res)
-
+        setLoading(false)
         callback(res?.description?.replaceAll("**", " ").replaceAll("#", "") || "")
       })
       .catch((e) => {
-        
+        console.log(e)
+        setLoading(false)
+        if (e?.status === 400) {
+          showSnackbar("Error: " + e?.data?.message, "error")
+        } else {
+          showSnackbar("Something went wrong", "error")
+        }
       });
     }else{
       showSnackbar("Set the Categories, Product price, Specifications before you generate", "error")
+      setLoading(false)
     }
   }

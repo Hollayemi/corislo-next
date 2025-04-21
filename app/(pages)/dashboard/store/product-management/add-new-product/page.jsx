@@ -68,7 +68,7 @@ const AddNewProduct = ({ params }) => {
   const prodToEdit = toEdit ? toEdit.data?.result : []
   const specWithSize = ['cloth_spec', 'shoe_spec']
   const [genPayload, getGenPayload] = useState(null)
-  const [genDesc, setGeneratedDesc] = useState()
+  const [descLoading, setDescLoading] = useState()
   const reduxFuntion = editID ? editProductHandler : createProductHandler
   const [formData, setFormData] = useState({
     prodName: '',
@@ -138,6 +138,10 @@ const AddNewProduct = ({ params }) => {
 
   const handleChangeCategory = (event) => {
     const { category, _id } = event.target.value
+    getGenPayload((prev) => ({
+      ...prev,
+      category,
+    }))
     setFormData({
       ...formData,
       category: _id,
@@ -149,7 +153,6 @@ const AddNewProduct = ({ params }) => {
     const { _id, collectionName, groups, ...others } = event.target.value
     getGenPayload((prev) => ({
       ...prev,
-      category: collectionName,
       subcategory: others.label,
     }))
     setFormData({
@@ -170,7 +173,6 @@ const AddNewProduct = ({ params }) => {
     setProdSpecs(spec)
   }
 
-  console.log(formData, categories)
   return (
     <StoreLeftSideBar
       path={path}
@@ -539,6 +541,7 @@ const AddNewProduct = ({ params }) => {
                     },
                     dispatch,
                     showSnackbar,
+                    setDescLoading,
                     (e) => setFormData((prev) => ({ ...prev, prodInfo: e }))
                   )
                 }
@@ -593,6 +596,7 @@ const AddNewProduct = ({ params }) => {
               /> */}
             <QuillTextEditor
               value={formData.prodInfo}
+              loading={descLoading}
               className="h-52 mt-1 mb-10"
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, prodInfo: e }))

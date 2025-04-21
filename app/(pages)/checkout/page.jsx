@@ -35,18 +35,16 @@ const Checkout = () => {
   const groupedCart = carts ? carts.data.result : []
   const amounts = carts ? carts.data.total : []
 
-  const getIds = () => {
-    if (seletedCartProds.length) {
-      return cartedProd
-    } else {
-      return selec
-    }
-  }
-
   const [payload, updatePayload] = useState({
     ids: seletedCartProds.length ? seletedCartProds : cartedProds,
     delivery: {},
-    picker: {},
+    picker: {
+      userId: userInfo?.userId || null,
+      name: userInfo?.fullname || null,
+      email: userInfo?.email || null,
+      phone: userInfo?.phone || null,
+      relationship: 'Myself',
+    },
     usingPoint,
     shippingAddress: temp.address || userInfo?.selectedAddress || null,
     billingCard: userInfo?.selectedBilling || null,
@@ -178,6 +176,7 @@ const Checkout = () => {
                 </Box>
                 <PaymentOptions
                   card={card}
+                  coin={agentInfo?.coin}
                   updatePayload={updatePayload}
                   usPoint={usPoint}
                   usingPoint={usingPoint}
@@ -260,6 +259,7 @@ export const ChangeAddress = ({ address, updatePayload }) => {
 
 export const PaymentOptions = ({
   card,
+  coin = 0,
   updatePayload,
   usPoint,
   usingPoint,
@@ -271,29 +271,31 @@ export const PaymentOptions = ({
       <Typography variant="body2" className="!font-bold !text-[15px]">
         Payment Option
       </Typography>
-      <Box className="flex justify-between items-center mt-5">
-        <Typography
-          variant="body2"
-          className="!text-[12px] !text-black !w-full"
-        >
-          Points ({reshapePrice(100)})
-        </Typography>
-        <Box className="flex items-center">
+      {coin ? (
+        <Box className="flex justify-between items-center mt-5">
           <Typography
             variant="body2"
-            noWrap
-            className="!text-[12px] !text-black !mr-2 !w-full"
+            className="!text-[12px] !text-black !w-full"
           >
-            - {reshapePrice(100)}
+            Points ({reshapePrice(coin)})
           </Typography>
+          <Box className="flex items-center">
+            <Typography
+              variant="body2"
+              noWrap
+              className="!text-[12px] !text-black !mr-2 !w-full"
+            >
+              - {reshapePrice(coin)}
+            </Typography>
+          </Box>
+          <MySwitch
+            edge="end"
+            checked={usingPoint}
+            className="!md:mr-2"
+            onChange={(e) => usPoint(!usingPoint)}
+          />
         </Box>
-        <MySwitch
-          edge="end"
-          checked={usingPoint}
-          className="!md:mr-2"
-          onChange={(e) => usPoint(!usingPoint)}
-        />
-      </Box>
+      ) : null}
       <Box className="w-full flex justify-between items-center mb-5">
         <Box className="flex items-center">
           {card ? (

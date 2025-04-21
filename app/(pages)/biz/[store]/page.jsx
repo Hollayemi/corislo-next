@@ -61,12 +61,7 @@ const BusinessPage = ({ params, searchParams, data, error }) => {
         popup={
           <BasicModal
             openModal={Boolean(share)}
-            content={
-              <Share
-                message=""
-                searchParams={searchParams}
-              />
-            }
+            content={<Share message="" searchParams={searchParams} />}
           />
         }
       >
@@ -159,13 +154,13 @@ export async function generateMetadata({ params }) {
       openGraph: {
         title: branchInfo.businessName,
         description: branchInfo.about_store,
-        url: `https://corislo.vercel.app/biz/${branchInfo.store}-${branchInfo.store}`,
+        url: `https://corisio.com/biz/${branchInfo.store}-${branchInfo.store}`,
         images: branchInfo.gallery,
         logo: branchInfo.profile_image,
         image: branchInfo.profile_image,
         type: 'website',
         keywords: `${getStore} ${branchInfo.businessName} ${branchInfo.address} ${getStore[1]} ${branchInfo?.payment_settings?.account_name}`,
-        logo: 'https://corislo.vercel.app/images/logo.png',
+        logo: 'https://corisio.com/images/logo.png',
         contact_email: branchInfo.email,
         contact_phone: branchInfo.phone,
         location: {

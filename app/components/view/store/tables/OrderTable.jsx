@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 const escapeRegExp = (value) => {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -12,7 +12,9 @@ const OrderTable = ({
   loading = false,
   size,
   tableProps = {},
+  search = ""
 }) => {
+  console.log(rows)
   const myRows = rows.map((e, i) => {
     return { ...e, id: i };
   });
@@ -21,6 +23,23 @@ const OrderTable = ({
   const [pageSize, setPageSize] = useState(size || 7);
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+
+  useEffect(() => {
+    if (search) {
+      setSearchText(search);
+      const searchRegex = new RegExp(escapeRegExp(search), "i");
+      const filteredRows = data.filter((row) => {
+        return Object.keys(row).some((field) => {
+          // @ts-ignore
+          return searchRegex.test(row[field]?.toString());
+        });
+      });
+      setFilteredData(filteredRows);
+    } else {
+      setFilteredData([]);
+    }
+  }
+  , [search, data]);
 
   const handleSearch = (searchValue) => {
     setSearchText(searchValue);

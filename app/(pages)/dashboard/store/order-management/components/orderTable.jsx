@@ -1,14 +1,21 @@
 import { useState } from 'react'
-import { Typography, Box, Grid, Button } from '@mui/material'
+import { Typography, Box, Grid, Button, TextField } from '@mui/material'
 import Image from 'next/image'
 import { OrderListComponents } from '.'
 import IconifyIcon from '@/app/components/icon'
 import { CircleLoader } from '@/app/components/cards/loader'
 import { MyTextField } from '@/app/(pages)/user/components'
 import useSWR from 'swr'
+import {
+  storeConfirmPicker,
+  storeFetchOrderByPicker,
+} from '@/app/redux/state/slices/shop/order'
+import { useDispatch } from 'react-redux'
 
 const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
   const { data, isLoading: counterLoading } = useSWR('/branch/order-count')
+  const [foundbyPicker, setFindbyPicker] = useState([])
+  const [search, setSearch] = useState('')
   const counter = data?.data || {}
   const [value, setValue] = useState('all')
   const Epl = ({ title, info }) => (
@@ -49,7 +56,14 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
           <Button
             className="!shadow-none w-36 md:!mt-4 !px-0 !bg-white !text-blue-900 !rounded-md"
             variant="contained"
-            onClick={() => setRightOpen(<ConfirmPicker />)}
+            onClick={() =>
+              setRightOpen(
+                <ConfirmPicker
+                  setSearch={setSearch}
+                  setRightOpen={setRightOpen}
+                />
+              )
+            }
           >
             Check By Picker
           </Button>
@@ -64,9 +78,24 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
       </Box>
       <br />
       <Box className="flex items-center justify-between px-3 py-3 mb-4">
-        <Typography variant="h5" className="!font-bold !text-sm md:text-2xl">
-          Orders
-        </Typography>
+        <Box className="flex items-center">
+          <Typography variant="h5" className="!font-bold !text-sm md:text-2xl">
+            Orders
+          </Typography>
+          <input
+            type="text"
+            className="block ml-2 w-full pl-3 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-transparent placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Search by order ..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          {/* <TextField
+            placeholder="Search by order Id"
+            className="!outline-none !ml-2"
+            size="small"
+            onChange={(e) => setSearch(e.target.value)}
+          /> */}
+        </Box>
         <Box>
           <Button
             className="w-20 md:w-24 !px-0 !bg-white !text-black !rounded-lg !mr-2 md:!mr-5 !text-[12px] md:!text-[13px]"
@@ -125,9 +154,11 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
         ) : (
           <OrderListComponents
             value={value}
+            foundbyPicker={foundbyPicker.length > 0 ? foundbyPicker : false}
             isLoading={isLoading}
             rows={selectRow.data}
             setValue={setValue}
+            search={search}
           />
         )}
       </Box>
@@ -137,15 +168,17 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
 
 export default OrderTable
 
-export const ConfirmPicker = () => {
-  const [pickerId, setPickerId] = useState('')
+export const ConfirmPicker = ({ setRightOpen, setSearch }) => {
+  const [pickerSlug, setPickerId] = useState('')
   const [orderSlug, setOrderId] = useState('')
+  const dispatch = useDispatch()
+
   return (
     <Box className="px-5 pt-5">
       <MyTextField
         title="Picker ID"
         onChange={(e) => setPickerId(e.target.value)}
-        value={pickerId}
+        value={pickerSlug}
         PClassName="w-full md:w-auto"
       />
       <MyTextField
@@ -157,8 +190,8 @@ export const ConfirmPicker = () => {
       <Box className="flex items-center justify-between mt-3">
         <Button
           onClick={() => {
-            // setOrderId("");
-            // setPickerId("");
+            setOrderId('')
+            setPickerId('')
           }}
           variant="outlined"
           className="w-32 !text-[12px] !h-10 !shadow-none !rounded-md !border"
@@ -168,6 +201,19 @@ export const ConfirmPicker = () => {
         <Button
           className="w-32 !text-[12px] !h-10 !shadow-none !rounded-md"
           variant="contained"
+          onClick={() =>
+            storeConfirmPicker(
+              dispatch,
+              { orderSlug, pickerSlug },
+
+              (res) => {
+                // setOrderId('')
+                // setPickerId('')
+                setRightOpen(false)
+                setSearch(orderSlug)
+              }
+            )
+          }
         >
           Verify
         </Button>

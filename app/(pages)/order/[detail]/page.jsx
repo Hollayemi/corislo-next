@@ -17,7 +17,7 @@ import { useDispatch } from 'react-redux'
 import { shopFeedbackHandler } from '@/app/redux/state/slices/home/feedback'
 import { useUserData } from '@/app/hooks/useData'
 
-const OrderDetails = ({ params }) => {
+const OrderDetails = ({ params, forPicker }) => {
   const dispatch = useDispatch()
   const { data: result } = useSWR(`/user/order/${params.detail}`)
   const { userInfo } = useUserData()
@@ -78,7 +78,7 @@ const OrderDetails = ({ params }) => {
                   </Typography>
                 </Box>
                 {
-                  <OrderActionBtn
+                  !forPicker && <OrderActionBtn
                     action={orderStatus?.toLowerCase()}
                     orderId={params.detail}
                   />

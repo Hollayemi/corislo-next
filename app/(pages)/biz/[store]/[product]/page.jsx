@@ -30,14 +30,14 @@ export async function generateMetadata({ params }) {
       openGraph: {
         title: product.prodName,
         description: product.prodInfo,
-        url: `https://corislo.vercel.app/biz/${product.store}-${product.store}/${product.prodName}`,
+        url: `https://corisio.com/biz/${product.store}-${product.store}/${product.prodName}`,
         images: product.images,
         logo: product.images[0],
         image: product.images[0],
         type: 'website',
         keywords: `${product.store} ${product.prodInfo} ${product.prodName}
                     ${product.branch} ${product?.collectionName} ${product?.subCollectionName} ${product?.group}`,
-        logo: 'https://corislo.vercel.app/images/logo.png',
+        logo: 'https://corisio.com/images/logo.png',
       },
       other: {
         // canonical: `https://www.example.com/${params.slug}`,

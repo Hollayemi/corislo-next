@@ -27,10 +27,7 @@ import { copyToClipboard } from '@/app/utils/clipboard'
 import { deleteOrder } from '@/app/redux/state/slices/home/order'
 import { useState } from 'react'
 import { Delete, ShoppingCartSharp } from '@mui/icons-material'
-import {
-  OrderActionBtn,
-  trackMainSteps,
-} from '@/app/(pages)/order/[detail]/components'
+import { OrderActionBtn } from '@/app/(pages)/order/[detail]/components'
 import { OrderStages } from '@/app/(pages)/order/timeline'
 import CustomOption from '../option-menu/option'
 
@@ -40,8 +37,10 @@ const ChangeQty = ({
   saveItem,
   quantity,
   qtyFunc,
+  cartPopup,
   isSavedView,
 }) => {
+  console.log('cartPopup2', cartPopup)
   const dispatch = useDispatch()
   const [qty, newQty] = useState(quantity)
   return (
@@ -51,7 +50,7 @@ const ChangeQty = ({
       {!isSavedView && (
         <Box
           className="float-right mb-10 md:mb-6"
-          onClick={() => addCartHandler(payload, dispatch)}
+          onClick={() => cartPopup(payload)}
         >
           <IconifyIcon
             icon="tabler:trash"
@@ -125,6 +124,7 @@ export const CartProductView = ({
   collection,
   hideCheckbox,
   hideQtyFunc,
+  cartPopup,
   isSavedView,
   selected,
   selectCart,
@@ -138,7 +138,7 @@ export const CartProductView = ({
     '#34ee',
     '#000',
   ]
-  const dispatch = useDispatch()
+  console.log('cartPopup1', cartPopup)
   const payload = {
     productId: productId,
     store,
@@ -151,7 +151,7 @@ export const CartProductView = ({
       >
         {!hideCheckbox && (
           <FormControlLabel
-            className="-!mt-6 w-7 md:w-8"
+            className={`-!mt-6 w-7 md:w-8 ${selected.length > 1 ? "!block" : "!hidden"} md:!block`}
             onChange={(e) =>
               removeOrAddToArray(productId, selected, selectCart)
             }
@@ -194,6 +194,7 @@ export const CartProductView = ({
                 payload={payload}
                 id={cartId}
                 quantity={quantity}
+                cartPopup={cartPopup}
                 qtyFunc={savedQuantity}
                 isSavedView
               />
@@ -225,6 +226,7 @@ export const CartProductView = ({
           payload={payload}
           id={cartId}
           quantity={quantity}
+          cartPopup={cartPopup}
           qtyFunc={changeQuantity}
         />
       )}
@@ -523,7 +525,6 @@ export const GroupSavedProducts = ({
             className: '!w-full',
           }}
         />
-
       </Box>
     </Box>
   )

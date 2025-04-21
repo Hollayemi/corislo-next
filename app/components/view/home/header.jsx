@@ -292,22 +292,26 @@ function Header({}) {
           </>
         ) : (
           <>
-            <Button
-              variant="text"
-              className="!rounded-2xl !text-xs h-8 !w-fit !text-black md:!text-blue-900 md:!w-20 !ml-1 md:!ml-5"
-              size="small"
-              onClick={() => router.push('/auth/login')}
-            >
-              Login
-            </Button>
-            <Button
-              onClick={() => router.push('/auth/register')}
-              variant="text"
-              className="!rounded-2xl h-8 !w-fit md:!w-20 !text-xs !ml-1 md:!ml-5"
-              size="small"
-            >
-              Register
-            </Button>
+            <Link href="/auth/login">
+              <Button
+                variant="text"
+                className="!rounded-2xl !text-xs h-8 !w-fit !text-black md:!text-blue-900 md:!w-20 !ml-1 md:!ml-5"
+                size="small"
+                onClick={() => router.push('/auth/login')}
+              >
+                Login
+              </Button>
+            </Link>
+            <Link href="/auth/register">
+              <Button
+                onClick={() => router.push('/auth/register')}
+                variant="text"
+                className="!rounded-2xl h-8 !w-fit md:!w-20 !text-xs !ml-1 md:!ml-5"
+                size="small"
+              >
+                Register
+              </Button>
+            </Link>
           </>
         )}
       </Box>

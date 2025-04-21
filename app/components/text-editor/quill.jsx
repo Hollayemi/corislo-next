@@ -2,11 +2,12 @@
 import React, { useRef } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css' // Quill's CSS for snow theme
+import { PingLoader } from '../cards/loader'
 
-function QuillTextEditor({ onChange, value, className = '' }) {
+function QuillTextEditor({ onChange, value, className = '', loading=false }) {
    const quillRef = useRef(null)
   return (
-    <div className={className}>
+    <div className={`${className} relative`}>
       <ReactQuill
         value={value}
         onChange={onChange}
@@ -15,6 +16,11 @@ function QuillTextEditor({ onChange, value, className = '' }) {
         theme="snow" // Theme can be 'snow' or 'bubble'
         className="!rounded-md h-[140px]"
       />
+      {loading && (
+        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-gray-200 bg-opacity-50">
+          <PingLoader size={5} />
+        </div>
+      )}
     </div>
   )
 }

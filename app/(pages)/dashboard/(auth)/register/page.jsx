@@ -124,34 +124,37 @@ const RegisterStore = () => {
         confPas={confPass}
         setConfPass={setConfPass}
         readyToNext={readyToNext}
-      />
-    ),
-    type: (
-      <BusinessType
-        setStage={setStage}
-        values={storeValues}
-        setStoreValues={setStoreValues}
-      />
-    ),
-    1: (
-      <BusinessProfile
-        errors={errors}
-        setStage={setStage}
         handleStoreChange={handleStoreChange}
-        values={storeValues}
-        userValues={userValues}
         setStoreValues={setStoreValues}
+        storeValues={storeValues}
       />
     ),
-    2: (
+    // type: (
+    //   <BusinessType
+    //     setStage={setStage}
+    //     values={storeValues}
+    //     setStoreValues={setStoreValues}
+    //   />
+    // ),
+    // 10: (
+    //   <BusinessProfile
+    //     errors={errors}
+    //     setStage={setStage}
+    //     handleStoreChange={handleStoreChange}
+    //     values={storeValues}
+    //     userValues={userValues}
+    //     setStoreValues={setStoreValues}
+    //   />
+    // ),
+    1: (
       <OtpVerification
         setStage={setStage}
         email={storeValues.businessEmail}
         account="business"
-        callback={(done) => setStage(done ? 3 : 2)}
+        callback={(done) => setStage(done ? 2 : 0)}
       />
     ),
-    3: (
+    2: (
       // <Pricing
       //   setStage={setStage}
       //   userValues={userValues}

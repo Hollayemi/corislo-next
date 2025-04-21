@@ -18,17 +18,20 @@ import {
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useUserData } from '@/app/hooks/useData'
-import { deleteBulkCart } from '@/app/redux/state/slices/home/cart'
+import { addCartHandler, deleteBulkCart, saveProduct } from '@/app/redux/state/slices/home/cart'
 import { useDispatch } from 'react-redux'
 import CustomOption from '@/app/components/option-menu/option'
 import Link from 'next/link'
 import useSWR from 'swr'
 import { reshapePrice } from '../dashboard/store/marketing/components'
 import Head from 'next/head'
+import { BasicModal } from '@/app/components/cards/popup'
+import RemoveFromCartModal from './components'
 
 const UserCart = () => {
   const dispatch = useDispatch()
   const { data: addrs } = useSWR('/user/addresses')
+  const [modalOpen, setModalOpen] = useState(false)
   const addresses = addrs?.data || []
   const {
     cartData,
@@ -55,7 +58,30 @@ const UserCart = () => {
         />
         <meta name="keywords" content="nextjs, homepage, website" />
       </Head>
-      <HomeWrapper>
+      <HomeWrapper
+        popup={
+          <BasicModal
+            openModal={Boolean(modalOpen)}
+            content={
+              <RemoveFromCartModal
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                onSaveForLater={() => {
+                  // alert('Saved for later!')
+                  addCartHandler(modalOpen, dispatch)
+                  saveProduct(modalOpen, dispatch)
+                  setModalOpen(false)
+                }}
+                onRemove={() => {
+                  // alert('Item removed!')
+                  addCartHandler(modalOpen, dispatch)
+                  setModalOpen(false)
+                }}
+              />
+            }
+          />
+        }
+      >
         <Box className="!px-2 my-5 sm:!px-16 md:!px-24 lg:!px-32 md:!py-7 relative">
           <Grid container spacing={2}>
             <Grid item xs={12} md={8}>
@@ -95,7 +121,11 @@ const UserCart = () => {
                         !selected.length > 0 && 'cursor-cancel'
                       }`}
                       disabled={!selected.length > 0}
-                      onClick={() => deleteBulkCart(selected, dispatch)}
+                      // onClick={() => deleteBulkCart(selected, dispatch)}
+                      onClick={() => {
+                        setModalOpen(true)
+                        // dispatch(deleteBulkCart(selected))
+                      }}
                     >
                       Delete selected items
                     </Button>
@@ -120,6 +150,7 @@ const UserCart = () => {
                               store={each.store}
                               selected={selected}
                               selectCart={selectCart}
+                              cartPopup={setModalOpen}
                               branch={each.branch}
                               cartId={each._id}
                               productId={each.product._id}

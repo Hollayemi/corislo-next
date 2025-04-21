@@ -23,16 +23,20 @@ import { useDispatch } from 'react-redux'
 import useSWR from 'swr'
 import { TitleSubtitle } from '../user/components'
 import { ChangeAddress, PaymentOptions } from '../checkout/page'
+import { reshapePrice } from '../dashboard/store/marketing/components'
 
 const SavedItems = () => {
   const dispatch = useDispatch()
-  const { savedProds, userInfo, temp, seletedCartProds } = useUserData()
+  const { savedProds, userInfo, temp, seletedCartProds, agentInfo } =
+    useUserData()
   const { data: saved, error } = useSWR('/user/saved-items/group')
   const { data: agents } = useSWR('/user/pickers')
   const pickers = agents?.data || []
   const groupedCart = saved ? saved.data : []
   const [selected, selectItem] = useState([])
   const [totalPrice, setTotalPrice] = useState([])
+  const [usingPoint, usPoint] = useState(false)
+  console.log(usingPoint)
 
   console.log(selected)
 
@@ -40,6 +44,7 @@ const SavedItems = () => {
     ids: selected,
     delivery: {},
     picker: {},
+    usingPoint,
     type: 'saved',
     shippingAddress: temp.address || userInfo?.selectedAddress || null,
     billingCard: userInfo?.selectedBilling || null,
@@ -48,9 +53,10 @@ const SavedItems = () => {
   useEffect(() => {
     orderPrice({ products: selected, model: 'saved' }, dispatch, setTotalPrice)
     updatePayload((prev) => ({ ...prev, ids: selected }))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected])
 
+  const myPoints = usingPoint ? agentInfo?.coin : 0
   const address = payload.shippingAddress
   const card = payload.billingCard
 
@@ -142,6 +148,19 @@ const SavedItems = () => {
                       {ngnPrice(totalPrice?.originalPrice || 0)}
                     </Typography>
                   </Box>
+                  {usingPoint && (
+                    <Box className="w-full flex justify-between items-center !mt-5">
+                      <Typography variant="body2" className="!text-[12px]">
+                        Points
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        className="!text-[12px] !text-green-500"
+                      >
+                        - {reshapePrice(agentInfo.coin || 0)}
+                      </Typography>
+                    </Box>
+                  )}
                   <Box className="w-full flex justify-between items-center !mt-2">
                     <Typography variant="body2" className="!text-[12px]">
                       Discount
@@ -198,7 +217,12 @@ const SavedItems = () => {
                   address={address}
                   updatePayload={updatePayload}
                 />
-                <PaymentOptions card={card} updatePayload={updatePayload} />
+                <PaymentOptions
+                  card={card}
+                  coin={agentInfo?.coin}
+                  usPoint={usPoint}
+                  updatePayload={updatePayload}
+                />
                 <Button
                   variant="contained"
                   disabled={selected.length < 1}

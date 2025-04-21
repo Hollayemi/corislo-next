@@ -35,7 +35,7 @@ export default function StoreAuthLayout({
   const StageBox = ({ text, level }) => {
     return (
       <Box
-        className="w-1/2 md:w-1/4"
+        className="w-1/3 md:w-1/3"
         onClick={getStatus(level) === 'done' ? () => setStage(level) : () => {}}
       >
         <CheckList2 text={text} active={getStatus(level)} />
@@ -117,10 +117,18 @@ export default function StoreAuthLayout({
               </Typography>
             </Box>
             <Box className="w-full flex items-center flex-wrap md:flex-nowrap mb-7 mt-4 md:mt-0 md:mb-0 md:px-6">
-              <StageBox text="Personal Info" level={0} />
-              <StageBox text="Business Profile" level={1} />
-              <StageBox text="Verification" level={2} />
-              <StageBox text="Set Location" level={3} />
+              <StageBox text="Profile" level={0} />
+              {/* <StageBox text="Business Profile" level={1} /> */}
+              <StageBox text="Verification" level={1} />
+              <StageBox
+                text={
+                  <div className="flex items-center">
+                    <span className="hidden md:block">Set</span>
+                    <span> Location</span>
+                  </div>
+                }
+                level={2}
+              />
             </Box>
             {/* This for the app */}
             {children}

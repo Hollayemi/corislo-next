@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation'
 import { ShareIcon } from '@/app/(pages)/referral/dashboard/page'
 
 export default function Share({
-  shareUrl = 'https://corislo.vercel.app',
+  shareUrl = 'https://corisio.com',
   message,
   close,
   searchParams,

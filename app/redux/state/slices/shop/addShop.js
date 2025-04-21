@@ -15,18 +15,26 @@ export const createNewStore = createAsyncThunk(
 );
 
 
-export const createStoreHandler = (payload, dispatch, router, setStage) => {
+export const createStoreHandler = (payload, dispatch, setStage, setLoading) => {
+  setLoading(true);
   dispatch(createNewStore(payload))
     .then(unwrapResult)
     .then((res) => {
       toaster({ ...res });
       console.log(res)
-      setStage(res.stage > -1 ? res.stage : 2)
-      // if (res.type === "success") {
-      //   router.push(res.navigateTo);
-      // }
+      setStage(res.type === "success" ? 1 : res.stage)
+      if (res.type === "success") {
+        setLoading(false);
+      }
+      setLoading(false);
     })
-    .catch((e) => {});
+    .catch((e) => {
+      setLoading(false);
+      toaster({
+        type: "error",
+        message: e?.data?.message || "Something went wrong",
+      });
+    });
 };
 
 export const fetchShopInfo = (dispatch, setState) => {

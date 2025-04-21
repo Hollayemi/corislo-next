@@ -28,6 +28,7 @@ import {
   WhatsappShareButton,
   XIcon,
 } from 'react-share'
+import Link from 'next/link'
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
@@ -235,14 +236,14 @@ const ReferralDashboard = () => {
                     <input
                       type="text"
                       className="border-none h-10 px-4 grow outline-none"
-                      value={`https://corislo.vercel.app/dashboard/register?ref=${agentData.ref_id}`}
+                      value={`https://corisio.com/dashboard/register?ref=${agentData.ref_id}`}
                     />
                     <Button
                       variant="contained"
                       className="!shadow-none"
                       onClick={() =>
                         copyToClipboard(
-                          `https://corislo.vercel.app/dashboard/register?ref=${agentData.ref_id}`,
+                          `https://corisio.com/dashboard/register?ref=${agentData.ref_id}`,
                           setIsCopied
                         )
                       }
@@ -259,19 +260,19 @@ const ReferralDashboard = () => {
                     </Typography>
                     <ShareIcon
                       icon="facebook"
-                      url={`https://corislo.vercel.app/dashboard/register?ref=${agentData.ref_id}`}
+                      url={`https://corisio.com/dashboard/register?ref=${agentData.ref_id}`}
                     />
                     <ShareIcon
                       icon="x"
-                      url={`https://corislo.vercel.app/dashboard/register?ref=${agentData.ref_id}`}
+                      url={`https://corisio.com/dashboard/register?ref=${agentData.ref_id}`}
                     />
                     <ShareIcon
                       icon="linkedin"
-                      url={`https://corislo.vercel.app/dashboard/register?ref=${agentData.ref_id}`}
+                      url={`https://corisio.com/dashboard/register?ref=${agentData.ref_id}`}
                     />
                     <ShareIcon
                       icon="whatsapp"
-                      url={`https://corislo.vercel.app/dashboard/register?ref=${agentData.ref_id}`}
+                      url={`https://corisio.com/dashboard/register?ref=${agentData.ref_id}`}
                     />
                   </Box>
                 </Box>
@@ -343,13 +344,15 @@ const ReferralDashboard = () => {
                 />
               </Box>
 
-              <Button
-                variant="contained"
-                className="!shadow-none !h-10 w-full md:!w-60 !text-[13px] !mt-6"
-                endIcon={<Icon icon="tabler:arrow-narrow-right" />}
-              >
-                Support & Resources
-              </Button>
+              <Link href="/referral/guide">
+                <Button
+                  variant="contained"
+                  className="!shadow-none !h-10 w-full md:!w-60 !text-[13px] !mt-6"
+                  endIcon={<Icon icon="tabler:arrow-narrow-right" />}
+                >
+                  Support & Resources
+                </Button>
+              </Link>
             </Box>
             <Box className="hidden md:flex justify-center w-full">
               <Image
@@ -506,7 +509,7 @@ const ActivityTable = () => {
         <Typography className="text-[13px] font-bold">Activities</Typography>
       </Box>
       <CardContent className="!overflow-auto">
-        {data.map((item, index) => {
+        {/* {data.map((item, index) => {
           return (
             <Box
               key={index}
@@ -563,7 +566,7 @@ const ActivityTable = () => {
               </Box>
             </Box>
           )
-        })}
+        })} */}
       </CardContent>
     </Card>
   )

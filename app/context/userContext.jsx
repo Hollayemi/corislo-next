@@ -68,7 +68,13 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
 
   useEffect(() => {
     const offlinePages = UserPages.isOffline.map((x) => x.link)
-    const whiteList = ['auth', 'biz', "category", ...offlinePages]
+    const whiteList = [
+      'auth',
+      'biz',
+      'picker-order',
+      'category',
+      ...offlinePages,
+    ]
     if (isOffline() && !whiteList.includes(getPath[getPath.length - 2])) {
       router.replace(`/auth/login?returnurl=${pathname.substring(1)}`)
     }
@@ -225,7 +231,7 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
         following: (!folErr && !folIsLoading && following?.data) || [],
         cartData: (!cartErr && !cartIsLoading && cartData?.data) || {},
         userInfo: (!userErr && !userIsLoading && userInfo?.user) || {},
-        agentInfo: (!agentIsLoading ? agentData : {}),
+        agentInfo: !agentIsLoading ? agentData : {},
         notifications,
         selectedAddress: {},
         coordinates,

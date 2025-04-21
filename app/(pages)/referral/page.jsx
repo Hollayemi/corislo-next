@@ -1,19 +1,23 @@
-"use client";
-import { useState } from "react";
-import { Box, Typography, Button } from "@mui/material";
-import HomeWrapper from "@/app/components/view/home";
-import { useRouter } from "next/navigation";
-import { useUserData } from "@/app/hooks/useData";
-import { ngnPrice } from "@/app/utils/format";
-import { copyToClipboard } from "@/app/utils/clipboard";
-import Icon from "@/app/components/icon";
-import Image from "next/image";
+'use client'
+import { useState } from 'react'
+import { Box, Typography, Button } from '@mui/material'
+import HomeWrapper from '@/app/components/view/home'
+import { useRouter } from 'next/navigation'
+import { useUserData } from '@/app/hooks/useData'
+import { ngnPrice } from '@/app/utils/format'
+import { copyToClipboard } from '@/app/utils/clipboard'
+import Icon from '@/app/components/icon'
+import Image from 'next/image'
+import useSWR from 'swr'
 
 const Referral = () => {
-  const { userInfo } = useUserData();
-  const [isCopied1, setIsCopied1] = useState(false);
-  const [isCopied2, setIsCopied2] = useState(false);
-  const route = useRouter();
+  const { userInfo } = useUserData()
+  const [isCopied1, setIsCopied1] = useState(false)
+  const [isCopied2, setIsCopied2] = useState(false)
+  const route = useRouter()
+  const { data, isLoading } = useSWR('/corisio/agent-rewards')
+  console.log(data)
+  const storeReward = data?.filter((item) => item.type === 'store_reg') || []
   return (
     <HomeWrapper noFooter>
       <Image
@@ -51,7 +55,7 @@ const Referral = () => {
               </Typography>
               <Box className="flex items-center">
                 <Icon
-                  icon="tabler:copy"
+                  icon={isCopied1 ? 'tabler:copy-check' : 'tabler:copy'}
                   onClick={() =>
                     copyToClipboard(userInfo.username, setIsCopied1)
                   }
@@ -75,9 +79,12 @@ const Referral = () => {
               </Typography>
               <Box className="w-11/12 flex items-center">
                 <Icon
-                  icon="tabler:copy"
+                  icon={isCopied2 ? 'tabler:copy-check' : 'tabler:copy'}
                   onClick={() =>
-                    copyToClipboard(userInfo.username, setIsCopied1)
+                    copyToClipboard(
+                      `https://corisio.com/refferal?id=${userInfo.username}`,
+                      setIsCopied2
+                    )
                   }
                   className="mr-2 cursor-pointer hover:text-blue-900"
                 />
@@ -86,7 +93,7 @@ const Referral = () => {
                   className="!text-[12px] !w-full !text-gray-800 !font-black"
                   variant="body2"
                 >
-                  https://corisio.vercel.app/refferal?id={userInfo.username}
+                  https://corisio.com/refferal?id={userInfo.username}
                 </Typography>
               </Box>
             </Box>
@@ -106,7 +113,7 @@ const Referral = () => {
                   className="!text-[12px] !text-gray-800 !font-black"
                   variant="caption"
                 >
-                  4000
+                  {`${storeReward[0]?.amount} Points`}
                 </Typography>
               </Box>
             </Box>
@@ -124,7 +131,7 @@ const Referral = () => {
                   className="!text-[12px] !w-full !text-gray-800 !font-black"
                   variant="body2"
                 >
-                  8000
+                  {`${storeReward[0]?.amount} + ${storeReward[0]?.point} Points`}
                 </Typography>
               </Box>
             </Box>
@@ -132,7 +139,9 @@ const Referral = () => {
 
           <Button
             variant="contained"
-            onClick={() => route.push('/dashboard/register?ref=stephenyemmitty')}
+            onClick={() =>
+              route.push(`/dashboard/register?ref=${userInfo.username}`)
+            }
             className="!mt-6 !shadow-none !text-white !h-10 w-full !text-[12px]"
           >
             Register Store
@@ -177,5 +186,5 @@ const Referral = () => {
       </Box>
     </HomeWrapper>
   )
-};
-export default Referral;
+}
+export default Referral

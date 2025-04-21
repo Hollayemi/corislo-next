@@ -14,7 +14,14 @@ import { allOrderColumns, ordersColumns } from './columns'
 import Icon from '@/app/components/icon'
 // import { rows } from "../row";
 
-export const OrderListComponents = ({ value, setValue, rows, isLoading }) => {
+export const OrderListComponents = ({
+  value,
+  setValue,
+  rows,
+  isLoading,
+  search,
+  foundbyPicker,
+}) => {
   // ** Hook
   const router = useRouter()
   // ** State
@@ -80,9 +87,10 @@ export const OrderListComponents = ({ value, setValue, rows, isLoading }) => {
       <TabPanel value="all" className="!px-px">
         <Box className={`w-full !pb-1 !rounded-md`} bgcolor="custom.bodyLight">
           <OrderTable
+            search={search}
             loading={isLoading}
             columns={allOrderColumns(actionFunctions)}
-            rows={sortBy()}
+            rows={foundbyPicker || sortBy()}
             // onRowClick={onRowClick}
           />
         </Box>
@@ -90,45 +98,50 @@ export const OrderListComponents = ({ value, setValue, rows, isLoading }) => {
       <TabPanel value="new" className="!px-px">
         <Box className={`w-full !pb-1 !rounded-md`} bgcolor="custom.bodyLight">
           <OrderTable
+            search={search}
             loading={isLoading}
             columns={ordersColumns(actionFunctions)}
-            rows={sortBy('paid')}
+            rows={foundbyPicker || sortBy('paid')}
           />
         </Box>
       </TabPanel>
       <TabPanel value="unpaid" className="!px-px">
         <Box className={`w-full !pb-1 !rounded-md`} bgcolor="custom.bodyLight">
           <OrderTable
+            search={search}
             loading={isLoading}
             columns={ordersColumns(actionFunctions)}
-            rows={sortBy('unpaid')}
+            rows={foundbyPicker || sortBy('unpaid')}
           />
         </Box>
       </TabPanel>
       <TabPanel value="pickable" className="!px-px">
         <Box className={`w-full !pb-1 !rounded-md`} bgcolor="custom.bodyLight">
           <OrderTable
+            search={search}
             loading={isLoading}
             columns={ordersColumns(actionFunctions)}
-            rows={sortBy('ongoing')}
+            rows={foundbyPicker || sortBy('ongoing')}
           />
         </Box>
       </TabPanel>
       <TabPanel value="cancelled" className="!px-px">
         <Box className={`w-full !pb-1 !rounded-md`} bgcolor="custom.bodyLight">
           <OrderTable
+            search={search}
             loading={isLoading}
             columns={ordersColumns(actionFunctions)}
-            rows={sortBy('cancelled')}
+            rows={foundbyPicker || sortBy('cancelled')}
           />
         </Box>
       </TabPanel>
       <TabPanel value="completed" className="!px-px">
         <Box className={`w-full !pb-1 !rounded-md`} bgcolor="custom.bodyLight">
           <OrderTable
+            search={search}
             loading={isLoading}
             columns={ordersColumns(actionFunctions)}
-            rows={sortBy('completed')}
+            rows={foundbyPicker || sortBy('completed')}
           />
         </Box>
       </TabPanel>
