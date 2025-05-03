@@ -58,7 +58,7 @@ export default function AuthLayout({ children, reverse, image, ...others }) {
         </Box>
 
         <Box
-          className="w-full h-full px-3 overflow-hidden"
+          className="w-full h-screen  overflow-hidden"
           bgcolor="custom.bodyGray"
         >
           <Box

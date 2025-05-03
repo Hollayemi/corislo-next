@@ -93,7 +93,7 @@ export const ReviewTab = ({ summary, searchParams }) => {
   const [page, setPage] = useState(10)
   const [option, setOption] = useState('March 2023 - October 2023')
 
-  const { review, average, sum, ...others } = summary
+  const { review, average, sum, ...others } = summary || {}
 
   return summary?.reviews?.length ? (
     <Box className="w-full">

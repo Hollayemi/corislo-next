@@ -24,9 +24,6 @@ import {
 } from '@/app/components/view/home/Components/Footer'
 import useSWR from 'swr'
 import { NumberExplained } from '../components/cards/sellerCards'
-import { useUserData } from '../hooks/useData'
-import { ServicesSlider } from './services/page'
-import Link from 'next/link'
 import useSWRWithCoordinates from '../hooks/fetchWithCoordinates'
 import { CircleLoader } from '../components/cards/loader'
 import { useRouter } from 'next/navigation'
@@ -55,6 +52,8 @@ const HomePage = ({ params }) => {
   const popularAds = ads ? ads.data : []
   const stores = nearStores ? nearStores.data : []
   const router = useRouter()
+
+  const [hasContent, hideTitle] = useState({})
 
   console.log(stores)
 
@@ -220,7 +219,7 @@ const HomePage = ({ params }) => {
               </Box>
             </ReactSlickSlider>
           </Box>
-          <Box className="!my-12 px-2 md:px-10">
+          {/* <Box className="!my-12 px-2 md:px-10">
             <SectionTitle
               black="Professional"
               blue="Services"
@@ -235,7 +234,7 @@ const HomePage = ({ params }) => {
             />
 
             <ServicesSlider noPopup />
-          </Box>
+          </Box> */}
           {/*  */}
           {/*  */}
           {/*  */}
@@ -251,7 +250,7 @@ const HomePage = ({ params }) => {
           {/*  */}
           {/*  */}
           {/*  */}
-          <Box className="px-2 md:px-10">
+          <Box className="px-2 mt-16 md:px-10">
             <SectionTitle black="Popular" blue="Products" />
             <PopularProduct />
           </Box>
@@ -271,6 +270,7 @@ const HomePage = ({ params }) => {
           <Box className="mt-14">
             <Box className="px-2 md:px-10 mt-4 ">
               <SectionTitle black="Flash" blue="Sale" />
+
               <br />
               <CountdownTimer initialDate={new Date()} daysToCount={5} />
               <br />
@@ -325,7 +325,9 @@ const HomePage = ({ params }) => {
           {/*  */}
           <Box className="mt-14">
             <Box className="px-2 md:px-10 ">
-              <SectionTitle black="Popular" blue="Ads" />
+              {popularAds.length > 0 && (
+                <SectionTitle black="Popular" blue="Ads" />
+              )}
               <Box className="!mt-6">
                 <ReactSlickSlider>
                   {popularAds.map((ad, i) => (
@@ -366,7 +368,7 @@ const HomePage = ({ params }) => {
                       key={i}
                       prodName={prod.prodName}
                       prodPrice={prod.prodPrice}
-                      image={`/images/more/${i + 1}.png`}
+                      image={prod?.images[0]?.image || prod?.images[0]}
                       star={prod.star}
                       store={prod.store}
                       branch={prod.branch}
@@ -401,7 +403,9 @@ const HomePage = ({ params }) => {
 
           <Box className="mt-14">
             <Box className="px-3 md:px-10">
-              <SectionTitle black="Store" blue="Around You" />
+              {stores.length > 0 && (
+                <SectionTitle black="Store" blue="Around You" />
+              )}
               <Box className="!mt-6 flex flex-col md:flex-row justify-center">
                 <Box className="w-full md:w-2/6 md:pr-6">
                   <Typography

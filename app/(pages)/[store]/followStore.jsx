@@ -44,11 +44,11 @@ const FollowStore = ({ getStore }) => {
             <IconifyIcon icon="tabler:link" className="!mr-2 !text-[14px]" />
 
             <Link
-              href={`www.corisio.com/biz/${branchInfo.store}`}
+              href={`www.corisio.com/${branchInfo.store}`}
               className="!text-[12px]"
               color="custom.pri"
             >
-              {mySubstring(`www.corisio.com/biz/${branchInfo.store}`, 25)}
+              {mySubstring(`www.corisio.com/${branchInfo.store}`, 25)}
             </Link>
           </Box>
           <Box className="flex items-center">

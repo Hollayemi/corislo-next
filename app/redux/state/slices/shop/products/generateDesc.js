@@ -5,7 +5,7 @@ const generateDescApi = createAsyncThunk(
   "post/genDesc",
   async (payload) => {
     console.log(payload)
-    const { data } = await axios.post("https://corisio-desc-generator.onrender.com/generate-description", payload)
+    const { data } = await axios.post("https://corisio-desc-generator.onrender.com/generate-description", {...payload, prodPrice: parseFloat(payload.prodPrice)})
       .then((res) => res)
       .catch((e) => e.response);
     return data;

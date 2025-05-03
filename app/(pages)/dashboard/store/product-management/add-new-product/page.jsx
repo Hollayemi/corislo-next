@@ -185,6 +185,7 @@ const AddNewProduct = ({ params }) => {
           link: 'add-new-product',
         },
       ]}
+      breadCrumbRIghtChildren={<Button variant="contained" href='add-new-product/bulk-upload' className='!shadow-none !rounded-md normal-case'>Bulk Upload</Button>}
     >
       <Box className="bg-white rounded-md md:px-5 pt-6 pb-8 !text-[13px]">
         <Grid container spacing={4} className="!px-3">

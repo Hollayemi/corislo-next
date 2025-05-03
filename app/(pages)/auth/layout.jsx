@@ -11,7 +11,7 @@ const config = {
   login: { title: 'Sign In to Account', center: true },
   refresh: { title: 'Authenticating', center: true, noLogo: true },
   logout: { title: 'User Logout', center: true },
-  register: { title: 'Create Account', center: true },
+  register: { title: 'Create Account'},
   forgot_password: { title: 'Forgot your Password?', center: true },
   reset_password: { title: 'Reset Account Password', center: true },
   verify_account: { title: 'Email Verification', center: true },

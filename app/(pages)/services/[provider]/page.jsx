@@ -7,7 +7,7 @@ import { LongServiceListing } from '../components'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { useState } from 'react'
 import Policies, { Policy2 } from './policies'
-import Review from '../../biz/[store]/review'
+import Review from '../../[store]/review'
 
 const ServiceProviderDisplay = ({ params, searchParams }) => {
   const { data, isLoading } = useSWR(`/services?provider=${params.provider}`)

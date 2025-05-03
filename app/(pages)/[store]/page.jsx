@@ -67,7 +67,7 @@ const BusinessPage = ({ params, searchParams, data, error }) => {
       >
         <Box className="relative">
           <Image
-            src="/images/misc/biz-header.png"
+            src="/images/misc-header.png"
             alt="header"
             width={1900}
             height={1400}
@@ -154,7 +154,7 @@ export async function generateMetadata({ params }) {
       openGraph: {
         title: branchInfo.businessName,
         description: branchInfo.about_store,
-        url: `https://corisio.com/biz/${branchInfo.store}-${branchInfo.store}`,
+        url: `https://corisio.com/${branchInfo.store}-${branchInfo.store}`,
         images: branchInfo.gallery,
         logo: branchInfo.profile_image,
         image: branchInfo.profile_image,

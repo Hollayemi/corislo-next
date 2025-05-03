@@ -20,7 +20,6 @@ export const PopularProduct = ({ endpoint, ...props }) => {
     endpoint || '/home/popular-products?limit=40'
   )
   const popularProducts = popularProds ? popularProds.data : []
-  console.log(popularProducts)
 
   const View = ({ image, prodName, store, price, small, others }) => (
     <Box
@@ -41,7 +40,7 @@ export const PopularProduct = ({ endpoint, ...props }) => {
           </Typography>
         </Box>
       )}
-      <Box onClick={() => router.push(`/biz/${store}/${prodName}`)}>
+      <Box onClick={() => router.push(`/${store}/${others.urlKey}`)}>
         <img
           src={image}
           alt="product_image"
@@ -49,7 +48,7 @@ export const PopularProduct = ({ endpoint, ...props }) => {
         />
       </Box>
       <Box className="py-1">
-        <Link href={`/biz/${store}/${prodName}`}>
+        <Link href={`/${store}/${others.urlKey}`}>
           <Box>
             <Typography
               variant="body2"
@@ -89,7 +88,7 @@ export const PopularProduct = ({ endpoint, ...props }) => {
     </Box>
   )
 }
-export const HotDeal = (props) => {
+export const HotDeal = ({ ...props }) => {
   const { data } = useSWRWithCoordinates('/home/flashsales?deal=hot')
   const hotDealData = data ? data.data : []
   const router = useRouter()
@@ -103,7 +102,7 @@ export const HotDeal = (props) => {
             : '!w-28 !h-44 md:!w-44 md:!h-60 m-1.5 md:m-3 relative'
         }`}
       >
-        <Box onClick={() => router.push(`/biz/${others?.store}/${prodName}`)}>
+        <Box onClick={() => router.push(`/${others?.store}/${others?.urlKey}`)}>
           <img
             src={image}
             alt="product_image"
@@ -113,7 +112,7 @@ export const HotDeal = (props) => {
           />
         </Box>
         <Box className="pt-1">
-          <Link href={`/biz/${others?.store}/${prodName}`}>
+          <Link href={`/${others?.store}/${others?.urlKey}`}>
             <Box>
               <Typography
                 variant="body2"
@@ -251,11 +250,13 @@ export const ProductOnShowcase = ({
   const { showMapScreen, cartedProds } = useUserData()
   const router = useRouter()
   const dispatch = useDispatch()
+  console.log(others, 'others')
   const payload = {
     productId: others._id,
     store,
     branch,
   }
+
   const reshapedProdName = prodName.split(' ').join('+').toLowerCase()
   return (
     <Box className="w-4/12 min-w-[100px] relative max-w-[140px] md:max-w-[170px] md:w-44 h-48 md:!h-64 md:mx-2 my-6 ">
@@ -271,7 +272,7 @@ export const ProductOnShowcase = ({
         </Box>
       )}
       <Box
-        onClick={() => router.push(`/biz/${store}/${reshapedProdName}`)}
+        onClick={() => router.push(`/${store}/${others?.urlKey}`)}
         className="!px-0.5"
       >
         <img
@@ -281,7 +282,7 @@ export const ProductOnShowcase = ({
         />
       </Box>
       <Box className="pt-1 px-px">
-        <Link href={`/biz/${store}/${reshapedProdName}`}>
+        <Link href={`/${store}/${others?.urlKey}`}>
           <Box>
             <Typography
               variant="body2"
@@ -303,10 +304,20 @@ export const ProductOnShowcase = ({
             className="md:border border-black rounded-full h-6 px-2 mt-1 cursor-pointer flex items-center"
             onClick={() => addCartHandler(payload, dispatch)}
           >
-            <Typography variant="caption" className="!text-[10px] !leading-5 hidden md:block">
+            <Typography
+              variant="caption"
+              className="!text-[10px] !leading-5 hidden md:block"
+            >
               {cartedProds.includes(others._id) ? 'Remove' : 'Add to Cart'}
             </Typography>
-            <IconifyIcon icon="tabler:shopping-cart" className={`md:hidden ml-1 ${cartedProds.includes(others._id)? "text-yellow-500": "text-gray-800"}`} /> 
+            <IconifyIcon
+              icon="tabler:shopping-cart"
+              className={`md:hidden ml-1 ${
+                cartedProds.includes(others._id)
+                  ? 'text-yellow-500'
+                  : 'text-gray-800'
+              }`}
+            />
           </Box>
         </Box>
 
@@ -319,7 +330,7 @@ export const ProductOnShowcase = ({
             size="small"
           />
           <Box className="flex justify-between items-center w-full mt-1 px-1">
-            <Link href={`/biz/${store}-${branch}/`}>
+            <Link href={`/${store}-${branch}/`}>
               <Typography
                 variant="body2"
                 className="whitespace-nowrap text-ellipsis !text-[10px]"

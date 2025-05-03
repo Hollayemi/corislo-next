@@ -15,7 +15,7 @@ const MapSelection = ({ setStage, userValues, storeValues }) => {
         <SetLocation close={() => {}} />
       </Box>
       <br />
-      <Box className="w-80  mb-8 md:pb-0 flex justify-center mt-6 px-4">
+      <Box className="w-80  mb- md:pb-0 flex justify-center mt-6 px-4">
         <Button
           variant="contained"
           className="w-full !h-10 !rounded-md !text-gray-100 !text-[17px] !mt-3 !shadow-none"

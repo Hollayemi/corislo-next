@@ -206,7 +206,7 @@ export const TopStores = ({
         className="!w-36 h-36 !rounded-full flex-shrink-0 !mb-3"
       />
 
-      <Link href={`/biz/${store}-${branch}`}>
+      <Link href={`/${store}-${branch}`}>
         <Typography variant="body2" className="!text-[13px] !font-bold">
           {name}
         </Typography>

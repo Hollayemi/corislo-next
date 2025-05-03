@@ -22,6 +22,7 @@ const useGeolocation = (interval = 120000) => {
             longitude: position.coords.longitude,
           });
           setLoading(false);
+          position.coords.latitude && localStorage.setItem("coordinates", [position.coords.latitude, position.coords.longitude])
         },
         (error) => {
           setError(error.message);
@@ -35,12 +36,23 @@ const useGeolocation = (interval = 120000) => {
       );
     };
 
+    
     updateCoordinates(); // Initial call
     const intervalId = setInterval(updateCoordinates, interval);
 
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, [interval]);
-
+  
+  useEffect(() => {
+    if(!coordinates.latitude){
+      const items = localStorage.getItem("coordinates").split(",")
+      console.log(items);
+      setCoordinates({
+        latitude: parseFloat(items[0]),
+        longitude: parseFloat(items[1])
+      })
+    }
+  }, [coordinates])
   return { coordinates, loading, error };
 };
 

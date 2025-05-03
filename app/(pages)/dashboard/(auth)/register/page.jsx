@@ -17,14 +17,16 @@ import { SetLocation } from '@/app/(pages)/dashboard/services/setup/component'
 import { Box } from '@mui/material'
 import MapSelection from './store/map'
 
-const RegisterStore = () => {
+export const StoreRegistrationForm = ({
+  searchParams,
+  page,
+  referrer,
+  stage,
+  setStage,
+}) => {
   const { coordinates } = useGeolocation()
   console.log(coordinates)
   const [readyToNext, showAllError] = useState(false)
-  const searchParams = useSearchParams()
-  const referrer = searchParams.get('ref')
-  const page = searchParams.get('p')
-  const [stage, setStage] = useState(parseInt(page) || 0)
 
   const [errors, setErrors] = useState({
     fullname: '',
@@ -66,7 +68,6 @@ const RegisterStore = () => {
   const handleStoreChange = (prop) => (event) => {
     console.log(event, event?.target?.value)
     setStoreValues({ ...storeValues, [prop]: event?.target?.value })
-   
   }
   const [userValues, setUserValues] = useState({
     fullname: '',
@@ -149,7 +150,7 @@ const RegisterStore = () => {
     1: (
       <OtpVerification
         setStage={setStage}
-        email={storeValues.businessEmail}
+        email={userValues.email}
         account="business"
         callback={(done) => setStage(done ? 2 : 0)}
       />
@@ -168,17 +169,28 @@ const RegisterStore = () => {
     ),
   }
   console.log(readyToNext)
+  return pages[stage]
+   
+}
+
+const RegisterStore = () => {
+    const searchParams = useSearchParams()
+    const referrer = searchParams.get('ref')
+    const page = searchParams.get('p')
+    const [stage, setStage] = useState(parseInt(page) || 0)
   return (
     <StoreAuthLayout
       title="Create Business Account"
       stage={stage}
       setStage={setStage}
-      showAllError={showAllError}
-      errors={errors}
-      userValues={userValues}
-      storeValues={storeValues}
+      noNote
     >
-      {pages[stage]}
+      <StoreRegistrationForm
+        stage={stage}
+        setStage={setStage}
+        page={page}
+        referrer={referrer}
+      />
     </StoreAuthLayout>
   )
 }

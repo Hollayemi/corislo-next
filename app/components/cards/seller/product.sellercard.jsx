@@ -1,21 +1,21 @@
-import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { useUserData } from "@/app/hooks/useData";
-import IconifyIcon from "@/app/components/icon";
-import useSWR from "swr";
-import Image from "next/image";
-import { Box, Button, Typography } from "@mui/material";
-import { summarizeFollowers } from "@/app/utils/format";
-import { followStore } from "@/app/redux/state/slices/users/following";
-import Link from "next/link";
+import { useRouter } from 'next/navigation'
+import { useDispatch } from 'react-redux'
+import { useUserData } from '@/app/hooks/useData'
+import IconifyIcon from '@/app/components/icon'
+import useSWR from 'swr'
+import Image from 'next/image'
+import { Box, Button, Typography } from '@mui/material'
+import { summarizeFollowers } from '@/app/utils/format'
+import { followStore } from '@/app/redux/state/slices/users/following'
+import Link from 'next/link'
 
 export const ProductSellerCard = ({ branchId }) => {
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const { data, error } = useSWR(`/branch/info?branchId=${branchId}`);
-  const storeInfo = data?.data || {};
-  const { following, socket } = useUserData();
-  const isFollowing = following.includes(branchId);
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const { data, error } = useSWR(`/branch/info?branchId=${branchId}`)
+  const storeInfo = data?.data || {}
+  const { following, socket } = useUserData()
+  const isFollowing = following.includes(branchId)
   return (
     <Box className="bg-white w-full rounded-xl p-4 mt-4 relative">
       <Box className="flex  justify-between">
@@ -27,7 +27,7 @@ export const ProductSellerCard = ({ branchId }) => {
             height={100}
             className="w-14 h-14 border border-blue-700 !rounded-full"
           />
-          <Link href={`/biz/${storeInfo.store}-${storeInfo.branch}`}>
+          <Link href={`/${storeInfo.store}-${storeInfo.branch}`}>
             <Box className="mt-3 ml-2">
               <Typography
                 variant="body2"
@@ -82,7 +82,10 @@ export const ProductSellerCard = ({ branchId }) => {
       </Box>
       <Box className="mt-3 flex flex-col md:flex-row ">
         <Box className="flex items-center justify-evenly md:w-3/5">
-          <StoreNumberStatus status="Items" value={storeInfo.totalItems || "..."} />
+          <StoreNumberStatus
+            status="Items"
+            value={storeInfo.totalItems || '...'}
+          />
           <Box className="w-0.5 h-6 bg-gray-300"></Box>
           <StoreNumberStatus
             status="Followers"
@@ -102,7 +105,7 @@ export const ProductSellerCard = ({ branchId }) => {
       </Box>
     </Box>
   )
-};
+}
 
 const TickCheck = ({ title, result, icon }) => (
   <Box className="flex items-center my-1">
@@ -123,7 +126,7 @@ const TickCheck = ({ title, result, icon }) => (
       </Typography>
     </Box>
   </Box>
-);
+)
 
 const StoreNumberStatus = ({ status, value }) => (
   <Box className="flex items-center">
@@ -145,4 +148,4 @@ const StoreNumberStatus = ({ status, value }) => (
       </Typography>
     </Box>
   </Box>
-);
+)

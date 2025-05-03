@@ -201,7 +201,10 @@ const StoreLeftSideBar = React.memo(
                   underline="hover"
                   key={index}
                   color="inherit"
-                  href={`/dashboard/store/${item.link}`}
+                  href={`/dashboard/store${crumb
+                    .slice(0, index + 1)
+                    .map((item) => item.link)
+                    .join('/')}`}
                 >
                   <Typography
                     className="!text-[12px] md:!text-[14px] !font-[500] !text-black"
@@ -220,8 +223,8 @@ const StoreLeftSideBar = React.memo(
       <React.Fragment>
         <Box
           sx={{ display: 'flex' }}
-          className="!overflow-hidden"
-          bgcolor="custom.bodyGray"
+          // className="!overflow-hidden"
+          // bgcolor="custom.bodyGray"
         >
           <CssBaseline />
           <StoreDashboardAppBar

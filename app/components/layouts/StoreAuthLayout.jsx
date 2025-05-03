@@ -17,14 +17,8 @@ export default function StoreAuthLayout({
   stage,
   setStage,
   image,
-  showAllError,
-  errors,
-  userValues,
-  storeValues,
   ...others
 }) {
-  const router = useRouter()
-  const dispatch = useDispatch()
 
   const getStatus = (level) => {
     if (stage === level) return 'active'
@@ -46,7 +40,7 @@ export default function StoreAuthLayout({
   return (
     <Box className="flex justify-center h-screen bg-black overflow-hidden">
       <Box className="flex w-full max-w-[1500px] h-full min-h-screen">
-        <Box className="w-[560px] min-w-[260px] h-full relative bg-slate-500 !overflow-hidden hidden sm:block">
+        <Box className="w-[560px]  min-w-[260px] h-full relative bg-slate-500 !overflow-hidden hidden sm:block">
           <Image
             src={image || '/images/misc/auth-bgd.png'}
             alt="auth-mage"

@@ -2,10 +2,27 @@ import HomeWrapper from '@/app/components/view/home'
 import React from 'react'
 import ProductDisplay from '.'
 import { server } from '@/app/redux/state/slices/api/baseApi'
+import { BasicModal } from '@/app/components/cards/popup'
+import Share from '@/app/components/cards/share'
 
 const ProductPage = ({ params, searchParams }) => {
+  const share = searchParams.share
+  const { store, product } = params
   return (
-    <HomeWrapper>
+    <HomeWrapper
+      popup={
+        <BasicModal
+          openModal={Boolean(share)}
+          content={
+            <Share
+              message=""
+              shareUrl={`https://corisio.com/${store}/${product}`}
+              searchParams={searchParams}
+            />
+          }
+        />
+      }
+    >
       <ProductDisplay params={params} searchParams={searchParams} />
     </HomeWrapper>
   )
@@ -14,13 +31,11 @@ const ProductPage = ({ params, searchParams }) => {
 export default ProductPage
 
 export async function generateMetadata({ params }) {
-  const { product: prodNameParam } = params
-  console.log(prodNameParam)
+  const { product: urlKey } = params
+  console.log(urlKey)
   try {
-    const response = await fetch(
-      `${server}/products?prodName=${prodNameParam.split('%2B').join(' ')}`
-    )
-
+    const response = await fetch(`${server}/products?urlKey=${urlKey}`)
+    console.log(response)
     const res = await response.json()
     const product = res?.data.result[0] || {}
 
@@ -30,7 +45,7 @@ export async function generateMetadata({ params }) {
       openGraph: {
         title: product.prodName,
         description: product.prodInfo,
-        url: `https://corisio.com/biz/${product.store}-${product.store}/${product.prodName}`,
+        url: `https://corisio.com/${product.store}/${product.urlKey}`,
         images: product.images,
         logo: product.images[0],
         image: product.images[0],

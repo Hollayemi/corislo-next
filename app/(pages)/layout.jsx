@@ -81,6 +81,7 @@ export default function RootLayout({ children }) {
         <meta property="og:type" content="product" />
         <meta property="og:locale" content="en_NG" />
         <meta name="application-name" content="Corisio" />
+        <title>Corisio-NG</title>
         <link
           rel="apple-touch-icon"
           sizes="180x180"
@@ -114,10 +115,10 @@ export default function RootLayout({ children }) {
         <meta property="og:url" content="https:corisio.com" />
         <meta property="og:type" content="product" />
 
-        <script
+        {/* <script
           defer
           src="https://session-witness-backend.onrender.com/api/v1/websites/p2pBtqBHWLFZBYtyXOaA/session-witness.js"
-        ></script>
+        ></script> */}
       </head>
 
       {!adminPaths ? (

@@ -25,7 +25,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "corislo.vercel.app",
+        hostname: "corisio.com",
         pathname: "/images**"
       },
        {
@@ -36,7 +36,11 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
-      }
+      },
+      {
+        protocol: 'https',
+        hostname: '**', // Allow any hostname (be careful, this is wild)
+      },
     ],
   },
 };

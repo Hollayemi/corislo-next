@@ -22,7 +22,7 @@ export const createStoreHandler = (payload, dispatch, setStage, setLoading) => {
     .then((res) => {
       toaster({ ...res });
       console.log(res)
-      setStage(res.type === "success" ? 1 : res.stage)
+      setStage(res.type === "success" ? 1 : 0)
       if (res.type === "success") {
         setLoading(false);
       }
