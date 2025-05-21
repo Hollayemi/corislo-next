@@ -10,19 +10,19 @@ const toaster = ({ message, type, promise, error, duration, position }) => {
   }
 
     toast.custom(
-      (t) => (
-        <div
-          className={`toast-custom ${
-            t.visible
-              ? "!z-[99999999999999999999999999999999999]"
-              : "animate-leave"
-          } ${colors[type]} `}
-        >
-          {message}
-        </div>
+      (t) => ( <></>
+        // <div
+        //   className={`toast-custom ${
+        //     t.visible
+        //       ? "!z-[99999999999999999999999999999999999]"
+        //       : "animate-leave"
+        //   } ${colors[type]} `}
+        // >
+        //   {message}
+        // </div>
       ),
       {
-        position: "top-right", // Ensure the position is set appropriately
+        position: "top-center", // Ensure the position is set appropriately
         duration: 4000, // Customize the duration as needed
         
       }

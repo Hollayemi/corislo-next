@@ -29,7 +29,7 @@ const BusinessProfile = ({
             }
             error={values.businessName && errors.businessName}
             hideCheck={!values.businessName}
-            id="bussname"
+            id="company"
             inputProps={{
               value: values?.businessName || '',
               type: 'text',
@@ -112,7 +112,7 @@ const BusinessProfile = ({
             }
             error={values.businessEmail && errors.businessEmail}
             hideCheck={!values.businessEmail}
-            id="emailAddress"
+            id="email"
             inputProps={{
               value: values?.businessEmail || '',
               type: 'email',
@@ -129,7 +129,7 @@ const BusinessProfile = ({
             }
             error={values.address && errors.address}
             hideCheck={!values.address}
-            id="buzzAddress"
+            id="address"
             inputProps={{
               value: values?.address || '',
               type: 'text',
@@ -180,7 +180,7 @@ const BusinessProfile = ({
             }
             error={values.about_store && errors.about_store}
             hideCheck={!values.about_store}
-            id="state"
+            id="about"
             multiline
             inputProps={{
               value: values?.about_store || '',

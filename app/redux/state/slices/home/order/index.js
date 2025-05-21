@@ -17,7 +17,11 @@ export const addNewOrder = (payload, dispatch, endpoint) => {
     .then(unwrapResult)
     .then((res) => {
       console.log(res)
-      // toaster({ ...res });
+      toaster({ ...res });
+      if (res.type === "error") return;
+      if (res.type === "success" && res?.checkoutUrl?.authorization_url) {
+        toaster({ type: "success", message: "Redirecting to payment" });
+      }
       // window.location.href = res.checkoutUrl
        window.open(res?.checkoutUrl?.authorization_url)
       mutate("/user/order");

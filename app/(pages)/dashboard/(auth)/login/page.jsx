@@ -1,65 +1,84 @@
-"use client";
+'use client'
 // ** React Imports
-import { useState } from "react";
+import { useState } from 'react'
 
 // ** Next Import
-import Link from "next/link";
+import Link from 'next/link'
 
 // ** MUI Components
-import Box from "@mui/material/Box";
+import Box from '@mui/material/Box'
 
-import { CustomInput } from "@/app/components/cards/auth/components";
-import { Button, Typography } from "@mui/material";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import AuthLayout from "@/app/components/layouts/AuthLayouts";
-import { storeLoginHandler } from "@/app/redux/state/slices/shop/auth/storeLogin";
+import { CustomInput } from '@/app/components/cards/auth/components'
+import { Button, Typography } from '@mui/material'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useDispatch } from 'react-redux'
+import AuthLayout from '@/app/components/layouts/AuthLayouts'
+import { storeLoginHandler } from '@/app/redux/state/slices/shop/auth/storeLogin'
+import { useStoreData } from '@/app/hooks/useData'
+import useStoreName from '@/app/hooks/useStoreName'
 
 const StoreLogin = () => {
-  const router = useRouter();
-  const dispatch = useDispatch();
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const { storeName, saveStoreName, removeStoreName } = useStoreName()
+  const { storeNamet } = useStoreData()
   const [values, setValues] = useState({
-    store: "",
-    password: "",
-    username: "",
-  });
+    store: storeName || '',
+    password: '',
+    username: '',
+  })
 
   const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
+    setValues({ ...values, [prop]: event.target.value })
+  }
 
   return (
     <AuthLayout title="Sign in to your store" center>
       <Box className="!mt-16 w-full max-w-[380px]">
-        <CustomInput
-          title="Store / Business Email Address"
-          onChange={handleChange("store")}
-          hideCheck={true}
-          id="email"
-          inputProps={{ type: "text", placeholder: "Enter your email address" }}
-        />
-        <br />
+        {!storeName && (
+          <>
+            <CustomInput
+              title="Store"
+              onChange={handleChange('store')}
+              hideCheck={true}
+              id="email"
+              inputProps={{
+                type: 'text',
+                placeholder: 'Enter your email address',
+              }}
+            />
+            <br />
+          </>
+        )}
         <CustomInput
           title="Username"
-          onChange={handleChange("username")}
+          onChange={handleChange('username')}
           hideCheck={true}
           id="username"
-          inputProps={{ type: "text", placeholder: "Enter your username" }}
+          inputProps={{ type: 'text', placeholder: 'Enter your username' }}
         />
         <br />
         <CustomInput
           title="Password"
-          onChange={handleChange("password")}
+          onChange={handleChange('password')}
           hideCheck={true}
           id="password"
-          inputProps={{ type: "password", placeholder: "Password" }}
+          inputProps={{ type: 'password', placeholder: 'Password' }}
         />
 
         <Button
           variant="contained"
           className="w-full !h-10 !rounded-full !text-gray-100 !text-[17px] !mt-6"
-          onClick={() => storeLoginHandler(values, router, dispatch)}
+          onClick={() =>
+            storeLoginHandler(
+              values,
+              router,
+              dispatch,
+              saveStoreName,
+              removeStoreName
+            )
+          }
         >
           Sign In
         </Button>
@@ -79,7 +98,7 @@ const StoreLogin = () => {
 
         <Box className="flex justify-center">
           <Typography className="!text-[13px] !mt-5">
-            Don’t have an account?{" "}
+            Don’t have an account?{' '}
             <Link
               href="/dashboard/register"
               color="custom.pri"
@@ -91,7 +110,7 @@ const StoreLogin = () => {
         </Box>
       </Box>
     </AuthLayout>
-  );
-};
+  )
+}
 
-export default StoreLogin;
+export default StoreLogin

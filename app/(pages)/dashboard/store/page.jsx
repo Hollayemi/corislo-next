@@ -1,7 +1,6 @@
 'use client'
 import useSWR from 'swr'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import { Grid, Box, Typography } from '@mui/material'
 import dynamic from 'next/dynamic'
@@ -12,14 +11,13 @@ const StoreLeftSideBar = dynamic(
     ssr: false,
   }
 )
-import { BranchesSales, TopCards, DashboardCrumb } from './components'
+import { TopCards, DashboardCrumb } from './components'
 import DashboardLineChart from '@/app/components/chart/ChartjsLineChart'
 import DashboardBubbleChart from '@/app/components/chart/ChartjsBubbleChart'
 import 'chart.js/auto'
 import OrderTable from '@/app/components/view/store/tables/OrderTable'
 import {
   allOrderColumns,
-  ordersColumns,
 } from './order-management/components/columns'
 import BranchSalesGrowth from '@/app/components/chart/Progress'
 import { InfoRounded } from '@mui/icons-material'

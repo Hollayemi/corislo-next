@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, unwrapResult } from "@reduxjs/toolkit";
 import toaster from "@/app/configs/toaster";
 import martApi from "../../api/baseApi";
 import { jsonHeader } from "../../api/setAuthHeaders";
+import toast from "react-hot-toast";
 
 const storeLoginApi = createAsyncThunk("post/UserLogin", async (payload) => {
   const { data } = await martApi
@@ -32,18 +33,23 @@ export const getStaffAccount = createAsyncThunk("post/loginSlice", async () => {
 
 */
 
-export const storeLoginHandler = (payload, router, dispatch) => {
+export const storeLoginHandler = (payload, router, dispatch, saveStoreName, removeStoreName) => {
   dispatch(storeLoginApi(payload))
     .then(unwrapResult)
     .then((res) => {
-      toaster({ ...res });
+      toast.success(res.message, {})
       if (res.type === "success") {
+        saveStoreName()
         router.push(res.to);
+      }else{
+        removeStoreName("storeName")
+        toast.error(res.message)
       }
       // localStorage.setItem("store_token", accessToken);
     })
     .catch((err) => {
     });
+      
 };
 
 

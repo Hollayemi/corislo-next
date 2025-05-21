@@ -140,7 +140,8 @@ const CategoryPage = ({ params }) => {
                 key={i}
                 prodName={prod.prodName}
                 prodPrice={prod.prodPrice}
-                image={`/images/more/${i + 1}.png`}
+                // image={`/images/more/${i + 1}.png`}
+                image={prod?.images[0]?.image || prod?.images[0]}
                 star={prod.star}
                 store={prod.store}
                 branch={prod.branch}

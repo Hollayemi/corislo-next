@@ -12,14 +12,19 @@ const StoreLeftSideBar = dynamic(
 import ProductList from '@/app/components/view/store/tables/productList'
 import OverViewCard from './overview'
 import { prodInnerList } from '@/app/data/store/innerList'
-import { BreadcrumbRightEle, productBreadCrumb } from './components'
+import {
+  BreadcrumbRightEle,
+  ExportSetup,
+  productBreadCrumb,
+} from './components'
 import { productListingRows } from './rows'
 import { StoreSalesApi } from '@/app/redux/state/slices/shop/overview/sales'
-import DialogPop from '@/app/components/cards/popup'
+import DialogPop, { BasicModal } from '@/app/components/cards/popup'
 import { useState } from 'react'
 
 const ProductManagement = ({ params }) => {
   const { data, error, isLoading } = useSWR('/store/get-products')
+  const [openModal, setOpenModal] = useState(false)
   const [dialogInfo, updateDialogInfo] = useState((status) => {
     return {
       open: false,
@@ -44,13 +49,27 @@ const ProductManagement = ({ params }) => {
       path={path}
       subListBar={false}
       InnerList={prodInnerList}
-      breadCrumbRIghtChildren={<BreadcrumbRightEle />}
+      breadCrumbRIghtChildren={<BreadcrumbRightEle setModal={setOpenModal} />}
       crumb={[
         ...productBreadCrumb,
         { text: 'Product listing', link: 'product-management' },
       ]}
       dialogInfo={dialogInfo}
       updateDialogInfo={updateDialogInfo}
+      popup={
+        <BasicModal
+          openModal={Boolean(openModal)}
+          toggleModal={() => setOpenModal(false)}
+          isLoading={isLoading}
+          content={
+            openModal === 'export-setup' ? (
+              <ExportSetup close={() => setOpenModal(false)} />
+            ) : (
+              <></>
+            )
+          }
+        />
+      }
     >
       <Box className="relative">
         <Box className="mb-10 bg-white rounded-md px-3 py-6">

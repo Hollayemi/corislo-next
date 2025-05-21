@@ -369,6 +369,7 @@ const HomePage = ({ params }) => {
                       prodName={prod.prodName}
                       prodPrice={prod.prodPrice}
                       image={prod?.images[0]?.image || prod?.images[0]}
+                      // image={`/images/more/${i + 1}.png`}
                       star={prod.star}
                       store={prod.store}
                       branch={prod.branch}

@@ -73,3 +73,35 @@ export const uploadBulkProductsHandler = (formData, dispatch, setUploadProgress,
             setUploadResults(error.response?.data || { message: error.message })
         });
 }
+
+const exportAllProductsApi = createAsyncThunk(
+    "post/store/product/bulk/export",
+    async (payload) => {
+        const { data } = await martApi
+        .post("/store/products/bulk-export", payload, {
+            ...jsonHeader("store"),
+          responseType: 'blob',
+        })
+        .then((res) => res)
+        .catch((e) => e.response);
+        return data;
+    }
+)
+
+export const exportAllProductsHandler = (name, formData, dispatch) => {
+    dispatch(exportAllProductsApi(formData))
+        .then(unwrapResult)
+        .then((res) => {
+            console.log(res);
+            const url = window.URL.createObjectURL(new Blob([res]))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', `${name}.xlsx`) //or any other extension
+            document.body.appendChild(link)
+            link.click()
+            link.remove()
+        })
+        .catch((e) => {
+            console.log(e);
+        });
+}

@@ -45,8 +45,10 @@ const useGeolocation = (interval = 120000) => {
   
   useEffect(() => {
     if(!coordinates.latitude){
-      const items = localStorage.getItem("coordinates").split(",")
+      const items = localStorage.getItem("coordinates")?.split(",")
       console.log(items);
+      if(!items) return
+      if(items.length < 2) return
       setCoordinates({
         latitude: parseFloat(items[0]),
         longitude: parseFloat(items[1])

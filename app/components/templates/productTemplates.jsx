@@ -250,16 +250,14 @@ export const ProductOnShowcase = ({
   const { showMapScreen, cartedProds } = useUserData()
   const router = useRouter()
   const dispatch = useDispatch()
-  console.log(others, 'others')
   const payload = {
     productId: others._id,
     store,
     branch,
   }
 
-  const reshapedProdName = prodName.split(' ').join('+').toLowerCase()
   return (
-    <Box className="w-4/12 min-w-[100px] relative max-w-[140px] md:max-w-[170px] md:w-44 h-48 md:!h-64 md:mx-2 my-6 ">
+    <Box className="w-6/12 min-w-[100px] relative mx-w-[140px] md:max-w-[170px] md:w-44 h-64 md:!h-64 md:mx-2 my-6 ">
       {others?.discount && (
         <Box className="w-9 h-4 bg-red-600 rounded-full absolute right-2 top-2 shadow flex items-center justify-center">
           <Typography
@@ -278,7 +276,7 @@ export const ProductOnShowcase = ({
         <img
           src={image}
           alt="product_image"
-          className="!w-full px-0.5 !h-28 md:!h-48 rounded-md"
+          className="!w-full px-0.5 !h-48 md:!h-48 rounded-md"
         />
       </Box>
       <Box className="pt-1 px-px">

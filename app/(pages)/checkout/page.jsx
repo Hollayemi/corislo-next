@@ -46,7 +46,7 @@ const Checkout = () => {
       relationship: 'Myself',
     },
     usingPoint,
-    shippingAddress: temp.address || userInfo?.selectedAddress || null,
+    shippingAddress: temp.address || userInfo?.selectedAddress || {},
     billingCard: userInfo?.selectedBilling || null,
   })
   console.log(payload)

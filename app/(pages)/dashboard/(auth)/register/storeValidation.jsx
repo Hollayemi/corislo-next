@@ -24,8 +24,8 @@ const validationStoreSchema = yup.object({
   about_store: yup
     .string()
     .min(
-      50,
-      'Give a short detail about your store with at least 50 characters.'
+      20,
+      'Give a short detail about your store with at least 20 characters.'
     )
     .required('Give a short detail about your store'),
 })

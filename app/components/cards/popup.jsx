@@ -1,5 +1,5 @@
-"use client";
-import { forwardRef } from "react";
+'use client'
+import { forwardRef } from 'react'
 import {
   Button,
   Modal,
@@ -10,17 +10,18 @@ import {
   Slide,
   Box,
   Typography,
-} from "@mui/material";
+} from '@mui/material'
+import { SpinLoader } from './loader'
 
 const DialogPop = ({ dialogComponent, dialogInfo, updateDialogInfo }) => {
   // Dialog transition
   const Transition = forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
+    return <Slide direction="up" ref={ref} {...props} />
+  })
   const handleCloseDialog = () =>
     updateDialogInfo((prev) => {
-      return { ...prev, open: false };
-    });
+      return { ...prev, open: false }
+    })
 
   return (
     dialogInfo.open && (
@@ -49,20 +50,33 @@ const DialogPop = ({ dialogComponent, dialogInfo, updateDialogInfo }) => {
         </DialogActions>
       </Dialog>
     )
-  );
-};
+  )
+}
 
-export default DialogPop;
+export default DialogPop
 
-export const BasicModal = ({ openModal, toggleModal, content }) => {
+export const BasicModal = ({
+  openModal,
+  toggleModal,
+  content = <></>,
+  isLoading,
+}) => {
   return (
     <Modal
-      open={openModal}
+      open={isLoading || openModal}
       onClose={toggleModal}
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
     >
-      {content}
+      {isLoading ? (
+        <Box className="flex justify-center items-center h-full w-full">
+          <Box className="flex justify-center items-center h-20 w-20 bg-white rounded-md">
+            {<SpinLoader size={10} />}
+          </Box>
+        </Box>
+      ) : (
+        content
+      )}
     </Modal>
-  );
-};
+  )
+}

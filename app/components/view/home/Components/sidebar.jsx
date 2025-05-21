@@ -1,45 +1,63 @@
-import { styled } from "@mui/material/styles";
-import Link from "next/link";
-import { useUserData } from "@/app/hooks/useData";
-const { Box, Button, Typography } = require("@mui/material");
-import { usePathname, useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { userLogout } from "@/app/redux/state/slices/auth/Login";
-import IconifyIcon from "@/app/components/icon";
-import useGeolocation from "@/app/hooks/useGeolocation";
+import { styled } from '@mui/material/styles'
+import Link from 'next/link'
+import { useUserData } from '@/app/hooks/useData'
+const { Box, Button, Typography } = require('@mui/material')
+import { usePathname, useRouter } from 'next/navigation'
+import { useDispatch } from 'react-redux'
+import { userLogout } from '@/app/redux/state/slices/auth/Login'
+import IconifyIcon from '@/app/components/icon'
+import useGeolocation from '@/app/hooks/useGeolocation'
+import useOpenCage from '@/app/hooks/useOpenCage'
+import { useEffect } from 'react'
 
 const UserSideBar = () => {
-  const { overLay, isOffline, showOverlay } = useUserData();
+  const { overLay, isOffline, showOverlay } = useUserData()
   const pathname = usePathname()
-const { coordinates: { latitude, longitude } } = useGeolocation()
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const getPath = pathname.split("/");
+  const {
+    coordinates: { latitude, longitude },
+  } = useGeolocation()
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const getPath = pathname.split('/')
+
+  // const {
+  //   locationData,
+  //   loading,
+  //   error,
+  //   getLocationFromCoords,
+  //   getCoordsFromAddress,
+  // } = useOpenCage()
+
+  // console.log(locationData, loading, error)
+
+  // useEffect(() => {
+  //   getLocationFromCoords()
+  // })
 
   const LinkStyled = styled(Link)(({}) => ({
-    fontSize: "0.869rem",
+    fontSize: '0.869rem',
     fontWeight: 500,
-    textDecoration: "none",
+    textDecoration: 'none',
     // color: "black",
-  }));
+  }))
 
   const pages = {
     isOffline: [
-      { name: "Home", link: "", icon: "tabler:home" },
-      { name: "About", link: "about", icon: "tabler:dots-circle-horizontal" },
-      { name: "Seller", link: "seller", icon: "tabler:building-store" },
-      { name: "Support", link: "support", icon: "tabler:heart-handshake" },
+      { name: 'Home', link: '', icon: 'tabler:home' },
+      { name: 'About', link: 'about', icon: 'tabler:dots-circle-horizontal' },
+      { name: 'Seller', link: 'seller', icon: 'tabler:building-store' },
+      { name: 'Support', link: 'support', icon: 'tabler:heart-handshake' },
     ],
 
     isOnline: [
-      { name: "Home", link: "", icon: "tabler:home" },
-      { name: "Order", link: "order", icon: "tabler:shopping-bag" },
-      { name: "Inbox", link: "chat", icon: "tabler:message" },
-      { name: "Agent", link: "referral", icon: "tabler:moneybag" },
-      { name: "Saved Items", link: "saved-items", icon: "tabler:heart" },
-      { name: "Account", link: "user", icon: "tabler:user-square-rounded" },
+      { name: 'Home', link: '', icon: 'tabler:home' },
+      { name: 'Order', link: 'order', icon: 'tabler:shopping-bag' },
+      { name: 'Inbox', link: 'chat', icon: 'tabler:message' },
+      { name: 'Agent', link: 'referral', icon: 'tabler:moneybag' },
+      { name: 'Saved Items', link: 'saved-items', icon: 'tabler:heart' },
+      { name: 'Account', link: 'user', icon: 'tabler:user-square-rounded' },
     ],
-  };
+  }
 
   return (
     <Box
@@ -113,6 +131,6 @@ const { coordinates: { latitude, longitude } } = useGeolocation()
       </Box>
     </Box>
   )
-};
+}
 
-export default UserSideBar;
+export default UserSideBar
