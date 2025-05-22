@@ -10,6 +10,7 @@ const TextInput = ({ inputProps, id, onChange, multiline }) =>
     <input
       {...inputProps}
       id={id}
+      aria-label={id}
       onChange={onChange}
       className="outline-none border-none w-full font-normal h-6 pr-5 !bg-white autofill:-px-4 !autofill:bg-transparent"
     />
@@ -60,6 +61,7 @@ export const CustomInput = ({
           <TextInput
             multiline={multiline}
             id={id}
+            
             inputProps={{ ...inputProps, type: newType }}
             onChange={onChange}
           />

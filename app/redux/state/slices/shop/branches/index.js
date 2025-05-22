@@ -154,7 +154,7 @@ const updateBranchImagesApi = createAsyncThunk(
 );
 
 export const updateBranchImages = (payload, dispatch, setLoading = () => {}, setUploadedFiles, setLocalFiles) => {
-  setLoading(true)
+  setLoading(payload.type || true)
   dispatch(updateBranchImagesApi(payload))
     .then(unwrapResult)
     .then((res) => {
@@ -168,7 +168,7 @@ export const updateBranchImages = (payload, dispatch, setLoading = () => {}, set
       setLocalFiles([])
       }
     })
-    .catch((e) => {
+    .catch((error) => {
       setLoading(false)
     });
 };

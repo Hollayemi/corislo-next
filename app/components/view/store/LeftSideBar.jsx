@@ -161,7 +161,7 @@ const StoreLeftSideBar = React.memo(
       if (permissions) {
         permissions[permission] === false && router.push('/dashboard/store/401')
       }
-    }, [permissions])
+    }, [permissions, permission, router])
 
     const handleCloseDialog = () =>
       updateDialogInfo((prev) => {
@@ -398,15 +398,15 @@ const StoreLeftSideBar = React.memo(
             {/* <Box className=""> */}
 
             <Box className="flex flex-col w-full pt-16 md:pt-20 md:px-7 px-3 ">
-              {onSideBar === '' && (
-                <Typography
-                  color="primary"
-                  className="!mb-5 !font-bold !text-2xl"
-                >
-                  Welcome back, {formatName(staffInfo.fullname) || 'Staff Name'}{' '}
-                  👋🏻
-                </Typography>
-              )}
+              {onSideBar === '' &&
+                staffInfo.fullname && (
+                  <Typography
+                    color="primary"
+                    className="!mb-5 !font-bold !text-2xl"
+                  >
+                    Welcome, {formatName(staffInfo.fullname)} 👋🏻
+                  </Typography>
+                )}
             </Box>
             {!hidebreadCrumb && (
               <Box className="flex items-center sticky top-16 md:top-20 justify-between mb-2 px-2 md:px-11">

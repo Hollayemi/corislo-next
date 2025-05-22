@@ -165,6 +165,7 @@ export const InputBoxWithSideLabel = ({
   value,
   className,
   inputProps,
+  isEdit,
   onChange,
   shortInput,
 }) => {
@@ -177,9 +178,21 @@ export const InputBoxWithSideLabel = ({
       </Grid>
       <Grid item xs={12} sm={shortInput ? 4 : 8}>
         <TextField
-          {...inputProps}
+          InputProps={{
+            ...inputProps,
+            sx: {
+              ...inputProps?.sx,
+              ...(!isEdit && {
+                '& .MuiOutlinedInput-notchedOutline': {
+                  border: 'none',
+                },
+              }),
+            },
+          }}
+          disabled={!isEdit}
           fullWidth
           onChange={onChange}
+          className="!border-none"
           value={value}
           size="small"
         />
@@ -193,6 +206,8 @@ export const SocialMediaConponent = ({
   className,
   socialMedia,
   setSocialMedia,
+  inputProps,
+  isEdit,
 }) => {
   const smallLabel = label.toLowerCase().split(' ').join('')
 
@@ -211,6 +226,18 @@ export const SocialMediaConponent = ({
         <TextField
           onChange={(e) => handleChange(smallLabel, e.target.value)}
           fullWidth
+          InputProps={{
+            ...inputProps,
+            sx: {
+              ...inputProps?.sx,
+              ...(!isEdit && {
+                '& .MuiOutlinedInput-notchedOutline': {
+                  border: 'none',
+                },
+              }),
+            },
+          }}
+          disabled={!isEdit}
           value={
             label && socialMedia[label?.split(' ').join('')?.toLowerCase()]
           }
@@ -221,7 +248,14 @@ export const SocialMediaConponent = ({
   )
 }
 
-export const OpeningHours = ({ label, className, openHours, setOpenHours }) => {
+export const OpeningHours = ({
+  label,
+  className,
+  openHours,
+  inputProps,
+  setOpenHours,
+  isEdit,
+}) => {
   const smallLabel = label.toLowerCase()
   const isPresent = Object.keys(openHours || {}).includes(smallLabel)
 
@@ -258,6 +292,18 @@ export const OpeningHours = ({ label, className, openHours, setOpenHours }) => {
           defaultValue="08:00"
           className=""
           size="small"
+          InputProps={{
+            ...inputProps,
+            sx: {
+              ...inputProps?.sx,
+              ...(!isEdit && {
+                '& .MuiOutlinedInput-notchedOutline': {
+                  border: 'none',
+                },
+              }),
+            },
+          }}
+          disabled={!isEdit}
           onChange={(e) => handleChange(smallLabel, 'from', e.target.value)}
         />
       </Grid>
@@ -267,6 +313,18 @@ export const OpeningHours = ({ label, className, openHours, setOpenHours }) => {
           defaultValue="05:00"
           className=""
           size="small"
+          InputProps={{
+            ...inputProps,
+            sx: {
+              ...inputProps?.sx,
+              ...(!isEdit && {
+                '& .MuiOutlinedInput-notchedOutline': {
+                  border: 'none',
+                },
+              }),
+            },
+          }}
+          disabled={!isEdit}
           onChange={(e) => handleChange(smallLabel, 'to', e.target.value)}
         />
       </Grid>

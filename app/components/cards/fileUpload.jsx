@@ -40,7 +40,7 @@ const ProfilePictureUploader = ({
   });
 
   return (
-    <div {...getRootProps({ className: "dropzone cursor-pointer" })}>
+    <div {...getRootProps({ className: "dropzone cursor-pointer w-fit" })}>
       <input {...getInputProps()} />
       {component}
     </div>

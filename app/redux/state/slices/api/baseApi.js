@@ -15,7 +15,7 @@ if (authToken) {
 let server;
 // let server = "http://localhost:5001/api/v1/"
 // if(localStorage.getItem("server")) {
-  server = "http://sholly.local:5001/api/v1/"
+server = "http://sholly.local:5001/api/v1/"
 // }
 console.log("server", server);
 if (process.env.NODE_ENV === "production") {

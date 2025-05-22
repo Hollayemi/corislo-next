@@ -48,11 +48,12 @@ const updateStoreProfileApi = createAsyncThunk(
   }
 );
 
-export const updateStoreProfile = (dispatch, payload) => {
+export const updateStoreProfile = (dispatch, payload, callback = () => {}) => {
   dispatch(updateStoreProfileApi(payload))
     .then(unwrapResult)
     .then((res) => {
       toaster({ ...res });
+      callback()
       mutate("/store");
     })
     .catch((e) => {});
