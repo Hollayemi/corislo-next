@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://corisio.com/api/sitemap.xml

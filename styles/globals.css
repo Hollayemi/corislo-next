@@ -1,0 +1,225 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0px;
+  margin: 0px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.ref {
+  font-family: 'Franklin Gothic Medium !important';
+}
+
+.slick-slide {
+  margin: 0 0px;
+  border-bottom: 68px;
+}
+
+.slick-list {
+  margin: 0 -10px;
+}
+button {
+  text-transform: none !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  font-size: 12px !important;
+  /* font-family: cursive; */
+}
+
+.custom-slider {
+  position: relative !important;
+  z-index: 10;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: #2c337c !important;
+}
+
+.custom-slider .slick-prev:before,
+.custom-slider .slick-next:before {
+  color: #2c337c !important;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #2c337c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slick-prev:after {
+  background-color: red;
+}
+
+.custom-slider .slick-next {
+  position: absolute;
+  top: -30px !important;
+  left: 97% !important;
+  z-index: 10000 !important;
+}
+.custom-slider .slick-prev {
+  position: absolute !important;
+  top: -30px !important;
+  left: calc(94% - 25px) !important;
+  z-index: 10000 !important;
+}
+
+.hideArrow .slick-prev,
+.hideArrow .slick-next {
+  display: none !important;
+}
+
+@media screen and (max-width: 700px) {
+  .custom-slider .slick-next {
+    position: absolute;
+    top: -30px !important;
+    left: 93% !important;
+    z-index: 10000 !important;
+  }
+  .custom-slider .slick-prev {
+    position: absolute !important;
+    top: -30px !important;
+    left: calc(88% - 25px) !important;
+    z-index: 10000 !important;
+  }
+}
+/* 
+.customInputt:focus-within{
+    border: 1px solid blue;
+} */
+
+.dfdgfd {
+  list-style-type: disc !important;
+}
+
+.header-zindex {
+  z-index: 10000000000000 !important;
+}
+.loading-zindex {
+  z-index: 500000 !important;
+}
+
+.dfdgfd li {
+  font-weight: 400 !important;
+}
+
+.overflowStyle::-webkit-scrollbar {
+  width: 5px;
+}
+.overflowStyle::-webkit-scrollbar-thumb {
+  background-color: #bdbdbd;
+  border-radius: 4px;
+}
+
+/* .overflowStyle: {
+  background-color: #f0eeee;
+} */
+
+.gm-controls .gm-style-map-type-control {
+  display: none !important;
+}
+.gmnoprint {
+  display: none !important;
+}
+
+#chartjs-tooltip {
+  position: absolute;
+  background-color: white;
+  box-shadow: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
+  color: rgb(26, 26, 26) !important;
+  font-size: 12px;
+  border-radius: 5px;
+  pointer-events: none;
+  width: 280px;
+  min-width: 280px;
+  height: 150px;
+  z-index: 30000000000000000;
+}
+.tooltipContainter {
+  width: 280px;
+  padding-bottom: 16px;
+}
+.tooltipHeader {
+  display: flex !important;
+  height: 26px;
+  padding: 15px;
+  border-bottom: 2px solid red;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.tooltipItems {
+  display: flex !important;
+  padding: 0px 10px;
+
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: -8px;
+}
+.mt10 {
+  margin-top: 10px !important;
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutToRight {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(130%);
+  }
+}
+
+.toast-custom {
+  color: #f1f0f0; /* Text color */
+  padding: 10px 16px;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  animation: slideInFromRight 0.5s ease forwards;
+  z-index: 99999999999999999999 !important;
+}
+
+.toast-custom.animate-leave {
+  animation: slideOutToRight 0.5s ease forwards;
+}
+
+.react-hot-toast,
+.css-1a0fd8 > div {
+  z-index: 99999999999999999999 !important;
+}
+
+.hidde {
+  display: none !important;
+  background-color: lightblue;
+  border-color: darkblue;
+  box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
+}
+
+/* service rendering dashboard */
+
+.serviceDashbord .MuiDrawer-root.MuiDrawer-docked {
+  background: #000 !important;
+  max-width: 270px !important;
+}
+
+.serviceDashbord
+  .MuiDrawer-root.MuiDrawer-docked
+  .MuiPaper-root.MuiPaper-elevation.MuiDrawer-paperAnchorLeft {
+  max-width: 270px !important;
+}
