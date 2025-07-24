@@ -33,7 +33,7 @@ const BulkProductUpload = ({ params }) => {
     subCollectionName: '',
   })
 
-  const { data: getData } = useSWR('/corisio/category/thread')
+  const { data: getData } = useSWR('/corisio/category/thread?for_store=true')
   const categories = getData ? getData?.data : [{}]
   const path = {
     ...params,

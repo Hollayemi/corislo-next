@@ -25,6 +25,7 @@
     "@mui/lab": "^5.0.0-alpha.137",
     "@mui/material": "^5.15.0",
     "@mui/x-data-grid": "^5.17.24",
+    "@mui/x-tree-view": "^8.4.0",
     "@react-google-maps/api": "^2.19.3",
     "@reduxjs/toolkit": "^1.9.5",
     "autoprefixer": "^10.4.19",

@@ -53,7 +53,10 @@ export const updateStoreProfile = (dispatch, payload, callback = () => {}) => {
     .then(unwrapResult)
     .then((res) => {
       toaster({ ...res });
-      callback()
+      if (res.type === "success") {
+        dispatch(getAccount());
+        callback()
+      }
       mutate("/store");
     })
     .catch((e) => {});

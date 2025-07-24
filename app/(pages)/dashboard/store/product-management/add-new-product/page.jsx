@@ -2,7 +2,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { prodInnerList } from '@/app/data/store/innerList'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import dynamic from 'next/dynamic'
 // import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 const StoreLeftSideBar = dynamic(
@@ -47,9 +47,11 @@ const QuillTextEditor = dynamic(
 import Image from 'next/image'
 import { generateDescApiHandler } from '@/app/redux/state/slices/shop/products/generateDesc'
 import { useStoreData } from '@/app/hooks/useData'
+import { BasicModal } from '@/app/components/cards/popup'
 // no allow (),+,
 const AddNewProduct = ({ params }) => {
   const theme = useTheme()
+  const router = useRouter()
   const { showSnackbar } = useStoreData()
   const searchParams = useSearchParams()
   const editID = searchParams.get('edit')
@@ -62,13 +64,18 @@ const AddNewProduct = ({ params }) => {
   const [files, setFiles] = useState([])
   const [localFiles, setLocalFiles] = useState([])
   const [delivery, selectDelivery] = useState(['pickup'])
-  const { data: getData } = useSWR('/corisio/category/thread')
-  const { data: toEdit } = useSWR(editID && `/products?productId=${editID}`)
+  const { data: getData, isLoading } = useSWR(
+    '/corisio/category/thread?for_store=true'
+  )
+  const { data: toEdit, isLoading: prodLoading } = useSWR(
+    editID && `/products?productId=${editID}`
+  )
   const categories = getData ? getData?.data : [{}]
   const prodToEdit = toEdit ? toEdit.data?.result : []
   const specWithSize = ['cloth_spec', 'shoe_spec']
   const [genPayload, getGenPayload] = useState(null)
   const [descLoading, setDescLoading] = useState()
+  const [loading, setLoading] = useState(false)
   const reduxFuntion = editID ? editProductHandler : createProductHandler
   const [formData, setFormData] = useState({
     prodName: '',
@@ -88,6 +95,30 @@ const AddNewProduct = ({ params }) => {
     delivery,
   })
   let fromCollection = categories.filter((x) => x._id === formData.category)[0]
+  const isloading = isLoading || prodLoading || loading
+  const reset = () => {
+    setFormData({
+      prodName: '',
+      prodPrice: '',
+      prodKey: '',
+      prodInfo: '',
+      specifications: { sizes: [] },
+      images: [],
+      totInStock: '',
+      subCollectionName: '',
+      collectionName: '',
+      category: '',
+      subcategory: '',
+      productGroup: '',
+      delivery: ['pickup'],
+    })
+    setFiles([])
+    setLocalFiles([])
+    setSelectedSizes([])
+    setNewSpec('')
+    setSpecValue('')
+    setProdSpecs('')
+  }
 
   useEffect(() => {
     if (toEdit) {
@@ -185,7 +216,16 @@ const AddNewProduct = ({ params }) => {
           link: 'add-new-product',
         },
       ]}
-      breadCrumbRIghtChildren={<Button variant="contained" href='add-new-product/bulk-upload' className='!shadow-none !rounded-md normal-case'>Bulk Upload</Button>}
+      breadCrumbRIghtChildren={
+        <Button
+          variant="contained"
+          href="add-new-product/bulk-upload"
+          className="!shadow-none !rounded-md normal-case"
+        >
+          Bulk Upload
+        </Button>
+      }
+      popup={<BasicModal isLoading={isloading} />}
     >
       <Box className="bg-white rounded-md md:px-5 pt-6 pb-8 !text-[13px]">
         <Grid container spacing={4} className="!px-3">
@@ -208,10 +248,19 @@ const AddNewProduct = ({ params }) => {
                 // label="Product Name"
               />
             </Box>
-
-            <Typography sx={{ fontWeight: 'bold', my: 2.5 }}>
-              Category
-            </Typography>
+            <Box className="flex items-center justify-between my-2">
+              <Typography sx={{ fontWeight: 'bold' }}>Category</Typography>
+              <Box className="flex items-center mt-3">
+                <Typography className="!text-[14px] !mr-1">Edit</Typography>
+                <IconifyIcon
+                  onClick={() =>
+                    router.push('/dashboard/store/stores/#categoories')
+                  }
+                  icon="tabler:edit"
+                  className="text-blue-600 text-[20px]"
+                />
+              </Box>
+            </Box>{' '}
             <Box sx={{ pl: 0.2, pl: brk('md') && '0.5', mb: 1.5 }}>
               <SimpleDropDown
                 render={categories?.map((res, i) => (
@@ -255,7 +304,6 @@ const AddNewProduct = ({ params }) => {
                 sx={{ mb: 2 }}
               />
             </Box>
-
             <Typography sx={{ fontWeight: 'bold', mb: 1.5 }}>
               Pricing
             </Typography>
@@ -271,7 +319,6 @@ const AddNewProduct = ({ params }) => {
                 // label="Product Price"
               />
             </Box>
-
             <Typography sx={{ fontWeight: 'bold', mb: 1.5 }}>
               Total In Stock
             </Typography>
@@ -287,7 +334,6 @@ const AddNewProduct = ({ params }) => {
                 // label="Total in stock"
               />
             </Box>
-
             <Typography sx={{ fontWeight: 'bold', mb: 1.5 }}>
               Product Preference
             </Typography>
@@ -335,12 +381,8 @@ const AddNewProduct = ({ params }) => {
               />
             </Box>
           </Grid>
-          {/* 
-
-
-
-
-*/}
+          {/*
+           */}
           <Grid item xs={12} md={7}>
             <Typography sx={{ fontWeight: 'bold', mb: 1.5 }}>
               Product Media
@@ -625,7 +667,18 @@ const AddNewProduct = ({ params }) => {
                   },
                   newImages: files,
                 },
-                dispatch
+                dispatch,
+                setLoading,
+                () => {
+                  showSnackbar({
+                    type: 'success',
+                    message: editID
+                      ? 'Product updated successfully'
+                      : 'Product added successfully',
+                  })
+                  reset()
+                  router.push('/dashboard/store/product-management')
+                }
               )
             }
           >
@@ -643,6 +696,7 @@ const AddNewProduct = ({ params }) => {
               <Button
                 variant="contained"
                 className="bg-blue-900 !w-1/5 !md:w-32 !py-2 md:px-6 !h-10"
+                onClick={reset}
               >
                 Discard
               </Button>

@@ -19,6 +19,7 @@ import {
   SocialMediaConponent,
   StoreBreadCrumb,
   BreadcrumbRightEle,
+  CategoryFolder,
 } from './component'
 import Icon from '@/app/components/icon'
 import { storeBottomBar } from '@/app/data/store/innerList'
@@ -33,6 +34,8 @@ import {
 } from '@/app/redux/state/slices/shop/branches'
 import { SpinLoader } from '@/app/components/cards/loader'
 import IconifyIcon from '@/app/components/icon'
+import { BasicModal } from '@/app/components/cards/popup'
+import { EnhancedCategorySelector } from '../../(auth)/register/personal'
 
 const StorePage = ({ params }) => {
   const { storeInfo: originalInfo } = useStoreData()
@@ -57,7 +60,7 @@ const StorePage = ({ params }) => {
   const [socialMedia, setSocialMedia] = useState({})
   const [files, setFiles] = useState([])
   const [localFiles, setLocalFiles] = useState([])
-
+  const [modalOpen, setModalOpen] = useState(false)
   const [profile, setProfile] = useState([])
   const [uploading, setUploading] = useState('')
   const [localProfile, setLocalProfile] = useState('')
@@ -68,6 +71,9 @@ const StorePage = ({ params }) => {
     city: '',
     landmark: '',
     about_store: '',
+    phone: "",
+    email:"",
+    categories: {},
   })
   useEffect(() => {
     setValues({
@@ -75,6 +81,8 @@ const StorePage = ({ params }) => {
       city: storeInfo?.profile?.city || '',
       landmark: storeInfo?.profile?.landmark || '',
       about_store: storeInfo?.profile?.about_store || '',
+      categories: storeInfo?.profile?.categories || {},
+      email: storeInfo?.profile?.email || "",
     })
     setSocialMedia(storeInfo?.profile?.social_media || {})
     setOpenHours(storeInfo?.profile?.opening_hours || {})
@@ -236,6 +244,62 @@ const StorePage = ({ params }) => {
                 isEdit={isEdit}
                 label="Closest Bus Stop or Landmark"
               />
+            </Box>
+
+            <Box className="!mt-8 !border-b !pb-6">
+              <Typography className="!font-bold !text-gray-800 text-sm">
+                Store Contact
+              </Typography>
+              <Typography variant="caption" className="">
+                How can customers reach you
+              </Typography>
+              <br />
+              <br />
+              <InputBoxWithSideLabel
+                value={storeInfo?.profile?.phone || ''}
+                isEdit={isEdit}
+                onChange={handleChange('phone')}
+                label="Phone Number"
+                inputProps={{
+                  disabled: true,
+                  className: '!border-none !border-white',
+                }}
+              />
+              <InputBoxWithSideLabel
+                value={storeInfo?.profile?.email || ''}
+                isEdit={isEdit}
+                onChange={handleChange('email')}
+                label="Email Address"
+                inputProps={{
+                  disabled: true,
+                  className: '!border-none !border-white',
+                }}
+              />
+            </Box>
+
+            <Box className="!mt-8 !pb-6" id="categoories">
+              <Typography className="!font-bold !text-gray-800 text-sm">
+                Preferred Categories
+              </Typography>
+              <Typography variant="caption" className="">
+                Select the categories that best describe your store
+              </Typography>
+              <br />
+              <br />
+              <CategoryFolder />
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={() => setModalOpen(true)}
+                disabled={!branchOwner || !isEdit}
+                className={`!bg-white !border ${
+                  !isEdit
+                    ? '!border-gray-400 !text-gray-400'
+                    : '!border-blue-400 !text-blue-400 '
+                }!rounded-md !text-[14px] !shadow-none`}
+              >
+                Adjust Categories
+              </Button>
             </Box>
 
             <Box className="!mt-8 !pb-6">
@@ -409,6 +473,7 @@ const StorePage = ({ params }) => {
                     () => {
                       allowEdit(false)
                       mutate(endpoint)
+                      mutate('/corisio/category/thread?for_store=true')
                     }
                   )
                 }
@@ -434,6 +499,22 @@ const StorePage = ({ params }) => {
           </Grid>
         </Grid>
       </Box>
+      <BasicModal
+        openModal={Boolean(modalOpen)}
+        toggleModal={() => setModalOpen(!modalOpen)}
+        content={
+          <EnhancedCategorySelector
+            closeModal={() => setModalOpen(false)}
+            setPreferedCategories={(e) =>
+              setValues((prev) => ({
+                ...prev,
+                categories: e,
+              }))
+            }
+            preferredCategories={inputValues.categories || {}}
+          />
+        }
+      />
     </StoreLeftSideBar>
   )
 }

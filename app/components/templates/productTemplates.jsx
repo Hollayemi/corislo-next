@@ -255,7 +255,7 @@ export const ProductOnShowcase = ({
     store,
     branch,
   }
-
+console.log(image)
   return (
     <Box className="w-6/12 min-w-[100px] relative mx-w-[140px] md:max-w-[170px] md:w-44 h-64 md:!h-64 md:mx-2 my-6 ">
       {others?.discount && (
@@ -276,7 +276,7 @@ export const ProductOnShowcase = ({
         <img
           src={image}
           alt="product_image"
-          className="!w-full px-0.5 !h-48 md:!h-48 rounded-md"
+          className="!w-full px-0.5 !h-48 md:!h-48 rounded-md object-scale-down"
         />
       </Box>
       <Box className="pt-1 px-px">

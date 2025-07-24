@@ -316,7 +316,7 @@ export const LineChartStatistic = ({ label, discounts, flashsales }) => {
 
 export const reshapePrice = (price) => {
   if (typeof parseInt(price) === 'number') {
-    return `₦ ${parseInt(price).toLocaleString()}`
+    return `₦ ${parseFloat(price).toLocaleString()}`
   }
 }
 

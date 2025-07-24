@@ -171,6 +171,7 @@ const BusinessProfile = ({
             }}
           />
         </Grid>
+
         <Grid item xs={12}>
           <CustomInput
             title="About"

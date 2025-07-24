@@ -26,10 +26,10 @@ export const PingLoader = ({ size = 8 }) => (
   </span>
 )
 
-export const SpinLoader = ({ size = 5 }) => (
+export const SpinLoader = ({ size = 7 }) => (
   <div className="">
     <div
-      className={`w-${size} h-${size} border-2 border-blue-500 border-t-transparent rounded-full animate-spin`}
+      className={`w-${size} h-${size} border-2 border-blue-500 mx-auto border-t-transparent rounded-full animate-spin`}
     ></div>
   </div>
 )

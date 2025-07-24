@@ -42,7 +42,7 @@ export const StoreRegistrationForm = ({
     city: '',
     address: '',
     state: '',
-    category: '',
+    categories: '',
     about: '',
   })
 
@@ -54,13 +54,15 @@ export const StoreRegistrationForm = ({
     city: '',
     address: '',
     state: '',
-    category: '',
+    categories: {},
     coordinates: {
       type: 'Point',
       coordinates: [coordinates.latitude || 0, coordinates.longitude || 0],
     },
     referrer,
   })
+
+  console.log(storeValues)
 
   const BusinessProfile =
     storeValues.businessType === 'services' ? Sevices : StoreProfile
@@ -170,14 +172,13 @@ export const StoreRegistrationForm = ({
   }
   console.log(readyToNext)
   return pages[stage]
-   
 }
 
 const RegisterStore = () => {
-    const searchParams = useSearchParams()
-    const referrer = searchParams.get('ref')
-    const page = searchParams.get('p')
-    const [stage, setStage] = useState(parseInt(page) || 0)
+  const searchParams = useSearchParams()
+  const referrer = searchParams.get('ref')
+  const page = searchParams.get('p')
+  const [stage, setStage] = useState(parseInt(page) || 0)
   return (
     <StoreAuthLayout
       title="Create Business Account"

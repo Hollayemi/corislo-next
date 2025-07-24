@@ -37,13 +37,12 @@ export const storeLoginHandler = (payload, router, dispatch, saveStoreName, remo
   dispatch(storeLoginApi(payload))
     .then(unwrapResult)
     .then((res) => {
-      toast.success(res.message, {})
+      toaster(res)
       if (res.type === "success") {
         saveStoreName()
         router.push(res.to);
       }else{
         removeStoreName("storeName")
-        toast.error(res.message)
       }
       // localStorage.setItem("store_token", accessToken);
     })

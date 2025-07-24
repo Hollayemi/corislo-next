@@ -16,14 +16,16 @@ export const addNewOrder = (payload, dispatch, endpoint) => {
   dispatch(addOrderApi(payload))
     .then(unwrapResult)
     .then((res) => {
-      console.log(res)
+      console.log(res, "------------->")
       toaster({ ...res });
       if (res.type === "error") return;
-      if (res.type === "success" && res?.checkoutUrl?.authorization_url) {
+      if (res.type === "success" && res?.data?.checkoutUrl?.authorization_url) {
         toaster({ type: "success", message: "Redirecting to payment" });
       }
-      // window.location.href = res.checkoutUrl
-       window.open(res?.checkoutUrl?.authorization_url)
+    
+      console.log(res)
+      // window.location.href = res?.data.checkoutUrl
+      window.open(res?.data?.checkoutUrl?.authorization_url)
       mutate("/user/order");
       mutate(endpoint);
     })

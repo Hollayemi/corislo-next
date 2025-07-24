@@ -19,18 +19,21 @@ export const createNewProduct = createAsyncThunk(
   }
 );
 
-export const createProductHandler = (formData, dispatch) => {
+export const createProductHandler = (formData, dispatch, setLoading, callback) => {
+  setLoading(true);
   dispatch(createNewProduct(formData))
     .then(unwrapResult)
     .then((res) => {
       console.log(res);
       toaster({ ...res });
       if (res.type === "success") {
-        mutate("/store/products");
+        callback()
       }
+      setLoading(false);
     })
     .catch((e) => {
       console.log(e);
+      setLoading(false)
     });
 };
 /*

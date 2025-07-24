@@ -3,13 +3,7 @@ import React from 'react'
 import { styled, alpha } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
 import MuiAppBar from '@mui/material/AppBar'
-import {
-  Badge,
-  Box,
-  Toolbar,
-  Avatar,
-  Typography,
-} from '@mui/material'
+import { Badge, Box, Toolbar, Avatar, Typography } from '@mui/material'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
@@ -202,6 +196,7 @@ export default function StoreDashboardAppBar({
             <Avatar
               alt={staffInfo.fullname}
               title={staffInfo.fullname}
+              onClick={() => route.push(`/dashboard/store/settings`)}
               src={staffInfo.picture || '/images/misc/no-profile.png'}
               className="mr-2"
             />

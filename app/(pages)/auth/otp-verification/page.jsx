@@ -58,9 +58,9 @@ const OtpVerification = ({ searchParams, email, account, callback }) => {
     setCountdown(60)
     setResendDisabled(true)
   }
-
+  //max-w-[380px] md:w-[480px]
   return (
-    <Box className="w-full max-w-[380px] md:w-[480px] !mt-10 flex flex-col items-center">
+    <Box className="w-full  !mt-10 flex flex-col justify-center items-center">
       <OtpInput inputValues={inputValues} setInputValues={setInputValues} />
       <br />
       <br />

@@ -28,6 +28,8 @@ import { updateBranchImages } from '@/app/redux/state/slices/shop/branches'
 import { useDispatch } from 'react-redux'
 import { CircleLoader } from '@/app/components/cards/loader'
 import { useStoreData } from '@/app/hooks/useData'
+import useSWR from 'swr'
+import Image from 'next/image'
 
 // Styled component for the upload image inside the dropzone area
 const Img = styled('img')(({ theme }) => ({
@@ -362,4 +364,150 @@ export const BreadcrumbRightEle = () => {
 
 export const MySwitch = (props) => {
   return <Switch {...props} />
+}
+
+export const CategoryFolder = () => {
+  const { data: getData } = useSWR('/corisio/category/thread?for_store=true')
+  const [selectedCategory, setSelectedCategory] = useState(null)
+  const [selectedSubcategory, setSelectedSubcategory] = useState(null)
+  const categories = getData ? getData?.data : []
+
+  return (
+    <Box className="flex flex-col h-full">
+      {/* Main Categories */}
+      <Box className="flex items-start flex-wrap gap-2 p-2">
+        {!selectedSubcategory &&
+          categories?.map((category, i) => (
+            <Box
+              key={i}
+              onClick={() =>
+                setSelectedCategory(
+                  selectedCategory === category.category
+                    ? null
+                    : category.category
+                )
+              }
+              className={`flex flex-col items-center p-3 rounded-lg cursor-pointer transition-all
+              ${
+                selectedCategory === category.category
+                  ? 'bg-blue-50 border border-blue-200'
+                  : 'hover:bg-gray-50'
+              }`}
+            >
+              <Box className="relative w-20 h-20">
+                <Image
+                  src={category?.image || '/images/misc/folder.png'}
+                  alt={category?.category || 'folder'}
+                  fill
+                  className="object-contain"
+                />
+              </Box>
+              <Typography
+                variant="body2"
+                className={`!text-xs !mt-2 !text-center max-w-24 line-clamp-2
+                ${
+                  selectedCategory === category.category
+                    ? '!text-blue-600 !font-medium'
+                    : '!text-gray-600'
+                }`}
+              >
+                {category.category || 'No Name'}
+              </Typography>
+            </Box>
+          ))}
+      </Box>
+
+      {/* Subcategories Panel */}
+      {selectedCategory && (
+        <Box className="border-t border-gray-200 p-4 bg-gray-50">
+          <Typography
+            variant="h6"
+            className="!text-sm !font-medium !mb-3 !text-gray-700"
+          >
+            Subcategories for {selectedCategory}
+          </Typography>
+
+          <Box className="flex flex-wrap gap-3">
+            {categories
+              .find((c) => c.category === selectedCategory)
+              ?.sub_category?.map((subcat, j) => (
+                <Box
+                  key={j}
+                  onClick={() =>
+                    setSelectedSubcategory(
+                      selectedSubcategory === subcat.label ? null : subcat.label
+                    )
+                  }
+                  className={`flex flex-col items-center p-2 rounded-md cursor-pointer transition-all
+                    ${
+                      selectedSubcategory === subcat.label
+                        ? 'bg-blue-100'
+                        : 'hover:bg-gray-100'
+                    }`}
+                >
+                  <Box className="relative w-16 h-16">
+                    <Image
+                      src={subcat?.image || '/images/misc/folder-2.png'}
+                      alt={subcat?.label || 'subfolder'}
+                      fill
+                      className="object-contain"
+                    />
+                  </Box>
+                  <Typography
+                    variant="body2"
+                    className={`!text-xs !mt-1 !text-center max-w-20 line-clamp-2
+                      ${
+                        selectedSubcategory === subcat.label
+                          ? '!text-blue-600 !font-medium'
+                          : '!text-gray-600'
+                      }`}
+                  >
+                    {subcat.label || 'No Name'}
+                  </Typography>
+                </Box>
+              ))}
+          </Box>
+        </Box>
+      )}
+
+      {/* Groups Panel (if subcategory selected) */}
+      {selectedSubcategory && (
+        <Box className="border-t border-gray-200 p-4 bg-white">
+          <Typography
+            variant="h6"
+            className="!text-sm !font-medium !mb-3 !text-gray-700"
+          >
+            Items in {selectedSubcategory}
+          </Typography>
+
+          <Box className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {categories
+              .find((c) => c.category === selectedCategory)
+              ?.sub_category?.find((s) => s.label === selectedSubcategory)
+              ?.groups?.map((group, k) => (
+                <Box
+                  key={k}
+                  className="flex flex-col items-center p-2 rounded-md hover:bg-gray-50 transition-all"
+                >
+                  <Box className="relative w-16 h-16">
+                    <Image
+                      src={group?.image || '/images/misc/folder-3.png'}
+                      alt={group?.label || 'group item'}
+                      fill
+                      className="object-contain"
+                    />
+                  </Box>
+                  <Typography
+                    variant="body2"
+                    className="!text-xs !mt-1 !text-center max-w-20 line-clamp-2 !text-gray-600"
+                  >
+                    {group.label || 'No Name'}
+                  </Typography>
+                </Box>
+              ))}
+          </Box>
+        </Box>
+      )}
+    </Box>
+  )
 }
