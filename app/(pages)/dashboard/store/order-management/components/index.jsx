@@ -22,6 +22,7 @@ export const OrderListComponents = ({
   search,
   foundbyPicker,
 }) => {
+  console.log({ rows })
   // ** Hook
   const router = useRouter()
   // ** State
@@ -34,9 +35,9 @@ export const OrderListComponents = ({
 
   const sortBy = (by = 'all') => {
     if (!by || by === 'all') {
-      return rows || []
+      return rows.orders || []
     } else {
-      return rows ? rows.filter((e) => e.status.toLowerCase() === by) : []
+      return rows ? rows.orders?.filter((e) => e.status.toLowerCase() === by) : []
     }
   }
 
@@ -91,7 +92,7 @@ export const OrderListComponents = ({
             loading={isLoading}
             columns={allOrderColumns(actionFunctions)}
             rows={foundbyPicker || sortBy()}
-            // onRowClick={onRowClick}
+          // onRowClick={onRowClick}
           />
         </Box>
       </TabPanel>
@@ -220,16 +221,14 @@ export const Summarize = ({ info }) => {
             key={i}
           >
             <Typography
-              className={`mr-2 shrink-0 !w-36 md:!w-44 !text-xs ${
-                each.bold && '!font-bold'
-              } `}
+              className={`mr-2 shrink-0 !w-36 md:!w-44 !text-xs ${each.bold && '!font-bold'
+                } `}
             >
               {each.key}
             </Typography>
             <Box
-              className={`!text-xs !whitespace-break-spaces ${
-                each.bold && '!font-bold'
-              }`}
+              className={`!text-xs !whitespace-break-spaces ${each.bold && '!font-bold'
+                }`}
             >
               {each.value}
             </Box>

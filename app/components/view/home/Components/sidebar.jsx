@@ -34,7 +34,7 @@ const UserSideBar = () => {
   //   getLocationFromCoords()
   // })
 
-  const LinkStyled = styled(Link)(({}) => ({
+  const LinkStyled = styled(Link)(({ }) => ({
     fontSize: '0.869rem',
     fontWeight: 500,
     textDecoration: 'none',
@@ -61,12 +61,11 @@ const UserSideBar = () => {
 
   return (
     <Box
-      className={`fixed ${
-        overLay === 'sidebar' ? 'left-0' : '-left-full sm:left-2/5'
-      } transition-all ease-in-out duration-500 top-0 h-screen w-full sm:w-2/5 bg-white pt-20 px-3 z-50 flex flex-col`}
+      className={`fixed ${overLay === 'sidebar' ? 'left-0' : '-left-full sm:left-2/5'
+        } transition-all ease-in-out duration-500 top-0 h-screen w-full sm:w-2/5 bg-white pt-20 !px-3 z-50 flex flex-col`}
     >
       <Box className="flex flex-col w-full">
-        <Box className="px-3">
+        <Box className="!px-3">
           <Box className="flex items-center">
             <IconifyIcon
               icon="tabler:current-location"
@@ -86,9 +85,8 @@ const UserSideBar = () => {
             key={i}
             href={`/${page.link}`}
             onClick={showOverlay(null)}
-            className={`!mx-2 px-2 mt-1.5 lg:!mx-4 ${
-              getPath[1] === page.link ? 'text-yellow-500' : 'text-black'
-            } hover:text-yellow-400 !text-[14px] border-b border-b-gray-100 shadow-sm h-12 flex items-center justify-between`}
+            className={`!mx-2 !px-2 mt-1.5 lg:!mx-4 ${getPath[1] === page.link ? 'text-yellow-500' : 'text-black'
+              } hover:text-yellow-400 !text-[14px] border-b border-b-gray-100 shadow-sm h-12 flex items-center justify-between`}
           >
             <Box className="flex items-center justify-between">
               <IconifyIcon icon={page.icon} className="text-[22px] mr-4" />

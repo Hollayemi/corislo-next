@@ -7,7 +7,7 @@ const StoreLeftSideBar = dynamic(
     ssr: false,
   }
 )
-import { useState } from 'react'
+import { use, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import {
   Avatar,
@@ -19,11 +19,8 @@ import {
 } from '@mui/material'
 import CustomChip from '@/app/components/chip'
 import {
-  formatCurrency,
-  formatDate,
   formatDateToMonthShort,
 } from '@/app/utils/format'
-import { OrderProductPrev } from '@/app/(pages)/order/pending-reviews/page'
 import useSWR from 'swr'
 import {
   ConfirmPicker,
@@ -34,18 +31,18 @@ import {
   renderMenu,
   renderSubMenu,
 } from './components'
-import { DetailsDesign } from '../components'
 import IconifyIcon from '@/app/components/icon'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { storeUpdateOrder } from '@/app/redux/state/slices/shop/order'
 import ModalHook from '@/app/hooks/modalHook'
 import Link from 'next/link'
+import { useFetchStoreOrdersQuery } from '@/app/redux/business/slices/orderSlice'
 
-const OrderReview = ({ params }) => {
+const OrderReview = ({ params: param, searchParams }) => {
+  const params = use(param)
+  const { order } = use(searchParams)
   const router = useRouter()
   const dispatch = useDispatch()
-  const searchParams = useSearchParams()
-  const order = searchParams.get('order')
   const [anchorEl, setAnchorEl] = useState(null)
   const [rightOpen, setRightOpen] = useState(null)
   const [subAnchorEl, setSubAnchorEl] = useState(null)
@@ -57,17 +54,12 @@ const OrderReview = ({ params }) => {
     data: orderInfo,
     error: orderErr,
     isLoading: orderLoading,
-  } = useSWR(`/branch/order-request?order=${order}`)
+    refetch: refetchOrder,
+  } = useFetchStoreOrdersQuery({ order })
 
-  const {
-    data: prodInfo,
-    error: prodErr,
-    isLoading: prodLoading,
-  } = useSWR(`/branch/order-product/${order}`)
-
-  const row = (!orderLoading && !orderErr && orderInfo?.data[0]) || null
-  const products = (!prodLoading && !prodErr && prodInfo?.data)[0] || {}
-  const picker = (products?.picker && products.picker[0]) || {}
+  const row = (!orderLoading && !orderErr && orderInfo?.data?.orders?.[0]) || {}
+  const products = row?.items
+  const picker = row?.picker || {}
   const open = Boolean(anchorEl)
   const openSub = Boolean(subAnchorEl)
   const handleButtonClick = (event) => {
@@ -107,8 +99,10 @@ const OrderReview = ({ params }) => {
           ...prev,
           open: true,
           alert: `Are you sure to change order status to ${payload.status}. The buyer will be notified instantly.`,
-          acceptFunction: () =>
-            storeUpdateOrder(dispatch, payload, setPayload({ orderId: order })),
+          acceptFunction: () => {
+            storeUpdateOrder(dispatch, payload, setPayload({ orderId: order }));
+            refetchOrder()
+          }
         }
       })
     } else {
@@ -171,7 +165,7 @@ const OrderReview = ({ params }) => {
             <Button
               onClick={handleButtonClick}
               variant="contained"
-              className="!flex !items-center !shadow-none !justify-between px-4 !text-white"
+              className="!flex !items-center !shadow-none !justify-between !px-4 !text-white"
             >
               {payload.status || 'Status'}
               {open ? (
@@ -194,31 +188,31 @@ const OrderReview = ({ params }) => {
             </Button>
           </Box>
 
-          {/* </div> */}
         </Box>
 
         <Box className="flex flex-col-reverse md:flex-row items-start mt-2">
           <Box className=" w-full md:w-7/12 md:pr-1">
             <Box className="w-full">
-              <Box className="w-full px-3 py-4 rounded-xl bg-white shadow-sm hover:shadow-md transition-all mt-4 md:mt-0">
+              <Box className="w-full !px-3 py-4 rounded-xl bg-white shadow-sm hover:shadow-md transition-all mt-4 md:mt-0">
                 <Typography className=" !text-[15px] !mb-2 !mr-4">
                   Order Items
                 </Typography>
                 <CustomizeStatus text={'Pending'} />
                 <br />
                 <br />
-                {products?.products?.map((each, i) => (
+                {products?.map((each, i) => (
                   <ProductPrev
-                    quantity={each.qty}
+                    quantity={each.quantity}
                     prodPrice={each.price}
-                    prodName={each.productName}
+                    prodName={each.name}
+                    image={each.image}
                     key={i}
                   />
                 ))}
               </Box>
             </Box>
 
-            <Box className="w-full px-3 py-4 mt-2 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
+            <Box className="w-full !px-3 py-4 mt-2 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
               <Typography className=" !text-[15px] !mb-2 !mr-4">
                 Order Summary
               </Typography>
@@ -235,19 +229,19 @@ const OrderReview = ({ params }) => {
               <br />
               <OrderSummary
                 title="Subtotal"
-                info={`${products?.products?.length} items`}
-                price={products?.allSubTotal}
+                info={`${products?.length} items`}
+                price={row?.totalPrice}
               />
               <OrderSummary
                 title="Discount"
                 info="No discount applied"
-                price={0}
+                price={row.discount}
               />
               <OrderSummary title="Shipping" info="No shipment" price={0} />
               <Divider>...</Divider>
-              <OrderSummary title="Total" bold price={products?.allSubTotal} />
+              <OrderSummary title="Total" bold price={row?.totalPrice} />
             </Box>
-            <Box className="w-full px-3 py-4 mt-2 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
+            <Box className="w-full !px-3 py-4 mt-2 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
               <Typography className=" !text-[15px] !mb-2 !mr-4">
                 Timeline
               </Typography>
@@ -283,7 +277,7 @@ const OrderReview = ({ params }) => {
                   <Button
                     onClick={handleButtonClick}
                     variant="contained"
-                    className="!flex !items-center !shadow-none !justify-between px-4 !text-white w-40"
+                    className="!flex !items-center !shadow-none !justify-between !px-4 !text-white w-40"
                   >
                     {payload.status || 'Status'}
                     {open ? (
@@ -312,7 +306,7 @@ const OrderReview = ({ params }) => {
             </Box>
           </Box>
           <Box className="w-full md:w-5/12 md:pl-1">
-            <Box className="w-full px-3 py-4 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
+            <Box className="w-full !px-3 py-4 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
               <Typography className=" !text-[15px] !mb-2 !mr-4">
                 Customer
               </Typography>
@@ -320,7 +314,7 @@ const OrderReview = ({ params }) => {
                 {row?.picture && (
                   <img
                     src={row?.picture}
-                    className="w-12 h-12 rounded-full mb-2"
+                    className="w-12 h-12 object-cover rounded-full mb-2"
                     alt="picture"
                   />
                 )}
@@ -332,7 +326,7 @@ const OrderReview = ({ params }) => {
               </Box>
             </Box>
 
-            <Box className="w-full mt-2 px-3 py-4 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
+            <Box className="w-full mt-2 !px-3 py-4 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
               <Typography className=" !text-[15px] !mb-2 !mr-4">
                 Contact Information
               </Typography>
@@ -343,19 +337,19 @@ const OrderReview = ({ params }) => {
             </Box>
 
             {row?.deliveryMedium === 'pickup' && (
-              <Box className="w-full px-3 mt-2 py-4 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
+              <Box className="w-full !px-3 mt-2 py-4 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
                 <Box className="flex items-center justify-between">
                   <Typography className=" !text-[15px] !mb-2 !mr-4">
                     Picker
                   </Typography>
                   <Box className="flex items-center ">
-                    <Link href={`tel:${picker?.phone || row.phone}`}>
+                    <Link href={`tel:${picker?.phone || row?.phone}`}>
                       <IconifyIcon
                         icon="tabler:phone"
                         className="mr-2 !text-green-600 !text-[15px] cursor-pointer"
                       />
                     </Link>
-                    <Link href={`mail:${picker.email || row.email}`}>
+                    <Link href={`mail:${picker?.email || row?.email}`}>
                       <IconifyIcon
                         icon="tabler:mail"
                         className="!text-blue-600 !text-[15px] cursor-pointer"
@@ -363,9 +357,9 @@ const OrderReview = ({ params }) => {
                     </Link>
                   </Box>
                 </Box>
-                {picker.name ? (
+                {picker?.name ? (
                   <Box className="mt-2">
-                    <IconValue icon="tabler:user" value={picker.name} />
+                    <IconValue icon="tabler:user" value={picker?.name} />
                     <IconValue icon="tabler:hash" value={'***-********'} />
                     <IconValue
                       icon="tabler:friends"
@@ -378,7 +372,7 @@ const OrderReview = ({ params }) => {
               </Box>
             )}
 
-            <Box className="w-full mt-2 px-3 py-4 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
+            <Box className="w-full mt-2 !px-3 py-4 shadow-sm rounded-xl bg-white hover:shadow-md transition-all">
               <Typography className=" !text-[15px] !mb-2 !mr-4">
                 Way-billing Address
               </Typography>

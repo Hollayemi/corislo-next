@@ -25,7 +25,7 @@ const ServiceDashboard = () => {
   const { staffInfo, screenWidth = 0 } = useStoreData()
   return (
     <ServiceRenderWrapper>
-      <Box className="w-full md:px-7 px-3 ">
+      <Box className="w-full md:!px-7 !px-3 ">
         <Box className="flex items-center">
           <Box className="w-1/2 pr-4">
             <Box className="bg-orange-200 rounded-2xl p-6 h-40 flex items-center">
@@ -135,7 +135,7 @@ const ServiceDashboard = () => {
             </Box>
             <Box className="bg-white h-48 rounded-xl flex flex-col items-center justify-center">
               <IconifyIcon icon="tabler:history" className="mb-2" />
-              <Typography  className="!text-[14px]">
+              <Typography className="!text-[14px]">
                 No booking history
               </Typography>
             </Box>
@@ -148,7 +148,7 @@ const ServiceDashboard = () => {
             </Box>
             <Box className="flex justify-evenly h-[210px] md:h-[200px] pt-2 md:pt-0">
               <CardsExplain title="Services" stat={50} />
-              <Box className="px-0.5 md:hidden"></Box>
+              <Box className="!px-0.5 md:hidden"></Box>
               <CardsExplain title="Users" stat={80} />
             </Box>
           </Box>

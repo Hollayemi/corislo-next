@@ -1,4 +1,4 @@
-import { MyTextField } from '@/app/(pages)/user/components'
+import { MyTextField } from '@/app/(pages)/(users)/user/components'
 import IconifyIcon from '@/app/components/icon'
 import { InfoOutlined } from '@mui/icons-material'
 

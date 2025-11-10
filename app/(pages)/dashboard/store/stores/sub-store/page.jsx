@@ -70,7 +70,7 @@ const StorePage = ({ params }) => {
       breadCrumbRIghtChildren={<BreadcrumbRightEle />}
       crumb={[...StoreBreadCrumb, { text: 'New Sub-Stores', link: '' }]}
     >
-      <Box className="w-full bg-white !rounded-md !px-4 !md:px-5 mt-3 !pb-8 relative">
+      <Box className="w-full bg-white !rounded-md !px-4 !md:!px-5 mt-3 !pb-8 relative">
         <Grid container spacing={2}>
           <Grid item sm={12} md={7} className="md:!pr-16">
             <Box>
@@ -107,10 +107,10 @@ const StorePage = ({ params }) => {
                 JPG, GIF or PNG, Max size of 500kb
               </Typography>
               <Box className="flex item-center mt-4">
-                <Paper className="px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3">
+                <Paper className="!px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3">
                   Change Photo
                 </Paper>
-                <Paper className="px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3">
+                <Paper className="!px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3">
                   Delete
                 </Paper>
               </Box>
@@ -121,7 +121,7 @@ const StorePage = ({ params }) => {
                 inputProps={{
                   disabled: true,
                 }}
-                onChange={() => {}}
+                onChange={() => { }}
                 label="Your Store Name"
               />
 

@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createBrand } from '@/app/redux/state/slices/shop/brands/brands'
 import { GridLayout } from './components'
-import QuillTextEditor from '@/app/components/text-editor/quill'
+// import QuillTextEditor from '@/app/components/text-editor/quill'
 
 const CreateSubCollection = () => {
   const [brandInfo, setBrandInfo] = useState('')
@@ -72,10 +72,21 @@ const CreateSubCollection = () => {
         title="Description"
         subtitle="Wite a short description"
         comp={
-          <QuillTextEditor
-            value={brandInfo}
-            className="bg-gray-50 h-52"
-            onChange={(e) => setBrandInfo(e)}
+          // <QuillTextEditor
+          //   value={brandInfo}
+          //   className="bg-gray-50 h-52"
+          //   onChange={(e) => setBrandInfo(e)}
+          // />
+          <TextField
+            sx={{ mb: 1.5 }}
+            className="w-5/6 md:w-full bg-gray-50"
+            onChange={handleChange('brandInfo')}
+            multiline
+            maxRows={7}
+            fullWidth
+            id="outlined-basic"
+            inputProps={{ className: '!h-2' }}
+            placeholder="Description"
           />
         }
       />

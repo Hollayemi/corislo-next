@@ -148,7 +148,7 @@ export const FlashSale = () => {
   )
 }
 
-export const PopularAds = ({ store, title, brief, image, url }) => {
+export const PopularAds = ({ store="", title, brief, image, url }) => {
   const router = useRouter()
   return (
     <Box className="!w-[350px] !h-48 flex !bg-yellow-50 !rounded-xl p-5 mx-2">
@@ -191,13 +191,13 @@ export const PopularAds = ({ store, title, brief, image, url }) => {
 export const TopStores = ({
   image,
   name,
-  store,
+  store = "",
   branch,
   rating,
   followers = 0,
 }) => {
   return (
-    <Box className="flex flex-col items-center justify-center px-2">
+    <Box className="flex flex-col items-center justify-center !px-2">
       <Image
         src={image}
         alt="flyer"

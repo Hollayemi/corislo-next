@@ -159,7 +159,7 @@ const StoreLeftSideBar = React.memo(
 
     React.useLayoutEffect(() => {
       if (permissions) {
-        permissions[permission] === false && router.push('/dashboard/store/401')
+        permissions[permission] === false && router.push('/dashboard/store/fouroone')
       }
     }, [permissions, permission, router])
 
@@ -223,8 +223,8 @@ const StoreLeftSideBar = React.memo(
       <React.Fragment>
         <Box
           sx={{ display: 'flex' }}
-          // className="!overflow-hidden"
-          // bgcolor="custom.bodyGray"
+        // className="!overflow-hidden"
+        // bgcolor="custom.bodyGray"
         >
           <CssBaseline />
           <StoreDashboardAppBar
@@ -322,41 +322,42 @@ const StoreLeftSideBar = React.memo(
                 className="flex flex-col justify-center items-start ml-6"
                 style={{ display: open ? 'flex' : 'none' }}
               >
-                <Typography
-                  variant="h5"
-                  style={{ fontSize: '13px' }}
-                  className="text-black font-bold py-2"
-                >
-                  Stores
-                </Typography>
-                <AvatarGroup total={10}>
-                  <Avatar
-                    alt="Remy Sharp"
-                    src="/images/avatar/1.png"
-                    sx={{ width: 34, height: 34 }}
-                  />
-                  <Avatar
-                    alt="Travis Howard"
-                    src="/images/avatar/2.png"
-                    sx={{ width: 34, height: 34 }}
-                  />
-                  <Avatar
-                    alt="Agnes Walker"
-                    src="/images/avatar/4.png"
-                    sx={{ width: 34, height: 34 }}
-                  />
-                  <Avatar
-                    alt="Trevor Henderson"
-                    src="/images/avatar/5.png"
-                    sx={{ width: 34, height: 34 }}
-                  />
-                  <Avatar
-                    alt="Travis Howard"
-                    src="/images/avatar/2.png"
-                    sx={{ width: 34, height: 34 }}
-                  />
-                </AvatarGroup>
-
+                <Box className="hidden">
+                  <Typography
+                    variant="h5"
+                    style={{ fontSize: '13px' }}
+                    className="text-black font-bold py-2"
+                  >
+                    Stores
+                  </Typography>
+                  <AvatarGroup className="" total={10}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      src="/images/avatar/1.png"
+                      sx={{ width: 34, height: 34 }}
+                    />
+                    <Avatar
+                      alt="Travis Howard"
+                      src="/images/avatar/2.png"
+                      sx={{ width: 34, height: 34 }}
+                    />
+                    <Avatar
+                      alt="Agnes Walker"
+                      src="/images/avatar/4.png"
+                      sx={{ width: 34, height: 34 }}
+                    />
+                    <Avatar
+                      alt="Trevor Henderson"
+                      src="/images/avatar/5.png"
+                      sx={{ width: 34, height: 34 }}
+                    />
+                    <Avatar
+                      alt="Travis Howard"
+                      src="/images/avatar/2.png"
+                      sx={{ width: 34, height: 34 }}
+                    />
+                  </AvatarGroup>
+                </Box>
                 <Box
                   className="flex items-center pb-2 flex-col justify-center w-52 my-5 rounded-md"
                   sx={{ bgcolor: 'custom.bodyGray' }}
@@ -386,18 +387,17 @@ const StoreLeftSideBar = React.memo(
             </StyleList>
           </Drawer>
           <Box
-            className={`top-0 ${
-              open
-                ? 'left-[270px]'
-                : rightOpen
+            className={`top-0 ${open
+              ? 'left-[270px]'
+              : rightOpen
                 ? ' -left-[330px] '
                 : ' md:left-16 '
-            } w-full transition-all duration-300 absolute flex-shrink-0 h-full md:pl-4 !pr-3 md:!pr-16 z-30`}
+              } w-full transition-all duration-300 absolute flex-shrink-0 h-full md:pl-4 !pr-3 md:!pr-16 z-30`}
             bgcolor="custom.bodyGray"
           >
             {/* <Box className=""> */}
 
-            <Box className="flex flex-col w-full pt-16 md:pt-20 md:px-7 px-3 ">
+            <Box className="flex flex-col w-full capitalize pt-16 md:pt-20 md:!px-7 !px-3 ">
               {onSideBar === '' &&
                 staffInfo.fullname && (
                   <Typography
@@ -409,12 +409,12 @@ const StoreLeftSideBar = React.memo(
                 )}
             </Box>
             {!hidebreadCrumb && (
-              <Box className="flex items-center sticky top-16 md:top-20 justify-between mb-2 px-2 md:px-11">
+              <Box className="flex items-center sticky top-16 md:top-20 justify-between mb-2 !px-2 md:!px-11">
                 <MyBreadcrumbs />
                 {breadCrumbRIghtChildren}
               </Box>
             )}
-            <Box className="flex flex-col relative md:flex-row items-start md:px-1.5">
+            <Box className="flex flex-col relative md:flex-row items-start md:!px-1.5">
               {InnerList && (
                 <Box className="w-full hidden md:block sticky top-[68px] h-[85vh] md:w-52  bg-white rounded-md">
                   <InnerBar path={path} InnerList={InnerList} />
@@ -441,13 +441,12 @@ const StoreLeftSideBar = React.memo(
           </Box>
 
           <Box
-            className={`transition-all duration-300 ${
-              rightOpen ? 'right-0' : '-right-[440px]'
-            } h-full w-[330px] fixed top-0  z-20 py-6 mt-7 `}
+            className={`transition-all duration-300 ${rightOpen ? 'right-0' : '-right-[440px]'
+              } h-full w-[330px] fixed top-0  z-20 py-6 mt-7 `}
           >
             <Box className="bg-white w-full h-full pt-5 shadow relative">
               <Box
-                className="flex items-center w-fit cursor-pointer mb-2 px-4"
+                className="flex items-center w-fit cursor-pointer mb-2 !px-4"
                 onClick={() => setRightOpen(false)}
               >
                 <IconifyIcon icon="tabler:arrow-left" className="mr-3" />

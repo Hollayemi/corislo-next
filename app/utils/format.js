@@ -46,33 +46,28 @@ export const intervals = {
 };
 
 export const timeSince = (date) => {
-  const currentDate = new Date();
-  const timeElapsedInSeconds = Math.floor((currentDate - date) / 1000);
+  const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
 
-  if (timeElapsedInSeconds < 60) {
-    return "Just now";
-  } else if (timeElapsedInSeconds < 3600) {
-    const minutes = Math.floor(timeElapsedInSeconds / 60);
-    return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
-  } else if (timeElapsedInSeconds < 86400) {
-    const hours = Math.floor(timeElapsedInSeconds / 3600);
-    return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
-  } else if (timeElapsedInSeconds < 604800) {
-    const days = Math.floor(timeElapsedInSeconds / 86400);
-    return `${days} day${days !== 1 ? "s" : ""} ago`;
-  } else if (timeElapsedInSeconds < 2419200) {
-    const weeks = Math.floor(timeElapsedInSeconds / 604800);
-    return `${weeks} week${weeks !== 1 ? "s" : ""} ago`;
-  } else if (timeElapsedInSeconds < 29030400) {
-    // Approximately one year
-    const months = Math.floor(timeElapsedInSeconds / 2419200);
-    return `${months} month${months !== 1 ? "s" : ""} ago`;
-  } else {
-    const years = Math.floor(timeElapsedInSeconds / 29030400); // Approximately one year
-    return `${years} year${years !== 1 ? "s" : ""} ago`;
+  if (seconds < 60) return "Just now";
+
+  const intervals = [
+    { label: "yr", seconds: 29030400 },   // 12 * 2419200
+    { label: "mn", seconds: 2419200 },   // 28 days (approx.)
+    { label: "wk", seconds: 604800 },
+    { label: "day", seconds: 86400 },
+    { label: "hr", seconds: 3600 },
+    { label: "min", seconds: 60 },
+  ];
+
+  for (const interval of intervals) {
+    const count = Math.floor(seconds / interval.seconds);
+    if (count >= 1) {
+      return `${count} ${interval.label}${count > 1 ? "s" : ""} ago`;
+    }
   }
-};
 
+  return "Just now"; // fallback
+};
 export const changeTime = (prevDate) => {
   prevDate = new Date(prevDate);
   const newDate = new Date();
@@ -108,7 +103,7 @@ export const dateNumericOption = {
   year: "numeric",
   month: "numeric",
   day: "numeric",
- 
+
 };
 
 export const formatDate = (
@@ -338,18 +333,18 @@ export const formatSegmentation = (orders, totalAmount, lastSeen) => {
   }
   return (
     <Box
-    className={`!text-xs !whitespace-break-spaces flex items-center `}
-    color={color}
+      className={`!text-xs !whitespace-break-spaces flex items-center `}
+      color={color}
     >
-        <Box
-          bgcolor={color}
-          className="w-4 h-4 shrink-0 rounded-full mr-2"
-          ></Box>
-          <Typography className="!text-xs">
+      <Box
+        bgcolor={color}
+        className="w-4 h-4 shrink-0 rounded-full mr-2"
+      ></Box>
+      <Typography className="!text-xs">
 
         {categ}
-    </Typography>
-      </Box>
+      </Typography>
+    </Box>
   );
 };
 
@@ -360,6 +355,11 @@ export const formatCurrency = (amount, currency = "NGN", sign = "NG") => {
   }).format(amount);
   return formattedCurrencyUS;
 };
+export const reshapePrice = (price) => {
+  if (typeof parseInt(price) === 'number') {
+    return `₦ ${parseFloat(price).toLocaleString()}`
+  }
+}
 
 export const summarizeFollowers = (followers) => {
   if (followers < 1500) {
@@ -377,9 +377,8 @@ export const mySubstring = (string = "", num = 15, start = 0) => {
   if (string.length < num) {
     return string;
   } else {
-    return `${string.substring(start, parseInt(num))} ${
-      string.length > num + start ? "..." : ""
-    }`;
+    return `${string.substring(start, parseInt(num))} ${string.length > num + start ? "..." : ""
+      }`;
   }
 };
 
@@ -399,14 +398,14 @@ export const formatBytes = (bytes, decimals = 2) => {
 
 export const formatDistance = (distance) => {
   if (distance < 1000) {
-    return `${distance.toFixed(2)} m`;
+    return `${distance.toFixed(1)} m`;
   } else if (distance < 1_000_000) { // less than 1 million meters
-    const km = (distance / 1000).toFixed(2);
+    const km = (distance / 1000).toFixed(1);
     return `${km} km`;
   } else { // 1 million meters or more
-    const Mm = (distance / 1_000_000).toFixed(2);
+    const Mm = (distance / 1_000_000).toFixed(1);
     return `${Mm} Mm`;
   }
 }
 
-export const idShorter = (_id) =>`${_id.substring(0, 8)}_${_id.substring(16)}`
+export const idShorter = (_id) => `${_id.substring(0, 8)}_${_id.substring(16)}`

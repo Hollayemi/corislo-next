@@ -27,9 +27,12 @@ import { copyToClipboard } from '@/app/utils/clipboard'
 import { deleteOrder } from '@/app/redux/state/slices/home/order'
 import { useState } from 'react'
 import { Delete, ShoppingCartSharp } from '@mui/icons-material'
-import { OrderActionBtn } from '@/app/(pages)/order/[detail]/components'
-import { OrderStages } from '@/app/(pages)/order/timeline'
+import { OrderActionBtn, trackMainSteps } from '@/app/(pages)/(users)/order/[detail]/components'
+import { OrderStages } from '@/app/(pages)/(users)/order/timeline'
 import CustomOption from '../option-menu/option'
+import GroupAvatar from '../cards/GroupImage'
+import { useCart } from '@/app/context/CartContext'
+import { Loader } from 'lucide-react'
 
 const ChangeQty = ({
   payload,
@@ -40,7 +43,7 @@ const ChangeQty = ({
   cartPopup,
   isSavedView,
 }) => {
-  console.log('cartPopup2', cartPopup)
+  const { updateQuantity, updatingItem } = useCart()
   const dispatch = useDispatch()
   const [qty, newQty] = useState(quantity)
   return (
@@ -62,20 +65,19 @@ const ChangeQty = ({
         <Box
           onClick={() =>
             quantity > 1 &&
-            qtyFunc({ id, operator: '-', saveItem }, dispatch, newQty)
+            updateQuantity(id,'-')
           }
-          className={`h-5 w-5 rounded-full cursor-pointer !text-[14px] border ${
-            quantity > 1 ? 'border-blue-800' : 'border-gray-300'
-          } !font-black flex items-center justify-center transition-all duration-300`}
+          className={`h-5 w-5 rounded-full cursor-pointer !text-[14px] border ${quantity > 1 ? 'border-blue-800' : 'border-gray-300'
+            } !font-black flex items-center justify-center transition-all duration-300`}
         >
           -
         </Box>
         <Typography variant="caption" className="!text-[15px] !text-blue-800">
-          {qty}
+          {updatingItem ? <Loader className="animate-spin" /> :  quantity}
         </Typography>
         <Box
           onClick={() =>
-            qtyFunc({ id, operator: '+', saveItem }, dispatch, newQty)
+            updateQuantity(id, '+')
           }
           className="h-5 w-5 rounded-full cursor-pointer !text-[14px] border border-blue-800 !font-black flex items-center justify-center"
         >
@@ -129,16 +131,7 @@ export const CartProductView = ({
   selected,
   selectCart,
 }) => {
-  const colorArray = [
-    '#eefabb',
-    '#aecabb',
-    '#eabdbb',
-    '#beea45',
-    '#afedda',
-    '#34ee',
-    '#000',
-  ]
-  console.log('cartPopup1', cartPopup)
+
   const payload = {
     productId: productId,
     store,
@@ -174,7 +167,7 @@ export const CartProductView = ({
             className="w-20 h-20 flex-shrink-0 !rounded-xl"
           />
           <Box
-            className={`px-3 ${hideQtyFunc ? 'w-10/12' : 'w-8/12'} relative`}
+            className={`!px-3 ${hideQtyFunc ? 'w-10/12' : 'w-8/12'} relative`}
           >
             <Typography
               variant="body2"
@@ -187,7 +180,7 @@ export const CartProductView = ({
               variant="body2"
               className="!font-extrabold !text-black !text-[16px] !my-px !p-0"
             >
-              NGN {(prodPrice * (quantity || 1)).toFixed(2).toLocaleString()}
+              NGN {(prodPrice).toFixed(2).toLocaleString()}
             </Typography>
             {isSavedView ? (
               <ChangeQty
@@ -319,12 +312,12 @@ export const GroupCartProducts = ({
         )}
       </Box>
 
-      <Box className="px-2 !mt-4">
+      <Box className="!px-2 !mt-4">
         {branch.map((each, i) => (
           <CartProductView
             key={i}
             prodName={each.product.prodName}
-            image={`/images/more/${i + 1}.png`}
+            image={each.product.images[0]}
             prodPrice={each.product.prodPrice}
             collection={each.product.collectionName}
             quantity={each.quantity}
@@ -335,7 +328,7 @@ export const GroupCartProducts = ({
 
         <OptionsMenu
           icon={
-            <Box className="flex items-center justify-between py-4 w-full cursor-pointer">
+            <Box className="flex items-center  !bg-gray-100 px-4 rounded-md justify-between py-4 w-full cursor-pointer">
               <Box className="text-left">
                 <Typography variant="body2" className="!text-[13px]">
                   <span className="!font-bold !text-gray-600 mr-3">
@@ -352,7 +345,7 @@ export const GroupCartProducts = ({
               </Box>
               <IconifyIcon
                 icon="tabler:chevron-right"
-                className="text-[14px]"
+                className="text-[20px] !text-gray-700"
               />
             </Box>
           }
@@ -362,6 +355,7 @@ export const GroupCartProducts = ({
               return { ...prev, delivery: { ...prev.delivery, [store]: x } }
             })
           }
+          
           iconButtonProps={{
             size: 'small',
             sx: { color: 'text.disabled', cursor: 'pointer' },
@@ -471,7 +465,7 @@ export const GroupSavedProducts = ({
         )}
       </Box>
 
-      <Box className="px-2 !mt-4">
+      <Box className="!px-2 !mt-4">
         {fromBranch.map((each, i) => (
           <CartProductView
             key={i}
@@ -542,8 +536,11 @@ export const OrderProductView = ({
   createdAt,
   store,
   status,
-  mutateStatus,
+  popUpFunc,
+  mutate,
+  others
 }) => {
+  const [showProgress, setShowProgress] = useState(false)
   const dispatch = useDispatch()
   const TitleValue = ({ title, value, allowCopy }) => (
     <Box className="flex items-center">
@@ -559,8 +556,8 @@ export const OrderProductView = ({
     </Box>
   )
   return (
-    <Box className="px-1.5 md:px-6 pb-2 rounded-md bg-white mb-5">
-      <Box className="flex justify-between px-3 items-center py-5 border-b-2">
+    <Box className="!px-1.5 md:!px-6 pb-2 rounded-md bg-white mb-5">
+      <Box className="flex justify-between !px-3 items-center py-5 border-b-2">
         <Typography
           variant="body2"
           className="!text-[13px] !font-semibold !text-gray-900"
@@ -585,7 +582,7 @@ export const OrderProductView = ({
           <Box className="h-5 border mx-2 md:mx-4"></Box>
           <Box
             className="flex items-center cursor-pointer"
-            onClick={() => deleteOrder(orderId, dispatch, mutateStatus)}
+            onClick={() => deleteOrder(orderId, dispatch, mutate)}
           >
             <IconifyIcon
               icon="tabler:trash"
@@ -603,14 +600,15 @@ export const OrderProductView = ({
 
       <Box className="flex flex-col md:flex-row items-start w-full my-3 relative">
         <Box className="flex items-start w-full">
-          <Image
+          <GroupAvatar size='xl' images={others?.items.map(e => e.image)} />
+          {/* <Image
             src={image || '/images/more/2.png'}
             alt="prod_img"
             width={150}
             height={150}
             className="w-20 h-20 md:w-24 md:h-28 flex-shrink-0 !rounded-xl"
-          />
-          <Box className={`px-3  md:w-8/12 relative`}>
+          /> */}
+          <Box className={`!px-3  md:w-8/12 relative`}>
             <Typography
               variant="body2"
               className="!text-[11px] !text-blue-900 !mb-2"
@@ -631,10 +629,10 @@ export const OrderProductView = ({
             />
             <Box className="md:flex items-center">
               <TitleValue title="Order ID:" value={orderSlug} allowCopy />
-              <span className="hidden md:block px-5"></span>
+              <span className="hidden md:block !px-5"></span>
               <TitleValue
                 title="No of Products:"
-                value={product?.length || 0}
+                value={others?.items?.length || 0}
               />
             </Box>
           </Box>
@@ -648,28 +646,31 @@ export const OrderProductView = ({
               NGN{totalAmount}
             </Typography>
           </Box>
-          <Box className="flex items-center flex-nowrap !mt-3 md:!mt-6 !ml-20">
+          <Box className="flex items-center justify-between flex-nowrap !mt-5 md:!mt-6 !ml-20">
             <Button
               variant="outlined"
+              onClick={() => setShowProgress(!showProgress)}
               className="w-32 h-9 md:h-10 !mr-4 !rounded-full !text-[14px] !shadow-none"
             >
-              Track items
+              {showProgress ? "Hide progress" : "Track order"}
             </Button>
 
             <OrderActionBtn
               action={status?.toLowerCase()}
               orderId={orderId}
               variant="contained"
-              mutateStatus={mutateStatus}
+              popUpFunc={popUpFunc}
             />
           </Box>
         </Box>
       </Box>
-      {/* <OrderStages
-        at={trackMainSteps[status?.toLowerCase()?.replaceAll(" ", "_")] || 0}
-        price={totalAmount}
-        delivery={deliveryMedium}
-      /> */}
+      {showProgress && <div className="mb-10 md:my-10 mx-auto w-full md:w-10/12">
+        <OrderStages
+          at={trackMainSteps[status?.toLowerCase()?.replaceAll(" ", "_")] || 0}
+          price={totalAmount}
+          delivery={deliveryMedium}
+        />
+      </div>}
     </Box>
   )
 }

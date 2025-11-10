@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 
 import { useEffect, useState } from 'react'
-import { TitleSubtitle } from '@/app/(pages)/user/components'
+import { TitleSubtitle } from '@/app/(pages)/(users)/user/components'
 import { Checked, defaultCol } from './role.components'
 import useSWR from 'swr'
 import { useDispatch } from 'react-redux'
@@ -60,9 +60,8 @@ const RolesComponent = ({ params }) => {
     // Update the state with the new array
     updatePermissions(newPermissions)
     const getM = Object.keys(to)
-    const message = `${formatName(getM[0].split('_').join('-'))} is ${
-      !to[getM[0]] ? 'not' : ''
-    } allowed to ${change.action.toLowerCase()}`
+    const message = `${formatName(getM[0].split('_').join('-'))} is ${!to[getM[0]] ? 'not' : ''
+      } allowed to ${change.action.toLowerCase()}`
     updatePermission(dispatch, { newPermissions, message })
   }
 
@@ -95,7 +94,7 @@ const RolesComponent = ({ params }) => {
     setPage(0)
   }
   return (
-    <Box className="h-ful w-full bg-white px-2 md:px-5 py-8 rounded-md">
+    <Box className="h-ful w-full bg-white !px-2 md:!px-5 py-8 rounded-md">
       <Box>
         <Box className="flex items-center justify-between mb-5">
           <TitleSubtitle

@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { use, useState } from 'react'
 import useSWR from 'swr'
 import { Box } from '@mui/material'
 import dynamic from 'next/dynamic'
@@ -11,15 +11,14 @@ const StoreLeftSideBar = dynamic(
   }
 )
 import OrderTable from './components/orderTable'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
-const OrderManagement = ({ params }) => {
+const OrderManagement = ({ params: param, searchParams }) => {
+  const params = use(param)
+  const { order: orderId } = use(searchParams)
   const [rightOpen, setRightOpen] = useState(false)
   const { data, error, isLoading } = useSWR('/branch/order-request')
   const router = useRouter()
-  const searchParams = useSearchParams()
-
-  const orderId = searchParams.get('order')
 
   const path = { ...params, sidebar: 'order-management' }
 
@@ -30,7 +29,7 @@ const OrderManagement = ({ params }) => {
       rightOpen={rightOpen}
       setRightOpen={setRightOpen}
     >
-      <Box className="-mt-4 md:px-3 py-3 rounded-md">
+      <Box className="-mt-4 md:!px-3 py-3 rounded-md">
         <OrderTable
           selectRow={data}
           isLoading={isLoading}

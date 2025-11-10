@@ -9,7 +9,7 @@ const editProduct = createAsyncThunk(
   "post/editProduct",
   async (payload) => {
     const { data } = await martApi
-      .put("/store/editProduct", payload, jsonHeader("store"))
+      .post("/store/product/edit", payload, jsonHeader("store"))
       .then((res) => res)
       .catch((e) => e.response);
     return data;

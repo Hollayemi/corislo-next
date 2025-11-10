@@ -27,7 +27,7 @@ export const BranchCard = ({
           height={200}
           className="w-full h-40 md:h-44 rounded-t-xl"
         />
-        <Box className="flex items-center mb-2 px-2 relative">
+        <Box className="flex items-center mb-2 !px-2 relative">
           <Box className="absolute top-0 right-0 mr-2 mt-2">
             <OptionsMenu
               icon={<IconifyIcon icon="tabler:dots" className="!text-[18px]" />}
@@ -56,7 +56,7 @@ export const BranchCard = ({
               {branchName}
             </Typography>
             <Box className="flex items-center mb-1">
-              <Box className="flex items-center w-fit jusify-center bg-gray-100 rounded-full px-2 mr-2">
+              <Box className="flex items-center w-fit jusify-center bg-gray-100 rounded-full !px-2 mr-2">
                 <Typography variant="caption" className="!text-[11px]">
                   {branch}
                 </Typography>

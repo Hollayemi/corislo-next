@@ -41,9 +41,8 @@ export const BriefStoreOnMap = ({ image, open, branchId, storeView }) => {
             {info.businessName}
           </Typography>
           <Box
-            className={`flex items-start mt-0.5 ml-1.5 ${
-              open ? "!text-green-500" : "!text-red-500"
-            }`}
+            className={`flex items-start mt-0.5 ml-1.5 ${open ? "!text-green-500" : "!text-red-500"
+              }`}
           >
             <IconifyIcon
               icon={!open ? "tabler:clock-stop" : "tabler:clock-pin"}

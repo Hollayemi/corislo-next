@@ -1,4 +1,4 @@
-import { MyTextField } from '@/app/(pages)/user/components'
+import { MyTextField } from '@/app/(pages)/(users)/user/components'
 import { createStoreHandler } from '@/app/redux/state/slices/shop/addShop'
 import {
   Box,
@@ -54,9 +54,8 @@ const Sevices = ({
   const [stage, setSubStage] = useState(values['about_store'] ? 6 : 1)
   const StageBox = ({ level }) => (
     <Box
-      className={`w-1/6 h-1 mx-1 ${
-        stage >= level ? 'bg-blue-900' : 'bg-gray-200'
-      }`}
+      className={`w-1/6 h-1 mx-1 ${stage >= level ? 'bg-blue-900' : 'bg-gray-200'
+        }`}
     ></Box>
   )
   const names = {
@@ -185,11 +184,11 @@ const Sevices = ({
             stage < 7
               ? setSubStage(stage + 1)
               : createStoreHandler(
-                  { user: userValues, store: values },
-                  dispatch,
-                  router,
-                  setStage
-                )
+                { user: userValues, store: values },
+                dispatch,
+                router,
+                setStage
+              )
           }
         >
           {stage < 7 ? 'Continue' : 'Next'}
@@ -209,17 +208,16 @@ export const FieldInput = ({
 }) => {
   return (
     <Box
-      className={`${props?.inputProps?.multiline ? 'w-full' : 'md:w-1/2'} px-2`}
+      className={`${props?.inputProps?.multiline ? 'w-full' : 'md:w-1/2'} !px-2`}
     >
       {type === 'text' ? (
         <Box
-          className={`${
-            stage >= level
+          className={`${stage >= level
               ? props?.inputProps?.multiline
                 ? 'h-28'
                 : 'h-20'
               : 'h-0'
-          } transition-all duration-300 overflow-hidden`}
+            } transition-all duration-300 overflow-hidden`}
         >
           <MyTextField
             title={props.label}
@@ -232,9 +230,8 @@ export const FieldInput = ({
         </Box>
       ) : (
         <Box
-          className={`${
-            stage >= level ? 'h-[76px]' : 'h-0'
-          } transition-all overflow-hidden`}
+          className={`${stage >= level ? 'h-[76px]' : 'h-0'
+            } transition-all overflow-hidden`}
         >
           <SimpleDropDown
             render={props.render.map((res, i) => (

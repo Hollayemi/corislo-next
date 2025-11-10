@@ -13,7 +13,7 @@ export const WatchVideo = ({ close }) => {
   const images = [1, 2, 3, 4, 5]
 
   const StatusMedia = ({ image }) => (
-    <Box className="w-full h-auto px-2 mt-4 flex items-center justify-center">
+    <Box className="w-full h-auto !px-2 mt-4 flex items-center justify-center">
       <Image
         src={image}
         alt="ser"
@@ -24,10 +24,10 @@ export const WatchVideo = ({ close }) => {
     </Box>
   )
   return (
-    <Box className="flex items-center justify-center w-full h-full px-4">
+    <Box className="flex items-center justify-center w-full h-full !px-4">
       <Box className="w-full max-w-[400px] h-[560px] mt-10 rounded-xl overflow-hidden shadow-xl relative">
         <Box className="bg-slate-900 h-full w-full opacity-90"></Box>
-        <Box className="absolute left-0 top-0 w-full h-[100%] px-3 pt-2">
+        <Box className="absolute left-0 top-0 w-full h-[100%] !px-3 pt-2">
           <Box className="flex items-center justify-between">
             <Box className="flex items-center p-2">
               <Image
@@ -72,7 +72,7 @@ export const WatchVideo = ({ close }) => {
                 type="video/mp4"
               />
               <div
-                onClick={() => {}}
+                onClick={() => { }}
                 className="text-[6px] flex items-center z-50 justify-center text-white absolute -mt-2 -mr-2 top-0 right-0 w-4 h-4 rounded-full bg-red-500"
               >
                 <IconifyIcon icon="tabler:trash" fontSize={16} />
@@ -81,7 +81,7 @@ export const WatchVideo = ({ close }) => {
           </Box>
           <Typography
             variant="body2"
-            className="!text-white !text-[11px] absolute bottom-6 z-50 h-12 !mt-6 px-6"
+            className="!text-white !text-[11px] absolute bottom-6 z-50 h-12 !mt-6 !px-6"
           ></Typography>
         </Box>
       </Box>

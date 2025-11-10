@@ -97,7 +97,7 @@ const BranchSalesGrowth = ({ interval, selectedInterval }) => {
 
   return (
     <Card className="w-full !shadow-none h-full">
-      <Box className="px-2 !flex !items-center !justify-between">
+      <Box className="!px-2 !flex !items-center !justify-between">
         <Typography className="text-[13px] !font-bold">
           Sales by Stores
         </Typography>

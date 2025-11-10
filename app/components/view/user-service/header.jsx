@@ -21,7 +21,7 @@ const UserServiceHeader = () => {
 
   return (
     <Box>
-      <Box className="h-12 bg-gray-800 flex items-center justify-between px-8">
+      <Box className="h-12 bg-gray-800 flex items-center justify-between !px-8">
         <Link href="#">
           <Typography className="!text-gray-400 !text-[13px]">
             Download Corisio mobile app now
@@ -29,7 +29,7 @@ const UserServiceHeader = () => {
         </Link>
         <Box className="flex items-center">
           {topLinks.map((each, i) => (
-            <Link href={each.link} key={i} className="mx-1 px-3 h-full">
+            <Link href={each.link} key={i} className="mx-1 !px-3 h-full">
               <Typography className="!text-gray-400 !text-[13px]">
                 {each.name}
               </Typography>
@@ -38,7 +38,7 @@ const UserServiceHeader = () => {
         </Box>
       </Box>
 
-      <Box className="py-4 flex items-center justify-between px-10">
+      <Box className="py-4 flex items-center justify-between !px-10">
         <Link href="/">
           <Image
             src={themeConfig.vertical1}
@@ -50,7 +50,7 @@ const UserServiceHeader = () => {
         </Link>
 
         <Box className="flex items-center">
-          <Box className="relative hidden mr-4 md:block w-full md:w-auto rounded-md px-2 md:px-0 overflow-hidden">
+          <Box className="relative hidden mr-4 md:block w-full md:w-auto rounded-md !px-2 md:!px-0 overflow-hidden">
             <input
               type="text"
               placeholder="Search anything"
@@ -79,7 +79,7 @@ const UserServiceHeader = () => {
         </Box>
       </Box>
 
-      
+
     </Box>
   )
 }

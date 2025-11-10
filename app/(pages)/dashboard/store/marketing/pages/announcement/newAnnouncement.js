@@ -36,6 +36,7 @@ const CustomInput = forwardRef((props, ref) => {
   return (
     <TextField
       fullWidth
+      name="announcement"
       inputRef={ref}
       label={props.label || ""}
       {...props}
@@ -43,7 +44,7 @@ const CustomInput = forwardRef((props, ref) => {
     />
   );
 });
-
+CustomInput.displayName = "CustomInput"
 const NewAnnouncement = ({ formData, setFormData, formHandler }) => {
   // ** State
   const dispatch = useDispatch();
@@ -92,7 +93,7 @@ const NewAnnouncement = ({ formData, setFormData, formHandler }) => {
           label="Brief Information"
           placeholder="Get up to 80% discount."
         />
-         
+
         <FormControl fullWidth className="!my-4">
           <InputLabel id="select-deal-purpose">Purpose</InputLabel>
           <Select
@@ -108,7 +109,7 @@ const NewAnnouncement = ({ formData, setFormData, formHandler }) => {
             <MenuItem value="url">Promote Special Offers</MenuItem>
           </Select>
         </FormControl>
-     
+
         {formData.purpose === "url" && <TextField
           fullWidth
           label="URL"
@@ -190,33 +191,33 @@ const NewAnnouncement = ({ formData, setFormData, formHandler }) => {
             setLocalFiles={setLocalFiles}
             component={
               <Box className="relative w-60 h-60 flex justify-center">
-                  <Box className="flex flex-col items-center border-2 border-dashed justify-center w-full h-full rounded-md absolute top-0 left-0 !text-white">
-                    
-                    <Image
-                      src={localFile[0] ? URL?.createObjectURL(localFile[0]) : `/images/misc/${images[formData.purpose]}` }
-                      alt="settings.png"
-                      width={250}
-                      height={250}
-                      className="w-full h-full x absolute top-0 left-0"
-                    />
-                    
-                    <Box className="w-full h-full z-30 rounded-md bg-black opacity-30 absolute top-0 left-0"></Box>
-                    <Image
-                      className="w-16  z-50 h-16"
-                      alt="Upload img"
-                      width={250}
-                      height={250}
-                      src={`/images/misc/upload-cloud.png`}
-                    />
-                    <Typography
-                      variant="caption"
-                      className="!text-[10px] z-50 !text-white"
-                    >
-                      Drag and drop image
-                    </Typography>
-                  </Box>
+                <Box className="flex flex-col items-center border-2 border-dashed justify-center w-full h-full rounded-md absolute top-0 left-0 !text-white">
+
+                  <Image
+                    src={localFile[0] ? URL?.createObjectURL(localFile[0]) : `/images/misc/${images[formData.purpose]}`}
+                    alt="settings.png"
+                    width={250}
+                    height={250}
+                    className="w-full h-full x absolute top-0 left-0"
+                  />
+
+                  <Box className="w-full h-full z-30 rounded-md bg-black opacity-30 absolute top-0 left-0"></Box>
+                  <Image
+                    className="w-16  z-50 h-16"
+                    alt="Upload img"
+                    width={250}
+                    height={250}
+                    src={`/images/misc/upload-cloud.png`}
+                  />
+                  <Typography
+                    variant="caption"
+                    className="!text-[10px] z-50 !text-white"
+                  >
+                    Drag and drop image
+                  </Typography>
                 </Box>
-             
+              </Box>
+
             }
           />
         </Box>

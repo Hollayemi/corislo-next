@@ -159,7 +159,7 @@ export default function StoreDashboardAppBar({
         )}
         <Box sx={{ flexGrow: 1 }} />
 
-        <Box className="relative mr-4 w-full md:w-auto px-2 md:px-0">
+        <Box className="relative mr-4 w-full md:w-auto !px-2 md:!px-0">
           <input
             type="text"
             placeholder="Search anything"

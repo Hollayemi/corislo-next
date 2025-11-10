@@ -52,9 +52,8 @@ export default function BottomBar({ path, InnerList }) {
               label={<h5 className="text-[10px]">{each.short}</h5>}
               value={listPath}
               icon={<IconifyIcon icon={each.icon} />}
-              className={`!px-0 w-auto !min-w-5 ${
-                onSubList === each.path && '!text-blue-800'
-              }`}
+              className={`!px-0 w-auto !min-w-5 ${onSubList === each.path && '!text-blue-800'
+                }`}
             />
           )
         ) : (
@@ -63,9 +62,8 @@ export default function BottomBar({ path, InnerList }) {
             label=""
             value={listPath}
             icon={<CircleLoader />}
-            className={`!px-0 w-auto !min-w-5 ${
-              onSubList === each.path && '!text-blue-800'
-            }`}
+            className={`!px-0 w-auto !min-w-5 ${onSubList === each.path && '!text-blue-800'
+              }`}
           />
         )
       })}

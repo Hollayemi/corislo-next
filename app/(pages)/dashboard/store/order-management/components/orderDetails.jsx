@@ -134,7 +134,7 @@ const OrderDetails = ({ order }) => {
       anchorEl={anchorEl}
       open={openSub}
       onClose={handleMenuClose}
-      className={` w-full ml-56 py-4 px-4`}
+      className={` w-full ml-56 py-4 !px-4`}
     >
       <MenuItem
         onClick={handleMenuItemClick("Processing")}
@@ -153,7 +153,7 @@ const OrderDetails = ({ order }) => {
       <MenuItem onClick={handleMenuItemClick("Completed")}>Received</MenuItem>
     </Menu>
   );
-  
+
   return (
     <Box className="">
       {!orderLoading && !orderErr && (
@@ -161,7 +161,7 @@ const OrderDetails = ({ order }) => {
           <Box className="flex items-center">
             <Box className="md:ml-4">
               <Box
-                
+
                 className="!text-xs overflow-hidden w-40 !font-bold !leading-10 !flex !items-center"
               >
                 Order ID: <b className="ml-1.5 md:ml-3">{row.orderId}</b>
@@ -194,7 +194,7 @@ const OrderDetails = ({ order }) => {
                     fullWidth
                     onClick={handleButtonClick}
                     variant="contained"
-                    className="!flex !items-center !justify-between px-4 !text-white"
+                    className="!flex !items-center !justify-between !px-4 !text-white"
                   >
                     {payload.status || "Change Status"}
                     {open ? (
@@ -248,7 +248,7 @@ const OrderDetails = ({ order }) => {
                 { key: "Phone", value: row.phone },
               ]}
               btnText="View User"
-              btnFunc={() => {}}
+              btnFunc={() => { }}
             />
 
             <DetailsDesign
@@ -283,13 +283,13 @@ const OrderDetails = ({ order }) => {
                 },
               ]}
               btnText="Show Map"
-              btnFunc={() => {}}
+              btnFunc={() => { }}
             />
           </Box>
         </Box>
       )}
 
-      <Grid container spacing={3} className="px-5">
+      <Grid container spacing={3} className="!px-5">
         <Grid item xs={12} md={5}></Grid>
         <Grid item xs={12} md={7}>
           <TextField
@@ -306,7 +306,7 @@ const OrderDetails = ({ order }) => {
         </Grid>
       </Grid>
 
-      <Typography variant="h5" className="!font-bold !pb-4  mt-10 px-5 text-sm">
+      <Typography variant="h5" className="!font-bold !pb-4  mt-10 !px-5 text-sm">
         Products
       </Typography>
       {!prodLoading && !prodErr && (

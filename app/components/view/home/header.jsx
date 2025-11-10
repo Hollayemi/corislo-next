@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from 'react'
 import {
   Badge,
@@ -34,15 +35,22 @@ export const IconImage = ({ image, className, onClick }) => (
 )
 
 const menuToHide = (menu = []) => {
-  let hide = 1
-  const width = window.screen.width
-  if (width < 1300) hide = 2
-  if (width < 1200) hide = 3
-  const toHide = menu.splice(hide * -1)
-  return toHide
-}
+  if (typeof window !== "undefined") {
+    let hide = 1;
+    const width = window.screen.width;
 
-function Header({}) {
+    if (width < 1300) hide = 2;
+    if (width < 1200) hide = 3;
+
+    const toHide = menu.splice(hide * -1);
+    return toHide;
+  }
+
+  return []; // safe fallback for SSR
+};
+
+
+function Header({ }) {
   const router = useRouter()
   const pathname = usePathname()
   const dispatch = useDispatch()
@@ -131,9 +139,8 @@ function Header({}) {
           <LinkStyled
             key={i}
             href={`/${page.link}`}
-            className={`px-1 !mx-2 lg:!mx-4 leading-10 ${
-              getPath[1] === page.link ? 'text-yellow-500' : 'text-black'
-            } hover:text-yellow-400`}
+            className={`!px-1 !mx-2 lg:!mx-4 leading-10 ${getPath[1] === page.link ? 'text-yellow-500' : 'text-black'
+              } hover:text-yellow-400`}
           >
             {page.name}
           </LinkStyled>
@@ -152,18 +159,17 @@ function Header({}) {
                   <LinkStyled
                     key={i}
                     href={`/${page.link}`}
-                    className={`px-1  leading-10 ${
-                      getPath[1] === page.link
-                        ? 'text-yellow-500'
-                        : 'text-black'
-                    } hover:text-yellow-400 !w-full !h-full`}
+                    className={`!px-1  leading-10 ${getPath[1] === page.link
+                      ? 'text-yellow-500'
+                      : 'text-black'
+                      } hover:text-yellow-400 !w-full !h-full`}
                   >
                     {page.name}
                   </LinkStyled>
                 ),
               }
             })}
-            setOption={(e) => {}}
+            setOption={(e) => { }}
             iconButtonProps={{
               size: 'small',
               sx: { cursor: 'pointer' },
@@ -173,7 +179,7 @@ function Header({}) {
         )}
       </Box>
       <Box className="flex items-center md:w-auto">
-        <Box className="relative hidden mr-4 md:block w-full md:w-auto px-2 md:px-0">
+        <Box className="relative hidden mr-4 md:block w-full md:w-auto !px-2 md:!px-0">
           <input
             type="text"
             placeholder="Search anything"
@@ -213,7 +219,6 @@ function Header({}) {
         )}
         {!isOffline ? (
           <>
-            {/* display cart on desktop view */}
             <Box
               onClick={() => router.push('/cart')}
               sx={{
@@ -223,7 +228,7 @@ function Header({}) {
                     : theme.palette.secondary.main,
                 border: 1,
               }}
-              className="h-7 hidden md:flex !cursor-pointer min-h-7 py-2 !border !rounded-full w-12 px-1 !bg-white justify-center items-center"
+              className="h-7 hidden md:flex !cursor-pointer min-h-7 py-2 !border !rounded-full w-12 !px-1 !bg-white justify-center items-center"
             >
               <MyCartBtn variant="contained" num={cartedProds?.length || 0} />
             </Box>
@@ -266,8 +271,8 @@ function Header({}) {
                       skin="light"
                       color="primary"
                       className="!w-10 !hidden md:!flex !h-10 !font-black !text-[15px] !ml-2 flex-shrink-0"
-                      // onClick={() => dispatch(userLogout())}
-                      // sx={{ ml: 3, width: 30, height: 30, fontSize: "0.85rem" }}
+                    // onClick={() => dispatch(userLogout())}
+                    // sx={{ ml: 3, width: 30, height: 30, fontSize: "0.85rem" }}
                     >
                       {getInitials(userInfo?.fullname || 'New User').substring(
                         0,
@@ -281,8 +286,8 @@ function Header({}) {
                   />
                 </Box>
               }
-              options={desktopOptions(dispatch)}
-              setOption={(e) => {}}
+              options={desktopOptions(isOffline, userInfo)}
+              setOption={(e) => { }}
               iconButtonProps={{
                 size: 'small',
                 sx: { cursor: 'pointer' },

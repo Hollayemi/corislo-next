@@ -46,10 +46,21 @@ const CreateCollection = () => {
         title="Description"
         subtitle="Wite a short description"
         comp={
-          <QuillTextEditor
-            value={collectionInfo}
-            className="bg-gray-50 h-52"
-            onChange={(e) => setCollectionInfo(e)}
+          // <QuillTextEditor
+          //   value={collectionInfo}
+          //   className="bg-gray-50 h-52"
+          //   onChange={(e) => setCollectionInfo(e)}
+          // />
+          <TextField
+            sx={{ mb: 1.5 }}
+            className="w-5/6 md:w-full bg-gray-50"
+            onChange={handleChange('collectionInfo')}
+            multiline
+            maxRows={7}
+            fullWidth
+            id="outlined-basic"
+            inputProps={{ className: '!h-2' }}
+            placeholder="Description"
           />
         }
       />

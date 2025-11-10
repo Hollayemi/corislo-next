@@ -42,9 +42,9 @@ const AppSearch = ({ showOverlay }) => {
   const [search, setSearch] = useState('')
   const result = deepFilter([searchNavigations], search)
   return (
-    <Box className="flex w-full px-1 justify-center">
+    <Box className="flex w-full !px-1 justify-center">
       <Box className="w-full md:w-[550px] h-[600px] md:h-[500px] mt-20 relative bg-white rounded-xl md:mr-10 flex flex-col">
-        <Box className="flex justify-between items-center px-4 h-14 border-b !w-full flex-shrink-0">
+        <Box className="flex justify-between items-center !px-4 h-14 border-b !w-full flex-shrink-0">
           <Typography variant="body2" className="!font-bold">
             Search
           </Typography>
@@ -65,7 +65,7 @@ const AppSearch = ({ showOverlay }) => {
               placeholder="Search."
             />
           </Box>
-          <Box className="px-3">
+          <Box className="!px-3">
             {result.map((each, index) =>
               search ? (
                 <LinkComponent
@@ -96,9 +96,8 @@ const LinkComponent = ({ each, showOverlay }) => {
     each.children.map((item, xx) => (
       <Box
         key={xx}
-        className={`!pl-8 ${
-          item.topLevel ? ' mb-6 border-b rounded-md' : 'mt-1'
-        }`}
+        className={`!pl-8 ${item.topLevel ? ' mb-6 border-b rounded-md' : 'mt-1'
+          }`}
         onClick={showOverlay}
       >
         <Link
@@ -142,7 +141,7 @@ const FirstBatch = ({ each, showOverlay }) => {
         return (
           <Link
             href={`/dashboard/store${item.path}`}
-            className="w-5/12 px-2 md:w-3/12 border border-gray-400 rounded-md m-2  hover:!text-blue-700 hover:border-blue-600 transition-all duration-300 "
+            className="w-5/12 !px-2 md:w-3/12 border border-gray-400 rounded-md m-2  hover:!text-blue-700 hover:border-blue-600 transition-all duration-300 "
             key={xx}
             onClick={showOverlay}
           >

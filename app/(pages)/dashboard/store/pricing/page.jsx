@@ -9,10 +9,12 @@ const StoreLeftSideBar = dynamic(
 )
 import { Box } from '@mui/material'
 import { pricingBreadCrumb } from './pricing.components'
-import { TitleSubtitle } from '@/app/(pages)/user/components'
+import { TitleSubtitle } from '@/app/(pages)/(users)/user/components'
 import AllPlans from '@/app/components/cards/plans'
+import { use } from 'react'
 
-const Plans = ({ params }) => {
+const Plans = ({ params: param }) => {
+  const params = use(param)
   const path = {
     ...params,
     sidebar: 'pricing',
@@ -23,7 +25,7 @@ const Plans = ({ params }) => {
       subListBar={false}
       crumb={[...pricingBreadCrumb, { text: 'Pricing', link: 'pricing' }]}
     >
-      <Box className="h-ful w-full bg-white px-2 md:px-5 py-8 rounded-md">
+      <Box className="h-ful w-full bg-white !px-2 md:!px-5 py-8 rounded-md">
         <TitleSubtitle
           title="Pricing"
           titleClass="!text-[17px]"
@@ -32,7 +34,7 @@ const Plans = ({ params }) => {
           className=""
         />
 
-        <Box className="w-full py-6 px-4 border border-slate-50 rounded-xl mt-3">
+        <Box className="w-full py-6 !px-4 border border-slate-50 rounded-xl mt-3">
           <AllPlans />
         </Box>
       </Box>

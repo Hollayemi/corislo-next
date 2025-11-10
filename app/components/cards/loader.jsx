@@ -1,19 +1,14 @@
-import { Circles } from "react-loader-spinner";
+
 
 export const CircleLoader = ({ width = 20, color = "gray" }) => {
   return (
-    <Circles
-      height="30"
-      width={width}
-      color={color}
-      ariaLabel="circle-wave"
-      wrapperStyle={{}}
-      wrapperClass=""
-      visible={true}
-      firstLineColor=""
-      middleLineColor=""
-      lastLineColor=""
-    />
+    <div className={`flex justify-center items-center`}>
+      <svg
+        className={`animate-spin h-${width} w-${width} text-${color}-600`} 
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+      ></svg> 
+      </div>
   );
 };
 

@@ -156,7 +156,7 @@ const StorePage = ({ params }) => {
         { text: 'Settings', link: '' },
       ]}
     >
-      <Box className="px-10 !hidden sm:!flex z-50 -mt-4">
+      <Box className="!px-10 !hidden sm:!flex z-50 -mt-9">
         <Link href="/dashboard/store/stores">
           <Typography className="pb-1 border-b-2 cursor-pointer !text-[13px] !w-24 text-center border-transparent">
             Store Profile
@@ -166,9 +166,9 @@ const StorePage = ({ params }) => {
           Store Settings
         </Typography>
       </Box>
-      <Box className="w-full bg-white !rounded-md !px-4 !mt-4 !md:px-5 !pb-8">
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={7}>
+      <Box className="w-full bg-white !rounded-md !px-4 pt-5 !mt-4 !md:!px-10 !pb-8 relative">
+        <Box className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <Box>
             <Box>
               <Typography className="!font-bold !text-gray-800 text-sm">
                 Delivery Option
@@ -344,6 +344,7 @@ const StorePage = ({ params }) => {
               <InputBoxWithSideLabel
                 value={formData.payment_settings.bank}
                 label="Bank Name"
+                isEdit={true}
                 onChange={(e) =>
                   updateFormData(e.target.value, 'bank', 'payment_settings')
                 }
@@ -351,6 +352,7 @@ const StorePage = ({ params }) => {
               <InputBoxWithSideLabel
                 value={formData.payment_settings.account_name}
                 label="Account Name"
+                isEdit={true}
                 onChange={(e) =>
                   updateFormData(
                     e.target.value,
@@ -362,6 +364,7 @@ const StorePage = ({ params }) => {
               <InputBoxWithSideLabel
                 value={formData.payment_settings.account_number}
                 label="Account Number"
+                isEdit={true}
                 onChange={(e) =>
                   updateFormData(
                     e.target.value,
@@ -844,13 +847,13 @@ const StorePage = ({ params }) => {
             >
               Save
             </Button>
-          </Grid>
-          <Grid item xs={12} sm={5}>
+          </Box>
+          <Box>
             <Box className="h-[500px] bg-gray-50 md:!mt-44">
               <h3 className="text-center py-10"> Map here</h3>
             </Box>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Box>
     </StoreLeftSideBar>
   )

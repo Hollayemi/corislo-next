@@ -29,11 +29,7 @@ const DashboardOverview = ({ params }) => {
   const [interval, selectedInterval] = useState('7 days')
   const { staffInfo } = useStoreData()
   const router = useRouter()
-  const {
-    data: orderData,
-    error: orderErr,
-    isLoading: orderLoading,
-  } = useSWR(`/branch/order-request`)
+  const { data: orderData, error: orderErr, isLoading: orderLoading, } = useSWR(`/branch/order-request`)
 
   const rows = orderData?.data || []
   const actionFunctions = (row, action) => {
@@ -61,9 +57,9 @@ const DashboardOverview = ({ params }) => {
         },
       ]}
     >
-      <Box className="md:px-2">
+      <Box className="md:!px-2">
         <Box>
-          <Box className="md:px-3 flex items-center mb-1">
+          <Box className="md:!px-3 flex items-center mb-1">
             <InfoRounded className="!text-gray-400 !mr-2 !text-[15px] cursor-pointer" />
             <Typography
               variant="caption"
@@ -76,8 +72,8 @@ const DashboardOverview = ({ params }) => {
           <TopCards />
         </Box>
         <Box className="mt-4 flwx justify-center">
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={3}>
+          <Box className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Box className="grid-cols-2">
               {staffInfo.viewAsAdmin ? (
                 <BranchSalesGrowth
                   interval={interval}
@@ -89,14 +85,14 @@ const DashboardOverview = ({ params }) => {
                   selectedInterval={selectedInterval}
                 />
               )}
-            </Grid>
-            <Grid item xs={12} md={5}>
+            </Box>
+            <Box>
               <DashboardLineChart interval={interval} />
-            </Grid>
-            <Grid item xs={12} md={4}>
+            </Box>
+            <Box>
               <DashboardBubbleChart interval={interval} />
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Box>
       </Box>
       {rows.length ? (

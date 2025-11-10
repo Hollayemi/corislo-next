@@ -30,7 +30,7 @@ export default function StoreAuthLayout({
     return (
       <Box
         className="w-1/3 md:w-1/3"
-        onClick={getStatus(level) === 'done' ? () => setStage(level) : () => {}}
+        onClick={getStatus(level) === 'done' ? () => setStage(level) : () => { }}
       >
         <CheckList2 text={text} active={getStatus(level)} />
       </Box>
@@ -50,7 +50,7 @@ export default function StoreAuthLayout({
           />
           <Box className="w-full h-full absolute top-0 left-0 bg-black opacity-50"></Box>
           <Box className="w-full h-full relative z-40 text-white p-4 flex items-center">
-            <Box className="px-5">
+            <Box className="!px-5">
               <Image
                 src={themeConfig.logo_hor_bw}
                 alt="auth-mage"
@@ -86,13 +86,12 @@ export default function StoreAuthLayout({
         </Box>
 
         <Box
-          className="w-full h-full px-2 overflow-y-auto flex justify-center"
+          className="w-full h-full !px-2 overflow-y-auto flex relative justify-center"
           bgcolor="custom.bodyGray"
         >
           <Box
-            className={`flex flex-col mt-6 md:mt-14 items-center w-full ${
-              stage !== 3 && 'md:w-4/5 md:px-4'
-            } h-ful`}
+            className={`flex flex-col mt-6 md:mt-14 items-center w-full ${stage !== 3 && 'md:w-4/5 md:!px-4'
+              } h-ful`}
           >
             <Box className="flex flex-col items-center mt-14 md:mt-0 ">
               <Image
@@ -100,7 +99,7 @@ export default function StoreAuthLayout({
                 alt="logo"
                 width={500}
                 height={500}
-                className="w-40 md:first-letter:!mt-8"
+                className="w-40 z-40 md:first-letter:!mt-8"
               />
               <Typography
                 variant="body2"
@@ -110,7 +109,7 @@ export default function StoreAuthLayout({
                 {others.title || '{ Page Title }'}
               </Typography>
             </Box>
-            <Box className="w-full flex items-center flex-wrap md:flex-nowrap mb-7 mt-4 md:mt-0 md:mb-0 md:px-6">
+            <Box className="w-full flex z-40 items-center flex-wrap md:flex-nowrap mb-7 mt-4 md:mt-0 md:mb-0 md:!px-6">
               <StageBox text="Profile" level={0} />
               {/* <StageBox text="Business Profile" level={1} /> */}
               <StageBox text="Verification" level={1} />
@@ -183,7 +182,7 @@ const CheckList = ({ title, text }) => (
 )
 
 const CheckList2 = ({ active, text }) => (
-  <Box className="flex items-center mt-1 md:!mt-6 md:!mb-5 border h-10 bg-white px-4 mx-1 cursor-pointer">
+  <Box className="flex items-center mt-1 md:!mt-6 md:!mb-5 border border-gray-100 h-10 bg-white !px-4 mx-1 cursor-pointer">
     <Box
       className="w-4 h-4 rounded-full flex flex-shrink-0 items-center justify-center !mt-1"
       bgcolor={color[active] || 'gray'}

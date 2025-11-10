@@ -10,7 +10,7 @@ import {
 import IconifyIcon from '../icon'
 import { mySubstring } from '@/app/utils/format'
 import { useRouter } from 'next/navigation'
-import { ShareIcon } from '@/app/(pages)/referral/dashboard/page'
+import { ShareIcon } from '@/app/(pages)/(users)/referral/dashboard/page'
 
 export default function Share({
   shareUrl = 'https://corisio.com',
@@ -19,7 +19,7 @@ export default function Share({
   searchParams,
 }) {
   const router = useRouter()
-  console.log(close, 'close')
+  console.log({ shareUrl })
   let closeFunc
   if (!close) {
     const currentSearchParams = new URLSearchParams(router.asPath)
@@ -49,10 +49,10 @@ export default function Share({
     fetchMetaData()
   }, [shareUrl])
   return (
-    <Box className="flex items-center justify-center w-full h-full px-4">
+    <Box className="flex items-center justify-center w-full h-full !px-4">
       <Box className="w-full max-w-[300px] h-[490px] mt-10 rounded-hidden  rounded-xl shadow-xl relative">
         <Box className="bg-slate-50 h-full w-full "></Box>
-        <Box className="absolute left-0 top-0 w-full h-[100%] px-3 pt-2">
+        <Box className="absolute left-0 top-0 w-full h-[100%] !px-3 pt-2">
           <Box className="flex justify-between items-center">
             <Typography
               variant="body2"
@@ -77,7 +77,7 @@ export default function Share({
                 className="w-full h-40 object-scale-down"
               />
 
-              <Box className="px-2">
+              <Box className="!px-2">
                 <Typography
                   variant="body2"
                   className="!font-bold font-sans !text-[13px] !leading-5 !text-slate-900 !text-pretty !w-full"
@@ -94,12 +94,12 @@ export default function Share({
             </div>
           )}
           {/* WhatsApp Share */}
-          <Box className="px-2 border rounded-md mt-4 py-2">
+          <Box className="!px-2 border rounded-md mt-4 py-2">
             <Box className="flex flex-col mt-1">
               <WhatsappShareButton
                 url={shareUrl}
                 title={message}
-                className="flex items-center h-10 !bg-gray-50 w-full px-2 relative group"
+                className="flex items-center h-10 !bg-gray-50 w-full !px-2 relative group"
               >
                 <ShareIcon icon="whatsapp" />
                 <Typography
@@ -119,7 +119,7 @@ export default function Share({
               <FacebookShareButton
                 url={shareUrl}
                 quote={message}
-                className="flex items-center h-10 !bg-gray-50 w-full px-2 relative group"
+                className="flex items-center h-10 !bg-gray-50 w-full !px-2 relative group"
               >
                 <ShareIcon icon="facebook" />
                 <Typography
@@ -139,7 +139,7 @@ export default function Share({
               <TwitterShareButton
                 url={shareUrl}
                 title={message}
-                className="flex items-center h-10 !bg-gray-50 w-full px-2 relative group"
+                className="flex items-center h-10 !bg-gray-50 w-full !px-2 relative group"
               >
                 <ShareIcon icon="x" />
                 <Typography

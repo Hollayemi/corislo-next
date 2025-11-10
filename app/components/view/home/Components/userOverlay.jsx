@@ -1,7 +1,7 @@
 import { useUserData } from "@/app/hooks/useData";
 import Notification from "./notification";
 import UserSideBar from "./sidebar";
-import Enable2FA from "@/app/(pages)/user/enable2FA";
+import Enable2FA from "@/app/(pages)/(users)/user/enable2FA";
 const { Box } = require("@mui/material");
 
 const UserOverlay = () => {

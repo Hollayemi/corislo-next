@@ -47,7 +47,7 @@ const MarketingPage = ({ params }) => {
         },
       ]}
     >
-      <Box className="px-2">
+      <Box className="!px-2">
         <Box className="w-full bg-white flex items-center md:justify-center mb-2 py-2 border-x-4 border-white rounded-xl !overflow-x-auto ">
           <CampaignTab
             title="Campaign"

@@ -19,9 +19,11 @@ import {
   formatDate,
   formatCurrency,
 } from '@/app/utils/format'
+import { use } from 'react'
 // import LineLoading from "@/app/(pages)/loading";
 
-const CustomerDetails = ({ params }) => {
+const CustomerDetails = ({ params: param }) => {
+  const params = use(param)
   const customer = params.customer
   const {
     data: customerInfo,
@@ -37,7 +39,7 @@ const CustomerDetails = ({ params }) => {
   const info = customerInfo?.data[0] || {}
 
   const path = { ...params, sidebar: 'customer-management' }
-
+  console.log(historyInfo?.data)
   return (
     <StoreLeftSideBar
       path={path}
@@ -47,7 +49,7 @@ const CustomerDetails = ({ params }) => {
       ]}
     >
       <Box className="w-full">
-        <Box className="bg-white rounded-md px-2 md:px-8 pt-6 w-full">
+        <Box className="bg-white rounded-md !px-2 md:!px-8 pt-6 w-full">
           <Box className="flex items-center !pb-5"></Box>
           <Box>
             <Grid container spacing={3}>
@@ -106,10 +108,10 @@ const CustomerDetails = ({ params }) => {
           {historyInfo?.data?.length && (
             <>
               <Typography variant="h5" className="!font-bold !text-sm pt-16">
-                Customer Purchase History ({historyInfo.data.length})
+                Customer Purchase History ({historyInfo?.data.length})
               </Typography>
 
-              <Table columns={customerColumns} rows={historyInfo.data} />
+              <Table columns={customerColumns} rows={historyInfo?.data || []} />
             </>
           )}
         </Box>

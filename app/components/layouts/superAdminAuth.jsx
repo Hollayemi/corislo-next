@@ -13,13 +13,12 @@ export default function SuperAdminAuth({ children, reverse, image, ...others }) 
     <Box className="flex justify-center bg-black overflow-hidden">
       <Box className="flex w-full max-w-[1500px] h-auto min-h-screen">
         <Box
-          className="w-full h-full px-3 overflow-hidden"
+          className="w-full h-full !px-3 overflow-hidden"
           bgcolor="custom.pri"
         >
           <Box
-            className={`flex flex-col ${
-              others.center ? "justify-center" : "!pt-1 md:!pt-10"
-            } overflow-auto  my-4 md:my-0 px-2 items-center h-full`}
+            className={`flex flex-col ${others.center ? "justify-center" : "!pt-1 md:!pt-10"
+              } overflow-auto  my-4 md:my-0 !px-2 items-center h-full`}
           >
             <Box className="flex flex-col items-center mt-8 md:mt-0 ">
               {!others.noLogo && (

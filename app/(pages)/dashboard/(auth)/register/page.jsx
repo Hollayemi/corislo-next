@@ -1,20 +1,14 @@
 'use client'
 
 import StoreAuthLayout from '@/app/components/layouts/StoreAuthLayout'
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import PersonalProfile from './personal'
 import StoreProfile from './store/business'
-import Verification from './store/verification'
-import { useSearchParams } from 'next/navigation'
-import Pricing from './store/pricing'
-import validationRegisterSchema from '../../../auth/register/validation'
+import validationRegisterSchema from '../../../(users)/auth/register/validation'
 import validationStoreSchema from './storeValidation'
-import BusinessType from './businessType'
 import Sevices from './services/upload'
 import useGeolocation from '@/app/hooks/useGeolocation'
-import OtpVerification from '@/app/(pages)/auth/otp-verification/page'
-import { SetLocation } from '@/app/(pages)/dashboard/services/setup/component'
-import { Box } from '@mui/material'
+import OtpVerification from '@/app/(pages)/(users)/auth/otp-verification/page'
 import MapSelection from './store/map'
 
 export const StoreRegistrationForm = ({
@@ -174,10 +168,8 @@ export const StoreRegistrationForm = ({
   return pages[stage]
 }
 
-const RegisterStore = () => {
-  const searchParams = useSearchParams()
-  const referrer = searchParams.get('ref')
-  const page = searchParams.get('p')
+const RegisterStore = ({ searchParams }) => {
+  const { ref: referrer, p: page } = use(searchParams)
   const [stage, setStage] = useState(parseInt(page) || 0)
   return (
     <StoreAuthLayout

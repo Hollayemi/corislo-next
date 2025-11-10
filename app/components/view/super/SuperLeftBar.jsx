@@ -145,7 +145,7 @@ const SuperLeftBar = React.memo(
 
     React.useLayoutEffect(() => {
       if (permissions) {
-        permissions[permission] === false && router.push('/dashboard/store/401')
+        permissions[permission] === false && router.push('/dashboard/store/fouroone')
       }
     }, [permissions])
 
@@ -297,22 +297,21 @@ const SuperLeftBar = React.memo(
             </StyleList>
           </Drawer>
           <Box
-            className={`top-0 ${
-              open
+            className={`top-0 ${open
                 ? 'left-[270px]'
                 : rightOpen
-                ? ' -left-[330px] '
-                : ' md:left-16 '
-            } w-full transition-all duration-300 absolute flex-shrink-0 mt-20 md:pl-4 !pr-3 md:!pr-16 z-50`}
+                  ? ' -left-[330px] '
+                  : ' md:left-16 '
+              } w-full transition-all duration-300 absolute flex-shrink-0 mt-20 md:pl-4 !pr-3 md:!pr-16 z-50`}
             bgcolor={bg && bg}
           >
             {!hidebreadCrumb && (
-              <Box className="flex items-center sticky top-16 md:top-20 justify-between mb-2 px-2 md:px-11">
+              <Box className="flex items-center sticky top-16 md:top-20 justify-between mb-2 !px-2 md:!px-11">
                 <MyBreadcrumbs />
                 {breadCrumbRIghtChildren}
               </Box>
             )}
-            <Box className="flex flex-col relative md:flex-row items-start md:px-1.5">
+            <Box className="flex flex-col relative md:flex-row items-start md:!px-1.5">
               <Box
                 className="!w-full pl-2 md:pl-3 md:pr-6 rounded-md pb-14"
                 bgcolor={bg}
@@ -323,9 +322,8 @@ const SuperLeftBar = React.memo(
           </Box>
 
           <Box
-            className={`transition-all duration-300 ${
-              rightOpen ? 'right-0' : '-right-[440px]'
-            } h-full w-[330px] fixed top-0  z-20 py-6 mt-7 `}
+            className={`transition-all duration-300 ${rightOpen ? 'right-0' : '-right-[440px]'
+              } h-full w-[330px] fixed top-0  z-20 py-6 mt-7 `}
           >
             <Box className="bg-white w-full h-full pt-5 shadow relative">
               <Box

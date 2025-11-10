@@ -33,7 +33,7 @@ export const WhoIsWaiting = () => {
           </Button>
         </Box>
       </Box>
-       </Box>
+    </Box>
   );
 };
 
@@ -46,7 +46,7 @@ export const WhoIsWaiting = () => {
 export const Testimonials = ({ text, pic, name, nameCap, date }) => {
   return (
     <Box
-      className="px-5 py-7 w-80 min-w-72 flex-shrink-0 !h-60 !rounded-xl m-2"
+      className="!px-5 py-7 w-80 min-w-72 flex-shrink-0 !h-60 !rounded-xl m-2"
       bgcolor="custom.bodyLight"
     >
       <RoundedPicWithName

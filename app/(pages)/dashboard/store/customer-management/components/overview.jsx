@@ -4,7 +4,6 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
-import tokens from "@/app/configs/tokens";
 
 // ** Icon Imports
 import Icon from '@/app/components/icon'
@@ -38,7 +37,7 @@ const renderStats = (data) => {
           </Typography>
           <Typography
             variant="caption"
-            className="!text-[9px] md:!text-[10px] !mt-1 !text-gray-500"
+            className="!text-[9px] md:!text-[12px] !mt-1 !text-gray-400"
           >
             {sale.more}
           </Typography>
@@ -49,10 +48,10 @@ const renderStats = (data) => {
 }
 
 const OverViewCard = () => {
-    const { data: segmentData, isLoading, error } = useSWR(
-      "/branch/customers/segment"
-    );
-    const segment = (segmentData && segmentData?.data[0]) || {};
+  const { data: segmentData, isLoading, error } = useSWR(
+    "/branch/customers/segment"
+  );
+  const segment = (segmentData && segmentData?.data[0]) || {};
 
   const data2 = [
     {
@@ -88,10 +87,10 @@ const OverViewCard = () => {
   return (
     !error &&
     !isLoading && (
-      <Box className="py-3 px-10.5md:px-5">
-        <Grid container spacing={1}>
+      <Box className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        
           {renderStats(data2)}
-        </Grid>
+       
       </Box>
     )
   );

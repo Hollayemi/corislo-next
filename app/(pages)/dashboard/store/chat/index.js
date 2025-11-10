@@ -17,8 +17,8 @@ import { getInitials } from "@/app/utils/get-initials";
 import { formatDateToMonthShort } from "@/app/utils/format";
 
 // ** Chat App Components Imports
-import SidebarLeft from "@/app/(pages)/chat/SidebarLeft";
-import ChatContent from "@/app/(pages)/chat/ChatContent";
+import SidebarLeft from "@/app/(pages)/(users)/chat/SidebarLeft";
+import ChatContent from "@/app/(pages)/(users)/chat/ChatContent";
 import useSWR from "swr";
 import { useStoreData } from "@/app/hooks/useData";
 import dynamic from "next/dynamic";

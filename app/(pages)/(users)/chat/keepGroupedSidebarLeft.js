@@ -1,0 +1,452 @@
+// ** React Imports
+import { useState, useEffect } from "react";
+
+// ** Next Import
+import { useRouter } from "next/navigation";
+
+// ** MUI Imports
+import Box from "@mui/material/Box";
+import List from "@mui/material/List";
+import Chip from "@mui/material/Chip";
+import Badge from "@mui/material/Badge";
+import Drawer from "@mui/material/Drawer";
+import MuiAvatar from "@mui/material/Avatar";
+import ListItem from "@mui/material/ListItem";
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemButton from "@mui/material/ListItemButton";
+import InputAdornment from "@mui/material/InputAdornment";
+
+// ** Third Party Components
+import PerfectScrollbar from "react-perfect-scrollbar";
+
+// ** Icon Imports
+import Icon from "@/app/components/icon";
+
+// ** Util Import
+import { hexToRGBA } from "@/app/utils/hex-to-rgba";
+
+// ** Custom Components Import
+import CustomAvatar from "@/app/components/avatar";
+
+// ** Chat App Components Imports
+import UserProfileLeft from "./UserProfileLeft";
+import { StyleList } from "./Styled";
+import { mySubstring } from "../../utils/format";
+
+const SidebarLeft = (props) => {
+  // ** Props
+  const {
+    store,
+    hidden,
+    mdAbove,
+    dispatch,
+    statusObj,
+    userStatus,
+    selectChat,
+    getInitials,
+    sidebarWidth,
+    selectContact,
+    setUserStatus,
+    leftSidebarOpen,
+    removeSelectedChat,
+    userProfileLeftOpen,
+    formatDateToMonthShort,
+    handleLeftSidebarToggle,
+    handleUserProfileLeftSidebarToggle,
+  } = props;
+
+  // ** States
+  const [query, setQuery] = useState("");
+  const [filteredChat, setFilteredChat] = useState([]);
+  const [filteredContacts, setFilteredContacts] = useState([]);
+  const [active, setActive] = useState(null);
+
+  // ** Hooks
+  const router = useRouter();
+
+  const handleChatClick = (type, id, store) => {
+    selectChat(id);
+    selectContact(store);
+    setActive({ type, id });
+    if (!mdAbove) {
+      handleLeftSidebarToggle();
+    }
+  };
+
+  useEffect(() => {
+    // router.events.on('routeChangeComplete', () => {
+    //   setActive(null)
+    //   dispatch(removeSelectedCheat())
+    // })
+
+    return () => {
+      setActive(null);
+      // dispatch(removeSelectedChat())
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const hasActiveId = (id) => {
+    if (store.byFollowing !== null) {
+      const arr = store.byFollowing.filter((i) => i.id === id);
+      return !!arr.length;
+    }
+  };
+
+  const renderChats = (group) => {
+    if (store && store[group] && store[group].length) {
+      if (query.length && !filteredChat.length) {
+        return (
+          <ListItem>
+            <Typography sx={{ color: "text.secondary" }}>
+              No Chats Found
+            </Typography>
+          </ListItem>
+        );
+      } else {
+        const arrToMap =
+          query.length && filteredChat.length ? filteredChat : store[group];
+
+        return arrToMap.map((chat, index) => {
+          const { lastMessage, id } = chat.chat;
+          const activeCondition =
+            (active && active.id === id) ||
+            (active && active.id === `new_chat-${group}-${index}`);
+
+          return (
+            <ListItem
+              key={index}
+              disablePadding
+              sx={{ "&:not(:last-child)": { mb: 0.5 } }}
+            >
+              <ListItemButton
+                disableRipple
+                onClick={() =>
+                  handleChatClick(
+                    "chat",
+                    id.length ? id : `new_chat-${group}-${index}`,
+                    chat
+                  )
+                }
+                sx={{
+                  py: 1.6,
+                  px: 1.4,
+                  width: "100%",
+                  borderRadius: 1,
+                  alignItems: "flex-start",
+                  // ...(activeCondition && {
+                  //   background: (theme) =>
+                  //     `linear-gradient(72.47deg, ${
+                  //       theme.palette.primary.main
+                  //     } 22.16%, ${hexToRGBA(
+                  //       theme.palette.primary.main,
+                  //       0.7
+                  //     )} 76.47%) !important`,
+
+                  //   background: "custom.bodyGray !important",
+                  //   color: "custom.sec !important",
+                  // }),
+                }}
+                className={`${activeCondition && "!bg-[#F3F5FF]"}`}
+              >
+                <ListItemAvatar sx={{ m: 0, alignSelf: "center" }}>
+                  <Badge
+                    overlap="circular"
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
+                    badgeContent={
+                      <Box
+                        component="span"
+                        sx={{
+                          width: 6,
+                          height: 6,
+                          borderRadius: "50%",
+                          color: `${statusObj[chat.status]}.main`,
+                          backgroundColor: `${statusObj[chat.status]}.main`,
+                          boxShadow: (theme) =>
+                            `0 0 0 2px ${!activeCondition
+                              ? theme.palette.background.paper
+                              : theme.palette.common.white
+                            }`,
+                        }}
+                      />
+                    }
+                  >
+                    {chat.avatar ? (
+                      <MuiAvatar
+                        src={chat.avatar}
+                        alt={chat.businessName}
+                        sx={{
+                          width: 38,
+                          height: 38,
+                          outline: (theme) =>
+                            `2px solid ${activeCondition
+                              ? theme.palette.common.white
+                              : "transparent"
+                            }`,
+                        }}
+                      />
+                    ) : (
+                      <CustomAvatar
+                        color={chat?.avatarColor || "primary"}
+                        skin={activeCondition ? "filled" : "light"}
+                        sx={{
+                          width: 34,
+                          height: 34,
+                          fontSize: "0.90rem",
+                          outline: (theme) =>
+                            `2px solid ${activeCondition
+                              ? theme.palette.common.white
+                              : "transparent"
+                            }`,
+                        }}
+                      >
+                        {getInitials(chat.businessName)}
+                      </CustomAvatar>
+                    )}
+                  </Badge>
+                </ListItemAvatar>
+                <ListItemText
+                  sx={{
+                    my: 0,
+                    ml: 0.2,
+                    mr: 0.2,
+                    "& .MuiTypography-root": {
+                      ...(activeCondition && { color: "text.secondary" }),
+                    },
+                  }}
+                  primary={
+                    <Typography
+                      noWrap
+                      className="!font-bold !text-[14px]"
+                      sx={{ fontWeight: 500 }}
+                    >
+                      {chat.businessName}
+                    </Typography>
+                  }
+                  secondary={
+                    <Typography
+                      // noWrap
+                      variant="body2"
+                      className="!leading-2 !text-[11px]"
+                      sx={{
+                        ...(!activeCondition && { color: "text.secondary" }),
+                      }}
+                    >
+                      {lastMessage
+                        ? mySubstring(lastMessage.message, 80)
+                        : null}
+                    </Typography>
+                  }
+                />
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    flexDirection: "column",
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  <Typography
+                    variant="body2"
+                    className="!text-[11px]"
+                    sx={{
+                      whiteSpace: "nowrap",
+                      color: activeCondition
+                        ? "text.secondary"
+                        : "text.disabled",
+                    }}
+                  >
+                    <>
+                      {lastMessage &&
+                        formatDateToMonthShort(lastMessage?.time, true)}
+                    </>
+                  </Typography>
+                  {chat?.chat?.unseenMsgs && chat?.chat?.unseenMsgs > 0 ? (
+                    <Chip
+                      color="error"
+                      label={chat.chat.unseenMsgs}
+                      sx={{
+                        mt: 0.25,
+                        height: 18,
+                        fontWeight: 600,
+                        fontSize: "0.75rem",
+                        "& .MuiChip-label": { pt: 0.5, px: 1.655 },
+                      }}
+                    />
+                  ) : null}
+                </Box>
+              </ListItemButton>
+            </ListItem>
+          );
+        });
+      }
+    }
+  };
+
+  const handleFilter = (e) => {
+    setQuery(e.target.value);
+    if (store.byFollowing !== null && store.contacts !== null) {
+      const searchFilterFunction = (contact) =>
+        contact.businessName
+          .toLowerCase()
+          .includes(e.target.value.toLowerCase());
+      const filteredChatsArr = store.byFollowing.filter(searchFilterFunction);
+      const filteredContactsArr = store.contacts.filter(searchFilterFunction);
+      setFilteredChat(filteredChatsArr);
+      setFilteredContacts(filteredContactsArr);
+    }
+  };
+
+  return (
+    <div className="md:pr-3 !rounded-md overflow-hidden">
+      <Drawer
+        open={leftSidebarOpen}
+        onClose={handleLeftSidebarToggle}
+        variant={mdAbove ? "permanent" : "temporary"}
+        ModalProps={{
+          disablePortal: true,
+          keepMounted: true, // Better open performance on mobile.
+        }}
+        sx={{
+          zIndex: 7,
+          height: "100%",
+          display: "block",
+          position: mdAbove ? "static" : "absolute",
+          "& .MuiDrawer-paper": {
+            boxShadow: "none",
+            borderRadius: 2,
+            elevation: 0,
+            width: sidebarWidth,
+            position: mdAbove ? "static" : "absolute",
+          },
+          "& > .MuiBackdrop-root": {
+            borderRadius: 1,
+            position: "absolute",
+            zIndex: (theme) => theme.zIndex.drawer - 1,
+          },
+        }}
+        className="!border-0 !rounded-md"
+      >
+        <Box className="h-14 border-b pt-6">
+          <Box className="flex justify-between items-center !px-3">
+            <Typography className="!font-bold !text-[17px]">Inbox</Typography>
+            <Icon icon="tabler:search" fontSize={20} />
+          </Box>
+        </Box>
+
+        <Box
+          sx={{
+            py: 1,
+            px: 2,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          {/* {store && store.userProfile ? (
+            <Badge
+              overlap="circular"
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              sx={{ mr: 1.5 }}
+              onClick={handleUserProfileLeftSidebarToggle}
+              badgeContent={
+                <Box
+                  component="span"
+                  sx={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    color: `${statusObj[userStatus]}.main`,
+                    backgroundColor: `${statusObj[userStatus]}.main`,
+                    boxShadow: (theme) =>
+                      `0 0 0 2px ${theme.palette.background.paper}`,
+                  }}
+                />
+              }
+            >
+              <MuiAvatar
+                src={store.userProfile.avatar}
+                alt={store.userProfile.businessName}
+                sx={{
+                  width: "2.375rem",
+                  height: "2.375rem",
+                  cursor: "pointer",
+                }}
+              />
+            </Badge>
+          ) : null} */}
+          <TextField
+            fullWidth
+            size="small"
+            value={query}
+            onChange={handleFilter}
+            className="border-none"
+            placeholder="Search for store..."
+            sx={{ "& .MuiInputBase-root": { borderRadius: 5, border: 0 } }}
+            InputProps={{
+              className: "!bg-gray-50 !border-none",
+              startAdornment: (
+                <InputAdornment
+                  position="start"
+                  sx={{ color: "text.secondary" }}
+                >
+                  <Icon icon="tabler:search" fontSize={20} />
+                </InputAdornment>
+              ),
+            }}
+          />
+          {!mdAbove ? (
+            <IconButton sx={{ p: 1, ml: 1 }} onClick={handleLeftSidebarToggle}>
+              <Icon icon="tabler:x" />
+            </IconButton>
+          ) : null}
+        </Box>
+
+        <StyleList sx={{ height: "calc(100vh - 13.9375rem)" }}>
+          <Box className="overflow-hidden">
+            <Box sx={{ p: (theme) => theme.spacing(4, 2, 2) }}>
+              <Typography
+                variant="h6"
+                className="!text-[16px] !font-bold"
+                sx={{ ml: 1.5, mb: 1.5, color: "primary.main" }}
+              >
+                Following Stores
+              </Typography>
+              <List sx={{ mb: 2.5, p: 0 }}>{renderChats("byFollowing")}</List>
+              <Typography
+                variant="h6"
+                className="!text-[16px] !font-bold"
+                sx={{ ml: 1.5, mb: 1.5, color: "primary.main" }}
+              >
+                Viewed Stores
+              </Typography>
+              <List sx={{ p: 0 }}>{renderChats("byProductView")}</List>
+            </Box>
+          </Box>
+        </StyleList>
+      </Drawer>
+
+      <UserProfileLeft
+        store={store}
+        hidden={hidden}
+        statusObj={statusObj}
+        userStatus={userStatus}
+        sidebarWidth={sidebarWidth}
+        setUserStatus={setUserStatus}
+        userProfileLeftOpen={userProfileLeftOpen}
+        handleUserProfileLeftSidebarToggle={handleUserProfileLeftSidebarToggle}
+      />
+    </div>
+  );
+};
+
+export default SidebarLeft;

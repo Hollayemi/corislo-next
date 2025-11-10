@@ -73,7 +73,7 @@ const StorePage = ({ params }) => {
 
   const handleChange = (prop) => (event) => {
     setValues({ ...inputValues, [prop]: event.target.value })
-    
+
   }
   return (
     <ServiceRenderWrapper
@@ -82,7 +82,7 @@ const StorePage = ({ params }) => {
       hidebreadCrumb
       crumb={[...WorkshopBreadCrumb]}
     >
-      <Box className="px-10 !hidden sm:!flex z-50">
+      <Box className="!px-10 !hidden sm:!flex z-50">
         <Typography className="pb-1 border-b-2 cursor-pointer !text-[13px] !w-24 text-center border-blue-900">
           Business Profile
         </Typography>
@@ -161,11 +161,11 @@ const StorePage = ({ params }) => {
                         dispatch
                       )
                     }
-                    className="px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3"
+                    className="!px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3"
                   >
                     Change Photo
                   </Box>
-                  <Paper className="px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3">
+                  <Paper className="!px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3">
                     Delete
                   </Paper>
                 </Box>
@@ -179,7 +179,7 @@ const StorePage = ({ params }) => {
                     // disabled: true,
                   }
                 }
-                onChange={() => {}}
+                onChange={() => { }}
                 label="Your Business Name"
               />
             </Box>

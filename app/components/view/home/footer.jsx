@@ -42,7 +42,7 @@ const HomeFooter = () => {
         href={`/${page.link}`}
         sx={{ display: "block" }}
         color="white"
-        className="px-0 my-4 w-fit !text-xs border-b-2 border-black hover:border-blue-600 !text-gray-200"
+        className="!px-0 my-4 w-fit !text-xs border-b-2 border-black hover:border-blue-600 !text-gray-200"
       >
         {page.name}
       </LinkStyled>
@@ -51,7 +51,7 @@ const HomeFooter = () => {
 
   return (
     <Box>
-      <Box className="px-2 md:px-16">
+      <Box className="!px-2 md:!px-16">
         <Box className="flex items-center justify-between !my-12">
           <Typography variant="body2" className="!font-bold w-40 md:w-auto">
             Download our Mobile app
@@ -75,7 +75,7 @@ const HomeFooter = () => {
         </Box>
       </Box>
       <Box className="bg-black">
-        <Box className="px-8 sm:px-20 md:px-32 lg:px-36 py-10">
+        <Box className="!px-8 sm:!px-20 md:!px-32 lg:!px-36 py-10">
           <Grid container spacing={3}>
             <Grid item xs={12} sm={4}>
               <Box className="!mb-5">
@@ -127,7 +127,7 @@ const HomeFooter = () => {
               </Grid>
             </Grid>
           </Grid>
-          <Box className="bg-white h-10 mt-4 w-full bg-white flex items-center px-10 !rounded-xl">
+          <Box className="bg-white h-10 mt-4 w-full bg-white flex items-center !px-10 !rounded-xl">
             <Typography className="!text-xs !font-bold">
               {new Date().getFullYear()} Corisio. All rights reserved
             </Typography>

@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { OrderListComponents } from '.'
 import IconifyIcon from '@/app/components/icon'
 import { CircleLoader } from '@/app/components/cards/loader'
-import { MyTextField } from '@/app/(pages)/user/components'
+import { MyTextField } from '@/app/(pages)/(users)/user/components'
 import useSWR from 'swr'
 import {
   storeConfirmPicker,
@@ -17,6 +17,7 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
   const [foundbyPicker, setFindbyPicker] = useState([])
   const [search, setSearch] = useState('')
   const counter = data?.data || {}
+  console.log({ data, counter })
   const [value, setValue] = useState('all')
   const Epl = ({ title, info }) => (
     <Box className="h-full pl-4 pt-1 border-r w-full min-w-28">
@@ -35,7 +36,7 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
   return (
     <Box className="w-full">
       <Box
-        className="w-full h-48 md:px-10 flex items-center justify-between rounded-2xl p-5 py-7 overflow-hidden"
+        className="w-full h-48 md:!px-10 flex items-center justify-between rounded-2xl p-5 py-7 overflow-hidden"
         bgcolor="custom.pri"
       >
         <Box className="w-7/12 md:w-7/12 shrink-0">
@@ -77,7 +78,7 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
         />
       </Box>
       <br />
-      <Box className="flex items-center justify-between px-3 py-3 mb-4">
+      <Box className="flex items-center justify-between !px-3 py-3 mb-4">
         <Box className="flex items-center">
           <Typography variant="h5" className="!font-bold !text-sm md:text-2xl">
             Orders
@@ -113,7 +114,7 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
         </Box>
       </Box>
       <Box className="h-16 w-full overflow-auto overflow-y-hidden rounded-md py-2 flex justify-evenly items-center bg-white">
-        <Box className="flex items-center w-full h-full px-3 border-r">
+        <Box className="flex items-center w-full h-full !px-3 border-r">
           <IconifyIcon icon="tabler:calendar" />
           <Typography variant="caption" className="!text-[12px] !ml-4">
             Today
@@ -121,19 +122,19 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
         </Box>
         <Epl
           title="Total orders"
-          info={counterLoading ? <CircleLoader /> : counter.totalOrder || 0}
+          info={counterLoading ? <CircleLoader /> : counter?.totalOrder || 0}
         />
         <Epl
           title="Ordered items over time"
-          info={counterLoading ? <CircleLoader /> : counter.totalItems || 0}
+          info={counterLoading ? <CircleLoader /> : counter?.totalItems || 0}
         />
         <Epl
           title="Returns"
-          info={counterLoading ? <CircleLoader /> : counter.returned || 0}
+          info={counterLoading ? <CircleLoader /> : counter?.returned || 0}
         />
         <Epl
           title="Fulfilled orders over time"
-          info={counterLoading ? <CircleLoader /> : counter.completed || 0}
+          info={counterLoading ? <CircleLoader /> : counter?.completed || 0}
         />
         <Epl
           title="Pickup / Waybilling"
@@ -141,7 +142,7 @@ const OrderTable = ({ selectRow, isLoading, setRightOpen }) => {
             counterLoading ? (
               <CircleLoader />
             ) : (
-              `${counter.pickup || 0} / ${counter.waybilling || 0}`
+              `${counter?.pickup || 0} / ${counter?.waybilling || 0}`
             )
           }
         />
@@ -174,7 +175,7 @@ export const ConfirmPicker = ({ setRightOpen, setSearch }) => {
   const dispatch = useDispatch()
 
   return (
-    <Box className="px-5 pt-5">
+    <Box className="!px-5 pt-5">
       <MyTextField
         title="Picker ID"
         onChange={(e) => setPickerId(e.target.value)}

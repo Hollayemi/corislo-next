@@ -36,12 +36,15 @@ const CustomInput = forwardRef((props, ref) => {
     <TextField
       fullWidth
       inputRef={ref}
+      name="inputs"
       label={props.label || ""}
       {...props}
       value={value}
     />
   );
 });
+
+CustomInput.displayName = "CustomInput"
 
 const StepDealDetails = ({ campaignData, setCampaignData, formHandler }) => {
   // ** State

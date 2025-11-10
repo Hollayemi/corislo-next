@@ -83,10 +83,8 @@ const OverViewCard = () => {
   return (
     !error &&
     !isLoading && (
-      <Box className="py-3 px-10.5md:px-5">
-        <Grid container spacing={1}>
-          {renderStats(data.data.topBar)}
-        </Grid>
+      <Box className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+        {renderStats(data.data.topBar)}
       </Box>
     )
   );

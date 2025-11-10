@@ -11,8 +11,10 @@ const StoreLeftSideBar = dynamic(
 import { customerBreadCrumb } from './components/columns'
 import { AllCustomers } from './components/allCustomers'
 import OverViewCard from './components/overview'
+import { use } from 'react'
 
-const CustomerManagement = ({ params }) => {
+const CustomerManagement = ({ params: param }) => {
+  const params = use(param)
   const path = { ...params, sidebar: 'customer-management' }
   return (
     <StoreLeftSideBar
@@ -24,11 +26,11 @@ const CustomerManagement = ({ params }) => {
     >
       <Box className="w-full">
         <Box className="">
-          <Box className="!pb-5 bg-white rounded-md px-2 md:px-8 pt-6 w-full">
+          <Box className="!pb-5 bg-white rounded-md !px-2 md:!px-8 pt-6 w-full">
             <OverViewCard />
           </Box>
 
-          <Box className="bg-white rounded-md px-2 md:px-8 pt-1 w-full mt-4">
+          <Box className="bg-white rounded-md !px-2 md:!px-8 pt-1 w-full mt-4">
             <AllCustomers />
           </Box>
         </Box>

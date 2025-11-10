@@ -11,9 +11,9 @@ const CreateCategory = ({ showOverlay }) => {
     setTabValue(newValue);
   };
   return (
-    <Box className="flex w-full px-2 justify-center h-[550px] overflowStyle">
+    <Box className="flex w-full !px-2 justify-center h-[550px] overflowStyle">
       <Box className="w-full md:w-[750px] h-[550px] overflow-y-auto overflowStyle mt-20 relative bg-white rounded-xl md:mr-10 flex flex-col">
-        <Box className="w-full !rounded-md pt-2 px-3">
+        <Box className="w-full !rounded-md pt-2 !px-3">
           <TabContext value={value}>
             <TabList
               orientation="horizontal"

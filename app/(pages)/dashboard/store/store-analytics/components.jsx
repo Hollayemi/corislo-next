@@ -205,11 +205,10 @@ export const reshapePrice = (price) => {
 export const Growth = ({ percentage }) => {
   return (
     <Box
-      className={`flex items-center w-auto ${
-        parseInt(percentage) < 0
+      className={`flex items-center w-auto ${parseInt(percentage) < 0
           ? '!text-red-600 bg-red-200'
           : '!text-green-600 bg-green-200'
-      }  rounded px-1`}
+        }  rounded !px-1`}
     >
       <Icon
         icon={

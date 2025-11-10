@@ -21,6 +21,7 @@ import { reshapePrice } from '@/app/(pages)/dashboard/store/marketing/components
 import { productStatusUpdate } from '@/app/redux/state/slices/shop/products/updateProduct'
 import { useDispatch } from 'react-redux'
 import { UpdateStock } from '@/app/(pages)/dashboard/store/product-management/out-of-stock/page'
+import { Edit, Eye, EyeClosed, Trash } from 'lucide-react'
 
 // ** renders client column
 
@@ -29,11 +30,12 @@ const renderClient = (params) => {
   const stateNum = Math.floor(Math.random() * 6)
   const states = ['success', 'error', 'warning', 'info', 'primary', 'secondary']
   const color = states[stateNum]
-  if (row?.image?.image) {
+  if (row?.image) {
     return (
       <CustomAvatar
-        src={row.image.image}
-        sx={{ mr: 3, width: '1.875rem', height: '1.875rem' }}
+        src={row.image}
+
+        sx={{ mr: 3, width: '2.2rem', height: '2.2rem' }}
       />
     )
   } else {
@@ -72,7 +74,7 @@ const columns = (clickFunc, outofstock) => [
       const { row } = params
 
       return (
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Box className="flex items-center h-full">
           {renderClient(params)}
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography
@@ -93,9 +95,11 @@ const columns = (clickFunc, outofstock) => [
     headerName: 'Uploaded By',
     field: 'uploadedBy',
     renderCell: (params) => (
-      <Typography variant="body2" sx={{ color: 'text.primary' }}>
-        {params.row.uploadedBy}
-      </Typography>
+      <Box className="flex items-center h-full">
+        <Typography variant="body2" sx={{ color: 'text.primary' }}>
+          {params.row.uploadedBy}
+        </Typography>
+      </Box>
     ),
   },
   {
@@ -104,9 +108,11 @@ const columns = (clickFunc, outofstock) => [
     headerName: 'Collection',
     field: 'collection',
     renderCell: (params) => (
-      <Typography variant="body2" sx={{ color: 'text.primary' }}>
-        {params.row.collectionName}
-      </Typography>
+      <Box className="flex items-center h-full">
+        <Typography variant="body2" sx={{ color: 'text.primary' }}>
+          {params.row.collectionName}
+        </Typography>
+      </Box>
     ),
   },
   {
@@ -115,13 +121,15 @@ const columns = (clickFunc, outofstock) => [
     headerName: 'Price',
     field: 'price',
     renderCell: (params) => (
-      <Typography
-        variant="body2"
-        className="!ml-3"
-        sx={{ color: 'text.primary' }}
-      >
-        {reshapePrice(params.row.price)}
-      </Typography>
+      <Box className="flex items-center h-full">
+        <Typography
+          variant="body2"
+          className="!ml-3"
+          sx={{ color: 'text.primary' }}
+        >
+          {reshapePrice(params.row.price)}
+        </Typography>
+      </Box>
     ),
   },
   {
@@ -130,9 +138,11 @@ const columns = (clickFunc, outofstock) => [
     headerName: 'Total in stock',
     field: 'date',
     renderCell: (params) => (
-      <Typography variant="body2" sx={{ color: 'text.primary' }}>
-        {params.row.totInStock}
-      </Typography>
+      <Box className="flex items-center h-full">
+        <Typography variant="body2" sx={{ color: 'text.primary' }}>
+          {params.row.totInStock}
+        </Typography>
+      </Box>
     ),
   },
   {
@@ -181,18 +191,18 @@ const columns = (clickFunc, outofstock) => [
       const currStatus = params.row.status
       const st = ['hidden', 'approved']
       return (
-        <div>
+        <Box className="flex items-center h-full w-full float-right">
           <Button
             onClick={
               outofstock
                 ? handleMenuItemClick('update-stock')
                 : handleButtonClick
             }
-            className="w-fit min-w-16 h-16 rounded-full"
+            className="w-fit min-w-16 h-16 !float-right rounded-full"
           >
             {outofstock ? 'Update stock' : <MoreIcon />}
           </Button>
-          {outofstock && (
+          {!outofstock && (
             <Menu
               anchorEl={anchorEl}
               open={open}
@@ -209,7 +219,7 @@ const columns = (clickFunc, outofstock) => [
                 className="!text-green-500"
                 onClick={handleMenuItemClick('edit')}
               >
-                Edit
+                <Edit size={20} className="!mr-3" /> Edit Product
               </MenuItem>
               {st.includes(currStatus) && (
                 <MenuItem
@@ -217,27 +227,28 @@ const columns = (clickFunc, outofstock) => [
                   onClick={handleMenuItemClick(
                     currStatus === 'hidden' ? 'show' : 'hide'
                   )}
+                  title={currStatus === 'hidden' ? 'Show to' : 'Hide from'} public
                 >
-                  {currStatus === 'hidden' ? 'Show to' : 'Hide from'} public
+                  {currStatus !== 'hidden' ?
+                    <div> <Eye size={20} className="!mr-3" /> Show to public </div> :
+                    <div> <EyeClosed size={20} className="!mr-3" /> hide from public </div>}
                 </MenuItem>
               )}
               <MenuItem
                 className="!text-red-600"
                 onClick={handleMenuItemClick('delete-permanently')}
               >
-                Delete Parmanently
+                <Trash size={20} className="!mr-3" /> Delete Icon
               </MenuItem>
             </Menu>
           )}
-        </div>
+        </Box>
       )
     },
   },
 ]
 
 const ProductList = ({ rows, updateDialogInfo, outofstock }) => {
-  // ** States
-
   const router = useRouter()
   const dispatch = useDispatch()
   const menuOptions = (row, action) => {

@@ -46,12 +46,12 @@ const Direction = ({ setStage }) => {
         <Box className="flex-grow w-full">
           <TextField
             size="small"
-            className="!mb-2 !w-full px-5"
+            className="!mb-2 !w-full !px-5"
             placeholder="Your Location"
           />
           <TextField
             size="small"
-            className="!mb-2 !w-full px-5"
+            className="!mb-2 !w-full !px-5"
             placeholder="Your Destination"
           />
         </Box>

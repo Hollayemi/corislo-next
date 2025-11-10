@@ -3,7 +3,7 @@ import { Box, Tab, Typography } from '@mui/material'
 import { settingsInnerList } from '@/app/data/store/innerList'
 import { settingsBreadCrumb } from './components'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
-import { useState } from 'react'
+import { use, useState } from 'react'
 import StaffSettings from './pages/accountingSettings'
 import SecuritySettings from './pages/securitySettings'
 import Activities from './pages/activities'
@@ -17,7 +17,8 @@ const StoreLeftSideBar = dynamic(
   }
 )
 
-const StoreSettings = ({ params }) => {
+const StoreSettings = ({ params: param }) => {
+  const params = use(param)
   const path = { ...params, sidebar: 'settings' }
   const [value, setTabValue] = useState('0')
   const handleChangeTab = (event, newValue) => {
@@ -70,7 +71,7 @@ const StoreSettings = ({ params }) => {
             const Content = tabContents[i.toString()]
             return (
               <TabPanel value={i.toString()} key={i} className="!py-4 !px-0">
-                <Box className="bg-white w-full px-3 py-5 md:p-8 !rounded-xl">
+                <Box className="bg-white w-full !px-3 py-5 md:p-8 !rounded-xl">
                   <Content />
                 </Box>
               </TabPanel>

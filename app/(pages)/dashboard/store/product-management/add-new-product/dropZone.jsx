@@ -20,7 +20,7 @@ const Img = styled("img")(({ theme }) => ({
   height: 48,
 }));
 
-const FileUploader = ({ files, setFiles, localFiles, setLocalFiles }) => {
+const FileUploader = ({ files, setFiles, localFiles, setLocalFiles, onImageUpload }) => {
   // ** State
   const [video, setVideo] = useState();
   // ** Hooks
@@ -37,6 +37,7 @@ const FileUploader = ({ files, setFiles, localFiles, setLocalFiles }) => {
       setLocalFiles((prev) => {
         return [...prev, ...fileInfo];
       });
+
       const base64Files = await Promise.all(
         acceptedFiles.map(async (file, i) => {
           if (file) {
@@ -51,6 +52,12 @@ const FileUploader = ({ files, setFiles, localFiles, setLocalFiles }) => {
                 },
               ];
             });
+
+            // Call the onImageUpload prop if it's an image file
+            if (file.type.startsWith("image") && onImageUpload) {
+              const imageUri = URL.createObjectURL(file);
+              onImageUpload(imageUri, base64Image);
+            }
           }
         })
       );
@@ -113,7 +120,6 @@ const FileUploader = ({ files, setFiles, localFiles, setLocalFiles }) => {
             <Grid item xs={8} md={6} key="video">
               <video className="w-52 h-16" controls>
                 <source
-                  // src="https://www.w3schools.com/html/mov_bbb.mp4"
                   src={video && URL.createObjectURL(video)}
                   type="video/mp4"
                 />
@@ -123,40 +129,27 @@ const FileUploader = ({ files, setFiles, localFiles, setLocalFiles }) => {
 
           {localFiles.length
             ? localFiles.map((file, i) => (
-                <Grid item xs={4} md={3} key={file.name + i}>
-                  {/* <CardMedia
-                    component="video"
-                    controls
-                    autoPlay
-                    src={URL.createObjectURL(file)}
-                    title={"title"}
-                  /> */}
-
-                  <div className="relative" title={file.name}>
-                    {renderFilePreview(file)}
-                    <div className="absolute bottom-0 right-0 rounded-tl-sm bg-white p-0.5 m-0.5 mr-1">
-                      <Typography className="!text-[11px]" variant="body2">
-                        {Math.round(file.size / 100) / 10 > 1000
-                          ? `${(Math.round(file.size / 100) / 10000).toFixed(
-                              1
-                            )}mb`
-                          : `${(Math.round(file.size / 100) / 10).toFixed(
-                              1
-                            )}kb`}
-                      </Typography>
-                    </div>
+              <Grid item xs={4} md={3} key={file.name + i}>
+                <div className="relative" title={file.name}>
+                  {renderFilePreview(file)}
+                  <div className="absolute bottom-0 right-0 rounded-tl-sm bg-white p-0.5 m-0.5 mr-1">
+                    <Typography className="!text-[11px]" variant="body2">
+                      {Math.round(file.size / 100) / 10 > 1000
+                        ? `${(Math.round(file.size / 100) / 10000).toFixed(
+                          1
+                        )}mb`
+                        : `${(Math.round(file.size / 100) / 10).toFixed(
+                          1
+                        )}kb`}
+                    </Typography>
                   </div>
-                </Grid>
-              ))
+                </div>
+              </Grid>
+            ))
             : null}
         </Grid>
       </Grid>
     </Grid>
-    //   <div className='buttons'>
-    //     <Button color='error' variant='outlined' onClick={handleRemoveAllFiles}>
-    //       Remove All
-    //     </Button>
-    //   </div>
   );
 };
 

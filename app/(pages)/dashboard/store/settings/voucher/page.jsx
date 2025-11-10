@@ -15,7 +15,7 @@ import { InputBoxWithSideLabel } from '../../stores/component'
 import { useStoreData } from '@/app/hooks/useData'
 import { settingsBreadCrumb } from '../components'
 import IconifyIcon from '@/app/components/icon'
-import { TitleSubtitle } from '@/app/(pages)/user/components'
+import { TitleSubtitle } from '@/app/(pages)/(users)/user/components'
 
 const VoucherPage = ({ params }) => {
   const path = {
@@ -74,7 +74,7 @@ const VoucherPage = ({ params }) => {
         />
       }
     >
-      <Box className="h-ful w-full bg-white px-1 md:px-5 py-8 rounded-md">
+      <Box className="h-ful w-full bg-white !px-1 md:!px-5 py-8 rounded-md">
         <Box className="flex items-start justify-between w-full">
           <TitleSubtitle
             title="Vouchers"

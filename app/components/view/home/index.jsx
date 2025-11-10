@@ -9,7 +9,7 @@ import UserOverlay from "./Components/userOverlay";
 import MapOverlay from "./Map";
 import UserSideBar from "./Components/sidebar";
 
-const HomeWrapper = ({
+const UserWrapper = ({
   children,
   bg,
   customersReview,
@@ -43,8 +43,8 @@ const HomeWrapper = ({
           <Box className={className}>{children}</Box>
           {popMap && <MapOverlay />}
           {overLay && <UserOverlay />}
-          <UserSideBar />
-         
+          {/* <UserSideBar /> */}
+
         </Box>
 
         {!noFooter && (
@@ -59,4 +59,4 @@ const HomeWrapper = ({
   );
 };
 
-export default HomeWrapper;
+export default UserWrapper;

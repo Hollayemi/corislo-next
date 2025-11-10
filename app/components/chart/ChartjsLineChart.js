@@ -108,7 +108,7 @@ const DashboardLineChart = ({ interval }) => {
         pointHoverBorderColor: white,
         pointBorderColor: "transparent",
         pointHoverBackgroundColor: warning,
-        data: Object.values(dataset.order || {}) 
+        data: Object.values(dataset.order || {})
       },
       {
         fill: false,

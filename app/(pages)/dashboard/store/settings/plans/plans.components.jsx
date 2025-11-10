@@ -22,7 +22,7 @@ export const PlansComponents = ({ opportunities, from, price, name }) => {
           Choose Plan
         </Button>
       </Box>
-      <Box className="mt-10 px-8">
+      <Box className="mt-10 !px-8">
         <Typography variant="body2" className="!text-md !text-white !font-bold">
           What you get
         </Typography>

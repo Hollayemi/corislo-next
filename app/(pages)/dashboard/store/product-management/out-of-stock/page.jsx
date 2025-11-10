@@ -44,7 +44,7 @@ const OutOfStock = ({ params }) => {
       dialogInfo={dialogInfo}
       updateDialogInfo={updateDialogInfo}
     >
-      <Box className="bg-white rounded-md px-3 md:px-5 pt-6 pb-8 w-full grow">
+      <Box className="bg-white rounded-md !px-3 md:!px-5 pt-6 pb-8 w-full grow">
         <Box>
           {data && (
             <ProductList

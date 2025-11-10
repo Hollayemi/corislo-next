@@ -80,7 +80,7 @@ const CategoriesSales = ({ interval, selectedInterval }) => {
 
   return (
     <Card className="w-full !shadow-none h-full">
-      <Box className="px-3 !flex !items-center !justify-between">
+      <Box className="!px-3 !flex !items-center !justify-between">
         <Typography className="text-[13px] !font-bold">
           Sales from categories
         </Typography>

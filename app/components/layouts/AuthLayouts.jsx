@@ -22,7 +22,7 @@ export default function AuthLayout({ children, reverse, image, ...others }) {
           />
           <Box className="w-full h-full absolute top-0 left-0 bg-black opacity-50"></Box>
           <Box className="w-full h-full relative z-40 text-white p-4 flex items-center">
-            <Box className="px-5">
+            <Box className="!px-5">
               <Image
                 src={themeConfig.logo_hor_bw}
                 alt="auth-mage"
@@ -62,7 +62,7 @@ export default function AuthLayout({ children, reverse, image, ...others }) {
           bgcolor="custom.bodyGray"
         >
           <Box
-            className={`flex flex-col ${others.center ? "justify-center" : "!pt-1 md:!pt-10"} overflow-auto  my-4 md:my-0 px-2 items-center h-full`}
+            className={`flex flex-col ${others.center ? "justify-center" : "!pt-1 md:!pt-10"} overflow-auto  my-4 md:my-0 !px-2 items-center h-full`}
           >
             <Box className="flex flex-col items-center mt-8 md:mt-0 ">
               {!others.noLogo && <Image

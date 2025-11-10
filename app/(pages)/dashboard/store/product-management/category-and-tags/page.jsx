@@ -50,11 +50,11 @@ const CategoryAndTags = ({ params }) => {
       ]}
     >
       {!isSelected && (
-        <Box className="bg-white rounded-md px-3 py-6 mb-4">
+        <Box className="bg-white rounded-md !px-3 py-6 mb-4">
           <OverViewCard />
         </Box>
       )}
-      <Box className="bg-white rounded-md px-3 pt-6 pb-8 w-full grow">
+      <Box className="bg-white rounded-md !px-3 pt-6 pb-8 w-full grow">
         {isSelected ? (
           <TreeViewSelected />
         ) : (
@@ -73,20 +73,20 @@ const BriefCategories = ({ selectedCate, setSelectedCate }) => {
   const allCategories =
     !error && !isLoading
       ? data.data.map((item, i) => {
-          return (
-            <Grid item xs={12} sm={6} md={4} key={i}>
-              <CardStatsHorizontal
-                category={item.category}
-                id={item.id || '0980978978607860'}
-                subCateNum={item.sub_categories}
-                prodNumb={item.products}
-                icon="tabler:currency-dollar"
-                selectedCate={selectedCate}
-                setSelectedCate={setSelectedCate}
-              />
-            </Grid>
-          )
-        })
+        return (
+          <Grid item xs={12} sm={6} md={4} key={i}>
+            <CardStatsHorizontal
+              category={item.category}
+              id={item.id || '0980978978607860'}
+              subCateNum={item.sub_categories}
+              prodNumb={item.products}
+              icon="tabler:currency-dollar"
+              selectedCate={selectedCate}
+              setSelectedCate={setSelectedCate}
+            />
+          </Grid>
+        )
+      })
       : null
   return (
     <Box>

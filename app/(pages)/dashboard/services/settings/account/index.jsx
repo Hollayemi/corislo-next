@@ -49,7 +49,7 @@ const ServiceAccount = () => {
           const Content = tabContents[i.toString()]
           return (
             <TabPanel value={i.toString()} key={i} className="!py-4 !px-0">
-              <Box className="bg-white w-full px-3 py-5 md:p-8 !rounded-xl">
+              <Box className="bg-white w-full !px-3 py-5 md:p-8 !rounded-xl">
                 <Content />
               </Box>
             </TabPanel>

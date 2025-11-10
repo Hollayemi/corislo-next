@@ -84,7 +84,7 @@ export const customerColumns = [
     headerName: "status",
     renderCell: (params) => (
       <Typography variant="body2" sx={{ color: "text.primary" }}>
-        {params.row.status[params.row.status.length - 1].state}
+        {params.row?.status[params.row.status?.length - 1]?.status || ""}
       </Typography>
     ),
   },

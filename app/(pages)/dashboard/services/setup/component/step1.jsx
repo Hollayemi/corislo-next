@@ -1,6 +1,5 @@
 'use client'
 import { Box, Button, Divider, Typography } from '@mui/material'
-import { ProgressBar } from 'react-loader-spinner'
 import { useState } from 'react'
 import ProfilePictureUploader from '@/app/components/cards/fileUpload'
 import IconifyIcon from '@/app/components/icon'
@@ -21,13 +20,12 @@ const UploadFiles = ({ setSection }) => {
   const UploadBar = ({ file, link, done = 0 }) => {
     const url = files.filter((x) => x.name === file.name)[0]
     return (
-      <Box className="flex flex-col items-center h-fit mt-3 w-full bg-gray-100 rounded-md px-2 ">
+      <Box className="flex flex-col items-center h-fit mt-3 w-full bg-gray-100 rounded-md !px-2 ">
         <Box className="flex justify-between items-center w-full h-14">
           <Box className="flex items-center">
             <Image
-              src={`/images/misc/${
-                file.type.startsWith('video') ? 'video' : 'image'
-              }-file.png`}
+              src={`/images/misc/${file.type.startsWith('video') ? 'video' : 'image'
+                }-file.png`}
               alt="video png"
               className="h-8 w-8"
               width={300}
@@ -45,7 +43,7 @@ const UploadFiles = ({ setSection }) => {
                 variant="body2"
                 className="!text-[10px] !text-gray-400"
               >
-                {formatBytes(file?.size || 0)} <span className="px-2 ">.</span>{' '}
+                {formatBytes(file?.size || 0)} <span className="!px-2 ">.</span>{' '}
                 {!done ? 'uploading' : 'uploaded'}
               </Typography>
             </Box>
@@ -73,16 +71,17 @@ const UploadFiles = ({ setSection }) => {
               </Typography>
             )}
             {!done && (
-              <ProgressBar
-                visible={true}
-                height="40"
-                width=""
-                borderColor="blue"
-                barColor="blue"
-                ariaLabel="progress-bar-loading"
-                wrapperStyle={{ width: '50px' }}
-                wrapperClass="mr-5"
-              />
+              <></>
+              // <ProgressBar
+              //   visible={true}
+              //   height="40"
+              //   width=""
+              //   borderColor="blue"
+              //   barColor="blue"
+              //   ariaLabel="progress-bar-loading"
+              //   wrapperStyle={{ width: '50px' }}
+              //   wrapperClass="mr-5"
+              // />
             )}
           </Box>
         </Box>
@@ -90,8 +89,8 @@ const UploadFiles = ({ setSection }) => {
     )
   }
   return (
-    <Box className="flex flex-col justify-center items-center px-2">
-      <Box className="px-4 py-6 md:p-10 bg-white rounded-xl shadow h-fit my-6 md:my-10 w-full md:w-[500px]">
+    <Box className="flex flex-col justify-center items-center !px-2">
+      <Box className="!px-4 py-6 md:p-10 bg-white rounded-xl shadow h-fit my-6 md:my-10 w-full md:w-[500px]">
         <Typography
           variant="body2"
           className="!text-[13px] !font-bold !text-black"
@@ -138,7 +137,7 @@ const UploadFiles = ({ setSection }) => {
                   isVideo: file.type.startsWith('video'),
                 },
                 dispatch,
-                () => {},
+                () => { },
                 setFiles,
                 setLocalFiles
               )

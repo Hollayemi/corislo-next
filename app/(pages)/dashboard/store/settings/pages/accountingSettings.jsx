@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Upload } from "@mui/icons-material";
 import ProfilePictureUploader from "@/app/components/cards/fileUpload";
 import { useDispatch } from "react-redux";
-import { MyTextField, TitleSubtitle } from "@/app/(pages)/user/components";
+import { MyTextField, TitleSubtitle } from "@/app/(pages)/(users)/user/components";
 import { useStoreData } from "@/app/hooks/useData";
 import { updateStaff, updateStaffPicture } from "@/app/redux/state/slices/shop/branches/staffs";
 import useSWR from "swr";
@@ -39,11 +39,11 @@ const StaffSettings = () => {
 
   const handleChange =
     (prop) =>
-    ({ target }) => {
-      setStaffInfo((prev) => {
-        return { ...prev, [prop]: target.value };
-      });
-    };
+      ({ target }) => {
+        setStaffInfo((prev) => {
+          return { ...prev, [prop]: target.value };
+        });
+      };
 
   const updateBtn = () => {
     updateStaffPicture(
@@ -167,7 +167,7 @@ const StaffSettings = () => {
           </Button>
         </Box>
       </Box>
-      {/* <Box className="mt-8 w-full md:w-[370px] bg-red-100 md:bg-transparent border md:border-0 py-4 px-2">
+      {/* <Box className="mt-8 w-full md:w-[370px] bg-red-100 md:bg-transparent border md:border-0 py-4 !px-2">
         <Typography
           variant="body2"
           className="!font-bold !text-black !text-[16px]"

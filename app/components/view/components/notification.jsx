@@ -4,12 +4,12 @@ import { Box, Typography } from "@mui/material";
 import React from "react";
 import { OrderNotif } from "../home/Components/notification";
 
-const Notification = ({  }) => {
-  const { showOverlay, notifications} = useStoreData()
+const Notification = ({ }) => {
+  const { showOverlay, notifications } = useStoreData()
   return (
-    <Box className="flex w-full px-1 justify-end">
+    <Box className="flex w-full !px-1 justify-end">
       <Box className="w-full md:w-[420px] h-full md:h-[500px] mt-16 md:mt-20 relative bg-white rounded-xl md:mr-10 flex flex-col">
-        <Box className="flex justify-between items-center px-4 h-14 border-b !w-full flex-shrink-0">
+        <Box className="flex justify-between items-center !px-4 h-14 border-b !w-full flex-shrink-0">
           <Typography variant="body2" className="!font-bold">
             Notification
           </Typography>

@@ -67,7 +67,7 @@ const UserServiceFooter = () => {
           </Typography>
         </Box>
       </Box>
-      <Box className="flex flex-col justify-center px-8 pt-20 !items-center bg-gradient-to-br from-orange-50 to-white">
+      <Box className="flex flex-col justify-center !px-8 pt-20 !items-center bg-gradient-to-br from-orange-50 to-white">
         <Typography
           variant="body2"
           className="!text-black !text-[35px] !font-black text-center w-3/6"
@@ -110,7 +110,7 @@ const UserServiceFooter = () => {
           </Typography>
           <Box className="flex items-center">
             {topLinks.map((each, i) => (
-              <Link href={each.link} key={i} className="mx-1 px-3 h-full">
+              <Link href={each.link} key={i} className="mx-1 !px-3 h-full">
                 <Typography className="!text-gray-400 !text-[13px]">
                   {each.name}
                 </Typography>
@@ -130,7 +130,7 @@ const Testimonial = () => {
     <Box className="w-72 h-56 bg-white m-3 p-3 py-5 rounded-md">
       <Rating
         defaultValue={2.4}
-        onChange={(e, t) => {}}
+        onChange={(e, t) => { }}
         readOnly
         precision={0.1}
         className="mb-4"

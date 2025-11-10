@@ -19,14 +19,12 @@ const Plans = ({
   const discounted = annPrice - (annPrice * discount) / 100
   return (
     <Box
-      className={`w-full sm:w-1/2 lg:w-1/3 md:px-2 ${
-        !prof && 'md:mt-0'
-      } md:py-10`}
+      className={`w-full sm:w-1/2 lg:w-1/3 md:!px-2 ${!prof && 'md:mt-0'
+        } md:py-10`}
     >
       <Box
-        className={`relative w-full !rounded-xl  border py-8 md:m-2 my-4 ${
-          prof ? 'md:shadow-2xl' : 'md:shadow-xl'
-        }`}
+        className={`relative w-full !rounded-xl  border py-8 md:m-2 my-4 ${prof ? 'md:shadow-2xl' : 'md:shadow-xl'
+          }`}
       >
         <Box className="flex flex-col items-center">
           <Typography
@@ -54,7 +52,7 @@ const Plans = ({
             </Button>
           )}
         </Box>
-        <Box className="mt-10 px-8 md:px-3">
+        <Box className="mt-10 !px-8 md:!px-3">
           <Typography
             variant="body2"
             className="!text-md !text-gray-600 !font-bold"
@@ -190,12 +188,11 @@ const AllPlans = ({ hideChoosePlan }) => {
   return (
     <Box>
       <Box className="flex justify-center mt-5">
-        <Box className="flex items-center rounded-full bg-gray-100 px-3 py-0.5 w-fit">
+        <Box className="flex items-center rounded-full bg-gray-100 !px-3 py-0.5 w-fit">
           <Typography
             variant="body2"
-            className={`mr-2 !text-[14px] !font-bold transition-all duration-300 ${
-              interval === 'Monthly' ? '!text-blue-800' : '!text-gray-400'
-            }`}
+            className={`mr-2 !text-[14px] !font-bold transition-all duration-300 ${interval === 'Monthly' ? '!text-blue-800' : '!text-gray-400'
+              }`}
           >
             Monthly
           </Typography>
@@ -210,9 +207,8 @@ const AllPlans = ({ hideChoosePlan }) => {
           />
           <Typography
             variant="body2"
-            className={`ml-2 !text-[14px] !font-bold transition-all duration-300 ${
-              interval === 'Annually' ? '!text-blue-800' : '!text-gray-400'
-            }`}
+            className={`ml-2 !text-[14px] !font-bold transition-all duration-300 ${interval === 'Annually' ? '!text-blue-800' : '!text-gray-400'
+              }`}
           >
             Annally
           </Typography>

@@ -148,7 +148,7 @@ const StorePage = ({ params }) => {
       breadCrumbRIghtChildren={<BreadcrumbRightEle />}
       crumb={[...WorkshopBreadCrumb, { text: 'Settings', link: '' }]}
     >
-      <Box className="px-10 !hidden sm:!flex z-50 ">
+      <Box className="!px-10 !hidden sm:!flex z-50 ">
         <Link href="/dashboard/services/business">
           <Typography className="pb-1 border-b-2 cursor-pointer !text-[13px] !w-24 text-center border-transparent">
             Business Profile
@@ -398,19 +398,19 @@ const StorePage = ({ params }) => {
                   </Typography>
                   {formData.sevice_policies.cancellation_policies.length >
                     0 && (
-                    <Button
-                      onClick={() =>
-                        updateFormData(
-                          [],
-                          'cancellation_policies',
-                          'sevice_policies'
-                        )
-                      }
-                      className="!text-red-500"
-                    >
-                      Clear
-                    </Button>
-                  )}
+                      <Button
+                        onClick={() =>
+                          updateFormData(
+                            [],
+                            'cancellation_policies',
+                            'sevice_policies'
+                          )
+                        }
+                        className="!text-red-500"
+                      >
+                        Clear
+                      </Button>
+                    )}
                 </Box>
                 <Box className="justify-between pl-2 md:pl-5 !mt-3">
                   {formData.sevice_policies.cancellation_policies.map(

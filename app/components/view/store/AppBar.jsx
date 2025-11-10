@@ -101,7 +101,7 @@ export default function StoreDashboardAppBar({
     <AppBar
       // position="relative"
       color="inherit"
-      className="!duration-300 transition-all border-b"
+      className="!duration-300 transition-all border-b border-b-gray-300"
       open={open}
       elevation={0}
     >
@@ -154,12 +154,12 @@ export default function StoreDashboardAppBar({
         )}
         <Box sx={{ flexGrow: 1 }} />
 
-        <Box className="relative mr-4 w-full md:w-auto px-2 md:px-0">
+        <Box className="relative mr-4 w-full md:w-auto !px-2 md:!px-0">
           <input
             type="text"
             placeholder="Search anything"
             defaultValue={''}
-            className="w-full md:w-[350px] pl-10 text-[13px] !bg-[#F3F5FF] pr-4 h-10 border rounded-xl transition-all outline-none"
+            className="w-full md:w-[350px] pl-10 text-[13px] !bg-[#F3F5FF] pr-4 h-10 border border-gray-300 rounded-xl transition-all outline-none"
             onFocus={() => showOverlay('appSearch')}
           />
           <IconImage image="search" className="w-4 absolute top-1 mt-2 ml-4" />

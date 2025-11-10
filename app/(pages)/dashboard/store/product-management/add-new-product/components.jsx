@@ -10,7 +10,6 @@ import {
   Grid,
   TextField,
   Box,
-  MenuItem,
 } from '@mui/material'
 import CustomChip from '@/app/components/chip'
 import { productSizes } from '@/app/data/store/productData'

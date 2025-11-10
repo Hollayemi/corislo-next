@@ -375,7 +375,7 @@ export const CategoryFolder = () => {
   return (
     <Box className="flex flex-col h-full">
       {/* Main Categories */}
-      <Box className="flex items-start flex-wrap gap-2 p-2">
+      <Box className="grid grid-cols-3 md:grid-cols-5 gap-2 p-2">
         {!selectedSubcategory &&
           categories?.map((category, i) => (
             <Box

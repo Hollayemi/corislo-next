@@ -1,7 +1,7 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { prodInnerList } from '@/app/data/store/innerList'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 // import StoreLeftSideBar from "@/app/components/view/store/LeftSideBar";
 const StoreLeftSideBar = dynamic(
@@ -24,11 +24,11 @@ import { productBreadCrumb } from '../components'
 import IconifyIcon from '@/app/components/icon'
 import { mySubstring } from '@/app/utils/format'
 // no allow (),+,
-const AddNewProduct = ({ params }) => {
+const AddNewProduct = ({ params: param, searchParams }) => {
+  const params = use(param)
+  const { id: viewID } = use(searchParams)
   const theme = useTheme()
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const viewID = searchParams.get('id')
   const brk = theme.breakpoints.down
   const [selectedSizes, setSelectedSizes] = useState([])
   const [newSpec, setNewSpec] = useState('')
@@ -138,7 +138,7 @@ const AddNewProduct = ({ params }) => {
         </Button>
       }
     >
-      <Box className="bg-white rounded-md md:px-5 pt-6 pb-8 !text-[13px]">
+      <Box className="bg-white rounded-md md:!px-5 pt-6 pb-8 !text-[13px]">
         <Grid container spacing={4} className="!px-3">
           <Grid item xs={12} md={5}>
             <Typography sx={{ fontWeight: 'bold', mb: 2.5 }}>
@@ -208,7 +208,7 @@ const AddNewProduct = ({ params }) => {
                       type="video/mp4"
                     />
                     <div
-                      onClick={() => {}}
+                      onClick={() => { }}
                       className="text-[6px] flex items-center z-50 justify-center text-white absolute -mt-2 -mr-2 top-0 right-0 w-4 h-4 rounded-full bg-red-500"
                     >
                       <IconifyIcon icon="tabler:trash" fontSize={16} />
@@ -266,7 +266,7 @@ const AddNewProduct = ({ params }) => {
             )}
             {formData.specifications && (
               <Box className="mt-4">
-                <Box className="px-4 !mb-14">
+                <Box className="!px-4 !mb-14">
                   {Object.keys(formData.specifications).map((val, i) => {
                     return (
                       <Box key={i}>

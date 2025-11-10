@@ -139,13 +139,17 @@ const AddEventSidebar = props => {
       <TextField
         inputRef={ref}
         fullWidth
+        name="picker-component"
         {...props}
         label={props.label || ''}
         sx={{ width: '100%' }}
         error={props.error}
       />
     )
+
+
   })
+  PickersComponent.displayName = "PickersComponent"
 
   const RenderSidebarFooter = () => {
     if (store.selectedEvent === null || (store.selectedEvent !== null && !store.selectedEvent?.title?.length)) {

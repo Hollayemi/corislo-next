@@ -1,7 +1,7 @@
 'use client'
 import { usePathname, useRouter } from 'next/navigation'
 import { useDispatch } from 'react-redux'
-import jwt_decode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import useSWR from 'swr'
 import io from 'socket.io-client'
 import Snackbar from '@mui/material/Snackbar'
@@ -98,48 +98,6 @@ const StoreDataProvider = ({ children }) => {
   //     router.replace(`/dashboard/store`);
   //   }
   // }, [getPath, router]);
-
-  useEffect(() => {
-    if (!socket) {
-      let server = 'http://localhost:5001'
-      if (process.env.NODE_ENV === 'production') {
-        server = 'https://corislo-backend.onrender.com'
-      }
-      const newSocket = io(server, {
-        query: {
-          token: localStorage.getItem('store_token'),
-          by: 'store_token',
-          port: 3033,
-        },
-      })
-      setSocket(newSocket)
-
-      newSocket.on('connect', () => {
-        newSocket.emit('registerUser', 'business')
-        console.log('Socket connected')
-      })
-
-      newSocket.on('disconnect', () => {
-        console.log('Socket disconnected')
-      })
-
-      newSocket.on('newMessage', (data) => {
-        console.log(data)
-      })
-
-      newSocket.on('notify', (data) => {
-        setNotifications(data)
-      })
-    }
-
-    // Cleanup when the component unmounts
-    return () => {
-      if (socket) {
-        socket.disconnect()
-      }
-    }
-  }, [socket])
-
   useEffect(() => {
     const getLocalToken =
       typeof window !== 'undefined' && localStorage.getItem('store_token')
@@ -153,7 +111,7 @@ const StoreDataProvider = ({ children }) => {
     const getLocalToken =
       typeof window !== 'undefined' && localStorage.getItem('store_token')
     if (getLocalToken) {
-      const decodedToken = jwt_decode(getLocalToken) // Decode the JWT token
+      const decodedToken = jwtDecode(getLocalToken) // Decode the JWT token
       const currentTime = Date.now() / 1000 // Get the current time in seconds
       // // Check if the token is still valid based on its expiration time
       return decodedToken.exp > currentTime
@@ -183,7 +141,7 @@ const StoreDataProvider = ({ children }) => {
   useEffect(() => {
     setNotifications(loadNotif)
   }, [notif])
-
+  
   //
   //
   //
@@ -216,7 +174,7 @@ const StoreDataProvider = ({ children }) => {
       <StoreDataContext.Provider
         value={{
           staffInfo: (!staffErr && !staffIsLoading && staffInfo?.data) || {},
-          storeInfo: (!storeErr && !storeIsLoading && storeInfo) || {},
+          storeInfo: (!storeErr && !storeIsLoading && storeInfo?.data) || {},
           selectedAddress: {},
           notifications,
           screenWidth,
@@ -225,8 +183,7 @@ const StoreDataProvider = ({ children }) => {
           setLoading: setLoading,
           showSnackbar,
           hideSnackbar,
-          overLay,
-          socket,
+          overLay
         }}
       >
         {children}

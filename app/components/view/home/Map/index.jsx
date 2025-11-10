@@ -53,16 +53,14 @@ const MapOverlay = () => {
 
   const MapStageBtn = ({ icon, name }) => (
     <Box
-      className={`${
-        name === stage && "bg-slate-200"
-      } hover:bg-slate-200 h-8 w-8 rounded flex justify-center items-center mb-1 par`}
+      className={`${name === stage && "bg-slate-200"
+        } hover:bg-slate-200 h-8 w-8 rounded flex justify-center items-center mb-1 par`}
       onClick={() => setStage(name)}
     >
       <IconifyIcon
         icon={icon}
-        className={`${
-          name === stage ? "!text-blue-800" : "!text-gray-400"
-        } par-hover:!text-blue-800 !text-[16px]`}
+        className={`${name === stage ? "!text-blue-800" : "!text-gray-400"
+          } par-hover:!text-blue-800 !text-[16px]`}
       />
     </Box>
   );
@@ -106,7 +104,7 @@ const MapOverlay = () => {
   return (
     <Box className="w-full h-screen fixed z-50 top-0 left-0 overflow-hidden">
       <Box className="w-full h-full absolute bg-white opacity-95 top-0 left-0"></Box>
-      <Box className="flex justify-center !w-full !h-full  py-8 md:px-8 md:py-12">
+      <Box className="flex justify-center !w-full !h-full  py-8 md:!px-8 md:py-12">
         <Box className="!w-full relative !h-full bg-white z-50 rounded-md mt-8">
           <Box className="w-full h-full p-2">
             {/* <Image
@@ -144,9 +142,9 @@ const MapOverlay = () => {
               />
             </Box>
 
-            <Box className="px-8">
+            <Box className="!px-8">
               <Box className="!-ml-2 md:!ml-40 relative w-full md:w-[350px]">
-                <Box className="relative md:block w-full md:w-auto md:px-0 mt-4 md:mt-6">
+                <Box className="relative md:block w-full md:w-auto md:!px-0 mt-4 md:mt-6">
                   <input
                     type="text"
                     placeholder="Search for stores or locations"
@@ -161,10 +159,10 @@ const MapOverlay = () => {
                 </Box>
 
                 {search && (
-                  <Box className="w-full bg-white px-2 py-2 absolute top-14 z-50 rounded-xl left-0 h-40 min-h-40 shadow-xl">
+                  <Box className="w-full bg-white !px-2 py-2 absolute top-14 z-50 rounded-xl left-0 h-40 min-h-40 shadow-xl">
                     <Typography
                       variant="body2"
-                      className="!text-[12px] !text-gray-600 mb-2 px-3 py-2 !flex-shrink-0 border-b"
+                      className="!text-[12px] !text-gray-600 mb-2 !px-3 py-2 !flex-shrink-0 border-b"
                     >
                       Search for stores or locations
                     </Typography>
@@ -187,7 +185,7 @@ const MapOverlay = () => {
             </Box>
 
             {stage && (
-              <Box className=" w-[303px] md:w-[360px] h-auto pb-3 shadow-xl bg-white rounded-xl absolute right-20 top-20 md:top-4 px-3">
+              <Box className=" w-[303px] md:w-[360px] h-auto pb-3 shadow-xl bg-white rounded-xl absolute right-20 top-20 md:top-4 !px-3">
                 {stages[stage]}
               </Box>
             )}

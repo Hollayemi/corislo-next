@@ -8,7 +8,7 @@ export const SetLocation = ({ close }) => {
     coordinates: { latitude: lat, longitude: lng },
   } = useGeolocation();
   return (
-    <Box className="flex h-full justify-center items-center px-4">
+    <Box className="flex h-full justify-center items-center !px-4">
       <Box className="w-full h-full">
         <MapGraph markers={[{ lat, lng }]} />
         <Button

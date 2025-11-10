@@ -5,14 +5,15 @@ const { Box, Typography } = require('@mui/material')
 
 const inputType = {}
 
-const TextInput = ({ inputProps, id, onChange, multiline }) =>
+const TextInput = ({ inputProps, id, onChange, onKeyDown, multiline }) =>
   !multiline ? (
     <input
       {...inputProps}
       id={id}
+      onKeyDown={onKeyDown}
       aria-label={id}
       onChange={onChange}
-      className="outline-none border-none w-full font-normal h-6 pr-5 !bg-white autofill:-px-4 !autofill:bg-transparent"
+      className="outline-none border-none w-full font-normal h-6 pr-5 !bg-white autofill:-!px-4 !autofill:bg-transparent"
     />
   ) : (
     <textarea
@@ -46,6 +47,7 @@ export const CustomInput = ({
   hideCheck,
   multiline,
   id,
+  onKeyDown,
   error,
   onChange,
   onCancel,
@@ -53,7 +55,7 @@ export const CustomInput = ({
   const [newType, changeType] = useState(inputProps.type)
   return (
     <Box>
-      <Box className="px-4 relative py-px pb-1.5 flex flex-col w-full bg-white rounded-md border-2 border-white focus-within:border-blue-800 overflow-hidden">
+      <Box className="!px-2 relative py-px pb-1.5 flex flex-col w-full bg-white rounded-md border-2 border-white focus-within:border-blue-800 overflow-hidden">
         <label htmlFor={id} className="!text-[11px]">
           {title}
         </label>
@@ -61,32 +63,29 @@ export const CustomInput = ({
           <TextInput
             multiline={multiline}
             id={id}
-            
             inputProps={{ ...inputProps, type: newType }}
+            onKeyDown={onKeyDown}
             onChange={onChange}
           />
         ) : (
           <SelectInput onChange={onChange} id={id} values={inputProps.values} />
         )}
-
         <Box
-          className={`w-4 h-4 rounded-full flex flex-shrink-0 items-center transition-all justify-center absolute ${
-            hideCheck ? '-right-10' : 'right-0'
-          } mr-4 bottom-0.5 mb-2 cursor-pointer`}
+          className={`w-4 h-4 rounded-full flex flex-shrink-0 items-center transition-all justify-center absolute ${hideCheck ? '-right-10' : 'right-0'
+            } mr-4 bottom-0.5 mb-2 cursor-pointer`}
           bgcolor={!error ? 'custom.pri' : 'red'}
         >
           <IconifyIcon
             icon={!error ? 'tabler:check' : 'tabler:x'}
-            onClick={error ? onCancel : () => {}}
+            onClick={error ? onCancel : () => { }}
             className="!text-[10px] !text-white"
           />
         </Box>
 
         {inputProps.type === 'password' && (
           <IconifyIcon
-            className={`!absolute ${
-              error || !hideCheck ? 'right-4' : 'right-0'
-            } mr-5 bottom-0 mb-2 transition-all !z-50 !text-gray-400 !text-[20px]`}
+            className={`!absolute ${error || !hideCheck ? 'right-4' : 'right-0'
+              } mr-5 bottom-0 mb-2 transition-all !z-50 !text-gray-400 !text-[20px]`}
             onClick={() =>
               changeType(newType === 'password' ? 'text' : 'password')
             }

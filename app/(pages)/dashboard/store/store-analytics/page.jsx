@@ -35,7 +35,7 @@ const CustomInput = forwardRef((props, ref) => {
   const value = `${startDate}${endDate !== null ? endDate : ''}`
 
   return (
-    <Box className="flex items-center !w-fit  bg-white leading-8 h-8 px-3 rounded-md border">
+    <Box className="flex items-center !w-fit  bg-white leading-8 h-8 !px-3 rounded-md border">
       <Box
         {...props}
         className=" w-full  !text-[12px] md:!text-[13px] !font-bold !text-gray-800"
@@ -108,7 +108,7 @@ const StoreAnalysisPage = ({ params }) => {
       subListBar={false}
       crumb={[...analyticsBreadCrumb]}
     >
-      <Box className="relative px-2">
+      <Box className="relative !px-2">
         <Box className="flex items-center justify-end -mt-8 md:-mt-10 mb-3 sticky top-[60px] z-50">
           <Box className="w-fit mr-2">
             <DatePickerWrapper>

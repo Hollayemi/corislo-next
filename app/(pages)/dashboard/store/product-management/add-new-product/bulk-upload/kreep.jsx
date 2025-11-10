@@ -151,7 +151,7 @@ const BulkProductUpload = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto !px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">
         Bulk Product Upload
       </h1>
@@ -172,7 +172,7 @@ const BulkProductUpload = () => {
                 name="storeId"
                 value={formData.storeId}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full !px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 required
               >
                 <option value="">Select Store</option>
@@ -193,7 +193,7 @@ const BulkProductUpload = () => {
                 name="category"
                 value={formData.category}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full !px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 required
               >
                 <option value="">Select Category</option>
@@ -214,7 +214,7 @@ const BulkProductUpload = () => {
                 name="subcategory"
                 value={formData.subcategory}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full !px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 required
                 disabled={!formData.category}
               >
@@ -236,7 +236,7 @@ const BulkProductUpload = () => {
                 name="productGroup"
                 value={formData.productGroup}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full !px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               >
                 <option value="">Select Product Group</option>
                 {dropdownOptions.productGroups.map((group) => (
@@ -257,7 +257,7 @@ const BulkProductUpload = () => {
                 name="collectionId"
                 value={formData.collectionId}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full !px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 required
               />
             </div>
@@ -271,7 +271,7 @@ const BulkProductUpload = () => {
                 name="collectionName"
                 value={formData.collectionName}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full !px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 required
               />
             </div>
@@ -285,7 +285,7 @@ const BulkProductUpload = () => {
                 name="subCollection"
                 value={formData.subCollection}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full !px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 required
               />
             </div>
@@ -299,7 +299,7 @@ const BulkProductUpload = () => {
                 name="subCollectionName"
                 value={formData.subCollectionName}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full !px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 required
               />
             </div>
@@ -314,7 +314,7 @@ const BulkProductUpload = () => {
                 name="store"
                 value={formData.store}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full !px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 required
               />
             </div>
@@ -328,7 +328,7 @@ const BulkProductUpload = () => {
                 name="branch"
                 value={formData.branch}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full !px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 required
               />
             </div>
@@ -344,13 +344,13 @@ const BulkProductUpload = () => {
                 type="file"
                 onChange={handleFileChange}
                 accept=".xlsx, .xls"
-                className="py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="py-2 !px-3 border border-gray-300 rounded-md shadow-sm text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 required
               />
               <button
                 type="button"
                 onClick={downloadTemplate}
-                className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="ml-4 inline-flex items-center !px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Download Template
               </button>
@@ -361,7 +361,7 @@ const BulkProductUpload = () => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="px-6 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              className="!px-6 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               disabled={uploadStatus === 'uploading'}
             >
               {uploadStatus === 'uploading'
@@ -397,11 +397,10 @@ const BulkProductUpload = () => {
           {uploadStatus === 'success' ? (
             <div className="space-y-4">
               <div
-                className={`p-4 rounded-md ${
-                  uploadResults.failed === 0
+                className={`p-4 rounded-md ${uploadResults.failed === 0
                     ? 'bg-green-50 text-green-800'
                     : 'bg-yellow-50 text-yellow-800'
-                }`}
+                  }`}
               >
                 <p className="font-medium">
                   {uploadResults.failed === 0
@@ -419,13 +418,13 @@ const BulkProductUpload = () => {
                     <table className="min-w-full divide-y divide-gray-200">
                       <thead className="bg-gray-50">
                         <tr>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="!px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Row
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="!px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Product
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="!px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Error
                           </th>
                         </tr>
@@ -433,13 +432,13 @@ const BulkProductUpload = () => {
                       <tbody className="bg-white divide-y divide-gray-200">
                         {uploadResults.errors.map((error, index) => (
                           <tr key={index}>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="!px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               {error.row}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="!px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               {error.product}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-red-500">
+                            <td className="!px-6 py-4 whitespace-nowrap text-sm text-red-500">
                               {error.error}
                             </td>
                           </tr>

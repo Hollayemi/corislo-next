@@ -27,7 +27,7 @@ const MyAutocomplete = ({
                   onClick(x)
                   closeFunc()
                 }}
-                className="py-2 px-4 cursor-pointer"
+                className="py-2 !px-4 cursor-pointer"
               >
                 <Typography variant="body2" className="text-black !text-[15px]">
                   {viewOption(x)}

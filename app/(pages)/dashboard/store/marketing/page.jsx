@@ -62,11 +62,10 @@ const MarketingPage = ({ params }) => {
   const [dialogInfo, updateDialogInfo] = useState({
     open: false,
     title: 'Action Confirmation',
-    alert: `Are you sure you want to ${
-      status?.toLowerCase()?.split('-')[0]
-    } the campaign status to?`,
+    alert: `Are you sure you want to ${status?.toLowerCase()?.split('-')[0]
+      } the campaign status to?`,
     acceptFunctionText: 'Yes, Continue',
-    acceptFunction: () => {},
+    acceptFunction: () => { },
   })
 
   useEffect(() => {
@@ -75,9 +74,8 @@ const MarketingPage = ({ params }) => {
         return {
           ...prev,
           open: Boolean(status),
-          alert: `Are you sure you want to ${
-            status?.toLowerCase()?.split('-')[0]
-          } the campaign status?`,
+          alert: `Are you sure you want to ${status?.toLowerCase()?.split('-')[0]
+            } the campaign status?`,
         }
       })
     }
@@ -173,7 +171,7 @@ const MarketingPage = ({ params }) => {
       updateDialogInfo={updateDialogInfo}
     >
       <DatePickerWrapper>
-        <Box className="pl-1 md:px-2">
+        <Box className="pl-1 md:!px-2">
           <Box className="!w-full bg-white p-2 md:p-4 rounded-xl">
             <Box className="flex justify-between md:justify-start items-center md:-mb-6">
               <Box className="!w-60">

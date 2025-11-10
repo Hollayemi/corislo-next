@@ -10,18 +10,19 @@ const StoreLeftSideBar = dynamic(
 import { settingsInnerList } from '@/app/data/store/innerList'
 import { Box, Button, MenuItem, TextField, Typography } from '@mui/material'
 import { settingsBreadCrumb } from '../components'
-import { TitleSubtitle } from '@/app/(pages)/user/components'
+import { TitleSubtitle } from '@/app/(pages)/(users)/user/components'
 import { SimpleDropDown } from '../../product-management/add-new-product/components'
 import { StaffCard } from './staff.component'
 import IconifyIcon from '@/app/components/icon'
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { InputBoxWithSideLabel } from '../../stores/component'
 import useSWR from 'swr'
 import { addStaff } from '@/app/redux/state/slices/shop/branches/staffs'
 import { useDispatch } from 'react-redux'
 import { useStoreData } from '@/app/hooks/useData'
 
-const Staffs = ({ params }) => {
+const Staffs = ({ params: param }) => {
+  const params = use(param)
   const path = {
     ...params,
     sidebar: 'settings',
@@ -80,7 +81,7 @@ const Staffs = ({ params }) => {
         />
       }
     >
-      <Box className="h-ful w-full bg-white px-1 md:px-5 py-8 rounded-md">
+      <Box className="h-ful w-full bg-white !px-1 md:!px-5 py-8 rounded-md">
         <Box className="flex items-start justify-between w-full">
           <TitleSubtitle
             title="Employee"
@@ -99,7 +100,7 @@ const Staffs = ({ params }) => {
           </Button>
         </Box>
 
-        <Box className="w-full py-6 px-1 rounded-xl">
+        <Box className="w-full py-6 !px-1 rounded-xl">
           {/* <Box className="flex items-center flex-wrap">
             <OrderBoxes
               image="/images/misc/all-orders.png"
@@ -128,7 +129,7 @@ const Staffs = ({ params }) => {
           </Box> */}
 
           <Box className="flex flex-col md:flex-row items-center justify-center mt-4">
-            <Box className="w-full md:w-3/5 mb-2 md:mb-0 md:px-2">
+            <Box className="w-full md:w-3/5 mb-2 md:mb-0 md:!px-2">
               <TextField
                 placeholder="Employee Name"
                 size="small"

@@ -102,7 +102,7 @@ const NewService = ({ close, toEdit }) => {
   }
   return (
     <Box className="flex w-full  justify-end h-[100vh] py-4 overflowStyle">
-      <ClickAwayListener onClickAway={() => {}}>
+      <ClickAwayListener onClickAway={() => { }}>
         <Box className="w-full md:w-[550px] h-full overflow-y-auto overflowStyle  p-3 relative border-8 border-white bg-white rounded-xl md:mr-4 flex flex-col">
           <Box className="sticky -top-3 border-b z-50  bg-white py-3 flex items-center justify-between mb-6">
             <Typography
@@ -213,7 +213,7 @@ const NewService = ({ close, toEdit }) => {
           >
             Duration
           </Typography>
-          <Box className="flex justify-between px-3 border p-3 py-5 mb-4 rounded-md">
+          <Box className="flex justify-between !px-3 border p-3 py-5 mb-4 rounded-md">
             <SimpleDropDown
               label="Hours *"
               render={Array.from({ length: 11 }, (_, i) => i)?.map((res, i) => (
@@ -261,7 +261,7 @@ const NewService = ({ close, toEdit }) => {
           >
             Price
           </Typography>
-          <Box className="flex items-center px-4 mt-3 mb-4">
+          <Box className="flex items-center !px-4 mt-3 mb-4">
             <TextField
               sx={{ mb: 1.5 }}
               className="!w-2/5 "
@@ -312,9 +312,8 @@ const NewService = ({ close, toEdit }) => {
             {toEdit?.images?.map((each, i) => (
               <Box className="relative w-16 h-16 m-3" key={i}>
                 <Image
-                  className={`w-full h-full rounded-md ${
-                    !prevImages.includes(each) && ' !opacity-40'
-                  }`}
+                  className={`w-full h-full rounded-md ${!prevImages.includes(each) && ' !opacity-40'
+                    }`}
                   alt={each}
                   src={each}
                   width={400}
@@ -327,9 +326,8 @@ const NewService = ({ close, toEdit }) => {
                   className="text-[6px] flex items-center justify-center absolute -mt-3 -mr-3 top-0 right-0 w-4 h-4 rounded-full !text-red-500"
                 >
                   <IconifyIcon
-                    icon={`tabler:${
-                      !prevImages.includes(each) ? 'restore' : 'trash'
-                    }`}
+                    icon={`tabler:${!prevImages.includes(each) ? 'restore' : 'trash'
+                      }`}
                     fontSize={17}
                   />
                 </div>

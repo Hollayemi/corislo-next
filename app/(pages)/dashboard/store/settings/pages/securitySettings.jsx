@@ -20,17 +20,17 @@ import {
   TitleSubtitle,
   devicesColumn,
   rowSample,
-} from "@/app/(pages)/user/components";
+} from "@/app/(pages)/(users)/user/components";
 import IconifyIcon from "@/app/components/icon";
-import OtpInput from "@/app/(pages)/auth/otp-verification/component";
+import OtpInput from "@/app/(pages)/(users)/auth/otp-verification/component";
 import { resendOtp } from "@/app/redux/state/slices/auth/otp";
 import { formatDate } from "@/app/utils/format";
 import CustomOption from "@/app/components/option-menu/option";
-import CheckPassword from "@/app/(pages)/user/checkPassword";
+import CheckPassword from "@/app/(pages)/(users)/user/checkPassword";
 import useSWR, { mutate } from "swr";
 import { changeStaffEmail } from "@/app/redux/state/slices/shop/auth/storeLogin";
 import { changeStorePassword } from "@/app/redux/state/slices/shop/auth/resetPassword";
-import OtpVerification from "@/app/(pages)/auth/otp-verification/page";
+import OtpVerification from "@/app/(pages)/(users)/auth/otp-verification/page";
 
 const Index = () => {
   const [display, setDisplay] = useState("all");

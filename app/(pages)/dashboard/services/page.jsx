@@ -36,7 +36,7 @@ const Services = ({ params }) => {
     title: 'Action Confirmation',
     acceptFunctionText: 'Yes, Delete',
     acceptButtonClass: ' !bg-red-500',
-    acceptFunction: () => {},
+    acceptFunction: () => { },
   })
 
   useEffect(() => {
@@ -85,7 +85,7 @@ const Services = ({ params }) => {
         </Typography>
 
         <Box className="flex items-center justify-between mt-4">
-          <Box className="relative md:mr-4 w-full md:w-80 px-2 md:px-0">
+          <Box className="relative md:mr-4 w-full md:w-80 !px-2 md:!px-0">
             <input
               type="text"
               placeholder="Search for name"
@@ -132,9 +132,8 @@ const Services = ({ params }) => {
             >
               <Tab
                 value="1"
-                className={`w-fit ${
-                  value === '1' ? '!text-blue-700' : '!text-black'
-                }`}
+                className={`w-fit ${value === '1' ? '!text-blue-700' : '!text-black'
+                  }`}
                 disableRipple
                 label={
                   <Typography
@@ -147,9 +146,8 @@ const Services = ({ params }) => {
               />
               <Tab
                 value="2"
-                className={`w-fit ${
-                  value === '2' ? '!text-blue-700' : '!text-black'
-                }`}
+                className={`w-fit ${value === '2' ? '!text-blue-700' : '!text-black'
+                  }`}
                 disableRipple
                 label={
                   <Typography

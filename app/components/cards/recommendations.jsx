@@ -140,7 +140,7 @@ export const Recommend = () => {
         className="flex items-center pr-3 cursor-pointer w-fit"
         onClick={() => setOpen(true)}
       >
-        <Box className="flex items-center mr-1 px-2 py-0.5 border-2 rounded-full">
+        <Box className="flex items-center mr-1 !px-2 py-0.5 border-2 rounded-full">
           <IconifyIcon
             icon="tabler:thumb-up-filled"
             className="text-[15px] mr-3"

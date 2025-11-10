@@ -1,7 +1,7 @@
 'use client'
 import { usePathname, useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
-import jwt_decode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import useSWR from 'swr'
 import io from 'socket.io-client'
 import { useUserData } from '../hooks/useData'
@@ -67,7 +67,7 @@ const SuperDataProvider = ({ children }) => {
     const getLocalToken =
       typeof window !== 'undefined' && localStorage.getItem('super_token')
     if (getLocalToken) {
-      const decodedToken = jwt_decode(getLocalToken) // Decode the JWT token
+      const decodedToken = jwtDecode(getLocalToken) // Decode the JWT token
       const currentTime = Date.now() / 1000 // Get the current time in seconds
       // // Check if the token is still valid based on its expiration time
       return decodedToken.exp > currentTime

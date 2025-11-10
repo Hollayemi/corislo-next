@@ -15,11 +15,11 @@ import Payment from 'payment'
 import { saveBilling } from '@/app/redux/state/slices/users/billing'
 import { useDispatch } from 'react-redux'
 import { useStoreData } from '@/app/hooks/useData'
-import { MyTextField, TitleSubtitle } from '@/app/(pages)/user/components'
+import { MyTextField, TitleSubtitle } from '@/app/(pages)/(users)/user/components'
 import IconifyIcon from '@/app/components/icon'
 
 const BillingCard = ({ card }) => {
-  const {} = useStoreData()
+  const { } = useStoreData()
   const [cardPayload, setCardData] = useState({
     number: '',
     cvv: '',
@@ -31,24 +31,24 @@ const BillingCard = ({ card }) => {
   const dispatch = useDispatch()
   const handleInputChange =
     (prop) =>
-    ({ target }) => {
-      if (prop === 'number') {
-        target.value = formatCreditCardNumber(target.value, Payment)
-        setCardData({ ...cardPayload, [prop]: target.value })
-      } else if (prop === 'expiry') {
-        target.value = formatExpirationDate(target.value)
-        setCardData({ ...cardPayload, [prop]: target.value })
-      } else if (prop === 'cvv') {
-        target.value = formatCVC(target.value, cardPayload.number, Payment)
-        setCardData({ ...cardPayload, [prop]: target.value })
-      } else {
-        setCardData({ ...cardPayload, [prop]: target.value })
+      ({ target }) => {
+        if (prop === 'number') {
+          target.value = formatCreditCardNumber(target.value, Payment)
+          setCardData({ ...cardPayload, [prop]: target.value })
+        } else if (prop === 'expiry') {
+          target.value = formatExpirationDate(target.value)
+          setCardData({ ...cardPayload, [prop]: target.value })
+        } else if (prop === 'cvv') {
+          target.value = formatCVC(target.value, cardPayload.number, Payment)
+          setCardData({ ...cardPayload, [prop]: target.value })
+        } else {
+          setCardData({ ...cardPayload, [prop]: target.value })
+        }
       }
-    }
 
   const cardType = detectCardType(cardPayload.number)
   return (
-    <Box className="px-3">
+    <Box className="!px-3">
       <Box className="flex justify-between items-center"></Box>
       <Grid container spacing={1}>
         <Grid item xs={12}>
@@ -73,14 +73,14 @@ const BillingCard = ({ card }) => {
               title="Name on card"
               value={cardPayload.name}
               onChange={handleInputChange('name')}
-              PClassName="w-full px-1 !tracking-wider"
+              PClassName="w-full !px-1 !tracking-wider"
               placeholder="e.g Samuel Colson Tobiloba"
             />
             <MyTextField
               title="Billing email"
               value={cardPayload.email}
               onChange={handleInputChange('email')}
-              PClassName="w-full px-1 !tracking-wider"
+              PClassName="w-full !px-1 !tracking-wider"
               placeholder="e.g bill@me.com"
             />
             <MyTextField
@@ -89,7 +89,7 @@ const BillingCard = ({ card }) => {
               placeholder="_ _ _ _  _ _ _ _  _ _ _ _  _ _ _ _"
               type="text"
               onChange={handleInputChange('number')}
-              PClassName="w-full px-1 !tracking-wider"
+              PClassName="w-full !px-1 !tracking-wider"
             />
 
             <Box className="flex items-center justify-between flex-wrap w-full">
@@ -99,7 +99,7 @@ const BillingCard = ({ card }) => {
                 type="text"
                 placeholder="MM/YYY"
                 onChange={handleInputChange('expiry')}
-                PClassName="w-full sm:w-1/2 px-1 !tracking-wider"
+                PClassName="w-full sm:w-1/2 !px-1 !tracking-wider"
               />
               <MyTextField
                 title="CVV"
@@ -107,7 +107,7 @@ const BillingCard = ({ card }) => {
                 type="number"
                 placeholder="_ _ _"
                 onChange={handleInputChange('cvv')}
-                PClassName="w-full sm:w-1/2 px-1 !tracking-wider"
+                PClassName="w-full sm:w-1/2 !px-1 !tracking-wider"
               />
             </Box>
             <Button

@@ -17,11 +17,11 @@ const { default: Image } = require('next/image')
 
 const Notification = () => {
   const { notifications, showOverlay } = useUserData()
-  const {} = useSWR('/user/notification/view-all')
+  const { } = useSWR('/user/notification/view-all')
   return (
-    <Box className="mt-16 relative md:absolute px-2 md:right-2">
+    <Box className="mt-16 relative md:absolute !px-2 md:right-2">
       <Box className="w-full md:w-[420px] h-[600px] md:h-[500px] relative bg-white rounded-xl md:mr-10 flex flex-col">
-        <Box className="flex justify-between items-center px-4 h-14 border-b !w-full flex-shrink-0">
+        <Box className="flex justify-between items-center !px-4 h-14 border-b !w-full flex-shrink-0">
           <Typography variant="body2" className="!font-bold">
             Notification
           </Typography>
@@ -33,7 +33,7 @@ const Notification = () => {
           {notifications.map((data, i) => (
             <OrderNotif key={i} data={data} />
           ))}
-        </Box> 
+        </Box>
         <Box className="h-14 flex items-center justify-center absolute bottom-0 !text-[12px] w-full text-center ">
           See all notifications
         </Box>
@@ -48,7 +48,7 @@ export const OrderNotif = ({ data, forStore }) => {
   const [open, setOpen] = useState(0)
   return (
     <Box className="w-full border-b-2">
-      <Box className="px-4 w-full flex justify between items-center mt-2">
+      <Box className="!px-4 w-full flex justify between items-center mt-2">
         <Typography variant="caption" className="!text-[11px] !font-bold">
           {data._id}
         </Typography>
@@ -81,9 +81,8 @@ export const OrderNotif = ({ data, forStore }) => {
 
             {!each.isText && (
               <Box
-                className={`rounded-md ${
-                  open === i ? 'h-20 p-2 border' : 'h-0'
-                } transition-all duration-300 !mt-3 w-full !overflow-hidden`}
+                className={`rounded-md ${open === i ? 'h-20 p-2 border' : 'h-0'
+                  } transition-all duration-300 !mt-3 w-full !overflow-hidden`}
               >
                 {each?.orderId && (
                   <NotifOrderDisplay
@@ -115,11 +114,10 @@ export const OrderNotif = ({ data, forStore }) => {
                       className="flex justify-center items-center w-4 h-4 cursor-pointer rounded-full border border-black"
                     >
                       <IconifyIcon
-                        icon={`${
-                          open === i
+                        icon={`${open === i
                             ? 'tabler:chevron-up'
                             : 'tabler:chevron-down'
-                        }`}
+                          }`}
                       />
                     </Box>
                   ))}

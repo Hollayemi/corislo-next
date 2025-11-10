@@ -13,7 +13,7 @@
         </Box>
         <Box className="flex justify-evenly h-[210px] md:h-[200px] w-5/12 pt-2 md:pt-0 md:pl-1">
           <CardsExplain title="Services" stat={50} />
-          <Box className="px-0.5 md:hidden"></Box>
+          <Box className="!px-0.5 md:hidden"></Box>
           <CardsExplain title="Users" stat={80} />
         </Box>
       </Box> */

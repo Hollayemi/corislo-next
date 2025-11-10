@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { Typography, Box, Grid, Paper, TextField, Button } from '@mui/material'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
@@ -36,22 +36,32 @@ import { SpinLoader } from '@/app/components/cards/loader'
 import IconifyIcon from '@/app/components/icon'
 import { BasicModal } from '@/app/components/cards/popup'
 import { EnhancedCategorySelector } from '../../(auth)/register/personal'
+import { useGetBranchInfoQuery, useUpdateStoreInfoMutation } from '@/app/redux/business/slices/branchSlice'
 
 const StorePage = ({ params }) => {
+  const { sublist, ...other } = use(params)
   const { storeInfo: originalInfo } = useStoreData()
+  console.log({ originalInfo })
+  const { store, branch } = originalInfo?.profile || {}
   const dispatch = useDispatch()
-  const endpoint = `/store?branch=${
-    params?.sublist || originalInfo?.profile?.branch
-  }`
+  const endpoint = `/store?branch=${sublist || branch
+    }`
+  const [updateStoreInfo, { isLoading }] = useUpdateStoreInfoMutation()
+  console.log({ branch, store })
 
   const {
-    data: storeInfo,
+    data: storeData,
     error: storeErr,
+    refetch,
     isLoading: storeIsLoading,
-  } = useSWR(endpoint)
+  } = useGetBranchInfoQuery({ branch: branch, store: store }, { skip: !branch })
+
+  const storeInfo = storeData?.data || {}
+
+  console.log({ storeInfo })
 
   const branchOwner =
-    originalInfo?.profile?.branch === storeInfo?.profile?.branch
+    originalInfo?.profile?.branch === storeInfo?.branch
   const { data } = useSWR('/branch/all?sidelist=true')
   const InnerList = data?.data ? data.data : []
 
@@ -63,8 +73,8 @@ const StorePage = ({ params }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [profile, setProfile] = useState([])
   const [uploading, setUploading] = useState('')
-  const [localProfile, setLocalProfile] = useState('')
-  const path = { ...params, sidebar: 'stores' }
+  const [localProfile, setLocalProfile] = useState('');
+  const path = { ...other, sidebar: 'stores' }
 
   const [inputValues, setValues] = useState({
     address: '',
@@ -72,20 +82,18 @@ const StorePage = ({ params }) => {
     landmark: '',
     about_store: '',
     phone: "",
-    email:"",
-    categories: {},
+    email: "",
   })
   useEffect(() => {
     setValues({
-      address: storeInfo?.profile?.address || '',
-      city: storeInfo?.profile?.city || '',
-      landmark: storeInfo?.profile?.landmark || '',
-      about_store: storeInfo?.profile?.about_store || '',
-      categories: storeInfo?.profile?.categories || {},
-      email: storeInfo?.profile?.email || "",
+      address: storeInfo?.address || '',
+      city: storeInfo?.city || '',
+      landmark: storeInfo?.landmark || '',
+      about_store: storeInfo?.about_store || '',
+      email: storeInfo?.email || "",
     })
-    setSocialMedia(storeInfo?.profile?.social_media || {})
-    setOpenHours(storeInfo?.profile?.opening_hours || {})
+    setSocialMedia(storeInfo?.social_media || {})
+    setOpenHours(storeInfo?.opening_hours || {})
   }, [storeIsLoading])
 
   const handleChange = (prop) => (event) => {
@@ -100,7 +108,7 @@ const StorePage = ({ params }) => {
       breadCrumbRIghtChildren={<BreadcrumbRightEle />}
       crumb={[...StoreBreadCrumb, { text: 'All Stores', link: '' }]}
     >
-      <Box className="px-10 !hidden sm:!flex z-50 -mt-6">
+      <Box className={`!px-10 !hidden sm:!flex z-50 -mt-9 `}>
         <Typography className="pb-1 border-b-2 cursor-pointer !text-[13px] !w-24 text-center border-blue-900">
           Store Profile
         </Typography>
@@ -110,9 +118,9 @@ const StorePage = ({ params }) => {
           </Typography>
         </Link>
       </Box>
-      <Box className="w-full bg-white !rounded-md !px-4 !mt-4 !md:px-5 !pb-8 relative">
-        <Grid container spacing={2}>
-          <Grid item sm={12} md={7} className="md:!pr-16">
+      <Box className="w-full bg-white !rounded-md !px-4 pt-5 !mt-4 !md:!px-10 !pb-8 relative">
+        <Box className="grid grid-cols-1 md:grid-cols-4">
+          <Box className="col-span-3 md:!pr-16">
             <Box className="flex items-center justify-between">
               <Box>
                 <Box className="flex items-center justify-between">
@@ -127,7 +135,7 @@ const StorePage = ({ params }) => {
 
               {!isEdit && (
                 <Box
-                  className="flex items-center"
+                  className="flex items-center cursor-pointer"
                   onClick={() => allowEdit(!isEdit)}
                 >
                   <IconifyIcon icon="tabler:edit" />
@@ -146,7 +154,7 @@ const StorePage = ({ params }) => {
                   updateBranchImages(
                     {
                       image: base64,
-                      type: 'profile_image',
+                      type: 'store_image',
                       state: 'add',
                     },
                     dispatch,
@@ -156,17 +164,16 @@ const StorePage = ({ params }) => {
                 component={
                   <Paper
                     elevation={0}
-                    className={`${
-                      isEdit && 'border'
-                    } border-dashed w relative rounded-md p-1 w-28 h-28 flex items-center justify-center`}
+                    className={`${isEdit && 'border'
+                      } border-dashed w relative rounded-md p-1 w-28 h-28 flex items-center justify-center`}
                   >
                     <Box className="!rounded-full relative border w-24 h-24 flex-shrink-0 overflow-hidden">
                       <img
                         src={
                           localProfile
                             ? URL?.createObjectURL(localProfile[0])
-                            : storeInfo?.profile?.profile_image ||
-                              '/images/misc/store_placeholder.png'
+                            : storeInfo?.profile_image ||
+                            '/images/misc/store_placeholder.png'
                         }
                         alt="Profile"
                         height="70"
@@ -193,31 +200,30 @@ const StorePage = ({ params }) => {
               </Typography>
               {branchOwner && localProfile && (
                 <Box className="flex item-center mt-4">
-                  <Box XclassName="px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3">
-                    {`${
-                      storeInfo?.profile?.profile_image ? 'Change' : 'Add'
-                    } Store Profile Photo`}
+                  <Box XclassName="!px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3">
+                    {`${storeInfo?.profile_image ? 'Change' : 'Add'
+                      } Store Profile Photo`}
                   </Box>
-                  {/* <Paper className="px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3">
+                  {/* <Paper className="!px-4 py-1.5 border !rounded-full !shadow-none cursor-pointer mr-3">
                     Delete
                   </Paper> */}
                 </Box>
               )}
             </Box>
-            <Box className="!mt-8 !border-b !pb-3">
+            <Box className="!mt-8 !border-b border-b-gray-300 !pb-3">
               <InputBoxWithSideLabel
-                value={storeInfo?.profile?.store || ''}
+                value={storeInfo?.store || ''}
                 inputProps={{
                   disabled: true,
                   className: '!border-none !border-white',
                 }}
                 isEdit={isEdit}
-                onChange={() => {}}
+                onChange={() => { }}
                 label="Your Store Name"
               />
             </Box>
 
-            <Box className="!mt-8 !border-b !pb-6">
+            <Box className="!mt-8 !border-b border-b-gray-300 !pb-6">
               <Typography className="!font-bold !text-gray-800 text-sm">
                 Store Address
               </Typography>
@@ -246,7 +252,7 @@ const StorePage = ({ params }) => {
               />
             </Box>
 
-            <Box className="!mt-8 !border-b !pb-6">
+            <Box className="!mt-8 !border-b border-b-gray-300 !pb-6">
               <Typography className="!font-bold !text-gray-800 text-sm">
                 Store Contact
               </Typography>
@@ -256,22 +262,20 @@ const StorePage = ({ params }) => {
               <br />
               <br />
               <InputBoxWithSideLabel
-                value={storeInfo?.profile?.phone || ''}
+                value={storeInfo?.phone || ''}
                 isEdit={isEdit}
                 onChange={handleChange('phone')}
                 label="Phone Number"
                 inputProps={{
-                  disabled: true,
                   className: '!border-none !border-white',
                 }}
               />
               <InputBoxWithSideLabel
-                value={storeInfo?.profile?.email || ''}
+                value={storeInfo?.email || ''}
                 isEdit={isEdit}
                 onChange={handleChange('email')}
                 label="Email Address"
                 inputProps={{
-                  disabled: true,
                   className: '!border-none !border-white',
                 }}
               />
@@ -292,11 +296,10 @@ const StorePage = ({ params }) => {
                 fullWidth
                 onClick={() => setModalOpen(true)}
                 disabled={!branchOwner || !isEdit}
-                className={`!bg-white !border ${
-                  !isEdit
-                    ? '!border-gray-400 !text-gray-400'
-                    : '!border-blue-400 !text-blue-400 '
-                }!rounded-md !text-[14px] !shadow-none`}
+                className={`!bg-white !border ${!isEdit
+                  ? '!border-gray-400 !text-gray-400'
+                  : '!border-blue-400 !text-blue-400 '
+                  }!rounded-md !text-[14px] !shadow-none`}
               >
                 Adjust Categories
               </Button>
@@ -324,7 +327,7 @@ const StorePage = ({ params }) => {
               />
             </Box>
 
-            <Box className="!mt-8 !border-b !pb-6">
+            <Box className="!mt-8 !border-b border-b-gray-300 !pb-6">
               <Typography className="!font-bold !text-gray-800 text-sm">
                 Store Gallery
               </Typography>
@@ -335,7 +338,7 @@ const StorePage = ({ params }) => {
               <br />
 
               <Grid container spacing={2}>
-                {storeInfo?.profile?.gallery?.map((gal, i) => (
+                {storeInfo?.gallery?.map((gal, i) => (
                   <Grid item xs={6} md={4} key={i}>
                     <Box className="p-1 md:p-1.5 border rounded-md bg-gray-50 relative">
                       <Box className="w-full h-full flex items-center rounded-md  justify-center overflow-hidden ">
@@ -344,7 +347,7 @@ const StorePage = ({ params }) => {
                           alt={`image ${i}`}
                           src={gal}
                         />
-                        <Box className="h-5 w-5 absolute top-0 right-0 m-0.5 bg-white rounded-full flex justify-center items-center border border-red-500">
+                        <Box className="h-5 w-5 absolute cursor-pointer top-0 right-0 m-0.5 bg-white rounded-full flex justify-center items-center border border-red-500">
                           <IconifyIcon
                             onClick={() =>
                               deletePicture(gal, dispatch, mutate(endpoint))
@@ -369,7 +372,7 @@ const StorePage = ({ params }) => {
               </Grid>
             </Box>
 
-            <Box className="!mt-8 !border-b !pb-6">
+            <Box className="!mt-8 !border-b border-b-gray-300 !pb-6">
               <Typography className="!font-bold !text-gray-800 text-sm">
                 Social Media Integration
               </Typography>
@@ -463,26 +466,21 @@ const StorePage = ({ params }) => {
                 className="!py-2 !bg-blue-900"
                 startIcon={<Icon icon="tabler:device-floppy" />}
                 onClick={() =>
-                  updateStoreProfile(
-                    dispatch,
+                  updateStoreInfo(
                     {
                       ...inputValues,
                       social_media: socialMedia,
                       opening_hours: openHours,
                     },
-                    () => {
-                      allowEdit(false)
-                      mutate(endpoint)
-                      mutate('/corisio/category/thread?for_store=true')
-                    }
-                  )
+                    
+                  ).then(() => refetch())
                 }
               >
                 Save
               </Button>
             )}
-          </Grid>
-          <Grid item sm={12} md={5} className="!relative !pl-5">
+          </Box>
+          <Box className="!relative !pl-5">
             {/* <Box className="h-[500px] bg-gray-50 !sticky top-0 md:mt-32">
               <MapGraph
                 markers={[
@@ -496,8 +494,8 @@ const StorePage = ({ params }) => {
               />
               <h3 className="text-center py-10 hidden"> Map here</h3>
             </Box> */}
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Box>
       <BasicModal
         openModal={Boolean(modalOpen)}

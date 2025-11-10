@@ -18,7 +18,7 @@ const BusinessProfile = ({
   const router = useRouter()
   const propStore = values.businessName.split(' ')[0]?.toLowerCase()
   return (
-    <Box className="px-2">
+    <Box className="!px-2">
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <CustomInput

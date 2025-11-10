@@ -9,25 +9,25 @@ import Link from 'next/link'
 import { useEffect } from 'react'
 import { formatCurrency, formatDistance, ngnPrice } from '@/app/utils/format'
 import { Map } from '@mui/icons-material'
-import { useUserData } from '@/app/hooks/useData'
+import { useChatData, useUserData } from '@/app/hooks/useData'
 import ReactSlickSlider from '../wrapper/react-slick'
 import useSWRWithCoordinates from '@/app/hooks/fetchWithCoordinates'
 import { addCartHandler } from '@/app/redux/state/slices/home/cart'
+import { useCart } from '@/app/context/CartContext'
 
 export const PopularProduct = ({ endpoint, ...props }) => {
   const router = useRouter()
   const { data: popularProds } = useSWRWithCoordinates(
     endpoint || '/home/popular-products?limit=40'
   )
-  const popularProducts = popularProds ? popularProds.data : []
 
+  const popularProducts = popularProds ? popularProds.data : []
   const View = ({ image, prodName, store, price, small, others }) => (
     <Box
-      className={`${
-        small
-          ? '!w-28 !h-44 m-2 '
-          : '!w-28 !h-44 md:!w-44 md:!h-56 m-1.5 md:m-3 relative'
-      }`}
+      className={`${small
+        ? '!w-28 !h-44 m-2 '
+        : '!w-28 !h-44 md:!w-44 md:!h-56 m-1.5 md:m-3 relative'
+        }`}
     >
       {others?.discount && (
         <Box className="w-9 h-4 bg-red-600 rounded-full absolute right-2 top-2 shadow flex items-center justify-center">
@@ -44,7 +44,7 @@ export const PopularProduct = ({ endpoint, ...props }) => {
         <img
           src={image}
           alt="product_image"
-          className={`!w-full ${small ? '!h-28' : '!h-28 md:!h-44'} rounded-md`}
+          className={`!w-full ${small ? '!h-28' : '!h-28 md:!h-44'} object-cover object-top rounded-md`}
         />
       </Box>
       <Box className="py-1">
@@ -77,7 +77,7 @@ export const PopularProduct = ({ endpoint, ...props }) => {
           <View
             key={i}
             {...props}
-            image={`/images/more/${i + 1}.png`}
+            image={prod.product.images[0]}
             store={prod.product.store}
             prodName={prod.product.prodName}
             price={prod.product.prodPrice}
@@ -96,19 +96,17 @@ export const HotDeal = ({ ...props }) => {
     const percentage = (unit / of) * 100
     return (
       <Box
-        className={`${
-          small
-            ? '!w-28 !h-44 m-2 '
-            : '!w-28 !h-44 md:!w-44 md:!h-60 m-1.5 md:m-3 relative'
-        }`}
+        className={`${small
+          ? '!w-28 !h-44 m-2 '
+          : '!w-28 !h-44 md:!w-44 md:!h-60 m-1.5 md:m-3 relative'
+          }`}
       >
         <Box onClick={() => router.push(`/${others?.store}/${others?.urlKey}`)}>
           <img
             src={image}
             alt="product_image"
-            className={`!w-full ${
-              small ? '!h-28' : '!h-28 md:!h-44'
-            } rounded-md`}
+            className={`!w-full ${small ? '!h-28' : '!h-28 md:!h-44'
+              } rounded-md`}
           />
         </Box>
         <Box className="pt-1">
@@ -180,9 +178,8 @@ export const ProductOnCategory = ({
     <Box className="m-1  p-3 py-4 rounded-xl md:!w-76 relative bg-white ProductOnCategory">
       <Box className="!flex items-center relative">
         <Link
-          href={`/shop/${product?.category?.replaceAll(' ', '-')}/${
-            product._id
-          }`}
+          href={`/shop/${product?.category?.replaceAll(' ', '-')}/${product._id
+            }`}
           className="w-5/12 flex-shrink-0"
         >
           <img
@@ -192,9 +189,8 @@ export const ProductOnCategory = ({
           />
         </Link>
         <Link
-          href={`/shop/${product?.category?.replaceAll(' ', '-')}/${
-            product._id
-          }`}
+          href={`/shop/${product?.category?.replaceAll(' ', '-')}/${product._id
+            }`}
         >
           <Box className="pl-2 cursor-pointer">
             <Typography variant="body2" className="!font-bold">
@@ -240,22 +236,29 @@ export const ProductOnCategory = ({
 
 export const ProductOnShowcase = ({
   others,
-  image,
   store,
   branch,
   prodName,
   prodPrice,
+  forStore,
   star,
 }) => {
-  const { showMapScreen, cartedProds } = useUserData()
+  const { showMapScreen } = useUserData()
+  const { cartedProducts: cartedProds, addToCart } = useCart()
   const router = useRouter()
-  const dispatch = useDispatch()
-  const payload = {
-    productId: others._id,
-    store,
-    branch,
-  }
-console.log(image)
+
+  const cartItem = {
+    product: {
+      _id: others._id,
+      prodName: prodName,
+      prodPrice: prodPrice,
+      image: others?.images?.[0],
+      collectionName: others.collectionName
+    },
+    store: others.store,
+    branch: others.branch,
+    quantity: 1,
+  };
   return (
     <Box className="w-6/12 min-w-[100px] relative mx-w-[140px] md:max-w-[170px] md:w-44 h-64 md:!h-64 md:mx-2 my-6 ">
       {others?.discount && (
@@ -274,12 +277,12 @@ console.log(image)
         className="!px-0.5"
       >
         <img
-          src={image}
+          src={others?.images && others?.images[0]}
           alt="product_image"
-          className="!w-full px-0.5 !h-48 md:!h-48 rounded-md object-scale-down"
+          className="!w-full !px-0.5 !h-48 md:!h-48 rounded-md object-scale-down"
         />
       </Box>
-      <Box className="pt-1 px-px">
+      <Box className="pt-1 !px-px">
         <Link href={`/${store}/${others?.urlKey}`}>
           <Box>
             <Typography
@@ -296,11 +299,11 @@ console.log(image)
             variant="body2"
             className="whitespace-nowrap !text-md text-ellipsis !font-black"
           >
-            {ngnPrice(prodPrice)}
+            {ngnPrice(prodPrice)} {branch}
           </Typography>
           <Box
-            className="md:border border-black rounded-full h-6 px-2 mt-1 cursor-pointer flex items-center"
-            onClick={() => addCartHandler(payload, dispatch)}
+            className="md:border border-black rounded-full h-6 !px-2 mt-1 cursor-pointer flex items-center"
+            onClick={() => addToCart(cartItem)}
           >
             <Typography
               variant="caption"
@@ -310,11 +313,10 @@ console.log(image)
             </Typography>
             <IconifyIcon
               icon="tabler:shopping-cart"
-              className={`md:hidden ml-1 ${
-                cartedProds.includes(others._id)
-                  ? 'text-yellow-500'
-                  : 'text-gray-800'
-              }`}
+              className={`md:hidden ml-1 ${cartedProds.includes(others._id)
+                ? 'text-yellow-500'
+                : 'text-gray-800'
+                }`}
             />
           </Box>
         </Box>
@@ -325,18 +327,18 @@ console.log(image)
             className="!text-[13px]"
             readOnly
             name="size-small"
-            size="small"
+            size="medium"
           />
-          <Box className="flex justify-between items-center w-full mt-1 px-1">
-            <Link href={`/${store}-${branch}/`}>
+          <Box className="flex justify-between items-center w-full mt-1 !px-1">
+            {!forStore && <Link href={`/${store}-${branch}/`}>
               <Typography
                 variant="body2"
                 className="whitespace-nowrap text-ellipsis !text-[10px]"
               >
                 {store}
               </Typography>
-            </Link>
-            <Box
+            </Link>}
+            {others?.distance && <Box
               className="flex items-center cursor-pointer md:mr-3"
               onClick={() => showMapScreen()}
             >
@@ -350,7 +352,7 @@ console.log(image)
               >
                 {formatDistance(others?.distance)}
               </Typography>
-            </Box>
+            </Box>}
           </Box>
         </Box>
       </Box>
@@ -426,7 +428,7 @@ export const OfflineProductOnCartView = ({
 
 export const ProductOnOrderView = ({ product }) => {
   return (
-    <Box className="flex items-ccnter md:px-4">
+    <Box className="flex items-ccnter md:!px-4">
       <Box className="!flex !w-full p-2 m-1 flex-grow items-center relative">
         <img
           src={product.image}

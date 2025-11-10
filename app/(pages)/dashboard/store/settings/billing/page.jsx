@@ -21,11 +21,11 @@ import {
 } from '@mui/material'
 import Image from 'next/image'
 import { settingsBreadCrumb } from '../components'
-import { TitleSubtitle } from '@/app/(pages)/user/components'
+import { TitleSubtitle } from '@/app/(pages)/(users)/user/components'
 import IconifyIcon from '@/app/components/icon'
 import { detectCardType, formatDate } from '@/app/utils/format'
 import { history, historyHeader } from './billing.components'
-import { useState } from 'react'
+import { use, useState } from 'react'
 import { reshapePrice } from '../../marketing/components'
 import BillingCard from './addCard'
 import useSWR from 'swr'
@@ -33,7 +33,8 @@ import { CircleLoader } from '@/app/components/cards/loader'
 import { businessSubscription } from '@/app/redux/state/slices/shop/settings/payment'
 import { useDispatch } from 'react-redux'
 
-const Billing = ({ params }) => {
+const Billing = ({ params: param }) => {
+  const params = use(param)
   const dispatch = useDispatch()
   const path = {
     ...params,
@@ -76,7 +77,7 @@ const Billing = ({ params }) => {
       rightOpen={rightOpen}
       setRightOpen={setRightOpen}
     >
-      <Box className="h-ful w-full bg-white px-1 md:px-5 py-8 rounded-md">
+      <Box className="h-ful w-full bg-white !px-1 md:!px-5 py-8 rounded-md">
         <TitleSubtitle
           title="Billing"
           titleClass="!text-[17px]"
@@ -85,7 +86,7 @@ const Billing = ({ params }) => {
           className=""
         />
 
-        <Box className="w-full py-6 px-1 md:px-4 border border-slate-50 rounded-xl mt-3">
+        <Box className="w-full py-6 !px-1 md:!px-4 border border-slate-50 rounded-xl mt-3">
           <TitleSubtitle
             title="Customer Plan"
             titleClass="!text-[13px] !mb-3"

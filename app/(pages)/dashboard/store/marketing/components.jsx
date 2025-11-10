@@ -41,21 +41,19 @@ export const CampaignTab = ({ title, caption, screen, setScreen, disabled }) => 
   const genCampReg = title.toLowerCase().split(' ').join('_')
   return (
     <Box
-      className={`w-32 flex-shrink-0 h-24 m-2 flex shadow flex-col items-center justify-center cursor-pointer translation-all duration-300 bg-gray-100 rounded-md border ${
-        screen !== genCampReg ? 'border-gray-100' : 'border-blue-800'
-      } hover:border-blue-800`}
+      className={`w-32 flex-shrink-0 h-24 m-2 flex shadow flex-col items-center justify-center cursor-pointer translation-all duration-300 bg-gray-100 rounded-md border ${screen !== genCampReg ? 'border-gray-100' : 'border-blue-800'
+        } hover:border-blue-800`}
       onClick={() => !disabled && setScreen(genCampReg)}
     >
       <Typography variant="body2" className="!text-[14px] !font-bold">
         {title}
       </Typography>
       <Typography variant="caption" className="!text-[11px]">
-        {disabled ? "(available soon)" :caption}
+        {disabled ? "(available soon)" : caption}
       </Typography>
       <Box
-        className={`h-5 w-5 mt-4 rounded-full border-4 ${
-          screen !== genCampReg ? 'border-gray-200' : 'border-blue-800'
-        } flex items-center justify-center focus`}
+        className={`h-5 w-5 mt-4 rounded-full border-4 ${screen !== genCampReg ? 'border-gray-200' : 'border-blue-800'
+          } flex items-center justify-center focus`}
       >
         <Box className="h-2 w-2 rounded-full bg-gray-200"></Box>
       </Box>
@@ -187,26 +185,26 @@ export const LineChartStatistic = ({ label, discounts, flashsales }) => {
             </div>
 
             ${items.map(
-              (item) =>
-                `
+                (item) =>
+                  `
                 <div class='tooltipItems'>
                   <h5>${item.title} (${item.discount}%)</h5>
                   <disable>${reshapePrice(item.originalAmount)} ${reshapePrice(
-                  item.originalAmount - item.discountAmount
-                )}</disable>
+                    item.originalAmount - item.discountAmount
+                  )}</disable>
                 </div> 
               `
-            )}
+              )}
 
             <div class='tooltipItems' style='margin-top:20px;'>
                   <h5></h5>
                   <disable>${reshapePrice(
-                    items.reduce(
-                      (sum, item) =>
-                        item.originalAmount - item.discountAmount + sum,
-                      0
-                    )
-                  )}</disable>
+                items.reduce(
+                  (sum, item) =>
+                    item.originalAmount - item.discountAmount + sum,
+                  0
+                )
+              )}</disable>
                 </div> 
             </div>
                 </div>`;
@@ -227,15 +225,13 @@ export const LineChartStatistic = ({ label, discounts, flashsales }) => {
           const tooltipWidth = tooltipEl.offsetWidth;
           const tooltipHeight = tooltipEl.offsetHeight;
           tooltipEl.style.opacity = 1;
-          tooltipEl.style.left = `${
-            position.left +
+          tooltipEl.style.left = `${position.left +
             window.pageXOffset +
             tooltipModel.caretX -
             tooltipWidth / 2
-          }px`;
-          tooltipEl.style.top = `${
-            position.top + window.pageYOffset + tooltipModel.caretY + 6
-          }px`;
+            }px`;
+          tooltipEl.style.top = `${position.top + window.pageYOffset + tooltipModel.caretY + 6
+            }px`;
         },
 
         backgroundColor: "rgba(0, 0, 0)",
@@ -334,7 +330,7 @@ export const GrowthCard = ({ title, growth, count, toExpire }) => {
             {count}
           </Typography>
           {!toExpire ? (
-            <Box className="h-7 rounded-md bg-green-100 w-fit  ml-3 flex items-center justify-center px-2">
+            <Box className="h-7 rounded-md bg-green-100 w-fit  ml-3 flex items-center justify-center !px-2">
               <Typography
                 variant="caption"
                 className="!text-[13px] !text-green-700"
@@ -343,7 +339,7 @@ export const GrowthCard = ({ title, growth, count, toExpire }) => {
               </Typography>
             </Box>
           ) : (
-            <Box className=" rounded-md bg-red-100 w-fit  ml-3 flex items-center justify-center p-1 px-2">
+            <Box className=" rounded-md bg-red-100 w-fit  ml-3 flex items-center justify-center p-1 !px-2">
               <Typography
                 variant="body2"
                 className="!text-[13px] !text-center !text-red-700"

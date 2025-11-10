@@ -8,13 +8,17 @@ import { Box, Button, Typography } from '@mui/material'
 import { summarizeFollowers } from '@/app/utils/format'
 import { followStore } from '@/app/redux/state/slices/users/following'
 import Link from 'next/link'
+import { useFollowStoreMutation } from '@/app/redux/user/slices/followSlice'
+import { Loader } from 'lucide-react'
+import { useGetStoreInfoQuery } from '@/app/redux/user/slices/storeSlice'
 
 export const ProductSellerCard = ({ branchId }) => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { data, error } = useSWR(`/branch/info?branchId=${branchId}`)
+  const { data, error } = useGetStoreInfoQuery({branchId})
   const storeInfo = data?.data || {}
-  const { following, socket } = useUserData()
+  const [followStore, { isLoading }] = useFollowStoreMutation()
+  const { following, refetchFollowing } = useUserData()
   const isFollowing = following.includes(branchId)
   return (
     <Box className="bg-white w-full rounded-xl p-4 mt-4 relative">
@@ -65,13 +69,13 @@ export const ProductSellerCard = ({ branchId }) => {
             variant="outlined"
             className="!rounded-full h-9 w-9 !min-w-[12px] md:w-28 !bg-white !shadow-none !ml-3"
             startIcon={
-              <IconifyIcon
+              isLoading ? <Loader className='animate-spin' size={20} /> :<IconifyIcon
                 icon={isFollowing ? 'tabler:user-minus' : 'tabler:user-plus'}
                 className="!text-blue-800 ml-3"
               />
             }
             onClick={() =>
-              followStore(storeInfo, dispatch, socket, isFollowing)
+              followStore(storeInfo).then(() => refetchFollowing())
             }
           >
             <span className="hidden md:block">
@@ -80,7 +84,7 @@ export const ProductSellerCard = ({ branchId }) => {
           </Button>
         </Box>
       </Box>
-      <Box className="mt-3 flex flex-col md:flex-row ">
+      <Box className="mt-3 hidden eflex flex-col md:flex-row ">
         <Box className="flex items-center justify-evenly md:w-3/5">
           <StoreNumberStatus
             status="Items"

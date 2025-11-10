@@ -10,7 +10,7 @@ import useBgColor from '@/app/hooks/useBgColor'
 
 const CustomAvatar = forwardRef((props, ref) => {
   // ** Props
-  const { sx, src, skin, color } = props
+  const { sx, src, skin, name, color } = props
 
   // ** Hook
   const theme = useTheme()
@@ -42,8 +42,11 @@ const CustomAvatar = forwardRef((props, ref) => {
     pink: getAvatarStyles(skin, 'pink')
   }
 
-  return <MuiAvatar ref={ref} {...props} name='kjlk' sx={!src && skin && color ? Object.assign(colors[color], sx) : sx} />
+  return <MuiAvatar ref={ref} {...props} name={name || ""} sx={!src && skin && color ? Object.assign(colors[color], sx) : sx} />
 })
+
+
+CustomAvatar.displayName = "CustomAvatar"
 CustomAvatar.defaultProps = {
   skin: "filled",
   color: "primary",

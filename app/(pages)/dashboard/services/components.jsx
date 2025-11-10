@@ -90,7 +90,7 @@ export const Service = ({ data, edit, del }) => {
 export const DashboardSlider = () => {
   return (
     <Box className=" h-full w-full flex justify-between items-center">
-      <Box className=" w-7/12 px-8">
+      <Box className=" w-7/12 !px-8">
         <Typography
           variant="body2"
           className="!text-gray-800 !text-[16px] !leading-6 mt-3"
@@ -136,7 +136,7 @@ export const DashboardSlider = () => {
 
 export const CardsExplain = ({ explain, stat = 0, icon, title }) => {
   return (
-    <Box className="w-1/2 px-1 h-full">
+    <Box className="w-1/2 !px-1 h-full">
       <Box className="bg-white w-full p-3 rounded-md h-full">
         <Typography
           variant="body2"
@@ -188,7 +188,7 @@ export const EachService = ({ id = 0 }) => {
   const bgColor = rgbaToHex(hexToRGBA(lightColors[id], 0.2))
   console.log(bgColor)
   const Tag = ({ text }) => (
-    <Box className="rounded-full  w-fit m-1 px-3 py-0.5 border border-gray-400">
+    <Box className="rounded-full  w-fit m-1 !px-3 py-0.5 border border-gray-400">
       <Typography
         variant="body2"
         noWrap
@@ -246,7 +246,7 @@ export const EachService = ({ id = 0 }) => {
             <Tag text="Suits" />
           </Box>
         </Box>
-        <Box className="flex justify-between items-center mt-2 px-1.5">
+        <Box className="flex justify-between items-center mt-2 !px-1.5">
           <Box className="flex items-center w-fit">
             <Box className="flex items-end mr-1.5" title="clicks">
               <IconifyIcon icon="tabler:users" className="!text-[16px] mx-1" />

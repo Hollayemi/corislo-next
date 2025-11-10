@@ -12,8 +12,8 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 export const StaffCard = ({ image, name, role, joinDate, status, id }) => {
-    const { showSnackbar } = useStoreData();
-    const dispatch = useDispatch()
+  const { showSnackbar } = useStoreData();
+  const dispatch = useDispatch()
 
   const FlexContent = ({ tag, info }) => (
     <Box className="flex items-center justify-between">
@@ -39,7 +39,7 @@ export const StaffCard = ({ image, name, role, joinDate, status, id }) => {
     );
   };
   return (
-    <Box className="w-1/2 sm:w-48 px-1 py-2 ">
+    <Box className="w-1/2 sm:w-48 !px-1 py-2 ">
       <Box className="w-full relative bg-gray-50 border rounded-xl flex-shrink-0 transition-all duration-300 hover:shadow">
         <Box className="absolute top-0 right-0 mr-2 mt-2">
           <OptionsMenu
@@ -76,7 +76,7 @@ export const StaffCard = ({ image, name, role, joinDate, status, id }) => {
           >
             {name}
           </Typography>
-          <Box className="flex items-center jusify-center bg-gray-100 rounded-full px-2">
+          <Box className="flex items-center jusify-center bg-gray-100 rounded-full !px-2">
             <Typography variant="caption" className="!text-[11px]">
               {role}
             </Typography>

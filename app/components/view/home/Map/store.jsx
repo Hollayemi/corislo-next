@@ -63,14 +63,14 @@ const AboutStore = ({ setStage }) => {
       >
         <IconifyIcon icon="tabler:x" className="!text-gray-600 !text-[15px]" />
       </Box>
-      <Box className="px-1 py-2 border-b">
+      <Box className="!px-1 py-2 border-b">
         <BriefStoreWithFuntions
           setStage={setStage}
           image="/images/misc/shop/1.png"
           info={info}
         />
       </Box>
-      <Box className="py-2 border-b px-2">
+      <Box className="py-2 border-b !px-2">
         <Typography
           variant="body1"
           className="!text-[14px] !font-bold !text-black !mb-2"

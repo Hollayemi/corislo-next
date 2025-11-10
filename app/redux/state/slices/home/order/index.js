@@ -19,7 +19,7 @@ export const addNewOrder = (payload, dispatch, endpoint) => {
       console.log(res, "------------->")
       toaster({ ...res });
       if (res.type === "error") return;
-      if (res.type === "success" && res?.data?.checkoutUrl?.authorization_url) {
+      if (res.type === "success" && res?.data?.paymentUrl) {
         toaster({ type: "success", message: "Redirecting to payment" });
       }
     

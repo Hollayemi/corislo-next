@@ -15,13 +15,10 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 export const ProductPrev = ({
-  _id,
   image,
   quantity,
   prodName,
   prodPrice,
-  branch,
-  store,
   others,
 }) => {
   return (
@@ -30,13 +27,13 @@ export const ProductPrev = ({
         <Box className={`flex items-center justify-between w-full `}>
           <Box className="flex items-start w-full">
             <img
-              src={image || '/images/more/2.png'}
+              src={image}
               alt="prod_image"
               width={150}
               height={150}
               className="w-20 h-20 flex-shrink-0 !rounded-xl"
             />
-            <Box className={`px-3 w-3/5 md:w-10/12 min-w-40 relative`}>
+            <Box className={`!px-3 w-3/5 md:w-10/12 min-w-40 relative`}>
               <Typography
                 variant="body2"
                 noWrap
@@ -191,7 +188,7 @@ export const renderSubMenu = ({
     anchorEl={anchorEl}
     open={openSub}
     onClose={handleMenuClose}
-    className={` w-full !-mr-80 py-4 px-4`}
+    className={` w-full !-mr-80 py-4 !px-4`}
   >
     <MenuItem
       onClick={handleMenuItemClick('Processing')}
@@ -216,7 +213,7 @@ export const ConfirmPicker = ({ payload, storeUpdateOrder, setRightOpen }) => {
   const dispatch = useDispatch()
   const npayload = { pickerSlug: slug, ...payload }
   return (
-    <Box className="px-3">
+    <Box className="!px-3">
       <Typography variant="body2" className="!text-[13px] !mt-4 !mb-2">
         Confirm Picker by ID
       </Typography>
