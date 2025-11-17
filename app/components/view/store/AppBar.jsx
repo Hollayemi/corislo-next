@@ -21,6 +21,7 @@ import { updateStaff } from '@/app/redux/state/slices/shop/branches/staffs'
 import { useDispatch } from 'react-redux'
 import { desktopOptions, mobileOptions } from '../components/data'
 import { formatName } from '@/app/utils/get-initials'
+import { NotificationBell } from '../../notification'
 
 const Icons = styled('div')(({ theme }) => ({
   padding: theme.spacing(1),
@@ -168,19 +169,7 @@ export default function StoreDashboardAppBar({
           sx={{ display: { xs: 'none', md: 'flex' } }}
           className="items-center"
         >
-          <Icons
-            size="large"
-            aria-label="show new notifications"
-            // color="inherit"
-            onClick={() => dropdownFunctions('notification')}
-          >
-            <Badge badgeContent={unread} color="error">
-              <Iconify
-                icon="tabler:bell"
-                className="!text-[30px] text-gray-700 hover:text-blue-900"
-              />
-            </Badge>
-          </Icons>
+          <NotificationBell />
           <Icons
             className="ml-6 mr-2"
             onClick={() => route.push('/dashboard/store/chat')}
@@ -232,6 +221,7 @@ export default function StoreDashboardAppBar({
             />
           </Box>
         </Box>
+
         <Box className="block md:hidden">
           <OptionsMenu
             icon={

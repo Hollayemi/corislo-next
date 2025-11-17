@@ -16,8 +16,10 @@ import { osName } from 'react-device-detect'
 import { usePathname } from 'next/navigation'
 import { jsonHeader } from '@/app/redux/state/slices/api/setAuthHeaders'
 import { CartProvider } from '@/app/context/CartContext'
-import { ChatDataProvider } from '@/app/hooks/useChatContext'
-import { server } from '@/app/redux/user/api/axiosBaseQuery'
+import { ChatDataProvider } from '@/app/context/useChatContext'
+import { baseUrl, server } from '@/app/redux/user/api/axiosBaseQuery'
+import { NotificationProvider } from '@/app/context/notificationContext'
+import handleSubscribeToNotification from '@/app/redux/state/slices/api/webpush'
 // import {
 //   onMessageListener,
 //   requestNotificationPermission,
@@ -36,14 +38,13 @@ import { server } from '@/app/redux/user/api/axiosBaseQuery'
 // Pace Loader
 export default function RootLayout({ children }) {
   const [connection, setConnection] = useState([])
+  const [socket, setSocket] = useState(null)
   const [hideOverflow, setOverflow] = useState(false)
   const pathname = usePathname()
 
   const forAdmins = ['/dashboard', '/coristen']
   const pathArr = pathname.split('/')
   const adminPaths = forAdmins.some((path) => pathname.startsWith(path))
-
-  console.log({ adminPaths })
 
   // useEffect(() => {
   //   requestNotificationPermission()
@@ -62,8 +63,7 @@ export default function RootLayout({ children }) {
         .register('/sw.js')
         .then((registration) => {
           if (!connection.includes(osName))
-            // handleSubscribeToNotification(connection)
-            console.log("Service Worker registered: ", registration);
+            handleSubscribeToNotification(connection)
         })
         .catch((error) => {
           console.error('Service Worker registration failed:', error)
@@ -128,7 +128,7 @@ export default function RootLayout({ children }) {
           <SWRConfig
             value={{
               refreshInterval: false,
-              revalidateOnFocus: true,
+              revalidateOnFocus: false,
 
               fetcher: async (resource, init) => {
                 let url = resource
@@ -155,28 +155,30 @@ export default function RootLayout({ children }) {
                 setOverflow={setOverflow}
                 setConnection={setConnection}
               >
-                <ChatDataProvider server={server} role="customer">
-                  <CartProvider>
-                    {/* <LineLoading /> */}
-                    {/* <PersistGate loading={null} persistor={persistor}> */}
-                    <ThemeComponent>
-                      {children}
-                      <ReactHotToast>
-                        <Toaster
-                          position="top-right"
-                          containerStyle={{
-                            zIndex: 10000, // Ensure the container itself has a high z-index
-                          }}
-                          toastOptions={{
-                            className: 'react-hot-toast !z-[10000000000]',
-                            style: {
-                              zIndex: 10000000000, // Set the z-index for the toast container
-                            },
-                          }}
-                        />
-                      </ReactHotToast>
-                    </ThemeComponent>
-                  </CartProvider>
+                <ChatDataProvider setSocket={setSocket} socket={socket} server={server} role="customer">
+                  <NotificationProvider socket={socket} apiUrl={baseUrl}>
+                    <CartProvider>
+                      {/* <LineLoading /> */}
+                      {/* <PersistGate loading={null} persistor={persistor}> */}
+                      <ThemeComponent>
+                        {children}
+                        <ReactHotToast>
+                          <Toaster
+                            position="top-right"
+                            containerStyle={{
+                              zIndex: 10000, // Ensure the container itself has a high z-index
+                            }}
+                            toastOptions={{
+                              className: 'react-hot-toast !z-[10000000000]',
+                              style: {
+                                zIndex: 10000000000, // Set the z-index for the toast container
+                              },
+                            }}
+                          />
+                        </ReactHotToast>
+                      </ThemeComponent>
+                    </CartProvider>
+                  </NotificationProvider>
                 </ChatDataProvider>
                 {/* </PersistGate> */}
               </UserDataProvider>
@@ -203,10 +205,11 @@ export default function RootLayout({ children }) {
             </ReactHotToast>
           </ThemeComponent>
         </body>
-      )}
+      )
+      }
       {/* <VoiceflowChatComponent /> */}
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7203031991825999"
         crossorigin="anonymous"></script>
-    </html>
+    </html >
   )
 }

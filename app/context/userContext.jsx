@@ -94,11 +94,6 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
   const isOffline = !isAuthenticated()
 
   useEffect(() => {
-    console.log({ getPath }, getPath[1])
-
-    console.log({
-      isOffline, page: whiteList.includes(getPath[1])
-    })
     if (isOffline && whiteList.includes(getPath[1])) {
       router.replace(`/auth/login?returnurl=${pathname.substring(1)}`)
     }
@@ -165,7 +160,7 @@ const UserDataProvider = ({ children, setOverflow, setConnection }) => {
     data: notif,
     error: notifErr,
     isLoading: notifIsLoading,
-  } = useSWR(!isOffline && '/user/notification')
+  } = useSWR(!isOffline && '/notification')
 
   const loadNotif = (!notifErr && !notifIsLoading && notif?.data) || []
 

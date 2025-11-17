@@ -15,8 +15,10 @@ import { osName } from 'react-device-detect'
 import ReactHotToast from '@/styles/react-hot-toast';
 import ThemeComponent from '@/theme';
 import { Toaster } from 'react-hot-toast';
-import { ChatDataProvider } from '@/app/hooks/useChatContext';
+import { ChatDataProvider } from '@/app/context/useChatContext';
 import { server } from '@/app/redux/business/api/axiosBaseQuery';
+import { NotificationProvider } from '@/app/context/notificationContext';
+import { baseUrl } from '@/app/redux/user/api/axiosBaseQuery';
 
 // export const metadata = {
 //   title: "Store - corislo",
@@ -26,21 +28,22 @@ import { server } from '@/app/redux/business/api/axiosBaseQuery';
 const icon = "main_store.png"
 
 export default function MyStoreDashboardLayout({ children }) {
+  const [socket, setSocket] = useState(null)
   const [connection, setConnection] = useState([])
+
   useEffect(() => {
     if ('serviceWorker' in navigator && connection) {
       navigator.serviceWorker
         .register('/sw.js')
         .then((registration) => {
-          if (!connection.includes(osName))
-            handleSubscribeToNotification(connection, "store")
-          // console.log("Service Worker registered: ", registration);
+          handleSubscribeToNotification(connection, "store")
         })
         .catch((error) => {
           console.error('Service Worker registration failed:', error)
         })
     }
   }, [connection])
+
   return (
     <html lang="en">
       <head>
@@ -101,16 +104,17 @@ export default function MyStoreDashboardLayout({ children }) {
               },
             }}
           >
-
             <Provider store={store}>
               <StoreDataProvider setConnection={setConnection}>
-                <ChatDataProvider server={server} role="store">
-                  <Box
-                    className="h-full !w-full absolute min-h-scren !overflow-x-hidden"
-                    bgcolor="custom.bodyGray"
-                  >
-                    {children}
-                  </Box>
+                <ChatDataProvider setSocket={setSocket} socket={socket} server={server} role="store" userType="store_token">
+                  <NotificationProvider socket={socket} apiUrl={baseUrl}>
+                    <Box
+                      className="h-full !w-full absolute min-h-scren !overflow-x-hidden"
+                      bgcolor="custom.bodyGray"
+                    >
+                      {children}
+                    </Box>
+                  </NotificationProvider>
                 </ChatDataProvider>
               </StoreDataProvider>
               <ReactHotToast>

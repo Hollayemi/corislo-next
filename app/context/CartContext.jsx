@@ -41,13 +41,11 @@ export function CartProvider({ children }) {
   const cartTotal = isUserAuthenticated ? cartFromDB.totalAmount || 0 : localCartTotal;
   const cartItemCount = isUserAuthenticated ? cartFromDB.cartedProds?.length || 0 : localCartItemCount;
 
-  console.log({ cartItems })
   // Load local cart on mount
   useEffect(() => {
     const loadLocalCart = () => {
       try {
         const savedCart = JSON.parse(localStorage.getItem('cart') || '{}');
-        console.log(savedCart)
         setLocalCartItems(savedCart);
         setLocalCartItemCount(savedCart.products?.length || 0);
         calculateLocalTotal(savedCart);
@@ -58,7 +56,7 @@ export function CartProvider({ children }) {
       }
     };
     const savedCart = loadLocalCart();
-    console.log({ isUserAuthenticated, length: savedCart?.products?.length, hasSynced })
+    // console.log({ isUserAuthenticated, length: savedCart?.products?.length, hasSynced })
     // Sync with server if user is authenticated and has local cart
     if (isUserAuthenticated && savedCart?.products?.length > 0 && !hasSynced) {
       syncLocalCartToServer(savedCart);
@@ -91,7 +89,6 @@ export function CartProvider({ children }) {
       setLocalCartTotal(0);
       setHasSynced(true);
 
-      console.log('Cart synced successfully');
     } catch (error) {
       console.error('Error syncing cart:', error);
     }
@@ -99,7 +96,7 @@ export function CartProvider({ children }) {
 
   // Calculate local cart total
   const calculateLocalTotal = (items) => {
-    console.log({ items })
+    // console.log({ items })
     const sum = items.products?.reduce((acc, item) => {
       return acc + (item.product.prodPrice * item.quantity);
     }, 0);
@@ -196,7 +193,7 @@ export function CartProvider({ children }) {
   };
 
   const updateQuantity = async (itemId, operator) => {
-    console.log(itemId, operator)
+    // console.log(itemId, operator)
     try {
       if (isUserAuthenticated) {
 

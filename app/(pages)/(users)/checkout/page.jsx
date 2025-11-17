@@ -3,10 +3,8 @@ import IconifyIcon from '@/app/components/icon'
 import { GroupCartProducts } from '@/app/components/templates/productView'
 import UserWrapper from '@/app/components/view/user'
 import { useUserData } from '@/app/hooks/useData'
-import { addNewOrder } from '@/app/redux/state/slices/home/order'
-import { Box, Button, Grid, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
 import useSWR from 'swr'
 import { TitleSubtitle } from '../user/components'
 import CustomOption from '@/app/components/option-menu/option'
@@ -18,25 +16,15 @@ import { MySwitch } from '../../dashboard/store/stores/component'
 import { useCart } from '@/app/context/CartContext'
 import { useCreateOrderMutation } from '@/app/redux/user/slices/orderSlice'
 import { useRouter } from 'next/navigation'
+import { useGetServiceChargeQuery } from '@/app/redux/user/slices/userSlice'
+import { Loader } from 'lucide-react'
 
 const Checkout = () => {
   const router = useRouter()
-  const { cartItems: cartData, cartedProducts: cartedProds, seletedCartProds, } = useCart()
-  const { userInfo, temp, agentInfo, launchConfetti } = useUserData()
+  const { cartedProducts: cartedProds, seletedCartProds, } = useCart()
+  const { userInfo, temp, agentInfo } = useUserData()
   const [usingPoint, usPoint] = useState(false)
-  const [createOrder, { isLoading: creating }] = useCreateOrderMutation()
-  console.log(usingPoint)
-  const endpoint = `/user/cart-group?${seletedCartProds.length && `prods=${seletedCartProds.join('.')}`
-    }`
-  const { data: carts, error } = useSWR(endpoint)
-
-  seletedCartProds.length && `prods=${seletedCartProds.join('.')}`
-  console.log(agentInfo)
-
-  const { data: agents } = useSWR('/user/pickers')
-  const pickers = agents?.data || []
-  const groupedCart = carts ? carts.data.result : []
-  const amounts = carts ? carts.data.total : []
+  const [createOrder] = useCreateOrderMutation()
 
   const [payload, updatePayload] = useState({
     ids: seletedCartProds.length ? seletedCartProds : cartedProds,
@@ -48,19 +36,31 @@ const Checkout = () => {
     usingPoint,
     shippingAddress: temp.address || userInfo?.selectedAddress || {},
   })
-  console.log(payload)
+
+  const endpoint = `/user/cart-group?${seletedCartProds.length && `prods=${seletedCartProds.join('.')}`
+    }`
+  const { data: carts } = useSWR(endpoint)
+
+  seletedCartProds.length && `prods=${seletedCartProds.join('.')}`
+
+  const { data: agents } = useSWR('/user/pickers')
+  const pickers = agents?.data || []
+  const groupedCart = carts ? carts.data.result : []
+  const amounts = carts ? carts.data.total : []
+
+  const { data: serviceCharge, isLoading: gettingServiceCharge } = useGetServiceChargeQuery({ subTotal: amounts?.discountAmount || 0, provider: payload.paymentInfo.method }, { skip: !payload.paymentInfo.method && !amounts?.discountAmount })
+  const serviceChargeData = serviceCharge ? serviceCharge.data : 0
+
   const address = payload.shippingAddress
-  const card = payload.billingCard
 
   const myPoints = usingPoint ? agentInfo?.coin : 0
-  const totPrice =
-    (amounts?.discountedPrice || amounts?.originalPrice) - myPoints
-
+  console.log({ myPoints, amounts, discountAmount: amounts?.discountAmount, serviceChargeData })
+  const totalPrice = (amounts?.discountAmount?.toFixed() || 0) - myPoints + (serviceChargeData || 0)
   return (
     <UserWrapper>
       <Box>
-        <Box className="!px-2 my-5 sm:!px-16 md:!px-24 lg:!px-32 md:!py-7 relative">
-          <Box className="flex flex-col sm:flex-row items-start gap-4 md:gap-10 " >
+        <Box className="!px-2 my-5 sm:!px-6 md:!px-8 lg:!px-32 md:!py-7 relative">
+          <Box className="flex flex-col sm:flex-row items-start gap-4 sm:gap-2 md:gap-10 " >
             <Box className="w-full sm:w-8/12">
               <ChangeAddress address={address} updatePayload={updatePayload} />
               <Box className="bg-white rounded-md py-5 !px-4 mt-5">
@@ -75,7 +75,7 @@ const Checkout = () => {
                       pickers={pickers}
                     />
                     {groupedCart.length > i + 1 && (
-                      <Box className="w-full border-[1px] my-5"></Box>
+                      <Box className="w-full border-[1px] border-gray-200 my-5"></Box>
                     )}
                   </Box>
                 ))}
@@ -124,14 +124,14 @@ const Checkout = () => {
                       </Typography>
                     </Box>
                   ) : null}
-                  {/* <Box className="w-full flex justify-between items-center !mt-2">
-                    <Typography variant="body2" className="!text-[12px]">
-                      Way-Billing
-                    </Typography>
-                    <Typography variant="body2" className="!text-[12px]">
-                      NGN9,500
-                    </Typography>
-                  </Box> */}
+                  {serviceChargeData || gettingServiceCharge ? (
+                    <Box className="w-full flex justify-between items-center !mt-2">
+                      <Typography variant="body2" className="!text-[12px]">Service Charge</Typography>
+                      <Typography variant="body2" className="!text-[12px]">
+                        {serviceChargeData ? reshapePrice(serviceChargeData) : <Loader className="spin size-4" />}
+                      </Typography>
+                    </Box>
+                  ) : null}
 
                   <Box className="w-full h-0.5 border-dashed border border-black mt-7"></Box>
                   <Box className="w-full flex justify-between items-center !mt-5">
@@ -145,7 +145,7 @@ const Checkout = () => {
                       variant="body2"
                       className="!text-[13px] !font-bold"
                     >
-                      {reshapePrice(totPrice)}
+                      {reshapePrice(totalPrice)}
                     </Typography>
                   </Box>
                 </Box>
@@ -177,13 +177,15 @@ const Checkout = () => {
                   <div className="payment-method-section">
                     <h3 className='font-bold text-sm'>Payment Method</h3>
                     <div className=" mt-3">
-                      <img src={"/images/misc/paystack.png"} className="w-24" alt="paystack" />
+                      <label htmlFor="paystack">
+                        <img src={"/images/misc/paystack.png"} className="w-24" alt="paystack" />
+                      </label>
                       <input
                         type="radio"
                         id="paystack"
                         name="payment"
                         checked={payload.paymentInfo.method === "paystack"}
-                        onChange={(e) =>
+                        onChange={() =>
                           updatePayload((prev) => {
                             return { ...prev, paymentInfo: { method: "paystack" } }
                           })}
@@ -191,18 +193,20 @@ const Checkout = () => {
                       <label htmlFor="paystack" className='text-[14px] font-semibold ml-3 mt-2'>
                         Pay with Bank transfer and Debit Cards
                       </label>
-                    
+
                     </div>
 
                     <div className="mt-8">
-                      <img src={"/images/misc/opay.png"} className='w-14' alt="paypal" />
+                      <label htmlFor="opay">
+                        <img src={"/images/misc/opay.png"} className='w-14' alt="paypal" />
+                      </label>
                       <input
                         type="radio"
                         id="opay"
                         name="payment"
                         size="large"
                         checked={payload.paymentInfo.method === "opay"}
-                        onChange={(e) =>
+                        onChange={() =>
                           updatePayload((prev) => {
                             return { ...prev, paymentInfo: { method: "opay" } }
                           })}
@@ -222,7 +226,6 @@ const Checkout = () => {
                   variant="contained"
                   className="w-full !mt-6 !h-12 !rounded-full !border-none !text-[14px] !text-white"
                   onClick={() => createOrder({ ...payload, usingPoint }).then((res) => {
-                    console.log(res)
                     if (res.data.type === "success") {
                       router.push(res?.data?.data?.paymentUrl)
 
@@ -335,7 +338,7 @@ export const PaymentOptions = ({
             edge="end"
             checked={usingPoint}
             className="!md:mr-2"
-            onChange={(e) => usPoint(!usingPoint)}
+            onChange={() => usPoint(!usingPoint)}
           />
         </Box>
       ) : null}

@@ -22,6 +22,7 @@ import OptionsMenu from '../../option-menu'
 import { UserPages } from './Components'
 import { desktopOptions } from './Components/data'
 import { useDispatch } from 'react-redux'
+import { NotificationBell } from '../../notification'
 
 export const IconImage = ({ image, className, onClick }) => (
   <Image
@@ -247,6 +248,9 @@ function Header({ }) {
                 />
               </Badge>
             </Box>
+
+            <NotificationBell />
+
             <Typography
               noWrap
               variant="body2"

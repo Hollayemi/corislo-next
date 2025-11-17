@@ -25,6 +25,7 @@ import { getInitials } from "@/app/utils/get-initials";
 import IconifyIcon from "../../icon";
 import { useDispatch } from "react-redux";
 import { desktopOptions } from "../home/Components/data";
+import { NotificationBell } from "../../notification";
 // import UserDropdown from "./UserDropdown";
 
 export default function Navbar2() {
@@ -124,7 +125,7 @@ export default function Navbar2() {
                             <div className="relative w-full">
                                 <input
                                     type="text"
-                                    value={searchQuery}
+                                    value={searchQuery || ""}
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter') {
                                             window.location.href = `/products?search=${searchQuery}`;
@@ -150,7 +151,7 @@ export default function Navbar2() {
                             {/* Cart */}
                             <Link
                                 href="/cart"
-                                className="flex md:!mr-10 items-center space-x-1 text-gray-600 hover:text-brand-600 relative"
+                                className="flex  items-center space-x-1 text-gray-600 hover:text-brand-600 relative"
                             >
                                 <ShoppingCart className="w-5 h-5" />
                                 <span className="hidden sm:inline text-sm font-medium">
@@ -160,7 +161,9 @@ export default function Navbar2() {
                                     {cartItemCount || 0}
                                 </span>
                             </Link>
-
+                            <div className="mx-4">
+                                <NotificationBell />
+                            </div>
                             <OptionsMenu
                                 icon={
                                     <div className="flex items-center">
@@ -221,7 +224,7 @@ export default function Navbar2() {
                         <div className="relative">
                             <input
                                 type="text"
-                                value={searchQuery}
+                                value={searchQuery || ""}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
                                         window.location.href = `/products?search=${searchQuery}`;

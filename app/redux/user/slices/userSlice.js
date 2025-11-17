@@ -123,7 +123,14 @@ export const userApi = createApi({
                 method: 'GET',
             }),
         }),
-
+        
+        getServiceCharge: builder.query({
+            query: (data) => ({
+                url: '/payment/service-charge',
+                method: 'get',
+                params: data
+            })
+        })
     }),
 });
 
@@ -142,4 +149,5 @@ export const {
     useSavePaymentAccountMutation,
     useGetPaymentAccountQuery,
     useGetPaymentLogsQuery,
+    useGetServiceChargeQuery,
 } = userApi;

@@ -1,3 +1,4 @@
+"use client"
 import { createSlice } from '@reduxjs/toolkit';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { useRouter } from 'next/router';

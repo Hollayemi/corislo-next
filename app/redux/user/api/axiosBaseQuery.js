@@ -5,7 +5,9 @@ import toast from 'react-hot-toast';
 
 export const server = process.env.NODE_ENV === "production"
     ? "https://corislo-backend.onrender.com"
-    : "http://localhost:5001" // "http://172.20.10.8:5001";
+    : "http://localhost:5001" // "http://172.20.10.8:5001" ;
+
+export const baseUrl = `${server}/api/v1`
 
 const getAuthHeaders = (by = "user") => {
     if (typeof window === 'undefined') {
@@ -68,8 +70,8 @@ export const axiosBaseQuery = (tokenOwner) => async (requestConfig) => {
             fetchOptions.body = JSON.stringify(data);
         }
 
-        console.log('Making request to:', fullUrl.toString());
-        console.log('Request options:', fetchOptions);
+        // console.log('Making request to:', fullUrl.toString());
+        // console.log('Request options:', fetchOptions);
 
         const response = await fetch(fullUrl.toString(), fetchOptions);
 
@@ -88,8 +90,8 @@ export const axiosBaseQuery = (tokenOwner) => async (requestConfig) => {
             responseData = null;
         }
 
-        console.log('Response status:', response.status);
-        console.log('Response data:', responseData);
+        // console.log('Response status:', response.status);
+        // console.log('Response data:', responseData);
 
         if (!response.ok) {
             const error = new Error(`HTTP ${response.status}: ${response.statusText}`);

@@ -87,7 +87,7 @@ const Referral = () => {
                   icon={isCopied2 ? 'tabler:copy-check' : 'tabler:copy'}
                   onClick={() =>
                     copyToClipboard(
-                      `https://corisio.com/refferal?id=${userInfo.username}`,
+                      `https://corisio.com/dashboard/register?ref=${userInfo.username}`,
                       setIsCopied2
                     )
                   }

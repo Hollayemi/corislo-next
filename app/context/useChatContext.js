@@ -18,8 +18,7 @@ const defaultProvider = {
 
 const ChatContext = createContext(defaultProvider);
 
-const ChatDataProvider = ({ children, server, role }) => {
-    const [socket, setSocket] = useState(null);
+const ChatDataProvider = ({ children, setSocket, socket, server, role, userType = "user_token" }) => {
     const [isSocketConnected, setIsSocketConnected] = useState(false);
     const [activeChats, setActiveChats] = useState({});
 
@@ -30,7 +29,7 @@ const ChatDataProvider = ({ children, server, role }) => {
 
 
     // Socket methods
-    const sendMessage = useCallback((chatId, message, branchId) => {
+    const sendMessage = useCallback((chatId, message, branchId, store, branch) => {
         console.log("hereeeeeeeeeeeee-->")
         if (socket && isSocketConnected) {
             const messageData = {
@@ -38,7 +37,8 @@ const ChatDataProvider = ({ children, server, role }) => {
                 message,
                 by: role,
                 branchId,
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                store, branch
             };
             socket.emit('sendMessage', messageData);
         } else {
@@ -86,7 +86,7 @@ const ChatDataProvider = ({ children, server, role }) => {
                     return;
                 }
 
-                const token = await localStorage.getItem("user_token");
+                const token = await localStorage.getItem(userType);
                 if (!token) {
                     console.log("No user token found");
                     return;
@@ -107,7 +107,7 @@ const ChatDataProvider = ({ children, server, role }) => {
                     timeout: 10000,
                     query: {
                         token: token,
-                        by: "user_token",
+                        by: userType,
                     },
                 });
 
