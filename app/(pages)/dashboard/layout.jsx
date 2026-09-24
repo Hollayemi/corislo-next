@@ -16,9 +16,9 @@ import ReactHotToast from '@/styles/react-hot-toast';
 import ThemeComponent from '@/theme';
 import { Toaster } from 'react-hot-toast';
 import { ChatDataProvider } from '@/app/context/useChatContext';
-import { server } from '@/app/redux/business/api/axiosBaseQuery';
 import { NotificationProvider } from '@/app/context/notificationContext';
 import { baseUrl } from '@/app/redux/user/api/axiosBaseQuery';
+import { server } from '@/app/redux/api/backendUrl';
 
 // export const metadata = {
 //   title: "Store - corislo",

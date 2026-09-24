@@ -3,10 +3,8 @@
 "use client"
 import { jwtDecode } from 'jwt-decode';
 import toast from 'react-hot-toast';
+import { server } from '../../api/backendUrl';
 
-export const server = process.env.NODE_ENV === "production"
-    ? "https://corislo-backend.onrender.com"
-    : "http://localhost:5001" //"http://172.20.10.8:5001";
 
 const getAuthHeaders = () => {
     // Check if we're in a browser environment
